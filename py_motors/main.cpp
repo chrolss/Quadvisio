@@ -7,8 +7,8 @@
 using namespace pyembed;
 std::ostringstream strs;
 std::string val;
-float p1;
-float p2;
+double p1;
+double p2;
 //Speed Test
 
 /*
@@ -33,12 +33,16 @@ int main(int argc, char** argv){
 std::string val2;
 int main(int argc, char** argv){
 	motor motor(argc, argv);
+	double input_pwm[4];
 	for (int i = 0; i < 5; i++)
 	{
 		printf("Give a PWM value, 0 - 100: \n");
 		std::cin >> p1;
 		std::cin >> p2;
-		motor.setPWM(p1,p2,p1,p2);
+		for (int i = 0; i < 4; i++){
+			input_pwm[i] = p1;
+		}
+		motor.setPWM(input_pwm);
 		printf("Duty cycle set \n");
 	}
 	motor.closePWM();
