@@ -1,4 +1,5 @@
 #include "motor.h"
+#include <string>
 
 motor::motor(int argc,char** argv){
 	// Initialize Python interpreter
@@ -21,6 +22,7 @@ motor::motor(int argc,char** argv){
 	//pClose = PyObject_GetAttrString(pModule, "close_pwm");
 	//pArgs = PyTuple_New(4);
 	PyObject_CallObject(pLoad,NULL);
+	Py_DECREF(pModule);
 
 }
 
@@ -30,11 +32,17 @@ double motor::mapper(double b){
 }
 
 void motor::setPWM(double *pwms){
-	PyObject* pSet = PyObject_GetAttrString(pModule,"set_pwm");
-	PyObject* pArgs = PyTuple_New(4);
+	PyObject* pName = PyString_FromString("pwm");
 
-	for (int i = 0; i < 4; i++){
-		pValue = PyFloat_FromDouble(mapper(pwms[i]));
+		// Load the module object
+	PyObject* pModule = PyImport_Import(pName);
+	Py_DECREF(pName);
+	PyObject* pSet = PyObject_GetAttrString(pModule,"set_pwm1");
+	PyObject* pArgs = PyTuple_New(1);
+	std::string s;
+	std::cin >> s;
+	for (int i = 0; i < 1; i++){
+		pValue = PyString_FromString(s.c_str());
 		PyTuple_SetItem(pArgs, i, pValue);
 	}
 

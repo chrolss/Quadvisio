@@ -2,7 +2,7 @@ import Adafruit_BBIO.PWM as PWM
 import time
 
 
-def initialize():
+def initialize(a,b,c,d):
 	print("inne i initialize")
 	PWM.start("P8_13",0,200)
 	time.sleep(0.5)
@@ -21,33 +21,25 @@ def initialize():
 	PWM.set_duty_cycle("P8_13",20)
 	PWM.set_duty_cycle("P9_14",20)
 	PWM.set_duty_cycle("P9_21",20)
-
-def set_pwm1(a):
-	PWM.set_duty_cycle("P8_13",a)
-
-def set_pwm1(a):
-	PWM.set_duty_cycle("P9_14",a)
+	time.sleep(0.5)
+	PWM.set_duty_cycle("P9_42",23)
+	PWM.set_duty_cycle("P8_13",b)
+	PWM.set_duty_cycle("P9_14",c)
+	PWM.set_duty_cycle("P9_21",d)
 	
-def set_pwm1(a):
-	PWM.set_duty_cycle("P9_21",a)
 
-def set_pwm1(a):
-	PWM.set_duty_cycle("P9_42",a)
-		
 def set_pwm(a,b,c,d):
-	print("inne i set_pwm")
-	e = "hej"
-	PWM.set_duty_cycle("P8_13",25)
-	print e
-	PWM.set_duty_cycle("P9_16",25)
-	print e
-	PWM.set_duty_cycle("P9_21",25)
-	print e
-	PWM.set_duty_cycle("P9_42",25)
-	print e
+	PWM.set_duty_cycle("P8_13",float(a))
+	print a
+	PWM.set_duty_cycle("P9_16",float(b))
+	print b
+	PWM.set_duty_cycle("P9_21",float(c))
+	print c
+	PWM.set_duty_cycle("P9_42",float(d))
+	print d
 	
 
-def close_pwm():
+def close_pwm(a,b,c,d):
 	print("inne i close")
 	PWM.set_duty_cycle("P8_13",20)
 	PWM.set_duty_cycle("P9_14",20)
@@ -58,4 +50,4 @@ def close_pwm():
 	PWM.set_duty_cycle("P9_14",0)
 	PWM.set_duty_cycle("P9_21",0)
 	PWM.set_duty_cycle("P9_42",0)
-	print("slut pa close")
+	exit()

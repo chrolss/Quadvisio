@@ -1,12 +1,10 @@
 #include <iostream>
 #include "pyembed.h"
 #include <string>
-#include "motor.h"
+#include "pymotor.h"
 #include <sstream>
 
 using namespace pyembed;
-std::ostringstream strs;
-std::string val;
 double p1;
 double p2;
 //Speed Test
