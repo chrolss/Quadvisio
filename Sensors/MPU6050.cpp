@@ -65,11 +65,15 @@ usleep(1000);
    }
    else { x=y=z=0;
 	
-	char  xl = (buf[1]<<8);
-	char  xm = (buf[0]<<8);
-	char  raw = xm * 256.0 + xl;
-	char  xAcc = raw / 16384.0;
-	std::cout <<"x-acceleration: " << xAcc <<std::endl;
+	char  xl = buf[1]<<8;
+	char  xm = buf[0]<<8;
+	char  raw = xm * 256 + xl;
+       if (raw & 1<<15)
+       {
+           raw -= 1<<16;
+       }
+	double  xAcc = raw / 16384;
+	printf("accel: %g\n", xAcc);
    }
 }
    return 0;
