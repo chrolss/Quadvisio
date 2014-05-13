@@ -71,7 +71,7 @@ usleep(1000);
     {
         xacc -= 1<<16;
     }
-	double  xAcc = xacc / 16384;
+	double  xAcc = (double)xacc / 16384;
 	printf("accel: %g\n", xAcc);
    }
 }
