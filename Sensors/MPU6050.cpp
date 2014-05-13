@@ -17,8 +17,8 @@ int main(int argc, char **argv)
    char *fileName = "/dev/i2c-1";                        // Name of the portwe will be using
    int  address = 0x68;                              // Address of the SRF02 shifted right one bit
    char buf[6];                              // Buffer for data being read/ written on the i2c bus
-   short x,y,z;
-    int xacc = 0;
+    double xacc,yacc,zacc;
+    int x,y,z;
 
    if ((fd = open(fileName, O_RDWR)) < 0) {               // Open port for reading and writing
       printf("Failed to open i2c port\n");
@@ -67,12 +67,28 @@ usleep(1000);
 	
 	xacc = buf[0]<<8;
 	xacc += buf[1];
-    if (xacc & 1<<15)
+    yacc = buf[2]<<8;
+    yacc += buf[3];
+    zacc = buf[4]<<8;
+    zacc += buf[5];
+    if (x & 1<<15)
     {
-        xacc -= 1<<16;
+        x -= 1<<16;
     }
-	double  xAcc = (double)xacc / 16384;
-	printf("accel: %g\n", xAcc);
+    if (y & 1<<15)
+    {
+        y -= 1<<16;
+    }
+    if (z & 1<<15)
+    {
+        z -= 1<<16;
+    }
+	xacc = (double)xacc / 16384;
+    yacc = (double)yacc / 16384;
+    zacc = (double)zacc / 16384;
+
+       
+	printf("X: %g Y: %g Z: %g\n", xacc, yacc,zacc);
    }
 }
    return 0;
