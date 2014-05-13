@@ -49,7 +49,7 @@ int main(int argc, char **argv)
                                        // This sleep waits for the ping to come back
 while(true){   
 
-   buf[0] = 59;                                       // This is the register we wish to read from
+   buf[0] = 0x3b;                                       // This is the register we wish to read from 59 or
    if ((write(fd, buf, 1)) != 1) {                        // Send the register to read from
       printf("Error writing to i2c slave\n");
       exit(1);
@@ -64,9 +64,12 @@ usleep(1000);
       exit(1);
    }
    else { x=y=z=0;
-
-       data = atof(buf);
-       std::cout << data << std::endl;
+	
+	char  xl = (buf[1]<<8);
+	char  xm = (buf[0]<<8);
+	char  raw = xm * 256.0 + xl;
+	char  xAcc = raw / 16384.0;
+	std::cout <<"x-acceleration: " << xAcc <<std::endl;
    }
 }
    return 0;
