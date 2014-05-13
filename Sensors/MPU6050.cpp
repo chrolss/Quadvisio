@@ -31,18 +31,18 @@ int main(int argc, char **argv)
         exit(1);
     }
 
-    buf[0] = 0x6b;            // Commands for performing a ranging CHANGED FROM 0x2d to 0x6b
-    buf[1] = 0;	//CHANGED FROM 0x18 to 0
+    buf[0] = 0x6b;          // Commands for performing a ranging CHANGED FROM 0x2d to 0x6b
+    buf[1] = 0;             //CHANGED FROM 0x18 to 0
    
-    if ((write(fd, buf, 2)) != 2) {                        // Write commands to the i2c port
+    if ((write(fd, buf, 2)) != 2) {                         // Write commands to the i2c port
         printf("Error writing to i2c slave\n");
         exit(1);
     }
-                                       // This sleep waits for the ping to come back
+                                                            // This sleep waits for the ping to come back
 while(true){   
 
-   buf[0] = 0x3b;                                       // This is the register we wish to read from 59 or
-   if ((write(fd, buf, 1)) != 1) {                        // Send the register to read from
+   buf[0] = 0x3b;                                           // This is the register we wish to read from 59 or
+   if ((write(fd, buf, 1)) != 1) {                          // Send the register to read from
       printf("Error writing to i2c slave\n");
       exit(1);
    }
