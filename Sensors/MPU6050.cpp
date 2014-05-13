@@ -65,12 +65,12 @@ usleep(1000);
    }
    else { x=y=z=0;
 	
-	xacc = buf[0]<<8;
-	xacc += buf[1];
-    yacc = buf[2]<<8;
-    yacc += buf[3];
-    zacc = buf[4]<<8;
-    zacc += buf[5];
+	x = buf[0]<<8;
+	x += buf[1];
+    y = buf[2]<<8;
+    y += buf[3];
+    z = buf[4]<<8;
+    z += buf[5];
     if (x & 1<<15)
     {
         x -= 1<<16;
@@ -83,9 +83,9 @@ usleep(1000);
     {
         z -= 1<<16;
     }
-	xacc = (double)xacc / 16384;
-    yacc = (double)yacc / 16384;
-    zacc = (double)zacc / 16384;
+	xacc = (double)x / 16384;
+    yacc = (double)y / 16384;
+    zacc = (double)z / 16384;
 
        
 	printf("X: %g Y: %g Z: %g\n", xacc, yacc,zacc);
