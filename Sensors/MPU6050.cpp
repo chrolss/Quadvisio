@@ -18,6 +18,7 @@ int main(int argc, char **argv)
    int  address = 0x68;                              // Address of the SRF02 shifted right one bit
    char buf[6];                              // Buffer for data being read/ written on the i2c bus
    short x,y,z;
+    double data;
 
    if ((fd = open(fileName, O_RDWR)) < 0) {               // Open port for reading and writing
       printf("Failed to open i2c port\n");
@@ -64,7 +65,8 @@ usleep(1000);
    }
    else { x=y=z=0;
 
-       std::cout<<"x:"<<x<<"\ty:"<<y<<"\tz:"<<z<<std::endl;
+       data = atof(buf);
+       std::cout << data << std::endl;
    }
 }
    return 0;
