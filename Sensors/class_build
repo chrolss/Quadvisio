@@ -1,0 +1,5 @@
+#!/bin/bash
+
+echo "Building ADXL345 class project"
+
+g++ -O2  sensors.cpp cadxl345.cpp -o testSensor
