@@ -14,7 +14,9 @@ public:
 private:
 	char i2c_bus;
 	int address;
-	char buf[6];	
+	char buf[6];
+	int fd;
+	char *fileName;    
 
 	short accX, accY, accZ;
 

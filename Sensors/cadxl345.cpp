@@ -23,9 +23,10 @@ cadxl345::cadxl345() {
 }
 
 void cadxl345::initialize(){
-	int fd;                                          
+	this-> fd = open(fileName, O_RDWR);  //fd blir en address till den öppna porten och måste vara en och samma genom hela klassen. Den får inte omdeklareras i readSensorData() och och måste då ha en this-> 
+                                         
    	char *fileName = "/dev/i2c-1";                        
-   	int  address = 0x53;                              
+   	int address = 0x53;                              
    	char buf[6];                              
    	short accX,accY,accZ;
 
@@ -58,22 +59,22 @@ void cadxl345::initialize(){
 
 int cadxl345::readSensorData(){
 	
-	int fd;                                          
+	//int fd;                                          
    	char *fileName = "/dev/i2c-1";                        
    	int  address = 0x53;                              
    	char buf[6];                              
    	short accX,accY,accZ;
 
+	
 	buf[0] = 0x32;                                       // This is the register we wish to read from
    	if ((write(fd, buf, 1)) != 1) {                        // Send the register to read from
       		printf("Error writing to i2c slave\n");
       		exit(1);
    	}
-   
+   	
 
 	usleep(1000);
   	memset(&buf,0,sizeof(buf));
-
    	if (read(fd, buf, 6) != 6) {                        // Read back data into buf[]
       		printf("Unable to read from slave\n");
       		exit(1);
@@ -81,7 +82,7 @@ int cadxl345::readSensorData(){
    	else 
 	{ 
 	accX=accY=accZ=0;
-
+	
 
 	this->accX = ((short)buf[1]<<8) | (short) buf[0]; 
        	this->accY = ((short)buf[3]<<8) | (short) buf[2];

@@ -10,11 +10,11 @@ using namespace std;
 
 int main(int argc, char *argv[]){
 	cadxl345 adxl345;
-	adxl345.readSensorData();
-	short x = adxl345.getAccX();
-	short y = adxl345.getAccY();
-	short z = adxl345.getAccZ();
-
-	std::cout<<"x:"<<x<<"\ty:"<<y<<"\tz:"<<z<<std::endl;
-
+	for (int i = 0; i < 20; i++){
+		adxl345.readSensorData();
+		short x = adxl345.getAccX();
+		short y = adxl345.getAccY();
+		short z = adxl345.getAccZ();
+		std::cout<<"x:"<<x<<"\ty:"<<y<<"\tz:"<<z<<std::endl;
+	}
 }
