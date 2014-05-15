@@ -22,7 +22,7 @@ cadxl345::cadxl345() {
 	initialize();
 }
 
-void initialize(){
+void cadxl345::initialize(){
 	int fd;                                          
    	char *fileName = "/dev/i2c-1";                        
    	int  address = 0x53;                              
@@ -56,7 +56,7 @@ void initialize(){
    	}
 }
 
-int readSensorData(){
+int cadxl345::readSensorData(){
 	
 	int fd;                                          
    	char *fileName = "/dev/i2c-1";                        
