@@ -2,6 +2,7 @@
 #include <string>
 #include <unistd.h>
 #include "adxl345.h"
+#include "mpu6050.h"
 
 // []
 // {}
