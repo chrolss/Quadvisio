@@ -69,6 +69,7 @@ usleep(1000);
        y = ((short)buf[3]<<8) | (short) buf[2];
        z = ((short)buf[5]<<8) | (short) buf[4];
        std::cout<<"x:"<<x<<"\ty:"<<y<<"\tz:"<<z<<std::endl;
+	sleep(1);
    }
 }
    return 0;

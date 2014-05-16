@@ -2,4 +2,4 @@
 
 echo "Building the sensor class project"
 
-g++ -O2  sensors.cpp adxl345.cpp mpu6050.cpp -o testSensor
+g++ -O2  sensors.cpp adxl345.cpp mpu6050.cpp l3g4200d.cpp -o testSensor

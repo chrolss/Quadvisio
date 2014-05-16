@@ -30,17 +30,17 @@ void l3g4200d::initialize(){
 	char buf[6];
 
 	if ((fd = open(fileName, O_RDWR)) < 0) {               // Open port for reading and writing
-     	printf("Failed to open i2c port\n");
-      	return false;
+     		printf("Failed to open i2c port\n");
+      		exit(1);
   	}
 
 	 buf[0] = CTRL_REG1;                                       // Commands for performing a ranging
   	 buf[1] = 0x0F;
    
-   	if(!writeToDevice(fd,buf,2))
-  	{
-      		return false;
-   	}
+   	if ((write(fd,buf,2)) != 2){
+		printf("Error writing to i2c slave\n");
+		exit(1);
+	}
    	// If you'd like to adjust/use the HPF, you can edit the line below to configure CTRL_REG2:
    	
 	/*
@@ -80,15 +80,17 @@ void l3g4200d::initialize(){
 	*/
 }
 
-l3g4200d::readSensorData(){
+int l3g4200d::readSensorData(){
 
+	float G_GAIN = 0.07;
+	float DT = 0.02; // loop period	
 	char buf[7];
    	buf[0] = 0x28;  
 	short x,y,z;                                     // This is the register we wish to read from
-   	if(!writeToDevice(fd,buf,2))
-   	{
-       		return false;
-   	}
+   	if ((write(fd, buf, 1)) != 1) {
+		printf("Error writing to i2c slave\n");
+		exit(1);
+	}
    
    	if (read(fd, buf, 6) != 6) {                        // Read back data into buf[]
       		printf("Unable to read from slave\n");
@@ -104,14 +106,13 @@ l3g4200d::readSensorData(){
    	short gx,gy,gz;
 
    	float rate_gyr_x(0.0),rate_gyr_y(0.0),rate_gyr_z(0.0);
-   	float gyroXangle(0.0),gyroYangle(0.0),gyroZangle(0.0);
+   	float gyroAngleX(0.0),gyroAngleY(0.0),gyroAngleZ(0.0);
 
    	float AccYangle(0.0),AccXangle(0.0);
    
    	float CFangleX = 0.0;
     	float CFangleY = 0.0;
-   	if(!init(fd))
-        	 exit(1);
+   	
    	usleep(100000);
    
    	   //Convert Gyro raw to degrees per second
@@ -119,9 +120,9 @@ l3g4200d::readSensorData(){
       	rate_gyr_y = (float)y * G_GAIN;
       	rate_gyr_z = (float)z * G_GAIN;
       	//Calculate the angles from the gyro
-      	gyroXangle+=rate_gyr_x*DT;
-        gyroYangle+=rate_gyr_y*DT;
-        gyroZangle+=rate_gyr_z*DT;
+      	this->gyroAngleX+=rate_gyr_x*DT;
+        this->gyroAngleY+=rate_gyr_y*DT;
+        this->gyroAngleZ+=rate_gyr_z*DT;
         
 
 	//Convert Accelerometer values to degrees
@@ -140,6 +141,8 @@ l3g4200d::readSensorData(){
        */
 
 
-}
+	}
 
 }
+
+l3g4200d::~l3g4200d(){}

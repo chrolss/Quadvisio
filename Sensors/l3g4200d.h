@@ -13,10 +13,10 @@ class l3g4200d
 public:
 	l3g4200d();
 	int readSensorData();
-	short getAccX() {return accX;}
-	short getAccY() {return accY;}
-	short getAccZ() {return accZ;}
-	~l3d4200d();
+	short getAngleX() {return gyroAngleX;}
+	short getAngleY() {return gyroAngleY;}
+	short getAngleZ() {return gyroAngleZ;}
+	~l3g4200d();
 
 private:
 	char i2c_bus;
@@ -25,7 +25,7 @@ private:
 	int fd;
 	char *fileName;
 
-	short accX, accY, accZ;
+	float gyroAngleX, gyroAngleY, gyroAngleZ;
 	
 	void initialize();
 	
