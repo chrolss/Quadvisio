@@ -1,7 +1,7 @@
 #include <iostream>
 #include <string>
 #include <unistd.h>
-#include "cadxl345.h"
+#include "adxl345.h"
 
 // []
 // {}
@@ -9,7 +9,7 @@
 using namespace std;
 
 int main(int argc, char *argv[]){
-	cadxl345 adxl345;
+	adxl345 adxl345;
 	for (int i = 0; i < 20; i++){
 		adxl345.readSensorData();
 		short x = adxl345.getAccX();

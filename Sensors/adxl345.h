@@ -1,15 +1,15 @@
-#ifndef CADXL345_H
-#define CADXL345_H
+#ifndef ADXL345_H
+#define ADXL345_H
 
-class cadxl345
+class adxl345
 {
 public:
-	cadxl345();
+	adxl345();
 	int readSensorData(); //When called, sensor data will be read and eventually returned as readable data
 	short getAccX() {return accX;}
 	short getAccY() {return accY;}
 	short getAccZ() {return accZ;} // All three called by readSensorData() and will pass the values
-	~cadxl345();
+	~adxl345();
 		
 private:
 	char i2c_bus;
@@ -23,4 +23,4 @@ private:
 	void initialize();
 };
 
-#endif /* CADXL345_H_ */
+#endif /* ADXL345_H_ */

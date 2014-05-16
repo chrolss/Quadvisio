@@ -1,5 +1,5 @@
 #include <iostream>
-#include "cadxl345.h"
+#include "adxl345.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <linux/i2c-dev.h>
@@ -11,18 +11,18 @@
 #include <unistd.h>
 #include <math.h>
 
-#define acc_x_lsb 0
+
 
 //    {
 //     }
 //    {}
 using namespace std;
 
-cadxl345::cadxl345() {
+adxl345::adxl345() {
 	initialize();
 }
 
-void cadxl345::initialize(){
+void adxl345::initialize(){
 	this-> fd = open(fileName, O_RDWR);  //fd blir en address till den öppna porten och måste vara en och samma genom hela klassen. Den får inte omdeklareras i readSensorData() och och måste då ha en this-> 
                                          
    	char *fileName = "/dev/i2c-1";                        
@@ -57,7 +57,7 @@ void cadxl345::initialize(){
    	}
 }
 
-int cadxl345::readSensorData(){
+int adxl345::readSensorData(){
 	
 	//int fd;                                          
    	char *fileName = "/dev/i2c-1";                        
@@ -92,5 +92,5 @@ int cadxl345::readSensorData(){
 	}
 }
 
-cadxl345::~cadxl345(){}
+adxl345::~adxl345(){}
 
