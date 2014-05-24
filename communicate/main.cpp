@@ -12,6 +12,9 @@
 int main(int argc, const char * argv[])
 {
     Communicate C;
+    sleep(1);
+    std::cout << "Do some stuff in the main thread while waiting for connections" << std::endl;
+    C.closeClient();
     return 0;
 }
 

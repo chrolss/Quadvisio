@@ -3,12 +3,61 @@
 
 Communicate::Communicate()
 {
-    std::cout << "test" << std::endl;
     std::thread t1(&Communicate::Listen, this);
     t1.join();
 }
 
+// Function to remove all dead processes
+void sigchld_handler(int s)
+{
+    while(waitpid(-1, NULL, WNOHANG) > 0);
+}
+
+void Communicate::error(const char *msg)
+{
+    perror(msg);
+    exit(1);
+}
+
 void Communicate::Listen()
 {
-    std::cout << "Detta kommer från en tråd" << std::endl;
+    sockfd = socket(AF_INET, SOCK_STREAM, 0);
+    if (sockfd < 0)
+        error("ERROR opening socket");
+    bzero((char *) &serv_addr, sizeof(serv_addr));
+    portno = atoi(PORT);
+    serv_addr.sin_family = AF_INET;
+    serv_addr.sin_addr.s_addr = INADDR_ANY;
+    serv_addr.sin_port = htons(portno);
+    if (bind(sockfd, (struct sockaddr *) &serv_addr, sizeof(serv_addr)) < 0) error("ERROR on binding");
+    listen(sockfd,5);
+    clilen = sizeof(cli_addr);
+    
+    std::cout << "Listening for life..." << std::endl;
+    newsockfd = accept(sockfd,(struct sockaddr *) &cli_addr, &clilen);
+    if (newsockfd < 0)
+        error("ERROR on accept");
+    bzero(buffer,256);
+    std::cout << "Connection estabilished" << std::endl;
+    std::cout << "Whaiting for income.." << std::endl;
+    n = (int)read(newsockfd,buffer,255);
+    if (n < 0) error("ERROR reading from socket");
+    printf("Here is the message: %s\n",buffer);
+    n = (int)write(newsockfd,"I got your message",18);
+    if (n < 0) error("ERROR writing to socket");
+    close(sockfd);
+}
+
+void Communicate::sendMsg(std::string s) {
+    if (send(newsockfd, "Hello, world!", 13, 0) == -1)
+        perror("send");
+}
+
+void Communicate::checkClient() {
+    std::cout << newsockfd << std::endl;
+}
+
+void Communicate::closeClient() {
+    close(newsockfd);
+    std::cout << "Connection closed." << std::endl;
 }
