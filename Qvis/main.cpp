@@ -1,13 +1,15 @@
 
 #include <iostream>
-#include "layout.h"
+#include "controller.h"
 
 int main(int argv, char **args)
 {
     QApplication app(argv, args);
     
-    Qvislayout qvis;
-    qvis.show();
+    std::cout << "Qvis started" << std::endl;
+    
+    QvisController controller;
+    controller.showUI();
     
     return app.exec();
 }
