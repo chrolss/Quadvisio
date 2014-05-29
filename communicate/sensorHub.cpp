@@ -1,4 +1,5 @@
 #include "sensorHub.h"
+#include <iostream>
 
 
 sensorHub::sensorHub()
@@ -28,6 +29,9 @@ std::string sensorHub::getDataMPU()
     std::ostringstream strs;
     strs << x << " " << y << " " << z;
     std::string str = strs.str();
+    
+    std::cout << x << std::endl;
+    std::cout << str << std::endl;
     
     return str;
 }

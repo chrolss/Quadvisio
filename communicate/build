@@ -2,4 +2,4 @@
 
 echo "Building the communication app"
 
-g++ -O2 main.cpp communicate.cpp -o communicate -std=c++0x -pthread
+g++ -O2 main.cpp communicate.cpp sensorHub.cpp mpu6050.cpp adxl345.cpp -o communicate -std=c++0x -pthread
