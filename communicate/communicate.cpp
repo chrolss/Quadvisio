@@ -44,8 +44,8 @@ void Communicate::Listen()
     
     // Send message
     msg = senHub->getDataMPU();
-    std::cout << &msg << std::endl;
-    n = (int)write(newsockfd,&msg,msg.length());
+    
+    n = (int)write(newsockfd,msg.c_str(),msg.length());
     
     if (n < 0) error("ERROR writing to socket");
     close(sockfd);
