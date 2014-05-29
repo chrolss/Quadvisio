@@ -1,0 +1,1 @@
+// Quadvisio registered trademark awesomeness
