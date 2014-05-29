@@ -7,12 +7,19 @@
 //
 
 #include <iostream>
+#include <string>
+#include "sensorHub.h"
+
+using namespace std;
 
 int main(int argc, const char * argv[])
 {
-
-    // insert code here...
-    std::cout << "Hello, World!\n";
+    sensorHub test;
+    test.initializeMPU();
+    string s = test.getDataMPU();
+    
+    cout << s << endl;
+    
     return 0;
 }
 
