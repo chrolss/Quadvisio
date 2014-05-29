@@ -1,0 +1,5 @@
+#!/bin/bash
+
+echo "Building sensor hub"
+
+g++ -O2 sensorHub.cpp adxl345.cpp mpu6050.cpp -o sensurHub
