@@ -22,6 +22,8 @@ public:
     QvisLayout();
     
     QPushButton *connectButton, *closeButton;
+    enum { NumGridRows = 3};
+    QLineEdit *lineEdits[NumGridRows], *ipField, *portField;
     
 private slots:
     void saveData();
@@ -29,9 +31,7 @@ private slots:
     void createConnectBox();
     
 private:
-    enum { NumGridRows = 3};
     QLabel *labels[NumGridRows];
-    QLineEdit *lineEdits[NumGridRows], *ipField;
     QGroupBox *gridGroupBox;
     QGroupBox *connectGroupBox;
     QLabel *connectLabel;

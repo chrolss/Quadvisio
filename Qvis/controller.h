@@ -13,9 +13,18 @@
 #include <QtGui>
 #include <QObject>
 #include <QDialog>
+#include <QTcpSocket>
+#include <string.h>
 
 #include "layout.h"
 #include "model.h"
+
+class QDialogButtonBox;
+class QLabel;
+class QLineEdit;
+class QPushButton;
+class QTcpSocket;
+class QNetworkSession;
 
 class QvisController : public QDialog
 {
@@ -26,12 +35,30 @@ public:
     void setTCPButton();
     void showUI();
     
-private slots:
+    /* For the TCP connection */
     void connectTCP();
+    static void* threadHelper(void *pThisArg)
+    {
+        QvisController *pThis = static_cast<QvisController*>(pThisArg);
+        pThis->connectTCP();
+        return NULL;
+    }
+    
+private slots:
+    void createTCPThread();
+    void readTCP();
+    void displayError(QAbstractSocket::SocketError socketError);
     
 private:
     QvisLayout *ui;
     QvisModel *model;
+    
+    // Networking
+    pthread_t t;
+    QTcpSocket *tcpSocket;
+    QString currentFortune;
+    quint16 blockSize;
+    QNetworkSession *networkSession;
     
 };
 
