@@ -19,7 +19,7 @@ QvisLayout::QvisLayout()
     mainLayout->addWidget(connectGroupBox);
     setLayout(mainLayout);
     setWindowTitle(tr("Qvis v0.1 (alpha)"));
-    setFixedSize(200, 300);
+    setFixedSize(300, 300);
 }
 
 void QvisLayout::saveData()
@@ -35,6 +35,7 @@ void QvisLayout::createGridBox()
     
     labels[0] = new QLabel(tr("X"));
     lineEdits[0] = new QLineEdit;
+    lineEdits[0]->setText("hej");
     layout->addWidget(labels[0], 1, 0);
     layout->addWidget(lineEdits[0], 1, 1);
     labels[1] = new QLabel(tr("Y"));
@@ -57,9 +58,12 @@ void QvisLayout::createConnectBox()
     connectLabel = new QLabel(tr("Not connected"));
     connectLabel->setStyleSheet("QLabel { color : red; }");
     connectLabel->setAlignment(Qt::AlignCenter);
+    ipField = new QLineEdit;
+    ipField->setText("Enter IP adress");
     connectButton = new QPushButton(tr("Connect to Pi"));
         
     connectLayout->addWidget(connectLabel);
+    connectLayout->addWidget(ipField);
     connectLayout->addWidget(connectButton);
     connectGroupBox->setLayout(connectLayout);
 }

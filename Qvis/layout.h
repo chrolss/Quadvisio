@@ -31,7 +31,7 @@ private slots:
 private:
     enum { NumGridRows = 3};
     QLabel *labels[NumGridRows];
-    QLineEdit *lineEdits[NumGridRows];
+    QLineEdit *lineEdits[NumGridRows], *ipField;
     QGroupBox *gridGroupBox;
     QGroupBox *connectGroupBox;
     QLabel *connectLabel;

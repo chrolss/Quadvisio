@@ -10,6 +10,7 @@
 #define __layout_test__model__
 
 #include <iostream>
+#include "tcpHandler.h"
 
 class QvisModel
 {
@@ -18,7 +19,7 @@ public:
     void connectToServer();
     
 private:
-    
+    tcpHandler *tcpH;
 };
 
 #endif /* defined(__layout_test__model__) */

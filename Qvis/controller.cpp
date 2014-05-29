@@ -16,7 +16,6 @@ QvisController::QvisController() {
     setTCPButton();
 }
 
-
 void QvisController::connectTCP()
 {
     std::cout << "This comes from the controller" << std::endl;
