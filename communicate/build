@@ -1,0 +1,5 @@
+#!/bin/bash
+
+echo "Building the communication app"
+
+g++ -O2 main.cpp communicate.cpp -o communicate -std=c++0x -pthread

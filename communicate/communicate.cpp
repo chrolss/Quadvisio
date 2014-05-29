@@ -8,10 +8,6 @@ Communicate::Communicate()
 }
 
 // Function to remove all dead processes
-void sigchld_handler(int s)
-{
-    while(waitpid(-1, NULL, WNOHANG) > 0);
-}
 
 void Communicate::error(const char *msg)
 {
