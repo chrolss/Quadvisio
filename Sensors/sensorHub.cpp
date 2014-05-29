@@ -4,11 +4,11 @@
 sensorHub::sensorHub()
 {};
 
-void intializeMPU(){
+void sensorHub::initializeMPU(){
 	mpu = new mpu6050;
 }
 	
-void initializeADXL(){
+void sensorHub::initializeADXL(){
 	adxl = new adxl345;
 }
 
@@ -17,7 +17,7 @@ std::string sensorHub::getAllData(){
 	double x = mpu->getAccX();
 	double y = mpu->getAccY();
 	double z = mpu->getAccZ();
-
+    return "hej";
 }
 
 
