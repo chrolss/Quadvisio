@@ -10,6 +10,7 @@
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <thread>
+#include "sensorHub.h"
 
 #define PORT "3490"  // the port users will be connecting to
 #define BACKLOG 10
@@ -31,6 +32,7 @@ private:
     struct sockaddr_in serv_addr, cli_addr;
     int n;
     std::string msg;
+    sensorHub *senHub;
 };
 
 #endif

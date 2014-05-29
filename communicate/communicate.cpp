@@ -3,6 +3,8 @@
 
 Communicate::Communicate()
 {
+    senHub = new sensorHub;
+    senHub->initializeMPU();
     std::thread t1(&Communicate::Listen, this);
     t1.join();
 }
@@ -41,8 +43,8 @@ void Communicate::Listen()
     printf("Here is the message: %s\n",buffer);
     
     // Send message
-    
-    n = (int)write(newsockfd,"I got your message",18);
+    msg = senHub->getDataMPU();
+    n = (int)write(newsockfd,&msg,msg.length());
     
     if (n < 0) error("ERROR writing to socket");
     close(sockfd);
