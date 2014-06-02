@@ -24,6 +24,6 @@ int main(int argc, char *argv[]){
 	l3g4200d l3g4200d;
 	for (int i = 0; i < 20; i++){
 		l3g4200d.readSensorData();
-		
+				
 	}
 }

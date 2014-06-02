@@ -43,7 +43,7 @@ void l3g4200d::initialize(){
 	}
    	// If you'd like to adjust/use the HPF, you can edit the line below to configure CTRL_REG2:
    	
-	/*
+	
 	buf[0] = CTRL_REG2;                                       // Commands for performing a ranging
    	buf[1] = 0x00;
    
@@ -77,7 +77,7 @@ void l3g4200d::initialize(){
    	{
        		return false;
    	}
-	*/
+	
 }
 
 int l3g4200d::readSensorData(){
