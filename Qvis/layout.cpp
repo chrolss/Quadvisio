@@ -58,9 +58,9 @@ void QvisLayout::createConnectBox()
     connectLabel->setStyleSheet("QLabel { color : red; }");
     connectLabel->setAlignment(Qt::AlignCenter);
     ipField = new QLineEdit;
-    ipField->setText("IP adress");
+    ipField->setText("10.0.1.4");
     portField = new QLineEdit;
-    portField->setText("Port Number");
+    portField->setText("3490");
     connectButton = new QPushButton(tr("Connect to Pi"));
         
     connectLayout->addWidget(connectLabel);
@@ -68,6 +68,49 @@ void QvisLayout::createConnectBox()
     connectLayout->addWidget(portField);
     connectLayout->addWidget(connectButton);
     connectGroupBox->setLayout(connectLayout);
+}
+
+void QvisLayout::setConnectionStatus(bool state)
+{
+    if (state) {
+        connectButton->setEnabled(false);
+        ipField->setEnabled(false);
+        portField->setEnabled(false);
+        connectButton->setText("Connecting");
+        connectLabel->setStyleSheet("QLabel { color : black; }");
+        connectLabel->setText("Connecting...");
+    }
+    else {
+        connectButton->setEnabled(true);
+        ipField->setEnabled(true);
+        portField->setEnabled(true);
+        connectButton->setText("Connect");
+        connectLabel->setStyleSheet("QLabel { color : red; }");
+        connectLabel->setText("Not Connected");
+    }
+}
+
+void QvisLayout::setConnected()
+{
+    connectButton->setEnabled(true);
+    connectButton->setText("Disconnect");
+    connectLabel->setStyleSheet("QLabel { color : green; }");
+    connectLabel->setText("Not connected to: " + ipField->text());
+}
+
+void QvisLayout::setDataFields(QString str)
+{
+    lineEdits[0]->setText(str);
+}
+
+int QvisLayout::getPort()
+{
+    return portField->text().toInt();
+}
+
+QString QvisLayout::getIp()
+{
+    return ipField->text();
 }
 
 

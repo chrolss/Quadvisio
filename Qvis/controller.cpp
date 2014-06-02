@@ -27,43 +27,69 @@ void QvisController::setTCPButton()
     QObject::connect(ui->connectButton, SIGNAL(clicked()), this, SLOT(createTCPThread()));
 }
 
+// Create and start thread for TCP connection
 void QvisController::createTCPThread()
 {
-    ui->connectButton->setEnabled(false);
+    
+    ui->setConnectionStatus(true);
 
     tcpSocket = new QTcpSocket(this);
     std::cout << "This comes from the controller" << std::endl;
-    int rc = pthread_create(&t, NULL, threadHelper, static_cast<void*>(this));
-    if ( rc != 0 )
-    {
-        std::cerr << "Error in thread creation..." << std::endl;
-        std::cerr << strerror(rc) << std::endl;
-        exit(EXIT_FAILURE);
-    }
-}
-
-void QvisController::connectTCP()
-{
-    std::cout << "This comes from the thread" << std::endl;
     
     connect(tcpSocket, SIGNAL(readyRead()), this, SLOT(readTCP()));
     connect(tcpSocket, SIGNAL(error(QAbstractSocket::SocketError)), this, SLOT(displayError(QAbstractSocket::SocketError)));
-    
-    ui->connectButton->setText("Connecting");
+
     blockSize = 0;
-    tcpSocket->connectToHost(ui->ipField->text(),ui->portField->text().toInt());
+    tcpSocket->connectToHost(ui->getIp(),ui->getPort());
     
+    //QObject::connect(ui->connectButton, SIGNAL(clicked()), this, SLOT(closeTCP()));
+    ui->setConnected();
+}
+
+void QvisController::closeTCP()
+{
     tcpSocket->abort();
     tcpSocket->deleteLater();
-    ui->lineEdits[0]->setText("Hej");
+    ui->setConnectionStatus(false);
 }
 
 void QvisController::readTCP()
 {
-    
+    std::cout << "hej" << std::endl;
+
+    QByteArray data = tcpSocket->readAll();
+    QString qs = data;
+    // Either this if you use UTF-8 anywhere
+    std::string utf8_text = qs.toUtf8().constData();
+    std::cout << utf8_text << std::endl;
+
+    ui->setDataFields(qs);
 }
 
 void QvisController::displayError(QAbstractSocket::SocketError socketError)
 {
+    std::cout << "In Error function" << std::endl;
+
+    switch (socketError) {
+        case QAbstractSocket::RemoteHostClosedError:
+            break;
+        case QAbstractSocket::HostNotFoundError:
+            QMessageBox::information(this, tr("Fortune Client"),
+                                     tr("The host was not found. Please check the "
+                                        "host name and port settings."));
+            break;
+        case QAbstractSocket::ConnectionRefusedError:
+            QMessageBox::information(this, tr("Fortune Client"),
+                                     tr("The connection was refused by the peer. "
+                                        "Make sure the fortune server is running, "
+                                        "and check that the host name and port "
+                                        "settings are correct."));
+            break;
+        default:
+            QMessageBox::information(this, tr("Fortune Client"),
+                                     tr("The following error occurred: %1.")
+                                     .arg(tcpSocket->errorString()));
+    }
     
+    ui->setConnectionStatus(false);
 }

@@ -20,10 +20,13 @@ class QvisLayout : public QDialog
     
 public:
     QvisLayout();
+    void setConnectionStatus(bool state);
+    void setConnected();
+    int getPort();
+    QString getIp();
+    void setDataFields(QString str);
     
     QPushButton *connectButton, *closeButton;
-    enum { NumGridRows = 3};
-    QLineEdit *lineEdits[NumGridRows], *ipField, *portField;
     
 private slots:
     void saveData();
@@ -31,12 +34,13 @@ private slots:
     void createConnectBox();
     
 private:
+    enum { NumGridRows = 3};
     QLabel *labels[NumGridRows];
     QGroupBox *gridGroupBox;
     QGroupBox *connectGroupBox;
-    QLabel *connectLabel;
-
     QVBoxLayout *connectLayout;
+    QLineEdit *lineEdits[NumGridRows], *ipField, *portField;
+    QLabel *connectLabel;
     
 };
 

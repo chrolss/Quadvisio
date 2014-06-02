@@ -32,24 +32,17 @@ class QvisController : public QDialog
     
 public:
     QvisController();
-    void setTCPButton();
     void showUI();
-    
-    /* For the TCP connection */
-    void connectTCP();
-    static void* threadHelper(void *pThisArg)
-    {
-        QvisController *pThis = static_cast<QvisController*>(pThisArg);
-        pThis->connectTCP();
-        return NULL;
-    }
     
 private slots:
     void createTCPThread();
+    void closeTCP();
     void readTCP();
     void displayError(QAbstractSocket::SocketError socketError);
     
 private:
+    void setTCPButton();
+    
     QvisLayout *ui;
     QvisModel *model;
     
@@ -59,6 +52,7 @@ private:
     QString currentFortune;
     quint16 blockSize;
     QNetworkSession *networkSession;
+    char buffer[256];
     
 };
 
