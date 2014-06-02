@@ -38,7 +38,9 @@ void l3g4200d::initialize(){
   	 buf[1] = 0x0F;
    
    	if ((write(fd,buf,2)) != 2){
+		std::cout << (write(fd,buf,2)) << std::endl;	//Denna rad ger tillbaka -1, kolla adxl345-koden och leta efter likheter/skillnader
 		printf("Error writing to i2c slave\n");
+		printf("A\n");
 		exit(1);
 	}
    	// If you'd like to adjust/use the HPF, you can edit the line below to configure CTRL_REG2:
@@ -47,9 +49,10 @@ void l3g4200d::initialize(){
 	buf[0] = CTRL_REG2;                                       // Commands for performing a ranging
    	buf[1] = 0x00;
    
-   	if(!writeToDevice(fd,buf,2))
+   	if((write(fd,buf,2)) != 2)
    	{
-       		return false;
+       		printf("Failed to write\n");
+		exit(1);
    	}
    	// Configure CTRL_REG3 to generate data ready interrupt on INT2
     	// No interrupts used on INT1, if you'd like to configure INT1
@@ -57,26 +60,29 @@ void l3g4200d::initialize(){
    	buf[0] = CTRL_REG3;                                       // Commands for performing a ranging
    	buf[1] = 0x08;
    
-   	if(!writeToDevice(fd,buf,2))
+   	if((write(fd,buf,2)) != 2)
    	{
-       		return false;
-   	}
+       		printf("Failed to write \n");
+   		exit(1);
+	}
 
    	buf[0] = CTRL_REG4;                                       // Commands for performing a ranging
    	buf[1] = 0x30;//0x30 - 2000
    
-   	if(!writeToDevice(fd,buf,2))
+   	if((write(fd,buf,2)) != 2)
    	{
-       		return false;
+       		printf("Failed to write\n");
+		exit(1);
    	}
 
    	buf[0] = CTRL_REG5;                                       // Commands for performing a ranging
    	buf[1] = 0x00;
    
-   	if(!writeToDevice(fd,buf,2))
+   	if((write(fd,buf,2)) != 2)
    	{
-       		return false;
-   	}
+       		printf("Failed to write\n");
+   		exit(1);
+	}
 	
 }
 
