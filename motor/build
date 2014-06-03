@@ -1,0 +1,5 @@
+#!/bin/bash
+
+echo "Building motor class"
+
+g++ -O2 -I/usr/include/python2.7 pyembed.cpp motorPWM.cpp main.cpp -L/usr/lib/python2.7/config -Xlinker -export-dynamic -lpython2.7 -lm -lpthread -lutil -o testProgram 
