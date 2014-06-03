@@ -1,11 +1,3 @@
-/**
- * @file pyembed.cpp
- * Defines a wrapper to the Python C API.
- * @see pyembed.h
- * Copyright (C) 2006 Mindteck.
- * @author Vijay Mathew Pandyalakal
- * @date 08 May, 2006
- */
 
 #include <iostream>
 using std::cout;

@@ -1,10 +1,3 @@
-/**
- * @file pyembed.h
- * Declares a wrapper to the Python C API.
- * Copyright (C) 2006 Mindteck.
- * @author Vijay Mathew Pandyalakal
- * @date 08 May, 2006
- */
 
 #ifndef PYEMBED_H
 #define PYEMBED_H
