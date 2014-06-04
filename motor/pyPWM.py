@@ -7,6 +7,9 @@ def init():
 def close():
 	PWM.stop("P8_13")
 	PWM.cleanup()
+	quit()
 
 def setPWM(a):
-	PWM.set_duty_cycle("P8_13",long(a))
+	print float(a)
+	PWM.set_duty_cycle("P8_13",float(a))
+
