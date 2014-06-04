@@ -3,7 +3,7 @@
 #include <iostream>
 #include "motorPWM.h"
 
-using namespace pyembed;
+//using namespace pyembed;
 
 motorPWM::motorPWM(int argc, char** argv){
 	try
@@ -12,7 +12,7 @@ motorPWM::motorPWM(int argc, char** argv){
         py.load("pyPWM");
         py.call("init");
 	}
-	catch (Python_exception ex)
+	catch (pyembed::Python_exception ex)
 	{
 		std::cout << ex.what();
 	}
@@ -21,13 +21,13 @@ motorPWM::motorPWM(int argc, char** argv){
 void motorPWM::setPWM(std::string a){
 	try
 	{
-		Arg_map args;
+		pyembed::Arg_map args;
 
-		args["4"] = Py_long;
+		args["4"] = pyembed::Py_long;
 
 		py.call("setPWM",args);
 	}
-	catch (Python_exception ex)
+	catch (pyembed::Python_exception ex)
 	{
 		std::cout << ex.what();
 	}
@@ -37,7 +37,7 @@ void motorPWM::closePWM()
 {
     try {
         py.call("close");
-    } catch (Python_exception ex) {
+    } catch (pyembed::Python_exception ex) {
         std::cout << ex.what();
     }
 }
@@ -45,11 +45,11 @@ void motorPWM::closePWM()
 void motorPWM::talk(int argc, char** argv){
 	try
     	{
-      		Python py(argc, argv); //create a python instance
+      		pyembed::Python py(argc, argv); //create a python instance
 	
 		py.run_file("hello.py");
 	}
-	catch (Python_exception ex)
+	catch (pyembed::Python_exception ex)
    	{
       		std::cout << ex.what() << '\n';
     	}
