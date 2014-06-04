@@ -8,7 +8,6 @@ using namespace pyembed;
 motorPWM::motorPWM(int argc, char** argv){
 	try
 	{
-        py = new Python(argc, argv);
         py(argc, argv);
         py.load("pyPWM");
         py.call("init");
