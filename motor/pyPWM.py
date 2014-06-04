@@ -1,3 +1,5 @@
+#!/bin/usr/python
+
 import Adafruit_BBIO.PWM as PWM
 
 
@@ -11,6 +13,8 @@ def close():
 
 def setPWM(a):
 	print float(a)
-    i = input("Set duty cycle from python: ")
-	PWM.set_duty_cycle("P8_13",float(i))
-
+	i = input("skriv duty i python: ")
+	if i < 100:
+		PWM.set_duty_cycle("P8_13",float(i))
+	else:
+		print("fel som fan")
