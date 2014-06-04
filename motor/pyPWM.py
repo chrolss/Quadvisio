@@ -11,5 +11,6 @@ def close():
 
 def setPWM(a):
 	print float(a)
-	PWM.set_duty_cycle("P8_13",float(a))
+    i = input("Set duty cycle from python: ")
+	PWM.set_duty_cycle("P8_13",float(i))
 
