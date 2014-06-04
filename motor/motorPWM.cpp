@@ -8,9 +8,9 @@
 motorPWM::motorPWM(int argc, char** argv){
 	try
 	{
-        py(argc, argv);
-        py.load("pyPWM");
-        py.call("init");
+        py = new pyembed::Python(argc,argv);
+        py->load("pyPWM");
+        py->call("init");
 	}
 	catch (pyembed::Python_exception ex)
 	{
@@ -25,7 +25,7 @@ void motorPWM::setPWM(std::string a){
 
 		args["4"] = pyembed::Py_long;
 
-		py.call("setPWM",args);
+		py->call("setPWM",args);
 	}
 	catch (pyembed::Python_exception ex)
 	{
@@ -36,23 +36,10 @@ void motorPWM::setPWM(std::string a){
 void motorPWM::closePWM()
 {
     try {
-        py.call("close");
+        py->call("close");
     } catch (pyembed::Python_exception ex) {
         std::cout << ex.what();
     }
-}
-
-void motorPWM::talk(int argc, char** argv){
-	try
-    	{
-      		pyembed::Python py(argc, argv); //create a python instance
-	
-		py.run_file("hello.py");
-	}
-	catch (pyembed::Python_exception ex)
-   	{
-      		std::cout << ex.what() << '\n';
-    	}
 }
 
 //motorPWM::~motorPWM()
