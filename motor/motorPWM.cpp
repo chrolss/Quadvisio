@@ -1,7 +1,6 @@
 // Quadvisio registered trademark awesomeness
 
 #include <iostream>
-#include "pyembed.h"
 #include "motorPWM.h"
 
 using namespace pyembed;

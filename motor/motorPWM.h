@@ -13,7 +13,7 @@ public:
 
 private:
 	double p1,p2,p3,p4;
-	Python *py;
+	pyembed::Python *py;
 };
 
 #endif /* MOTORPWM_H_ */	
