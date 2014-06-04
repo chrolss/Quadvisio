@@ -23,7 +23,7 @@ void motorPWM::setPWM(std::string a){
 	{
 		pyembed::Arg_map args;
 
-		args["4"] = pyembed::Py_long;
+		args[a] = pyembed::Py_long;
 
 		py->call("setPWM",args);
 	}

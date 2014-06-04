@@ -9,4 +9,4 @@ def close():
 	PWM.cleanup()
 
 def setPWM(a):
-	PWM.set_duty_cycle("P8_13",float(a))
+	PWM.set_duty_cycle("P8_13",long(a))
