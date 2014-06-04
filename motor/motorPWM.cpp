@@ -6,10 +6,32 @@
 
 using namespace pyembed;
 
-motorPWM::motorPWM(){}
+motorPWM::motorPWM(int argc, char** argv){
+	try
+	{
+	py(argc, argv);
+	py.load("pyPWM");
+	py.call("init");
+	}
+	catch (Python_exception ex)
+	{
+		std::cout << ex.what();
+	}
+}
 
-void motorPWM::setMotorPWM(double s1,double s2, double s3, double s4){
-		
+void motorPWM::setPWM(float a){
+	try
+	{
+		Arg_map args;
+
+		args[a] = Py_float;
+
+		py.call("setPWM",args);
+	}
+	catch (Pyton_exception ex)
+	{
+		std::cout << ex.what();
+	}
 	
 
 }
