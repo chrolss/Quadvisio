@@ -9,9 +9,10 @@ using namespace pyembed;
 motorPWM::motorPWM(int argc, char** argv){
 	try
 	{
-	py(argc, argv);
-	py.load("pyPWM");
-	py.call("init");
+        py = new Python(argc, argv);
+        py(argc, argv);
+        py.load("pyPWM");
+        py.call("init");
 	}
 	catch (Python_exception ex)
 	{
@@ -19,21 +20,28 @@ motorPWM::motorPWM(int argc, char** argv){
 	}
 }
 
-void motorPWM::setPWM(float a){
+void motorPWM::setPWM(std::string a){
 	try
 	{
 		Arg_map args;
 
-		args[a] = Py_float;
+		args["4"] = Py_long;
 
 		py.call("setPWM",args);
 	}
-	catch (Pyton_exception ex)
+	catch (Python_exception ex)
 	{
 		std::cout << ex.what();
 	}
-	
+}
 
+void motorPWM::closePWM()
+{
+    try {
+        py.call("close");
+    } catch (Python_exception ex) {
+        std::cout << ex.what();
+    }
 }
 
 void motorPWM::talk(int argc, char** argv){
@@ -49,4 +57,7 @@ void motorPWM::talk(int argc, char** argv){
     	}
 }
 
-motorPWM::~motorPWM(){}
+//motorPWM::~motorPWM()
+//{
+//
+//}

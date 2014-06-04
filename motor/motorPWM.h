@@ -5,14 +5,15 @@
 class motorPWM
 {
 public:
-	motorPWM();
-	void setPWM(float a); //will take 4 speed values and write correct PWM
+	motorPWM(int argc, char** argv);
+	void setPWM(std::string a); //will take 4 speed values and write correct PWM
+    void closePWM();
 	void talk(int argc, char** argv); //test function for pyscripts
-	~motorPWM();
+	//~motorPWM();
 
 private:
 	double p1,p2,p3,p4;
-	Python py;
+	Python *py;
 };
 
 #endif /* MOTORPWM_H_ */	
