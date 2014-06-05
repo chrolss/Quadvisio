@@ -64,7 +64,6 @@ int adxl345::readSensorData(){
    	int  address = 0x53;                              
    	char buf[6];                              
    	short accX,accY,accZ;
-
 	
 	buf[0] = 0x32;                                       // This is the register we wish to read from
    	if ((write(fd, buf, 1)) != 1) {                        // Send the register to read from
@@ -83,11 +82,12 @@ int adxl345::readSensorData(){
 	{ 
 	accX=accY=accZ=0;
 	
-
+	
+	
 	this->accX = ((short)buf[1]<<8) | (short) buf[0]; 
        	this->accY = ((short)buf[3]<<8) | (short) buf[2];
       	this->accZ = ((short)buf[5]<<8) | (short) buf[4];
-
+	
 	return 0;
 	}
 }
