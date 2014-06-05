@@ -1,3 +1,5 @@
+//Created by Christian Olsson
+
 #include <iostream>
 #include "adxl345.h"
 #include <stdio.h>

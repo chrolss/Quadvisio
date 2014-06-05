@@ -18,8 +18,10 @@ int main(int argc, char *argv[]){
 		short x = adxl345.getAccX();
 		short y = adxl345.getAccY();
 		short z = adxl345.getAccZ();
-		std::cout<<"x:"<<x<<"\ty:"<<y<<"\tz:"<<z<<std::endl;
+		//std::cout<<"x:"<<x<<"\ty:"<<y<<"\tz:"<<z<<std::endl;
+		std::cout << "x: " << x << std::endl;
 	}
+
 	/*
 	l3g4200d l3g4200d;
 	for (int i = 0; i < 20; i++){
