@@ -11,9 +11,4 @@ def close():
 	quit()
 
 def setPWM(a):
-	print float(a)
-	i = input("skriv duty i python: ")
-	if i < 100:
-		PWM.set_duty_cycle("P8_13",float(i))
-	else:
-		print("fel som fan")
+	PWM.set_duty_cycle("P8_13",float(a))
