@@ -1,0 +1,5 @@
+#!/bin/bash
+
+echo "Building Atlas Project"
+
+g++ -I../Sensors/adxl345.cpp main.cpp -o atlas
