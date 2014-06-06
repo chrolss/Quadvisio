@@ -21,12 +21,11 @@ motorPWM::motorPWM(int argc, char** argv){
 void motorPWM::setPWM(std::string a){
 	try
 	{
-		pyembed::Arg_map args;
 
 		args[a] = pyembed::Py_string;
-
 		py->call("setPWM",args);
-		args.clear();
+        args.clear();
+        
 	}
 	catch (pyembed::Python_exception ex)
 	{
