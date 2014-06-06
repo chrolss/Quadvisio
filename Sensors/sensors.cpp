@@ -11,7 +11,8 @@
 using namespace std;
 
 int main(int argc, char *argv[]){
-		
+
+	/*
 	adxl345 adxl345;
 	while (true){
 		adxl345.readSensorData();
@@ -21,12 +22,15 @@ int main(int argc, char *argv[]){
 		//std::cout<<"x:"<<x<<"\ty:"<<y<<"\tz:"<<z<<std::endl;
 		std::cout << "x: " << x << std::endl;
 	}
-
-	/*
-	l3g4200d l3g4200d;
-	for (int i = 0; i < 20; i++){
-		l3g4200d.readSensorData();
-				
-	}
 	*/
+
+	l3g4200d l3g;
+	while (true){
+		l3g.readSensorData();
+		short x = l3g.getAngleX();
+		short y = l3g.getAngleY();
+		short z = l3g.getAngleZ();
+		std::cout << "x: " << x << "\ty: " << y << "\tz: " << z << std::endl;
+	}
+
 }

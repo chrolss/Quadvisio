@@ -34,13 +34,17 @@ void l3g4200d::initialize(){
       		exit(1);
   	}
 
+	if (ioctl(fd, I2C_SLAVE, address) < 0) {
+	      		printf("Unable to get bus access to talk to slave\n");
+	      		exit(1);
+	   	}
+
 	 buf[0] = CTRL_REG1;                                       // Commands for performing a ranging
   	 buf[1] = 0x0F;
    
    	if ((write(fd,buf,2)) != 2){
-		std::cout << (write(fd,buf,2)) << std::endl;	//Denna rad ger tillbaka -1, kolla adxl345-koden och leta efter likheter/skillnader
+		std::cout << (write(fd,buf,2)) << std::endl;
 		printf("Error writing to i2c slave\n");
-		printf("A\n");
 		exit(1);
 	}
    	// If you'd like to adjust/use the HPF, you can edit the line below to configure CTRL_REG2:
@@ -126,9 +130,9 @@ int l3g4200d::readSensorData(){
       	rate_gyr_y = (float)y * G_GAIN;
       	rate_gyr_z = (float)z * G_GAIN;
       	//Calculate the angles from the gyro
-      	this->gyroAngleX+=rate_gyr_x*DT;
-        this->gyroAngleY+=rate_gyr_y*DT;
-        this->gyroAngleZ+=rate_gyr_z*DT;
+      	this->gyroAngleX =rate_gyr_x*DT;
+        this->gyroAngleY =rate_gyr_y*DT;
+        this->gyroAngleZ =rate_gyr_z*DT;
         
 
 	//Convert Accelerometer values to degrees
