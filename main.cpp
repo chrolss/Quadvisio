@@ -1,11 +1,42 @@
 #include <iostream>
-#include "../Quadvisio/Sensors/adxl345.h"
+#include <Sensors/adxl345.h>
+#include <motor/motorPWM.h>
 
-//Lite kul här
 
-adxl345 adxl345;
-
-int main() {
+int main(int argc, char** argv) {
+	adxl345 adxl;
+	motorPWM PWM(argc, argv);
+	while (true)
+	{
+		adxl.readSensorData();
+		short x = adxl.getAccX();
+		if (x>0)
+		{
+			if(x<180)
+			{
+				PWM.setPWM("7");
+				std::cout << "7" << std::endl;
+			}
+			else
+			{
+				PWM.setPWM("9");
+				std::cout << "9" << std::endl;
+			}
+		}
+		else
+		{
+			if(x<-180)
+			{
+				PWM.setPWM("5");
+				std::cout << "5" << std::endl;
+			}
+			else
+			{
+				PWM.setPWM("4");
+				std::cout << "4" << std::endl;
+			}
+		}
+	}
     // Testa de klasser som man vill testa
     
     return 0;
