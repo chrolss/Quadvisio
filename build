@@ -2,4 +2,4 @@
 
 echo "Building Atlas Project"
 
-g++ -I../Sensors/adxl345.cpp main.cpp -o atlas
+g++ -I /home/root/Desktop/Quadvisio/Sensors /home/root/Desktop/Quadvisio/Sensors/adxl345.cpp main.cpp -o atlas
