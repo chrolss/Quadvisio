@@ -6,7 +6,7 @@
 int main(int argc, char** argv) {
 	adxl345 adxl;
 	motorPWM PWM(argc, argv);
-	while (true)
+	for (int j=0; j<5000; j++)
 	{
 		adxl.readSensorData();
 		short x = adxl.getAccX();
@@ -27,13 +27,13 @@ int main(int argc, char** argv) {
 		{
 			if(x<-180)
 			{
-				PWM.setPWM("5");
-				std::cout << "5" << std::endl;
+				PWM.setPWM("4");
+				std::cout << "4" << std::endl;
 			}
 			else
 			{
-				PWM.setPWM("4");
-				std::cout << "4" << std::endl;
+				PWM.setPWM("5");
+				std::cout << "5" << std::endl;
 			}
 		}
 	}

@@ -22,9 +22,7 @@ void motorPWM::setPWM(std::string a){
 	try
 	{
 		args[a] = pyembed::Py_string;
-		std::cout << "A" << std::endl;
 		py->call("setPWM",args);
-		std::cout << "B" << std::endl;
         
 	}
 	catch (pyembed::Python_exception ex)
