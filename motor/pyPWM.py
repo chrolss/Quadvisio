@@ -12,3 +12,4 @@ def close():
 
 def setPWM(a):
 	PWM.set_duty_cycle("P8_13",float(a))
+	a = None
