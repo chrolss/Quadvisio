@@ -4,14 +4,11 @@ import Adafruit_BBIO.PWM as PWM
 import time
 
 PWM.start("P8_13",4,50)
+PWM.set_duty_cycle("P8_13",4)
+while (True):
+	PWM.set_duty_cycle("P8_13",float(4))
+	print "duty set to: 5.54 "	
 
-while True:
-	i = input("Enter a number")
-	if i < 100:
-		PWM.set_duty_cycle("P8_13",float(i))
-		print "duty set to: ",i,""
-	else:	
-		break
 
 PWM.stop("P8_13")
 PWM.cleanup()
