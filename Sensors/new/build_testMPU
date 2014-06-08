@@ -1,5 +1,5 @@
 #!/bin/bash
 
-echo ”mpu” test program
+echo building mpu test program
 
 g++ -O2 main.cpp MPU6050.cpp I2Cdev.cpp sensorHub.cpp -o testMPU

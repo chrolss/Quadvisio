@@ -1,5 +1,6 @@
 #include "sensorHub.h"
 
+MPU6050 mpu;
 
 sensorHub::sensorHub()
 {
