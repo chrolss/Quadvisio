@@ -14,7 +14,7 @@
 using namespace std;
 
 mpu6050::mpu6050() {
-    adress = MPU6050_DEFAULT_ADDRESS;
+    devAddr = MPU6050_DEFAULT_ADDRESS;
 	initialize();
 }
 

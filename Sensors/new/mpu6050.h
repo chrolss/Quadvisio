@@ -376,7 +376,7 @@ private:
     void setFullScaleGyroRange(uint8_t range);
     void setFullScaleAccelRange(uint8_t range);
     
-	uint8_t address;
+	uint8_t devAddr;
     uint8_t buffer[14];
 };
 
