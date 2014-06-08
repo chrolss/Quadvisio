@@ -3,6 +3,7 @@
 
 sensorHub::sensorHub()
 {
+    dmpReady =false;
     mpu = new MPU6050;
 }
 
