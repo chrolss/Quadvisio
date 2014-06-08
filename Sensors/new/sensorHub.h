@@ -22,7 +22,7 @@ public:
 	void initializeADXL();
 private:
     bool dmpReady;
-    MPU6050 *mpu;
+    MPU6050 mpu;
     uint8_t mpuIntStatus;
     uint8_t devStatus;
     uint16_t packetSize;
