@@ -2,23 +2,23 @@
 #include "I2Cdev.h"
 #include "MPU6050_6Axis_MotionApps20.h"
 
+bool dmpReady;
+uint8_t mpuIntStatus;
+uint8_t devStatus;
+uint16_t packetSize;
+uint16_t fifoCount;
+uint8_t fifoBuffer[64];
+Quaternion q;
+VectorInt16 aa;
+VectorInt16 aaReal;
+VectorInt16 aaWorld;
+VectorFloat gravity;
+float euler[3];
+float ypr[3];
+MPU6050 mpu;
+
 sensorHub::sensorHub()
 {
-    bool dmpReady;
-    uint8_t mpuIntStatus;
-    uint8_t devStatus;
-    uint16_t packetSize;
-    uint16_t fifoCount;
-    uint8_t fifoBuffer[64];
-    Quaternion q;
-    VectorInt16 aa;
-    VectorInt16 aaReal;
-    VectorInt16 aaWorld;
-    VectorFloat gravity;
-    float euler[3];
-    float ypr[3];
-    MPU6050 mpu;
-
     dmpReady =false;
 
     // initialize device
