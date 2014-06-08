@@ -3,7 +3,8 @@
 sensorHub::sensorHub()
 {
     dmpReady =false;
-    
+    MPU6050 mpu;
+
     // initialize device
     printf("Initializing I2C devices...\n");
     mpu.initialize();
