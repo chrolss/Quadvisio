@@ -19,7 +19,7 @@ public:
 	std::string getAllData();
     std::string getDataMPU();
 	void initializeMPU();
-	void initializeADXL();
+    
 private:
     bool dmpReady;
     uint8_t mpuIntStatus;
@@ -27,6 +27,7 @@ private:
     uint16_t packetSize;
     uint16_t fifoCount;
     uint8_t fifoBuffer[64];
+    MPU6050 mpu;
     Quaternion q;
     VectorInt16 aa;
     VectorInt16 aaReal;

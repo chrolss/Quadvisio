@@ -1,13 +1,8 @@
 #include "sensorHub.h"
 
-MPU6050 mpu;
-
 sensorHub::sensorHub()
 {
     dmpReady =false;
-}
-
-void sensorHub::initializeMPU(){
     // initialize device
     printf("Initializing I2C devices...\n");
     mpu.initialize();
@@ -43,6 +38,10 @@ void sensorHub::initializeMPU(){
         // (if it's going to break, usually the code will be 1)
         printf("DMP Initialization failed (code %d)\n", devStatus);
     }
+}
+
+void sensorHub::initializeMPU(){
+
 }
 
 std::string sensorHub::getAllData()

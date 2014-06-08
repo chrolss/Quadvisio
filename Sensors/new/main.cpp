@@ -13,7 +13,6 @@ int main(int argc, const char * argv[])
 {
     
     sensorHub sensor;
-    sensor.initializeMPU();
 
     return 0;
 }
