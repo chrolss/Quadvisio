@@ -16,9 +16,7 @@ class sensorHub
 public:
 	sensorHub();
 	std::string getAllData();
-    std::string getDataMPU();
-	void initializeMPU();
-    
+    std::string getDataMPU();    
 private:
 
 };
