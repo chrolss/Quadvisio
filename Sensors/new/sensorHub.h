@@ -18,6 +18,7 @@ public:
 	std::string getAllData();
     std::string getDataMPU();    
 private:
+    void initializeMPU();
 
 };
 
