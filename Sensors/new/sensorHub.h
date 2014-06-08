@@ -18,8 +18,21 @@ public:
 	std::string getAllData();
     std::string getDataMPU();    
 private:
-    void initializeMPU();
-
+    extern void initializeMPU();
+    extern bool dmpReady;
+    extern uint8_t mpuIntStatus;
+    extern uint8_t devStatus;
+    extern uint16_t packetSize;
+    extern uint16_t fifoCount;
+    extern uint8_t fifoBuffer[64];
+    extern MPU6050 mpu;
+    extern Quaternion q;
+    extern VectorInt16 aa;
+    extern VectorInt16 aaReal;
+    extern VectorInt16 aaWorld;
+    extern VectorFloat gravity;
+    extern float euler[3];
+    extern float ypr[3];
 };
 
 #endif /* sensorHub */
