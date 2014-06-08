@@ -11,7 +11,6 @@
 
 int main(int argc, const char * argv[])
 {
-    
     sensorHub sensor;
 
     return 0;
