@@ -1,0 +1,5 @@
+#!/bin/bash
+
+echo "Building quad pwm program"
+
+g++ -std=c++11 -W -I /Users/toniaxelsson/Documents/Kod/Quadvisio/ /Users/toniaxelsson/Documents/Kod/Quadvisio/BlackLib/BlackLib.cpp motorControl.cpp blackMain.cpp -o quadvisio

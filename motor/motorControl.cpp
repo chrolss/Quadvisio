@@ -1,17 +1,20 @@
 #include <iostream>
 #include "motorControl.h"
+#include <BlackLib/BlackLib.h>
+
+BlackPWM pwm13;
 
 motorControl::motorControl(){
 	initialize();
 }
 
 void motorControl::initialize(){
-	BlackPWM *pwm13 = new BlackPWM(EHRPWM2B); //instansera P8_13's pwm
+	//BlackPWM *pwm13 = new BlackPWM(EHRPWM2B); //instansera P8_13's pwm
 
-	pwm13->setRunState(run); //sätt igång signalen
+	pwm13.setRunState(run); //sätt igång signalen
 
-	pwm13->setPeriodTime(5000000);
-	pwm13->setDutyPercent(0.0);
+	pwm13.setPeriodTime(5000000);
+	pwm13.setDutyPercent(0.0);
 
 	sleep(1);
 }
@@ -22,9 +25,10 @@ float motorControl::mapper(){
 }
 
 void motorControl::setPWM(float a){
-	pwm13->setDutyPercent(a);
+    float i;
+	pwm13.setDutyPercent(i);
 }
 
 void motorControl::closePWM(){
-	pwm13->setRunState(stop);
+	pwm13.setRunState(stop);
 }
