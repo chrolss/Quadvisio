@@ -15,7 +15,7 @@ public:
 
 private:
 	void initialize();
-	float mapper();
+	float mapper(float b);
 };
 
 #endif /*MOTORCONTROL_H_ */

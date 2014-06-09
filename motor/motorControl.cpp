@@ -17,13 +17,14 @@ void motorControl::initialize(){
 	sleep(1);
 }
 
-float motorControl::mapper(){
-	std::cout << "inget än" << std::endl; //ska konvertera 0 - 100% input till riktiga pwmvärden
-	return 0.0;
+float motorControl::mapper(float b){
+	float val = float(float(29.0/100.0)*b) + float(20); //Konverterar input 0 - 100 till pwmsignal
+	return val;
 }
 
 void motorControl::setPWM(float a){
-	pwm13->setDutyPercent(a);
+	float val = mapper(a);
+	pwm13->setDutyPercent(val);
 }
 
 void motorControl::closePWM(){
