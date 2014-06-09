@@ -18,6 +18,7 @@ int main(){
 		{
 			std::cout << "Quitting" << std::endl;
 			PWM.closePWM();
+			break;
 		}
 	}
 

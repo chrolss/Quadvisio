@@ -9,7 +9,7 @@ class motorControl
 {
 public:
 	motorControl();
-	void setPWM(float a);
+	void setPWM(float a);  //min 22% max 49%
 	void closePWM();
 	BlackPWM* pwm13;
 
