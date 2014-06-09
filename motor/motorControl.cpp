@@ -1,6 +1,5 @@
 #include <iostream>
 #include "motorControl.h"
-#include <BlackLib/BlackLib.h>
 
 
 motorControl::motorControl(){
@@ -8,7 +7,6 @@ motorControl::motorControl(){
 }
 
 void motorControl::initialize(){
-	//BlackPWM *pwm13 = new BlackPWM(EHRPWM2B); //instansera P8_13's pwm
 	pwm13 = new BlackPWM(EHRPWM2B);
 	pwm13->setRunState(run); //sätt igång signalen
 
