@@ -6,6 +6,7 @@
 //  Copyright (c) 2014 Toni Axelsson. All rights reserved.
 //
 
+/*
 #include <iostream>
 #include "motorPWM.h"
 
@@ -31,3 +32,4 @@ int main(int argc, char** argv)
     return 0;
 }
 
+*/

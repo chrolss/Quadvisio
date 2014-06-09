@@ -2,15 +2,16 @@
 
 #include <iostream>
 #include <unistd.h>
-#include "BlackLib.h"
+#include <BlackLib/BlackLib.h>
 
 using namespace std;
 
 int main()
 	{
 	BlackPWM	pwm13(EHRPWM2B);
-
+	pwm13.setRunState(run);
 	float percent = 0.0;
+	float duty = 0.0;
 
 	pwm13.setPeriodTime(5000000);
 	pwm13.setDutyPercent(0.0);
@@ -19,13 +20,16 @@ int main()
 
 	while (true)
 		{
-		cout << "Duty cycle: " << pwm13.getDutyValue() << endl;
+		cout << "Set new duty cycle: " << endl;
+		cin >> duty;
+
+		if (duty > 100)
+			break;
 
 		if (pwm13.fail(BlackPWM::outOfRangeErr))
 			cout << "New percentage out of range" << endl;
 
-		sleep(1);
-		pwm13.setDutyPercent(percent);
-		percent += 5.0;
+
+		pwm13.setDutyPercent(duty);
 		}
 	}
