@@ -63,6 +63,30 @@ void sensorHub::initializeMPU(){
 
 std::string sensorHub::getAllData()
 {
+    // if programming failed, don't try to do anything
+    if (!dmpReady) return "Fail";
+    // get current FIFO count
+    fifoCount = mpu.getFIFOCount();
+    
+    if (fifoCount == 1024) {
+        // reset so we can continue cleanly
+        mpu.resetFIFO();
+        printf("FIFO overflow!\n");
+        
+        // otherwise, check for DMP data ready interrupt (this should happen frequently)
+    } else if (fifoCount >= 42) {
+        // read a packet from FIFO
+        mpu.getFIFOBytes(fifoBuffer, packetSize);
+    }
+    
+    mpu.dmpGetQuaternion(&q, fifoBuffer);
+    printf("quat %7.2f %7.2f %7.2f %7.2f    ", q.w,q.x,q.y,q.z);
+    
+    mpu.dmpGetQuaternion(&q, fifoBuffer);
+    mpu.dmpGetGravity(&gravity, &q);
+    mpu.dmpGetYawPitchRoll(ypr, &q, &gravity);
+    printf("ypr  %7.2f %7.2f %7.2f    ", ypr[0] * 180/M_PI, ypr[1] * 180/M_PI, ypr[2] * 180/M_PI);
+
     return "hej";
 }
 

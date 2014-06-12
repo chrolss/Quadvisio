@@ -12,6 +12,7 @@
 int main(int argc, const char * argv[])
 {
     sensorHub sensor;
+    sensor.getAllData();
 
     return 0;
 }
