@@ -88,10 +88,7 @@ std::string sensorHub::getAllData()
     mpu.dmpGetGravity(&gravity, &q);
     mpu.dmpGetYawPitchRoll(ypr, &q, &gravity);
     printf("ypr  %7.2f %7.2f %7.2f    ", ypr[0] * 180/M_PI, ypr[1] * 180/M_PI, ypr[2] * 180/M_PI);
-    
-    str.append(std::to_string(ypr[0]*180/M_PI));
-    
-    printf("detta är ett test %s", str.c_str());
+        
     return "hej";
 }
 
