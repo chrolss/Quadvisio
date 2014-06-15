@@ -7,6 +7,7 @@
 #include <unistd.h>
 #include <stdint.h>
 #include <string.h>
+#include <sstream>
 #include <math.h>
 
 class sensorHub
@@ -14,7 +15,6 @@ class sensorHub
 public:
 	sensorHub();
 	std::string getAllData();
-    std::string getDataMPU();    
 private:
     void initializeMPU();
 

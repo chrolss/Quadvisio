@@ -2,4 +2,4 @@
 
 echo building mpu test program
 
-g++ -O2 main.cpp MPU6050.cpp I2Cdev.cpp sensorHub.cpp -o testMPU
+g++ -O2 main.cpp MPU6050.cpp I2Cdev.cpp sensorHub.cpp communicate.cpp -o testMPU
