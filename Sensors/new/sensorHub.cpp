@@ -79,12 +79,12 @@ std::string sensorHub::getAllData()
         mpu.getFIFOBytes(fifoBuffer, packetSize);
     
     mpu.dmpGetQuaternion(&q, fifoBuffer);
-    printf("quat %7.2f %7.2f %7.2f %7.2f    ", q.w,q.x,q.y,q.z);
+    //printf("quat %7.2f %7.2f %7.2f %7.2f    ", q.w,q.x,q.y,q.z);
     
     mpu.dmpGetQuaternion(&q, fifoBuffer);
     mpu.dmpGetGravity(&gravity, &q);
     mpu.dmpGetYawPitchRoll(ypr, &q, &gravity);
-    printf("ypr  %7.2f %7.2f %7.2f    ", ypr[0] * 180/M_PI, ypr[1] * 180/M_PI, ypr[2] * 180/M_PI);
+    //printf("ypr  %7.2f %7.2f %7.2f    ", ypr[0] * 180/M_PI, ypr[1] * 180/M_PI, ypr[2] * 180/M_PI);
     
     std::ostringstream o;
     o << q.x << " " << q.y << " " << q.z << " " << ypr[0] * 180/M_PI << " " << ypr[1] * 180/M_PI << " " << ypr[2] * 180/M_PI;

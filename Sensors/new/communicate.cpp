@@ -36,17 +36,33 @@ void Communicate::Listen()
         error("ERROR on accept");
     bzero(buffer,256);
     std::cout << "Connection estabilished" << std::endl;
-    std::cout << "Whaiting for income.." << std::endl;
-    n = (int)read(newsockfd,buffer,255);
-    if (n < 0) error("ERROR reading from socket");
-    printf("Here is the message: %s\n",buffer);
+    //std::cout << "Whaiting for income.." << std::endl;
+    //n = (int)read(newsockfd,buffer,255);
+    //if (n < 0) error("ERROR reading from socket");
+    //printf("Here is the message: %s\n",buffer);
     
     // Send message
     
+    std::cout << "Sending messages" << std::endl;
     msg = senHub->getAllData();
-    n = (int)write(newsockfd,msg.c_str(),msg.length());
+    sleep(1);
     
-    if (n < 0) error("ERROR writing to socket");
+    int i = 0;
+    while(true)
+    {
+		msg = senHub->getAllData();
+		i++;
+		if (i>100) {	
+			std::cout << "sending" << std::endl;
+			n = (int)write(newsockfd,msg.c_str(),msg.length());
+			i = 0;
+			if (n < 0) 
+			{
+				error("ERROR writing to socket");
+			}
+		}
+		
+    }
     close(sockfd);
 }
 
