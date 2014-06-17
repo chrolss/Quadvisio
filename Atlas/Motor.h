@@ -18,7 +18,7 @@ public:
     void setPWM(float *output);
     
 private:
-    
+    float PWM[4];
 };
 
 #endif /* defined(__Atlas__Motor__) */

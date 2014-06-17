@@ -7,3 +7,7 @@
 //
 
 #include "Com.h"
+
+Com::Com(){
+    
+}

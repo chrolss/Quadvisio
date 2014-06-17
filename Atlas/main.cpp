@@ -20,6 +20,7 @@ Com *communicate;
 Motor *motor;
 float input[6];
 float output[4];
+bool run=true;
 
 void initailize(){
     sensorManager = new SensorManager;
@@ -29,10 +30,11 @@ void initailize(){
 }
 
 void loop(){
-    while (true) {
+    while (run) {
         sensorManager->readMPU(input);
         controller->calcPWM(input, output);
         motor->setPWM(output);
+        run=false;
     }
 }
 
