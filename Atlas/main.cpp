@@ -31,9 +31,20 @@ void initailize(){
 
 void loop(){
     while (run) {
+        
+        // Read sensor data
         sensorManager->readMPU(input);
+        
+        // Calculate control action
         controller->calcPWM(input, output);
+        
+        // Send PWM values to motors
         motor->setPWM(output);
+        
+        // If connected to Qvis send data
+        if (communicate->connected) {
+            communicate->sendMsg("Hej", 3);
+        }
         run=false;
     }
 }
