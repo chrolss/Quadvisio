@@ -18,7 +18,6 @@ class Motor{
 public:
     Motor();
     void setPWM(float *output); //min 22% max 49%
-    void closePWM();
     BlackPWM* pwmLF; //Left Front, pin P8_13
     BlackPWM* pwmRF; //right front, pin P8_19
     BlackPWM* pwmLR; //left rear, pin P9_14
@@ -29,6 +28,7 @@ private:
     float PWM[4];
     void initialize();
     float mapper(float b);
+    void closePWM();
 };
 
 #endif /* defined(__Atlas__Motor__) */

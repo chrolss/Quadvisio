@@ -12,7 +12,7 @@ Motor::Motor(){
 	initialize();
 }
 
-void intitialize(){
+void Motor::initialize(){
 	pwmLF = new BlackPWM(EHRPWM2B); //P8_13
 	pwmRF = new BlackPWM(EHRPWM2A); //P8_19
 	pwmLR = new BlackPWM(EHRPWM1A);	//P9_14
@@ -43,18 +43,12 @@ void intitialize(){
 	sleep(1);
 }
 
-float motorControl::mapper(float b){
+float Motor::mapper(float b){
 	float val = float(float(29.0/100.0)*b) + float(20); //Konverterar input 0 - 100 till pwmsignal
 	return val;
 }
 
-/*
-void motorControl::setPWM(float a){
-	float val = mapper(a);
-	pwmLF->setDutyPercent(val);
-}
-*/
-void motorControl::closePWM(){
+void Motor::closePWM(){
 	pwmLF->setRunState(stop); //stäng alla fyra pwmportar
 	pwmRF->setRunState(stop);
 	pwmLR->setRunState(stop);
@@ -62,10 +56,13 @@ void motorControl::closePWM(){
 }
 
 void Motor::setPWM(float *output) {
-    PWM[0]=output[0];
-    PWM[1]=output[1];
-    PWM[2]=output[2];
-    PWM[3]=output[3];
+	for (int i = 0; i<4; i++)
+		PWM[i] = mapper(output[i]);
+
+    pwmLF->setDutyPercent(PWM[0]);
+    pwmRF->setDutyPercent(PWM[1]);
+    pwmLR->setDutyPercent(PWM[2]);
+    pwmRR->setDutyPercent(PWM[3]);
     
     printf("The PWM values are: %f %f %f %f", PWM[0], PWM[1], PWM[2], PWM[3]);
 }
