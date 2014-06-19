@@ -15,6 +15,8 @@
 #include <QDialog>
 #include <QTcpSocket>
 #include <string.h>
+#include <unistd.h>
+
 
 #include "layout.h"
 #include "model.h"
@@ -49,11 +51,11 @@ private:
     // Networking
     pthread_t t;
     QTcpSocket *tcpSocket;
-    QString currentFortune;
+    QByteArray data;
+    QString qs;
     quint16 blockSize;
     QNetworkSession *networkSession;
-    char buffer[256];
-    
+    int numb=0;
 };
 
 #endif /* defined(__layout_test__controller__) */

@@ -55,15 +55,27 @@ void QvisController::closeTCP()
 
 void QvisController::readTCP()
 {
-    std::cout << "hej" << std::endl;
+    if (numb==0 && tcpSocket->bytesAvailable()>2) {
+        QByteArray length = tcpSocket->read(2);
+        QString qsl = length;
+        numb = length.toInt();
+        std::cout << "Bytes available after reading 2: " << tcpSocket->bytesAvailable() << std::endl;
+        std::cout << "Extracted length of message: " << numb << std::endl;
+    }
+    
+    if (numb>0 && tcpSocket->bytesAvailable()>=numb) {
+        data = tcpSocket->read(numb);
+        qs = data;
+        std::string utf8_text = qs.toUtf8().constData();
+        std::cout << utf8_text << std::endl;
+        QStringList pieces = qs.split(" ");
+        ui->setDataFields(pieces);
+        numb = 0;
+    }
 
-    QByteArray data = tcpSocket->readAll();
-    QString qs = data;
-    // Either this if you use UTF-8 anywhere
-    std::string utf8_text = qs.toUtf8().constData();
-    std::cout << utf8_text << std::endl;
-
-    ui->setDataFields(qs);
+    else {
+        return;
+    }
 }
 
 void QvisController::displayError(QAbstractSocket::SocketError socketError)

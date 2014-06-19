@@ -11,15 +11,17 @@
 QvisLayout::QvisLayout()
 {
     std::cout << "This comes from the GUI" << std::endl;
-    createGridBox();
+    createAccBox();
+    createAngBox();
     createConnectBox();
     
-    QVBoxLayout *mainLayout = new QVBoxLayout;
-    mainLayout->addWidget(gridGroupBox);
-    mainLayout->addWidget(connectGroupBox);
+    QGridLayout *mainLayout = new QGridLayout;
+    mainLayout->addWidget(gridAccBox, 0, 0);
+    mainLayout->addWidget(gridAngBox, 0, 1);
+    mainLayout->addWidget(connectGroupBox, 1, 0, 1, 2);
     setLayout(mainLayout);
     setWindowTitle(tr("Qvis v0.1 (alpha)"));
-    setFixedSize(300, 350);
+    setFixedSize(400, 400);
 }
 
 void QvisLayout::saveData()
@@ -28,25 +30,47 @@ void QvisLayout::saveData()
 }
 
 // Create the connect Acceleration data UI section
-void QvisLayout::createGridBox()
+void QvisLayout::createAccBox()
 {
-    gridGroupBox = new QGroupBox(tr("Acceleration"));
+    gridAccBox = new QGroupBox(tr("Acceleration"));
     QGridLayout *layout = new QGridLayout;
     
-    labels[0] = new QLabel(tr("X"));
-    lineEdits[0] = new QLineEdit;
-    layout->addWidget(labels[0], 1, 0);
-    layout->addWidget(lineEdits[0], 1, 1);
-    labels[1] = new QLabel(tr("Y"));
-    lineEdits[1] = new QLineEdit;
-    layout->addWidget(labels[1], 2, 0);
-    layout->addWidget(lineEdits[1], 2, 1);
-    labels[2] = new QLabel(tr("Z"));
-    lineEdits[2] = new QLineEdit;
-    layout->addWidget(labels[2], 3, 0);
-    layout->addWidget(lineEdits[2], 3, 1);
+    labelsAcc[0] = new QLabel(tr("X"));
+    lineEditsAcc[0] = new QLineEdit;
+    layout->addWidget(labelsAcc[0], 1, 0);
+    layout->addWidget(lineEditsAcc[0], 1, 1);
+    labelsAcc[1] = new QLabel(tr("Y"));
+    lineEditsAcc[1] = new QLineEdit;
+    layout->addWidget(labelsAcc[1], 2, 0);
+    layout->addWidget(lineEditsAcc[1], 2, 1);
+    labelsAcc[2] = new QLabel(tr("Z"));
+    lineEditsAcc[2] = new QLineEdit;
+    layout->addWidget(labelsAcc[2], 3, 0);
+    layout->addWidget(lineEditsAcc[2], 3, 1);
     
-    gridGroupBox->setLayout(layout);
+    gridAccBox->setLayout(layout);
+}
+
+void QvisLayout::createAngBox()
+{
+    gridAngBox =new QGroupBox(tr("Angles"));
+    QGridLayout *layout = new QGridLayout;
+    
+    labelsAng[0] = new QLabel(tr("Roll"));
+    lineEditsAng[0] = new QLineEdit;
+    layout->addWidget(labelsAng[0], 1, 0);
+    layout->addWidget(lineEditsAng[0], 1, 1);
+    labelsAng[1] = new QLabel(tr("Pitch"));
+    lineEditsAng[1] = new QLineEdit;
+    layout->addWidget(labelsAng[1], 2, 0);
+    layout->addWidget(lineEditsAng[1], 2, 1);
+    labelsAng[2] = new QLabel(tr("Yaw"));
+    lineEditsAng[2] = new QLineEdit;
+    layout->addWidget(labelsAng[2], 3, 0);
+    layout->addWidget(lineEditsAng[2], 3, 1);
+    
+    gridAngBox->setLayout(layout);
+    
 }
 
 // Create the connect UI section
@@ -98,9 +122,14 @@ void QvisLayout::setConnected()
     connectLabel->setText("Not connected to: " + ipField->text());
 }
 
-void QvisLayout::setDataFields(QString str)
+void QvisLayout::setDataFields(QStringList strList)
 {
-    lineEdits[0]->setText(str);
+    lineEditsAcc[0]->setText(strList.value(0));
+    lineEditsAcc[1]->setText(strList.value(1));
+    lineEditsAcc[2]->setText(strList.value(2));
+    lineEditsAng[2]->setText(strList.value(3));
+    lineEditsAng[1]->setText(strList.value(4));
+    lineEditsAng[0]->setText(strList.value(5));
 }
 
 int QvisLayout::getPort()

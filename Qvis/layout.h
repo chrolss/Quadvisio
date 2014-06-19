@@ -24,22 +24,23 @@ public:
     void setConnected();
     int getPort();
     QString getIp();
-    void setDataFields(QString str);
+    void setDataFields(QStringList strList);
     
     QPushButton *connectButton, *closeButton;
     
 private slots:
     void saveData();
-    void createGridBox();
+    void createAccBox();
     void createConnectBox();
+    void createAngBox();
     
 private:
     enum { NumGridRows = 3};
-    QLabel *labels[NumGridRows];
-    QGroupBox *gridGroupBox;
+    QLabel *labelsAcc[NumGridRows], *labelsAng[NumGridRows];
+    QGroupBox *gridAccBox, *gridAngBox;
     QGroupBox *connectGroupBox;
     QVBoxLayout *connectLayout;
-    QLineEdit *lineEdits[NumGridRows], *ipField, *portField;
+    QLineEdit *lineEditsAcc[NumGridRows], *lineEditsAng[NumGridRows], *ipField, *portField;
     QLabel *connectLabel;
     
 };
