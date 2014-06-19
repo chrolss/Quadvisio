@@ -1,9 +1,9 @@
 //
 //  Controller.h
-//  Atlas
+//  Atlas Software
 //
-//  Created by Toni Axelsson on 2014-06-17.
-//  Copyright (c) 2014 Toni Axelsson. All rights reserved.
+//  Created by Quadvisio on 2014-06-06 as part of the Atlas Project.
+//  Copyright (c) 2014 Quadvisio. All rights reserved.
 //
 
 #ifndef __Atlas__Controller__
