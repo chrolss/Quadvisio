@@ -1,0 +1,6 @@
+#!/bin/bash
+
+echo "bulding kalman filter test"
+
+g++ -W kalman.cpp test.cpp -o program
+
