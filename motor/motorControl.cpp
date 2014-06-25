@@ -25,6 +25,7 @@ float motorControl::mapper(float b){
 
 void motorControl::setPWM(float a){
 	float val = mapper(a);
+	std::cout << "val = " << val << std::endl;
 	pwm13->setDutyPercent(val);
 }
 
