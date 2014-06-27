@@ -15,6 +15,7 @@ short est;
 
 int main(int argc, char *argv[]){
 
+/*
 	kalman filter(0.01, 0.1, 10, 10);
 	adxl345 adxl345;
 	while (true){
@@ -27,14 +28,17 @@ int main(int argc, char *argv[]){
 		std::cout << "measured: " << x << ", estimated: " << est << std::endl;
 	}
 
-/*
+*/
 	l3g4200d l3g;
+	kalman filter2(0.1,0.1,10,10);
 	while (true){
 		l3g.readSensorData();
 		short x = l3g.getAngleX();
-		short y = l3g.getAngleY();
-		short z = l3g.getAngleZ();
-		std::cout << "x: " << x << "\ty: " << y << "\tz: " << z << std::endl;
+		//short y = l3g.getAngleY();
+		//short z = l3g.getAngleZ();
+		est = filter2.estimate(x);
+		std::cout<< "measured x: " << x << ", and estimated: " 
+<< est << std::endl;
 	}
-*/
+
 }
