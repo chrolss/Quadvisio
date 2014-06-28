@@ -7,3 +7,7 @@ Then run the shell scrip "gcc-set-default-version.sh" followed by the version nu
 	sh gcc-set-default-version.sh 4.x
 
 You should get a confirmation about what version is set as default
+
+You might have to make it executable by:
+
+	chmod 755 gcc-set-default-version
