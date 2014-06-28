@@ -1,0 +1,26 @@
+First
+
+	sudo apt-get install locales
+
+In most cases it will report that locales is already installed and up to date.
+
+Second, what most how-to’s and fixes forget to mention, it is very important 
+to know which locales are needed by the system.
+
+	sudo locale
+
+By running this command, you will get a list of every needed locale. It is important to write down the locales other than en_US. On my system there was an extra locale nl_NL.UTF-8.
+
+Now, you have to check which locale is already present on the system. Do this by running the following listing.
+
+	sudo locale -a
+
+Normally you will see some English locales. But your extra locales are probably missing.
+
+Use dpkg-reconfigure
+
+	sudo dpkg-reconfigure locales
+
+First you’ll get a menu in which you have to select all needed locales. Select the English ones AND your extras with the space-bar.
+In the next window select en_US.UTF-8 as default locale.
+After regenerating the locales log out and back in. Your problem is solved!

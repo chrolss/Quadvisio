@@ -1,0 +1,9 @@
+Install the g++/gcc version you want by (x is the version you want)
+
+	sudo apt-get g++-4.x gcc-4.x
+
+Then run the shell scrip "gcc-set-default-version.sh" followed by the version number:
+
+	sh gcc-set-default-version.sh 4.x
+
+You should get a confirmation about what version is set as default
