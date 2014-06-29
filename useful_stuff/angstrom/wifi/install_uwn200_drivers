@@ -1,0 +1,14 @@
+## How to install UWN200 Drivers (mt7601U)
+
+1) Download the latest mt7601U drivers for USB, filename something like 
+"DPO_MT7601*" and a file called "mt7601.tar.gz"
+
+2) Follow instructions from 
+"tutorial_installing-compact-USB-Wifi-Adapter-on-BB.pdf
+under the sections "FULL INSTALLATIONS", Follow it to point except:
+
+the files mtutil7601Usta.ko  and mtnet7601Usta.ko do not exist in the 
+downloaded folder. Find these files from "mt7601.tar.gz" file. However, 
+put them in the correct folder /lib/modules/$(uname -r) when installing.
+
+

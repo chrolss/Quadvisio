@@ -1,0 +1,14 @@
+### How to establish a WiFi connection with the UWN200
+
+1) after installing drivers, insert USB adapter and reboot BBB
+
+2) Follow the instructions in 
+"Tutorial_installing-Compact-USB-Wifi-Adapter-on-BBB.pdf"
+
+3) To actually connect, use VNC server and press the "network-button" in 
+top right corner of screen. Choose the correct network you want to 
+connect to, then on your router, turn on WPS-service (a button, or 
+online somewhere to start a WPS process). Then in angstrom, choose the 
+network and simply press "connect" and it will auto-setup everything
+
+4) The wifi should now work and should automatically start upon boot
