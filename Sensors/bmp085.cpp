@@ -8,7 +8,7 @@ bmp085::bmp085(){
 
 void bmp085::initialize(){
 	char *fileName = "/dev/i2c-1";
-	int address = 0x53; //ändra till den korrekta porten
+	int address = 0x77; //correct port
 	char buf[6];
 
 	this-> fd = open(fileName, O_RDWR);
