@@ -3,13 +3,9 @@
 
 Communicate::Communicate()
 {
-    senHub = new sensorHub;
-    senHub->initializeMPU();
     std::thread t1(&Communicate::Listen, this);
-    t1.join();
+    t1.detach();
 }
-
-// Function to remove all dead processes
 
 void Communicate::error(const char *msg)
 {
@@ -19,6 +15,7 @@ void Communicate::error(const char *msg)
 
 void Communicate::Listen()
 {
+    connected = false;
     sockfd = socket(AF_INET, SOCK_STREAM, 0);
     if (sockfd < 0)
         error("ERROR opening socket");
@@ -36,23 +33,27 @@ void Communicate::Listen()
     if (newsockfd < 0)
         error("ERROR on accept");
     bzero(buffer,256);
+    connected = true;
     std::cout << "Connection estabilished" << std::endl;
+    
     std::cout << "Whaiting for income.." << std::endl;
     n = (int)read(newsockfd,buffer,255);
     if (n < 0) error("ERROR reading from socket");
     printf("Here is the message: %s\n",buffer);
     
     // Send message
-    msg = senHub->getDataMPU();
-    
+    msg = "0.965 -0.234 0.543 0.4 0.3 0.6";
     n = (int)write(newsockfd,msg.c_str(),msg.length());
-    
     if (n < 0) error("ERROR writing to socket");
-    close(sockfd);
 }
 
-void Communicate::sendMsg(std::string s) {
-    if (send(newsockfd, "Hello, world!", 13, 0) == -1)
+void Communicate::sendMsg(std::string s, size_t i) {
+    
+    std::ostringstream ostr;
+    ostr << i << s;
+    s=ostr.str();
+    std::cout << s << std::endl;
+    if (send(newsockfd, s.c_str(), s.length(), 0) == -1)
         perror("send");
 }
 
