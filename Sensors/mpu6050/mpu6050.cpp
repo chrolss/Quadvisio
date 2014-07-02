@@ -9,27 +9,35 @@
 #include <sys/stat.h>
 #include <unistd.h>
 #include <math.h>
+#include <linux/i2c.h>
+#include <linux/i2c-dev.h>
 
 
 using namespace std;
+#define MAX_BUS 64
 
-mpu6050::mpu6050() {
+mpu6050::mpu6050( int bus, int adress) {
+    I2CBus = bus;
+    I2CAdress = adress
 	initialize();
 }
 
 void mpu6050::initialize(){
-	this-> fd = open(fileName, O_RDWR); // fd address, kept constant. Open port
-	char *fileName = "/dev/i2c-1";      // Name of the portwe will be using
-    address = 0x68;                     // Address of the SRF02 shifted right one bit
+	
+    char namebuf[MAX_BUS];
+    
+    snprintf(namebuf, sizeof(namebuf), "/dev/i2c-%d", I2CBus);
+    
+    int file;
     
     // Open port for reading and writing
-    if ((fd = open(fileName, O_RDWR)) < 0) {
+    if ((file = open(namebuf, O_RDWR)) < 0) {
         printf("Failed to open i2c port\n");
         exit(1);
     }
     
     // Set the port options and set the address of the device we wish to speak to
-    if (ioctl(fd, I2C_SLAVE, address) < 0) {
+    if (ioctl(fd, I2C_SLAVE, I2CAddress) < 0) {
         printf("Unable to get bus access to talk to slave\n");
         exit(1);
     }
@@ -38,7 +46,6 @@ void mpu6050::initialize(){
     buf[0] = 0x6b;
    	buf[1] = 0;
    
-    // Write commands to the i2c port
     if ((write(fd, buf, 2)) != 2) {
         printf("Error writing to i2c slave\n");
         exit(1);

@@ -1,20 +1,10 @@
 #ifndef MPU6050_H_
 #define MPU6050_H_
 
-#include <linux/i2c-dev.h>
-
-class mpu6050
-{
-public:
-	mpu6050();
-	int readSensorData();
-	double getAccX() {return accX;}
-	double getAccY() {return accY;}
-	double getAccZ() {return accZ;}
-	~mpu6050();
+class mpu6050 {
 
 private:
-    
+    int I2CBus, I2CAdress
     void convertAcc();
     
 	char i2c_bus;
@@ -22,12 +12,21 @@ private:
 	char buf[6];
 	int fd;
 	char *fileName;
-
+    
 	double accX, accY, accZ;
-	int x,y,z;	
-
+	int x,y,z;
+    
+    double pitch, roll, yaw;
+    
 	void initialize();
 
+public:
+	mpu6050(int bus, int adress);
+	int readSensorData();
+	double getAccX() {return accX;}
+	double getAccY() {return accY;}
+	double getAccZ() {return accZ;}
+	virtual ~mpu6050();
 };
 
 #endif /* MPU6050_H_ */
