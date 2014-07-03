@@ -1,5 +1,5 @@
 #!/bin/bash
 
-echo "Building motor class"
+echo "Building motor test program"
 
-g++ -O2 -I/usr/include/python2.7 pyembed.cpp motorPWM.cpp main.cpp -L/usr/lib/python2.7/config -Xlinker -export-dynamic -lpython2.7 -lm -lpthread -lutil -o testProgram 
+g++ -std=c++11 -W -I /home/root/Desktop/Quadvisio/ /home/root/Desktop/Quadvisio/BlackLib/BlackLib.cpp Motor.cpp main.cpp -o tester
