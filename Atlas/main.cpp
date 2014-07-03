@@ -51,8 +51,10 @@ void loop(){
 
 int main(int argc, const char * argv[])
 {
-    initailize();
-    loop();
+    //initailize();
+    //loop();
+	Motor pwm;
+
     return 0;
 }
 
