@@ -53,8 +53,61 @@ void bmp085::initialize(){
 }
 
 int bmp085::readSensorData(){
+	int up = 0;
+	buf[0] = 0xF4;
+	buf[1] = 0x34 + (3<<6); //kommer från oversampling setting = 3
+
+	if (write(fd,buf,2) != 2){
+		printf("Failed to write to i2c bus");
+		exit(1);
+	}
+	usleep((2+ (3<<3)) * 1000);
+	buf[0] = 0xF4;
+	if (read(fd, buf, 3) != 3)
+	{
+	      	printf("Unable to read from slave\n");
+	      	exit(1);
+	}
+	else
+	{
+		int up = ((int) buf[0] << 16) | (int) buf[1] << 8 | (int) buf[2] >> (8-3); //uncompensated pressure reading
+	}
+
+	int x1, x2, x3, b3, b6, p;
+	unsigned int b4, b7;
+
+	b6 = b5 - 4000;
+	x1 = (b2 * (b6 * b6)>>12)>>11;
+	x2 = (ac2 * b6)>>11;
+	x3 = x1 + x2;
+	b3 = (((((int)ac1)*4 + x3)<<3) + 2)>>2;
+
+	x1 = (ac3 * b6)>>13;
+	x2 = (b1 * ((b6 * b6)>>12))>>16;
+	x3 = x1 + x2;
+	b4 = (ac4 * (unsigned int)(x3 + 32768))>>15;
+
+	b7 = ((unsigned int)(up - b3) * (50000>>3));
+	if (b7 < 0x80000000)
+		p = (b7<<1)/b4;
+	else
+		p = (b7/b4)<<1;
+
+	x1 = (p>>8) * (p>>8);
+	x1 = (x1 * 3038)>>16;
+	x2 = (-7357 * p)>>16;
+	p += (x1 + x2 + 3791)>>4; //final pressure value
+
+	double A = p/101794.58;
+	double B = 1.0/5.25588;
+	double C = pow(A,B);
+	C = 1 - C;
+	C = C / 0.0000225577;
+
+	this->alt = C;
 
 	return 0;
 }
+
 
 bmp085::~bmp085(){}
