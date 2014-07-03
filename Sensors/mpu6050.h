@@ -1,6 +1,8 @@
 #ifndef MPU6050_H_
 #define MPU6050_H_
 
+#include <linux/i2c-dev.h>
+
 class mpu6050
 {
 public:
@@ -12,6 +14,9 @@ public:
 	~mpu6050();
 
 private:
+    
+    void convertAcc();
+    
 	char i2c_bus;
 	int address;
 	char buf[6];
