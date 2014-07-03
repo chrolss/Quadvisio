@@ -1,6 +1,8 @@
 #ifndef MPU6050_H_
 #define MPU6050_H_
 
+#define MPU6050_RA_ACCEL_XOUT_H     0x3b
+
 class mpu6050 {
 
 private:

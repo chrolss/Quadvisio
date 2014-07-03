@@ -54,7 +54,7 @@ void mpu6050::initialize() {
 int8_t mpu6050::readRawMotion()
 {
     int8_t count = 0;
-    buf[0] = 0x3b;
+    buf[0] = MPU6050_RA_ACCEL_XOUT_H;
     // This is the register we wish to
    	if ((write(fd, buf, 1)) != 1) {
         printf("Error writing to i2c slave\n");
@@ -62,7 +62,6 @@ int8_t mpu6050::readRawMotion()
    	}
     
     memset(&buf,0,sizeof(buf));
-
     count = read(fd, buf, 14);
     if ( count != 14) {                        // Read back data into buf[]
         fprintf(stderr, "Short read  from device, expected %d, got %d\n", 14, count);
