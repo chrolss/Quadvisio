@@ -47,6 +47,8 @@ void mpu6050::initialize() {
         printf("Error writing to i2c slave\n");
         exit(1);
     }
+    usleep(1000);
+    std::cout << "MPU initialized" << std::endl;
 }
 
 int8_t mpu6050::readRawMotion()
@@ -58,8 +60,7 @@ int8_t mpu6050::readRawMotion()
         printf("Error writing to i2c slave\n");
         return(-1);
    	}
-
-    usleep(1000);
+    
     memset(&buf,0,sizeof(buf));
 
     count = read(fd, buf, 14);
