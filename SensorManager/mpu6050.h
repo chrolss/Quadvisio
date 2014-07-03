@@ -377,8 +377,10 @@ private:
 	
     void convertAcc();
     void setSleep(bool enabled);
-    bool writeBit(uint8_t regAddr, uint8_t bitNum, uint8_t data);
-
+    void setClockSource(uint8_t source);
+    void setFullScaleGyroRange(uint8_t range);
+    void setFullScaleAccelRange(uint8_t range);
+    
 public:
 	mpu6050(int bus, uint8_t adress);
     void initialize();

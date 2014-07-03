@@ -20,34 +20,15 @@ mpu6050::mpu6050( int bus, uint8_t adress) {
 
 void mpu6050::initialize() {
     
+    std::cout << "Setting clock source..." << std::endl;
+    setClockSource(MPU6050_CLOCK_PLL_XGYRO);
+    std::cout << "Setting full gyro range..." << std::endl;
+    setFullScaleGyroRange(MPU6050_GYRO_FS_250);
+    std::cout << "Setting full acceleration range..." << std::endl;
+    setFullScaleAccelRange(MPU6050_ACCEL_FS_2);
     setSleep(false);
 
-    char namebuf[MAX_BUS];
-
-    snprintf(namebuf, sizeof(namebuf), "/dev/i2c-%d", I2CBus);
-    
-    // Open port for reading and writing
-    if ((fd = open(namebuf, O_RDWR)) < 0) {
-        printf("Failed to open i2c port\n");
-        exit(1);
-    }
-    
-    // Set the port options and set the address of the device we wish to speak to
-    if (ioctl(fd, I2C_SLAVE, I2CAdress) < 0) {
-        printf("Unable to get bus access to talk to slave\n");
-        exit(1);
-    }
-
-    // Wake up the mpu6050 by sending a wake-up call to adress 0x6b
-    buf[0] = 0x6b;
-    buf[1] = 0;
-
-    if ((write(fd, buf, 2)) != 2) {
-        printf("Error writing to i2c slave\n");
-        exit(1);
-    }
-    usleep(1000);
-    std::cout << "MPU initialized" << std::endl;
+    std::cout << "MPU initialized!" << std::endl;
 }
 
 int8_t mpu6050::readRawMotion()
@@ -89,7 +70,15 @@ void mpu6050::convertAcc()
 }
 
 void mpu6050::setSleep(bool enabled) {
-    writeBit(MPU6050_RA_PWR_MGMT_1, MPU6050_PWR1_SLEEP_BIT, enabled);
+    I2Cdev::writeBit(I2CAdress, MPU6050_RA_PWR_MGMT_1, MPU6050_PWR1_SLEEP_BIT, enabled);
+}
+
+void mpu6050::setFullScaleAccelRange(uint8_t range) {
+    I2Cdev::writeBits(I2CAdress, MPU6050_RA_ACCEL_CONFIG, MPU6050_ACONFIG_AFS_SEL_BIT, MPU6050_ACONFIG_AFS_SEL_LENGTH, range);
+}
+
+void mpu6050::setFullScaleGyroRange(uint8_t range) {
+    I2Cdev::writeBits(I2CAdress, MPU6050_RA_GYRO_CONFIG, MPU6050_GCONFIG_FS_SEL_BIT, MPU6050_GCONFIG_FS_SEL_LENGTH, range);
 }
 
 
