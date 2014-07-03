@@ -53,7 +53,24 @@ int main(int argc, const char * argv[])
 {
     //initailize();
     //loop();
+	float tal;
+	float pwmTal[4];
 	Motor pwm;
+	while (true){
+		printf("Ge pwm-värde\n");
+		std::cin >> tal;
+		if (tal > 100){
+			pwm.closePWM();
+			exit(1);
+		}
+		pwmTal[0] = tal;
+		pwmTal[1] = tal;
+		pwmTal[2] = tal;
+		pwmTal[3] = tal;
+
+		pwm.setPWM(pwmTal);
+	}
+
 
     return 0;
 }
