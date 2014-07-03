@@ -5,6 +5,31 @@ bmp085::bmp085(){
 	calibrate(); //probably need to calibrate a new 0-level each time we initiate it.
 }
 
+short int bmp085::i2cRead(char address){
+	buf[0] = address;
+	if (read(fd, buf, 1) != 1)
+	{
+	    printf("Unable to read from slave\n");
+	    exit(1);
+	}
+
+	res = ((buf[0]<<8) & 0xFF00) | ((buf[0]>>8) & 0xFF);
+	return res;
+}
+
+void bmp085::calibrate(){
+	this->ac1 = i2cRead(0xAA);
+	this->ac2 = i2cRead(0xAC);
+	this->ac3 = i2cRead(0xAE);
+	this->ac4 = i2cRead(0xB0);
+	this->ac5 = i2cRead(0xB2);
+	this->ac6 = i2cRead(0xB4);
+	this->b1 = i2cRead(0xB6);
+	this->b2 = i2cRead(0xB8);
+	this->mb = i2cRead(0xBA);
+	this->mc = i2cRead(0xBC);
+	this->md = i2cRead(0xBE);
+}
 
 void bmp085::initialize(){
 	char *fileName = "/dev/i2c-1";

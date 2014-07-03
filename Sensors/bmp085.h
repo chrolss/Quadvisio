@@ -20,6 +20,7 @@ public:
 	int readSensorData();
 	double getAltitude() {return alt;}
 	double getTemperature() {return temp;}
+	short int i2cRead(char address);
 	~bmp085();
 
 private:
@@ -30,6 +31,20 @@ private:
 	char *fileName;
 
 	double alt, temp;
+
+	short int ac1;
+	short int ac2;
+	short int ac3;
+	unsigned short int ac4;
+	unsigned short int ac5;
+	unsigned short int ac6;
+	short int b1;
+	short int b2;
+	short int mb;
+	short int mc;
+	short int md;
+	int b5;
+	short int res;
 
 	void initialize();
 	void calibrate();
