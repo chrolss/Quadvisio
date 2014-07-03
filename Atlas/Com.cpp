@@ -9,7 +9,7 @@
 #include "Com.h"
 
 Com::Com(){
-    std::thread t1(&Communicate::Listen, this);
+    std::thread t1(&Com::Listen, this);
     t1.detach();
 }
 

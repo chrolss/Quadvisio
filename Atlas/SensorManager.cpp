@@ -9,10 +9,10 @@
 #include "SensorManager.h"
 
 SensorManager::SensorManager(){
-    
+    mpu = new mpu6050(1, 0x68);
 }
 
-void SensorManager::initialize(){
+void SensorManager::initializeMPU(){
     
 }
 
