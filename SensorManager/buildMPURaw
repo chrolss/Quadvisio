@@ -1,5 +1,5 @@
 #!/bin/bash
 
-echo "Building test program for the MPU6050”
+echo "Building test program for the MPU6050"
 
-g++ -O2 -I testRaw.cpp SensorManager.cpp mpu6050.cpp -o mpuRawTest
+g++ -O2 -W testRaw.cpp SensorManager.cpp mpu6050.cpp -o mpuRawTest -std=c++11

@@ -4,7 +4,8 @@
 class mpu6050 {
 
 private:
-    int I2CBus, I2CAdress;
+    int I2CBus;
+    uint8_t I2CAdress;
     void convertAcc();
     
 	uint8_t buf[14];
@@ -19,7 +20,7 @@ private:
 	void initialize();
 
 public:
-	mpu6050(int bus, int adress);
+	mpu6050(int bus, uint8_t adress);
 	int8_t readRawMotion();
     
 	double getAccX() {return accX;}

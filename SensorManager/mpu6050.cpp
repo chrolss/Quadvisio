@@ -11,21 +11,20 @@
 #include <math.h>
 #include <linux/i2c.h>
 #include <linux/i2c-dev.h>
-#include <errno.h>
 
 
 using namespace std;
 #define MAX_BUS 64
 
-mpu6050::mpu6050( int bus, int adress) {
+mpu6050::mpu6050( int bus, uint8_t adress) {
     I2CBus = bus;
     I2CAdress = adress;
 }
 
-void mpu6050::initialize(){
-	
+void mpu6050::initialize() {
+
     char namebuf[MAX_BUS];
-    
+
     snprintf(namebuf, sizeof(namebuf), "/dev/i2c-%d", I2CBus);
     
     // Open port for reading and writing
@@ -35,15 +34,15 @@ void mpu6050::initialize(){
     }
     
     // Set the port options and set the address of the device we wish to speak to
-    if (ioctl(fd, I2C_SLAVE, I2CAddress) < 0) {
+    if (ioctl(fd, I2C_SLAVE, I2CAdress) < 0) {
         printf("Unable to get bus access to talk to slave\n");
         exit(1);
     }
 
     // Wake up the mpu6050 by sending a wake-up call to adress 0x6b
     buf[0] = 0x6b;
-   	buf[1] = 0;
-   
+    buf[1] = 0;
+
     if ((write(fd, buf, 2)) != 2) {
         printf("Error writing to i2c slave\n");
         exit(1);
@@ -53,9 +52,9 @@ void mpu6050::initialize(){
 int8_t mpu6050::readRawMotion()
 {
     int8_t count = 0;
-
+    buf[0] = 0x3b;
     // This is the register we wish to
-   	if ((write(fd, 0x3b, 1)) != 1) {
+   	if ((write(fd, buf, 1)) != 1) {
         printf("Error writing to i2c slave\n");
         return(-1);
    	}
