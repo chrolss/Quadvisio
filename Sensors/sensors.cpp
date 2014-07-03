@@ -4,6 +4,7 @@
 #include "adxl345.h"
 #include "mpu6050.h"
 #include "l3g4200d.h"
+#include "bmp085.h"
 #include <Kalman/kalman.h>
 
 // []
@@ -28,7 +29,7 @@ int main(int argc, char *argv[]){
 		std::cout << "measured: " << x << ", estimated: " << est << std::endl;
 	}
 
-*/
+
 	l3g4200d l3g;
 	kalman filter2(0.1,0.1,10,10);
 	while (true){
@@ -40,5 +41,11 @@ int main(int argc, char *argv[]){
 		std::cout<< "measured x: " << x << ", and estimated: " 
 << est << std::endl;
 	}
+*/
+
+	bmp085 bmp;
+	bmp.readSensorData();
+	double altitude = bmp.getAltitude();
+	std::cout << "Current altitude: " << altitude << std::endl;
 
 }

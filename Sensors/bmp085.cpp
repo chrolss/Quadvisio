@@ -7,13 +7,13 @@ bmp085::bmp085(){
 
 short int bmp085::i2cRead(char address){
 	buf[0] = address;
-	if (read(fd, buf, 1) != 1)
+	if (read(fd, buf, 2) != 2)
 	{
 	    printf("Unable to read from slave\n");
 	    exit(1);
 	}
 
-	res = ((buf[0]<<8) & 0xFF00) | ((buf[0]>>8) & 0xFF);
+	res = ((buf[0]<<8) & 0xFF00) | ((buf[1]>>8) & 0xFF);
 	return res;
 }
 
@@ -54,14 +54,15 @@ void bmp085::initialize(){
 
 int bmp085::readSensorData(){
 	int up = 0;
+	int oss = 0;
 	buf[0] = 0xF4;
-	buf[1] = 0x34 + (3<<6); //kommer från oversampling setting = 3
+	buf[1] = 0x34 + (oss<<6); //kommer från oversampling setting = 3
 
 	if (write(fd,buf,2) != 2){
 		printf("Failed to write to i2c bus");
 		exit(1);
 	}
-	usleep((2+ (3<<3)) * 1000);
+	usleep((2 + (3<<3)) * 1000);
 	buf[0] = 0xF4;
 	if (read(fd, buf, 3) != 3)
 	{
@@ -71,16 +72,17 @@ int bmp085::readSensorData(){
 	else
 	{
 		int up = ((int) buf[0] << 16) | (int) buf[1] << 8 | (int) buf[2] >> (8-3); //uncompensated pressure reading
+		printf("Up = %d \n",up);
 	}
 
 	int x1, x2, x3, b3, b6, p;
 	unsigned int b4, b7;
-
+	std::cout << "börjar räkna" << std::endl;
 	b6 = b5 - 4000;
 	x1 = (b2 * (b6 * b6)>>12)>>11;
 	x2 = (ac2 * b6)>>11;
 	x3 = x1 + x2;
-	b3 = (((((int)ac1)*4 + x3)<<3) + 2)>>2;
+	b3 = (((((int)ac1)*4 + x3)<<oss) + 2)>>2;
 
 	x1 = (ac3 * b6)>>13;
 	x2 = (b1 * ((b6 * b6)>>12))>>16;
