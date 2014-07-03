@@ -7,14 +7,12 @@ private:
     int I2CBus, I2CAdress
     void convertAcc();
     
-	char i2c_bus;
-	int address;
-	char buf[6];
+	uint8_t buf[14];
 	int fd;
 	char *fileName;
     
-	double accX, accY, accZ;
-	int x,y,z;
+	int16_t accX, accY, accZ;
+	int16_t ax,ay,az,gx,gy,gz;
     
     double pitch, roll, yaw;
     
@@ -22,7 +20,8 @@ private:
 
 public:
 	mpu6050(int bus, int adress);
-	int readSensorData();
+	int8_t readRawMotion();
+    
 	double getAccX() {return accX;}
 	double getAccY() {return accY;}
 	double getAccZ() {return accZ;}

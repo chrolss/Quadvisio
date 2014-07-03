@@ -11,6 +11,7 @@
 #include <math.h>
 #include <linux/i2c.h>
 #include <linux/i2c-dev.h>
+#include <errno.h>
 
 
 using namespace std;
@@ -28,10 +29,8 @@ void mpu6050::initialize(){
     
     snprintf(namebuf, sizeof(namebuf), "/dev/i2c-%d", I2CBus);
     
-    int file;
-    
     // Open port for reading and writing
-    if ((file = open(namebuf, O_RDWR)) < 0) {
+    if ((fd = open(namebuf, O_RDWR)) < 0) {
         printf("Failed to open i2c port\n");
         exit(1);
     }
@@ -52,53 +51,45 @@ void mpu6050::initialize(){
     }
 }
 
-int mpu6050::readSensorData()
+int8_t mpu6050::readRawMotion()
 {
-   	buf[0] = 0x3b;                                  // This is the register we wish to
-   	if ((write(fd, buf, 1)) != 1) {                 // Send the register to read from
-      		printf("Error writing to i2c slave\n");
-      		exit(1);
+    int8_t count = 0;
+
+    // This is the register we wish to
+   	if ((write(fd, 0x3b, 1)) != 1) {
+        printf("Error writing to i2c slave\n");
+        return(-1);
    	}
 
     usleep(1000);
     memset(&buf,0,sizeof(buf));
 
-    if (read(fd, buf, 6) != 6) {                        // Read back data into buf[]
-        printf("Unable to read from slave\n");
-        exit(1);
+    count = read(fd, buf, 14);
+    if ( count != 14) {                        // Read back data into buf[]
+        fprintf(stderr, "Short read  from device, expected %d, got %d\n", 14, count);
+        return(-1);
     }
     else {
         convertAcc();
    	}
-
-   return 0;
+    
+    return count;
 }
 
 void mpu6050::convertAcc()
 {
-    x=y=z=0;
 	
-    x = buf[0]<<8;
-    x += buf[1];
-    y = buf[2]<<8;
-    y += buf[3];
-    z = buf[4]<<8;
-    z += buf[5];
-    if (x & 1<<15)
-    {
-        x -= 1<<16;
-    }
-    if (y & 1<<15)
-    {
-        y -= 1<<16;
-    }
-    if (z & 1<<15)
-    {
-        z -= 1<<16;
-    }
+    ax = (((int16_t)buffer[0]) << 8) | buffer[1];
+    ay = (((int16_t)buffer[2]) << 8) | buffer[3];
+    az = (((int16_t)buffer[4]) << 8) | buffer[5];
+    gx = (((int16_t)buffer[8]) << 8) | buffer[9];
+    gy = (((int16_t)buffer[10]) << 8) | buffer[11];
+    gz = (((int16_t)buffer[12]) << 8) | buffer[13];
+    /*
     this->accX = (double)x / 16384;
     this->accY = (double)y / 16384;
     this->accZ = (double)z / 16384;
+     */
 }
 
 mpu6050::~mpu6050(){}
