@@ -4,7 +4,7 @@
 class mpu6050 {
 
 private:
-    int I2CBus, I2CAdress
+    int I2CBus, I2CAdress;
     void convertAcc();
     
 	uint8_t buf[14];

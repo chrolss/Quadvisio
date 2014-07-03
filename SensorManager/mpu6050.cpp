@@ -19,8 +19,7 @@ using namespace std;
 
 mpu6050::mpu6050( int bus, int adress) {
     I2CBus = bus;
-    I2CAdress = adress
-	initialize();
+    I2CAdress = adress;
 }
 
 void mpu6050::initialize(){
@@ -79,12 +78,12 @@ int8_t mpu6050::readRawMotion()
 void mpu6050::convertAcc()
 {
 	
-    ax = (((int16_t)buffer[0]) << 8) | buffer[1];
-    ay = (((int16_t)buffer[2]) << 8) | buffer[3];
-    az = (((int16_t)buffer[4]) << 8) | buffer[5];
-    gx = (((int16_t)buffer[8]) << 8) | buffer[9];
-    gy = (((int16_t)buffer[10]) << 8) | buffer[11];
-    gz = (((int16_t)buffer[12]) << 8) | buffer[13];
+    ax = (((int16_t)buf[0]) << 8) | buf[1];
+    ay = (((int16_t)buf[2]) << 8) | buf[3];
+    az = (((int16_t)buf[4]) << 8) | buf[5];
+    gx = (((int16_t)buf[8]) << 8) | buf[9];
+    gy = (((int16_t)buf[10]) << 8) | buf[11];
+    gz = (((int16_t)buf[12]) << 8) | buf[13];
     /*
     this->accX = (double)x / 16384;
     this->accY = (double)y / 16384;
