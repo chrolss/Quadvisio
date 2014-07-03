@@ -9,9 +9,6 @@
 #include <sys/stat.h>
 #include <unistd.h>
 #include <math.h>
-#include <linux/i2c.h>
-#include <linux/i2c-dev.h>
-
 
 using namespace std;
 #define MAX_BUS 64
@@ -22,6 +19,8 @@ mpu6050::mpu6050( int bus, uint8_t adress) {
 }
 
 void mpu6050::initialize() {
+    
+    setSleep(false);
 
     char namebuf[MAX_BUS];
 
@@ -76,7 +75,6 @@ int8_t mpu6050::readRawMotion()
 
 void mpu6050::convertAcc()
 {
-	
     ax = (((int16_t)buf[0]) << 8) | buf[1];
     ay = (((int16_t)buf[2]) << 8) | buf[3];
     az = (((int16_t)buf[4]) << 8) | buf[5];
@@ -89,5 +87,10 @@ void mpu6050::convertAcc()
     this->accZ = (double)z / 16384;
      */
 }
+
+void mpu6050::setSleep(bool enabled) {
+    writeBit(MPU6050_RA_PWR_MGMT_1, MPU6050_PWR1_SLEEP_BIT, enabled);
+}
+
 
 mpu6050::~mpu6050(){}
