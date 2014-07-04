@@ -9,9 +9,9 @@ int main(int argc, const char * argv[])
 {
     SensorManager sm;
     sm.initializeMPU();
-    sm.readMPU(input);
     
-    for (int i = 0; i<6; i++) {
-        std::cout  << input[i] << std::endl;
+    while (true) {
+        sm.readMPU(input);
     }
+    
 }
