@@ -43,7 +43,7 @@ void Com::Listen()
     std::cout << "Connection estabilished" << std::endl;
 }
 
-void Com::sendMsg(std::string s, int i) {
+void Com::sendMsg(std::string s, size_t i) {
     
     std::ostringstream ostr;
     ostr << i << s;
