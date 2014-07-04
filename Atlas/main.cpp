@@ -18,8 +18,8 @@ SensorManager *sensorManager;
 Controller *controller;
 Com *communicate;
 Motor *motor;
-double input[6];
-double output[4];
+double sInput[6];
+double sOutput[4];
 bool runAtlas=true;
 
 void initailize(){
@@ -35,17 +35,17 @@ void loop(){
     while (runAtlas) {
 
         // Read sensor data
-        sensorManager->readMPU(input);
+        sensorManager->readMPU(sInput);
 
         // Calculate control action
-        controller->calcPWM(input, output);
+        controller->calcPWM(sInput, sOutput);
 
         // Send PWM values to motors
         //motor->setPWM(output);
 
         // If connected to Qvis send data
         if (communicate->connected) {
-            communicate->sendMsg(input);
+            communicate->sendMsg(sInput);
         }
         runAtlas=false;
     }

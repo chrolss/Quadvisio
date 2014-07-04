@@ -16,11 +16,11 @@ void SensorManager::initializeMPU(){
     mpu->initialize();
 }
 
-void SensorManager::readMPU(double *input) {
+void SensorManager::readMPU(double *sInput) {
     
-    mpu->getMotion(&input[0], &input[1], &input[2], &input[3], &input[4], &input[5]);
+    mpu->getMotion(&sInput[0], &sInput[1], &sInput[2], &sInput[3], &sInput[4], &sInput[5]);
     
-    printf("X: %f\nY: %f\n Z: %f\nRoll: %f\nPitch: %f\nYaw %f\n\n",input[0],input[1],input[2],input[3],input[4],input[5]);
+    printf("X: %f\nY: %f\n Z: %f\nRoll: %f\nPitch: %f\nYaw %f\n\n",sInput[0], sInput[1], sInput[2], sInput[3], sInput[4], sInput[5]);
 }
 
 

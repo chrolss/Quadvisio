@@ -55,9 +55,9 @@ void Motor::closePWM(){
 	pwmRR->setRunState(stop);
 }
 
-void Motor::setPWM(double *output) {
+void Motor::setPWM(double *sOutput) {
 	for (int i = 0; i<4; i++)
-		PWM[i] = mapper(output[i]);
+		PWM[i] = mapper(sOutput[i]);
 
     pwmLF->setDutyPercent(PWM[0]);
     pwmRF->setDutyPercent(PWM[1]);
