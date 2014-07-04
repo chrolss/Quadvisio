@@ -2,4 +2,4 @@
 
 echo "Building test program for the MPU6050"
 
-g++ -O2 -W testRaw.cpp SensorManager.cpp mpu6050.cpp -o mpuRawTest -std=c++11
+g++ -O2 -W testRaw.cpp SensorManager.cpp mpu6050.cpp I2Cdev.cpp -o mpuRawTest -std=c++11
