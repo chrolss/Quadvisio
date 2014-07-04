@@ -18,8 +18,8 @@ SensorManager *sensorManager;
 Controller *controller;
 Com *communicate;
 Motor *motor;
-float input[6];
-float output[4];
+double input[6];
+double output[4];
 bool run=true;
 
 void initailize(){
