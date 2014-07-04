@@ -374,8 +374,6 @@ private:
 	int16_t ax,ay,az,gx,gy,gz;
     double pitch, roll, yaw;
     
-	
-    void convertAcc();
     void setSleep(bool enabled);
     void setClockSource(uint8_t source);
     void setFullScaleGyroRange(uint8_t range);
@@ -384,11 +382,11 @@ private:
 public:
 	mpu6050(int bus, uint8_t adress);
     void initialize();
-	int8_t readRawMotion();
     
 	double getAccX() {return accX;}
 	double getAccY() {return accY;}
 	double getAccZ() {return accZ;}
+    void getMotion(int16_t* ax, int16_t* ay, int16_t* az, int16_t* gx, int16_t* gy, int16_t* gz);
 	virtual ~mpu6050();
 };
 
