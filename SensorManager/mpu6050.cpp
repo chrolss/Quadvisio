@@ -31,29 +31,6 @@ void mpu6050::initialize() {
     std::cout << "MPU initialized!" << std::endl;
 }
 
-int8_t mpu6050::readRawMotion()
-{
-    int8_t count = 0;
-    buf[0] = MPU6050_RA_ACCEL_XOUT_H;
-    // This is the register we wish to
-   	if ((write(fd, buf, 1)) != 1) {
-        printf("Error writing to i2c slave\n");
-        return(-1);
-   	}
-    
-    memset(&buf,0,sizeof(buf));
-    count = read(fd, buf, 14);
-    if ( count != 14) {                        // Read back data into buf[]
-        fprintf(stderr, "Short read  from device, expected %d, got %d\n", 14, count);
-        return(-1);
-    }
-    else {
-        convertAcc();
-   	}
-    
-    return count;
-}
-
 void mpu6050::getMotion(int16_t* ax, int16_t* ay, int16_t* az, int16_t* gx, int16_t* gy, int16_t* gz) {
     I2Cdev::readBytes(I2CAdress, MPU6050_RA_ACCEL_XOUT_H, 14, buf);
     *ax = (((int16_t)buf[0]) << 8) | buf[1];

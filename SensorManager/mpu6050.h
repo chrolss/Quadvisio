@@ -384,7 +384,6 @@ private:
 public:
 	mpu6050(int bus, uint8_t adress);
     void initialize();
-	int8_t readRawMotion();
     
 	double getAccX() {return accX;}
 	double getAccY() {return accY;}
