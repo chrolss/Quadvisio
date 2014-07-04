@@ -25,6 +25,10 @@ void SensorManager::readMPU(int16_t *input) {
     input[5] = 6.0;
     
     printf("a/g: %6hd %6hd %6hd   %6hd %6hd %6hd\n",input[0],input[1],input[2],input[3],input[4],input[5]);
+    
+    mpu->getMotion(&input[0], &input[1], &input[2], &input[3], &input[4], &input[5]);
+    
+    printf("a/g: %6hd %6hd %6hd   %6hd %6hd %6hd\n",input[0],input[1],input[2],input[3],input[4],input[5]);
 }
 
 
