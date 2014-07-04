@@ -374,8 +374,6 @@ private:
 	int16_t ax,ay,az,gx,gy,gz;
     double pitch, roll, yaw;
     
-	
-    void convertAcc();
     void setSleep(bool enabled);
     void setClockSource(uint8_t source);
     void setFullScaleGyroRange(uint8_t range);
