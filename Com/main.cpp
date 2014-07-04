@@ -9,12 +9,12 @@
 #include <iostream>
 #include <string>
 #include <sstream>
-#include "communicate.h"
+#include "Com.h"
 
 int main(int argc, const char * argv[])
 {
     std::string input = "";
-    Communicate C;
+    Com C;
     sleep(1);
     while (true) {
         if (C.connected) {
