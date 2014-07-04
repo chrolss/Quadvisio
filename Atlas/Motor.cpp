@@ -55,7 +55,7 @@ void Motor::closePWM(){
 	pwmRR->setRunState(stop);
 }
 
-void Motor::setPWM(float *output) {
+void Motor::setPWM(double *output) {
 	for (int i = 0; i<4; i++)
 		PWM[i] = mapper(output[i]);
 

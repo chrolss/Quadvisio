@@ -12,7 +12,7 @@ Controller::Controller(){
     
 }
 
-void Controller::calcPWM(float *input, float *output) {
+void Controller::calcPWM(double *input, double *output) {
     
     output[0] = input[0];
     output[1] = input[1];

@@ -17,7 +17,7 @@ class Motor{
     
 public:
     Motor();
-    void setPWM(float *output); //min 22% max 49%
+    void setPWM(double *output); //min 22% max 49%
     void closePWM();
     BlackPWM* pwmLF; //Left Front, pin P8_13
     BlackPWM* pwmRF; //right front, pin P8_19
