@@ -45,9 +45,9 @@ void loop(){
 
         // If connected to Qvis send data
         if (communicate->connected) {
+            std::cout << "Sending data" << std::endl;
             communicate->sendMsg(sInput);
         }
-        runAtlas=false;
     }
 }
 
