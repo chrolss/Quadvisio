@@ -21,8 +21,8 @@ public:
     void closePWM();
     BlackPWM* pwmLF; //Left Front, pin P8_13
     BlackPWM* pwmRF; //right front, pin P8_19
-    BlackPWM* pwmLR; //left rear, pin P9_14
-    BlackPWM* pwmRR; //right rear, pin P9_16
+    //BlackPWM* pwmLR; //left rear, pin P9_14
+    //BlackPWM* pwmRR; //right rear, pin P9_16
 
     
 private:

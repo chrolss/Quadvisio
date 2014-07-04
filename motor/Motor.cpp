@@ -13,8 +13,7 @@ Motor::Motor(){
 }
 
 void Motor::initialize(){
-	
-	pwmLF = new BlackPWM(P8_13); //P8_13
+	pwmLF = new BlackPWM(P8_19);
 	sleep(1);
 	pwmLF->setRunState(run); //sätt igång signalen
 	sleep(1);
@@ -24,19 +23,6 @@ void Motor::initialize(){
 	sleep(1);
 	pwmLF->setDutyPercent(20.0); //Speciellt för vår ESC
 	sleep(1);
-	printf("P8_13 ready\n");
-	
-	pwmRF = new BlackPWM(P8_19); //P8_19
-	sleep(1);
-	pwmRF->setRunState(run); //sätt igång signalen
-	sleep(1);
-	pwmRF->setPeriodTime(5000000);
-	sleep(1);
-	pwmRF->setDutyPercent(0.0);
-	sleep(1);
-	pwmRF->setDutyPercent(20.0); //Speciellt för vår ESC
-	sleep(1);
-	printf("P8_19 ready\n");
 }
 
 float Motor::mapper(float b){
@@ -46,8 +32,8 @@ float Motor::mapper(float b){
 
 void Motor::closePWM(){
 	pwmLF->setRunState(stop); //stäng alla fyra pwmportar
-	pwmRF->setRunState(stop);
 	/*
+	pwmRF->setRunState(stop);
 	pwmLR->setRunState(stop);
 	pwmRR->setRunState(stop);
 	*/
@@ -58,8 +44,8 @@ void Motor::setPWM(float *output) {
 		PWM[i] = mapper(output[i]);
 
     pwmLF->setDutyPercent(PWM[0]);
-    pwmRF->setDutyPercent(PWM[1]);
     /*
+    pwmRF->setDutyPercent(PWM[1]);
     pwmLR->setDutyPercent(PWM[2]);
     pwmRR->setDutyPercent(PWM[3]);
 	*/
