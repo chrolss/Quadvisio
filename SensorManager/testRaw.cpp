@@ -3,15 +3,15 @@
 #include "SensorManager.h"
 #include "I2Cdev.h"
 
-int16_t input[6];
+double input[6];
 
 int main(int argc, const char * argv[])
 {
     SensorManager sm;
     sm.initializeMPU();
-    sm.readMPU(input);
     
-    for (int i = 0; i<6; i++) {
-        std::cout  << input[i] << std::endl;
+    while (true) {
+        sm.readMPU(input);
     }
+    
 }

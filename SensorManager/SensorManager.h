@@ -19,7 +19,7 @@ class SensorManager {
 public:
     SensorManager();
     void initializeMPU();
-    void readMPU(int16_t *input);
+    void readMPU(double *input);
     
 private:
     mpu6050 *mpu;

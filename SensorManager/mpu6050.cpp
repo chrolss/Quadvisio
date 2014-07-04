@@ -31,14 +31,24 @@ void mpu6050::initialize() {
     std::cout << "MPU initialized!" << std::endl;
 }
 
-void mpu6050::getMotion(int16_t* ax, int16_t* ay, int16_t* az, int16_t* gx, int16_t* gy, int16_t* gz) {
+void mpu6050::getMotion(double* dax, double* day, double* daz, double* dgx, double* dgy, double* dgz) {
     I2Cdev::readBytes(I2CAdress, MPU6050_RA_ACCEL_XOUT_H, 14, buf);
-    *ax = (((int16_t)buf[0]) << 8) | buf[1];
-    *ay = (((int16_t)buf[2]) << 8) | buf[3];
-    *az = (((int16_t)buf[4]) << 8) | buf[5];
-    *gx = (((int16_t)buf[8]) << 8) | buf[9];
-    *gy = (((int16_t)buf[10]) << 8) | buf[11];
-    *gz = (((int16_t)buf[12]) << 8) | buf[13];
+    ax = (((int16_t)buf[0]) << 8) | buf[1];
+    ay = (((int16_t)buf[2]) << 8) | buf[3];
+    az = (((int16_t)buf[4]) << 8) | buf[5];
+    gx = (((int16_t)buf[8]) << 8) | buf[9];
+    gy = (((int16_t)buf[10]) << 8) | buf[11];
+    gz = (((int16_t)buf[12]) << 8) | buf[13];
+    
+    *dax = (double)ax / 16384;
+    *day = (double)ay / 16384;
+    *daz = (double)az / 16384;
+    *dgx = (double)gx / 131;
+    *dgy = (double)gy / 131;
+    *dgz = (double)gz / 131;
+
+    
+    
     /*
     this->accX = (double)x / 16384;
     this->accY = (double)y / 16384;
