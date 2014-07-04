@@ -13,16 +13,14 @@ SensorManager::SensorManager(){
 }
 
 void SensorManager::initializeMPU(){
-    
+    mpu->initialize();
 }
 
-void SensorManager::readMPU(float *input) {
-    input[0] = 1.0;
-    input[1] = 2.0;
-    input[2] = 3.0;
-    input[3] = 4.0;
-    input[4] = 5.0;
-    input[5] = 6.0;
+void SensorManager::readMPU(double *input) {
+    
+    mpu->getMotion(&input[0], &input[1], &input[2], &input[3], &input[4], &input[5]);
+    
+    printf("X: %f\nY: %f\n Z: %f\nRoll: %f\nPitch: %f\nYaw %f\n\n",input[0],input[1],input[2],input[3],input[4],input[5]);
 }
 
 
