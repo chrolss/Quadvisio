@@ -28,7 +28,7 @@ class Com{
 public:
     Com();
     void Listen();
-    void sendMsg(double* s);
+    void sendMsg(double *input);
     void checkClient();
     void closeClient();
     
