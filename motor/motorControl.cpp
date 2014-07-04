@@ -7,7 +7,7 @@ motorControl::motorControl(){
 }
 
 void motorControl::initialize(){
-	pwm13 = new BlackPWM(P9_21);
+	pwm13 = new BlackPWM(P8_19);
 	sleep(1);
 	pwm13->setRunState(run); //sätt igång signalen
 	sleep(1);
