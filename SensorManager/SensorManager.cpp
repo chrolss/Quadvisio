@@ -13,7 +13,7 @@ SensorManager::SensorManager(){
 }
 
 void SensorManager::initializeMPU(){
-    
+    mpu->initialize();
 }
 
 void SensorManager::readMPU(float *input) {
