@@ -20,7 +20,7 @@ Com *communicate;
 Motor *motor;
 double input[6];
 double output[4];
-bool run=true;
+bool runAtlas=true;
 
 void initailize(){
     sensorManager = new SensorManager;
@@ -32,7 +32,7 @@ void initailize(){
 }
 
 void loop(){
-    while (run) {
+    while (runAtlas) {
 
         // Read sensor data
         sensorManager->readMPU(input);
@@ -47,7 +47,7 @@ void loop(){
         if (communicate->connected) {
             communicate->sendMsg(input);
         }
-        run=false;
+        runAtlas=false;
     }
 }
 
