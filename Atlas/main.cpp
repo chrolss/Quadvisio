@@ -41,7 +41,7 @@ void loop(){
         controller->calcPWM(input, output);
 
         // Send PWM values to motors
-        motor->setPWM(output);
+        //motor->setPWM(output);
 
         // If connected to Qvis send data
         if (communicate->connected) {
