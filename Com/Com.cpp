@@ -46,7 +46,13 @@ void Com::Listen()
 void Com::sendMsg(std::string s, size_t i) {
     
     std::ostringstream ostr;
-    ostr << i << s;
+    if (i<10) {
+        ostr << i << "  " << s;
+    }
+    else {
+        ostr << i << " " << s;
+    }
+    
     s=ostr.str();
     std::cout << s << std::endl;
     

@@ -23,6 +23,16 @@ int main(int argc, const char * argv[])
             if (input == "A") {
                 break;
             }
+            else if (input == "test") {
+                for (int i=0; i<100; i++) {
+                    std::ostringstream ostr;
+                    std::string s = " 0.435 0.7065 0.35 50.304 4000.00";
+                    ostr << std::to_string(i) << s;
+                    s = ostr.str();
+                    C.sendMsg(s, s.length());
+                    usleep(300000);
+                }
+            }
             else {
                 C.sendMsg(input, input.length());
             }
