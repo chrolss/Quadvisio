@@ -73,6 +73,10 @@ void mpu6050::setSleep(bool enabled) {
     I2Cdev::writeBit(I2CAdress, MPU6050_RA_PWR_MGMT_1, MPU6050_PWR1_SLEEP_BIT, enabled);
 }
 
+void mpu6050::setClockSource(uint8_t source) {
+    I2Cdev::writeBits(I2CAdress, MPU6050_RA_PWR_MGMT_1, MPU6050_PWR1_CLKSEL_BIT, MPU6050_PWR1_CLKSEL_LENGTH, source);
+}
+
 void mpu6050::setFullScaleAccelRange(uint8_t range) {
     I2Cdev::writeBits(I2CAdress, MPU6050_RA_ACCEL_CONFIG, MPU6050_ACONFIG_AFS_SEL_BIT, MPU6050_ACONFIG_AFS_SEL_LENGTH, range);
 }
