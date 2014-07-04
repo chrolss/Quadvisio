@@ -28,7 +28,7 @@ class Com{
 public:
     Com();
     void Listen();
-    void sendMsg(std::string s, int i);
+    void sendMsg(double* s);
     void checkClient();
     void closeClient();
     

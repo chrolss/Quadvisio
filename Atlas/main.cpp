@@ -27,6 +27,8 @@ void initailize(){
     controller = new Controller;
     communicate = new Com;
     motor = new Motor;
+    
+    sensorManager->initializeMPU();
 }
 
 void loop(){
@@ -43,7 +45,7 @@ void loop(){
 
         // If connected to Qvis send data
         if (communicate->connected) {
-            communicate->sendMsg("Hej", 3);
+            communicate->sendMsg(input);
         }
         run=false;
     }

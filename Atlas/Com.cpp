@@ -43,11 +43,15 @@ void Com::Listen()
     std::cout << "Connection estabilished" << std::endl;
 }
 
-void Com::sendMsg(std::string s, int i) {
+void Com::sendMsg(double* input) {
     
     std::ostringstream ostr;
-    ostr << i << s;
-    s=ostr.str();
+    ostr << input[0] << " " << input[1] << " " << input[2] << " " << input[3] << " " << input[4] << " " << input[5];
+    std:: string s=ostr.str();
+    ostr.clear();
+    size_t strLength = s.length();
+    ostr << strLength << " " << s;
+    s = ostr.str();
     std::cout << s << std::endl;
     
     if (send(newsockfd, s.c_str(), s.length(), 0) == -1)

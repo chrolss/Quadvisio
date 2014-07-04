@@ -46,14 +46,6 @@ void mpu6050::getMotion(double* dax, double* day, double* daz, double* dgx, doub
     *dgx = (double)gx / 131;
     *dgy = (double)gy / 131;
     *dgz = (double)gz / 131;
-
-    
-    
-    /*
-    this->accX = (double)x / 16384;
-    this->accY = (double)y / 16384;
-    this->accZ = (double)z / 16384;
-     */
 }
 
 void mpu6050::setSleep(bool enabled) {
