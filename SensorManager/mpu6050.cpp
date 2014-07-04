@@ -41,6 +41,12 @@ void mpu6050::getMotion(double* dax, double* day, double* daz, double* dgx, doub
     gz = (((int16_t)buf[12]) << 8) | buf[13];
     
     *dax = (double)ax / 16384;
+    *day = (double)ay / 16384;
+    *daz = (double)az / 16384;
+    *dgx = (double)gx / 131;
+    *dgy = (double)gy / 131;
+    *dgz = (double)gz / 131;
+
     
     
     /*
