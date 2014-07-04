@@ -8,10 +8,11 @@ motorControl::motorControl(){
 
 void motorControl::initialize(){
 	pwm13 = new BlackPWM(P8_13);
-
+	sleep(1);
 	pwm13->setRunState(run); //sätt igång signalen
-
+	sleep(1);
 	pwm13->setPeriodTime(5000000);
+	sleep(1);
 	pwm13->setDutyPercent(0.0);
 	sleep(1);
 	pwm13->setDutyPercent(20.0); //Speciellt för vår ESC
@@ -30,5 +31,8 @@ void motorControl::setPWM(float a){
 }
 
 void motorControl::closePWM(){
+	std::cout << "Setting pwm to zero" << std::endl;
+	pwm13->setDutyPercent(20.0);
+	std::cout << "Closing pwm channels" << std::endl;
 	pwm13->setRunState(stop);
 }
