@@ -14,13 +14,17 @@ QvisLayout::QvisLayout()
     createAccBox();
     createAngBox();
     createConnectBox();
+    createVideoBox();
+    createOrientationBox();
     
     QGridLayout *mainLayout = new QGridLayout;
-    mainLayout->addWidget(gridAccBox, 0, 0);
-    mainLayout->addWidget(gridAngBox, 0, 1);
-    mainLayout->addWidget(connectGroupBox, 1, 0, 1, 2);
+    mainLayout->addWidget(gridVideoBox, 0, 0, 1, 2);
+    mainLayout->addWidget(gridOrientationBox, 0, 2, 1, 2);
+    mainLayout->addWidget(gridAccBox, 1, 1, 1, 1);
+    mainLayout->addWidget(gridAngBox, 1, 2, 1, 1);
+    mainLayout->addWidget(connectGroupBox, 2, 1, 1, 2);
     setLayout(mainLayout);
-    setWindowTitle(tr("Qvis v0.1 (alpha)"));
+    setWindowTitle(tr("Qvis v0.2 (alpha)"));
     setFixedSize(400, 400);
 }
 
@@ -29,68 +33,84 @@ void QvisLayout::saveData()
     
 }
 
-// Create the connect Acceleration data UI section
+// Create acceleration box
 void QvisLayout::createAccBox()
 {
     gridAccBox = new QGroupBox(tr("Acceleration"));
     QGridLayout *layout = new QGridLayout;
     
-    labelsAcc[0] = new QLabel(tr("X"));
-    lineEditsAcc[0] = new QLineEdit;
-    layout->addWidget(labelsAcc[0], 1, 0);
-    layout->addWidget(lineEditsAcc[0], 1, 1);
-    labelsAcc[1] = new QLabel(tr("Y"));
-    lineEditsAcc[1] = new QLineEdit;
-    layout->addWidget(labelsAcc[1], 2, 0);
-    layout->addWidget(lineEditsAcc[1], 2, 1);
-    labelsAcc[2] = new QLabel(tr("Z"));
-    lineEditsAcc[2] = new QLineEdit;
-    layout->addWidget(labelsAcc[2], 3, 0);
-    layout->addWidget(lineEditsAcc[2], 3, 1);
+    labelsAcc[0] = new QLabel(tr("X: "));
+    valAcc[0] = new QLabel(tr("0"));
+    layout->addWidget(labelsAcc[0], 0, 0);
+    layout->addWidget(valAcc[0], 0, 1);
+    labelsAcc[1] = new QLabel(tr("Y: "));
+    valAcc[1] = new QLabel(tr("0"));
+    layout->addWidget(labelsAcc[1], 1, 0);
+    layout->addWidget(valAcc[1], 1, 1);
+    labelsAcc[2] = new QLabel(tr("Z: "));
+    valAcc[2] = new QLabel(tr("0"));
+    layout->addWidget(labelsAcc[2], 2, 0);
+    layout->addWidget(valAcc[2], 2, 1);
     
     gridAccBox->setLayout(layout);
 }
 
 void QvisLayout::createAngBox()
 {
-    gridAngBox =new QGroupBox(tr("Angles"));
+    gridAngBox = new QGroupBox(tr("Angles"));
     QGridLayout *layout = new QGridLayout;
     
-    labelsAng[0] = new QLabel(tr("Roll"));
-    lineEditsAng[0] = new QLineEdit;
-    layout->addWidget(labelsAng[0], 1, 0);
-    layout->addWidget(lineEditsAng[0], 1, 1);
-    labelsAng[1] = new QLabel(tr("Pitch"));
-    lineEditsAng[1] = new QLineEdit;
-    layout->addWidget(labelsAng[1], 2, 0);
-    layout->addWidget(lineEditsAng[1], 2, 1);
-    labelsAng[2] = new QLabel(tr("Yaw"));
-    lineEditsAng[2] = new QLineEdit;
-    layout->addWidget(labelsAng[2], 3, 0);
-    layout->addWidget(lineEditsAng[2], 3, 1);
+    labelsAng[0] = new QLabel(tr("Roll :"));
+    valAng[0] = new QLabel(tr("0"));
+    layout->addWidget(labelsAng[0], 0, 0);
+    layout->addWidget(valAng[0], 0, 1);
+    labelsAng[1] = new QLabel(tr("Pitch: "));
+    valAng[1] = new QLabel(tr("0"));
+    layout->addWidget(labelsAng[1], 1, 0);
+    layout->addWidget(valAng[1], 1, 1);
+    labelsAng[2] = new QLabel(tr("Yaw: "));
+    valAng[2] = new QLabel(tr("0"));
+    layout->addWidget(labelsAng[2], 2, 0);
+    layout->addWidget(valAng[2], 2, 1);
     
     gridAngBox->setLayout(layout);
     
+}
+
+void QvisLayout::createVideoBox() {
+    
+    gridVideoBox = new QGroupBox(tr("Camera"));
+}
+
+void QvisLayout::createOrientationBox(){
+    
+    gridOrientationBox = new QGroupBox(tr("Orientation"));
 }
 
 // Create the connect UI section
 void QvisLayout::createConnectBox()
 {
     connectGroupBox = new QGroupBox(tr("TCP Connection"));
-    connectLayout = new QVBoxLayout;
+    connectLayout = new QGridLayout;
     connectLabel = new QLabel(tr("Not connected"));
     connectLabel->setStyleSheet("QLabel { color : red; }");
     connectLabel->setAlignment(Qt::AlignCenter);
+    
+    ipLabel = new QLabel(tr("Ip:"));
+    portLabel = new QLabel(tr("Port:"));
+    
     ipField = new QLineEdit;
-    ipField->setText("10.0.1.4");
+    ipField->setText("10.0.1.8");
     portField = new QLineEdit;
     portField->setText("3490");
-    connectButton = new QPushButton(tr("Connect to Pi"));
+    connectButton = new QPushButton(tr("Connect to Atlas"));
         
-    connectLayout->addWidget(connectLabel);
-    connectLayout->addWidget(ipField);
-    connectLayout->addWidget(portField);
-    connectLayout->addWidget(connectButton);
+    connectLayout->addWidget(connectLabel, 0, 0, 1, 3);
+    connectLayout->addWidget(ipLabel, 1, 0, 1, 1);
+    connectLayout->addWidget(ipField, 1, 1, 1, 2);
+    connectLayout->addWidget(portLabel, 2, 0, 1, 1);
+    connectLayout->addWidget(portField, 2, 1, 1, 2);
+    connectLayout->addWidget(connectButton, 3, 0, 1, 3);
     connectGroupBox->setLayout(connectLayout);
 }
 
@@ -124,12 +144,12 @@ void QvisLayout::setConnected()
 
 void QvisLayout::setDataFields(QStringList strList)
 {
-    lineEditsAcc[0]->setText(strList.value(0));
-    lineEditsAcc[1]->setText(strList.value(1));
-    lineEditsAcc[2]->setText(strList.value(2));
-    lineEditsAng[2]->setText(strList.value(3));
-    lineEditsAng[1]->setText(strList.value(4));
-    lineEditsAng[0]->setText(strList.value(5));
+    valAcc[0]->setText(strList.value(0));
+    valAcc[1]->setText(strList.value(1));
+    valAcc[2]->setText(strList.value(2));
+    valAng[2]->setText(strList.value(3));
+    valAng[1]->setText(strList.value(4));
+    valAng[0]->setText(strList.value(5));
 }
 
 int QvisLayout::getPort()

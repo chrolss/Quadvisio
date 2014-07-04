@@ -33,15 +33,17 @@ private slots:
     void createAccBox();
     void createConnectBox();
     void createAngBox();
+    void createVideoBox();
+    void createOrientationBox();
     
 private:
     enum { NumGridRows = 3};
     QLabel *labelsAcc[NumGridRows], *labelsAng[NumGridRows];
-    QGroupBox *gridAccBox, *gridAngBox;
-    QGroupBox *connectGroupBox;
-    QVBoxLayout *connectLayout;
-    QLineEdit *lineEditsAcc[NumGridRows], *lineEditsAng[NumGridRows], *ipField, *portField;
-    QLabel *connectLabel;
+    QLabel *valAcc[NumGridRows], *valAng[NumGridRows];
+    QGroupBox *connectGroupBox, *gridAccBox, *gridAngBox, *gridVideoBox, *gridOrientationBox;
+    QGridLayout *connectLayout;
+    QLineEdit *ipField, *portField;
+    QLabel *connectLabel, *ipLabel, *portLabel;
     
 };
 

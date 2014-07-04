@@ -55,26 +55,35 @@ void QvisController::closeTCP()
 
 void QvisController::readTCP()
 {
-    if (numb==0 && tcpSocket->bytesAvailable()>2) {
-        QByteArray length = tcpSocket->read(2);
+    while (tcpSocket->bytesAvailable()>0) {
+
+    if (numbytes==0 && tcpSocket->bytesAvailable()>3) {
+        std::cout << "Bytes available before reading: " << tcpSocket->bytesAvailable() << std::endl;
+        
+        QByteArray length = tcpSocket->read(3);
         QString qsl = length;
-        numb = length.toInt();
-        std::cout << "Bytes available after reading 2: " << tcpSocket->bytesAvailable() << std::endl;
-        std::cout << "Extracted length of message: " << numb << std::endl;
+        QStringList numStr= qsl.split(" ");
+        numbytes = numStr[0].toInt();
+        std::cout << "Bytes available after reading 3: " << tcpSocket->bytesAvailable() << std::endl;
+        std::cout << "Extracted length of message: " << numbytes << std::endl;
     }
     
-    if (numb>0 && tcpSocket->bytesAvailable()>=numb) {
-        data = tcpSocket->read(numb);
+    if (numbytes>0 && tcpSocket->bytesAvailable()>=numbytes) {
+        data = tcpSocket->read(numbytes);
         qs = data;
+        count++;
         std::string utf8_text = qs.toUtf8().constData();
         std::cout << utf8_text << std::endl;
+        std::cout << count << std::endl;
+        
         QStringList pieces = qs.split(" ");
         ui->setDataFields(pieces);
-        numb = 0;
+        numbytes = 0;
     }
 
     else {
         return;
+    }
     }
 }
 

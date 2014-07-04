@@ -55,7 +55,8 @@ private:
     QString qs;
     quint16 blockSize;
     QNetworkSession *networkSession;
-    int numb=0;
+    int numbytes=0;
+    int count = 0;
 };
 
 #endif /* defined(__layout_test__controller__) */
