@@ -381,6 +381,8 @@ private:
     void setFullScaleGyroRange(uint8_t range);
     void setFullScaleAccelRange(uint8_t range);
     
+    void getMotion(int16_t* ax, int16_t* ay, int16_t* az, int16_t* gx, int16_t* gy, int16_t* gz);
+    
 public:
 	mpu6050(int bus, uint8_t adress);
     void initialize();
