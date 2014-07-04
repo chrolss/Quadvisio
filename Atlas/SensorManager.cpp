@@ -20,7 +20,7 @@ void SensorManager::readMPU(double *sInput) {
     
     mpu->getMotion(&sInput[0], &sInput[1], &sInput[2], &sInput[3], &sInput[4], &sInput[5]);
     
-    printf("X: %f\nY: %f\n Z: %f\nRoll: %f\nPitch: %f\nYaw %f\n\n",sInput[0], sInput[1], sInput[2], sInput[3], sInput[4], sInput[5]);
+    //printf("X: %f\nY: %f\n Z: %f\nRoll: %f\nPitch: %f\nYaw %f\n\n",sInput[0], sInput[1], sInput[2], sInput[3], sInput[4], sInput[5]);
 }
 
 

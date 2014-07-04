@@ -44,10 +44,11 @@ void loop(){
         //motor->setPWM(output);
 
         // If connected to Qvis send data
-        if (communicate->connected) {
+        if (communicate->connected==true) {
             std::cout << "Sending data" << std::endl;
             communicate->sendMsg(sInput);
         }
+        usleep(200000);
     }
 }
 
