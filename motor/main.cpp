@@ -13,21 +13,25 @@
 int main(int argc, const char * argv[])
 {
 	float tal;
-	float pwmTal[4];
-	Motor pwm;
+	Motor pwm1(1);
+	Motor pwm2(2);
+	Motor pwm3(3);
+	Motor pwm4(4);
 	while (true){
 		printf("Ge pwm-värde\n");
 		std::cin >> tal;
 		if (tal > 100){
-			pwm.closePWM();
+			pwm1.closePWM();
+			pwm2.closePWM();
+			pwm3.closePWM();
+			pwm4.closePWM();
 			exit(1);
 		}
-		pwmTal[0] = tal;
-		pwmTal[1] = tal;
-		pwmTal[2] = tal;
-		pwmTal[3] = tal;
+		pwm1.setPWM(tal);
+		pwm2.setPWM(tal);
+		pwm3.setPWM(tal);
+		pwm4.setPWM(tal);
 
-		pwm.setPWM(pwmTal);
 	}
 
 

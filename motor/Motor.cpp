@@ -8,46 +8,44 @@
 
 #include "Motor.h"
 
-Motor::Motor(){
-	initialize();
+Motor::Motor(int _i){
+	initialize(_i);
 }
 
-void Motor::initialize(){
-	pwmLF = new BlackPWM(P8_19);
+void Motor::initialize(int _i){
+	if (_i == 1)
+		pwm = new BlackPWM(P8_13);
+	else if (_i == 2)
+		pwm = new BlackPWM(P8_19);
+	else if (_i == 3)
+			pwm = new BlackPWM(P9_14);
+	else if (_i == 4)
+			pwm = new BlackPWM(P9_21);
+	else
+		printf("Invalid engine number \n");
 	sleep(1);
-	pwmLF->setRunState(run); //sätt igång signalen
+	pwm->setRunState(run); //sätt igång signalen
 	sleep(1);
-	pwmLF->setPeriodTime(5000000);
+	pwm->setPeriodTime(5000000);
 	sleep(1);
-	pwmLF->setDutyPercent(0.0);
+	pwm->setDutyPercent(0.0);
 	sleep(1);
-	pwmLF->setDutyPercent(20.0); //Speciellt för vår ESC
+	pwm->setDutyPercent(20.0); //Speciellt för vår ESC
+	printf("PWM signal ready on engine %f.\n", _i);
 	sleep(1);
 }
 
-float Motor::mapper(float b){
-	float val = float(float(29.0/100.0)*b) + float(20); //Konverterar input 0 - 100 till pwmsignal
+double Motor::mapper(double b){
+	double val = double(double(29.0/100.0)*b) + double(20); //Konverterar input 0 - 100 till pwmsignal
 	return val;
 }
 
 void Motor::closePWM(){
-	pwmLF->setRunState(stop); //stäng alla fyra pwmportar
-	/*
-	pwmRF->setRunState(stop);
-	pwmLR->setRunState(stop);
-	pwmRR->setRunState(stop);
-	*/
+	pwm->setDutyPercent(20.0); //förhindrar felkalibrering
+	pwm->setRunState(stop); //stäng pwmportar
 }
 
-void Motor::setPWM(float *output) {
-	for (int i = 0; i<4; i++)
-		PWM[i] = mapper(output[i]);
+void Motor::setPWM(double output) {
+    pwm->setDutyPercent(mapper(output));
 
-    pwmLF->setDutyPercent(PWM[0]);
-    /*
-    pwmRF->setDutyPercent(PWM[1]);
-    pwmLR->setDutyPercent(PWM[2]);
-    pwmRR->setDutyPercent(PWM[3]);
-	*/
-    //printf("The PWM values are: %f %f %f %f", PWM[0], PWM[1], PWM[2], PWM[3]);
 }
