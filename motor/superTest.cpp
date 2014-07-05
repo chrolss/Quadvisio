@@ -7,8 +7,11 @@ float mapper(float b){
 	return val;
 }
 
-BlackPWM *pwm1 = new BlackPWM(P8_13);
+BlackPWM pwms[2];
 //BlackPWM *pwm2 = new BlackPWM(P8_19);
+
+pwms[0] = new BlackPWM(P8_13);
+pwms[1]	= new BlackPWM(P8_19);
 
 float val;
 
