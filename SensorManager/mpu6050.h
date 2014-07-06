@@ -382,6 +382,7 @@ private:
 public:
 	mpu6050(int bus, uint8_t adress);
     void initialize();
+    void initializeDMP();
     
 	double getAccX() {return accX;}
 	double getAccY() {return accY;}

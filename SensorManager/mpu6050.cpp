@@ -31,6 +31,10 @@ void mpu6050::initialize() {
     std::cout << "MPU initialized!" << std::endl;
 }
 
+void mpu6050::initializeDMP() {
+    
+}
+
 void mpu6050::getMotion(double* dax, double* day, double* daz, double* dgx, double* dgy, double* dgz) {
     I2Cdev::readBytes(I2CAdress, MPU6050_RA_ACCEL_XOUT_H, 14, buf);
     ax = (((int16_t)buf[0]) << 8) | buf[1];
@@ -46,14 +50,6 @@ void mpu6050::getMotion(double* dax, double* day, double* daz, double* dgx, doub
     *dgx = (double)gx / 131;
     *dgy = (double)gy / 131;
     *dgz = (double)gz / 131;
-
-    
-    
-    /*
-    this->accX = (double)x / 16384;
-    this->accY = (double)y / 16384;
-    this->accZ = (double)z / 16384;
-     */
 }
 
 void mpu6050::setSleep(bool enabled) {
@@ -71,6 +67,5 @@ void mpu6050::setFullScaleAccelRange(uint8_t range) {
 void mpu6050::setFullScaleGyroRange(uint8_t range) {
     I2Cdev::writeBits(I2CAdress, MPU6050_RA_GYRO_CONFIG, MPU6050_GCONFIG_FS_SEL_BIT, MPU6050_GCONFIG_FS_SEL_LENGTH, range);
 }
-
 
 mpu6050::~mpu6050(){}

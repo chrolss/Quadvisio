@@ -19,6 +19,7 @@ class SensorManager {
 public:
     SensorManager();
     void initializeMPU();
+    void initializeMPUdmp();
     void readMPU(double *input);
     
 private:
