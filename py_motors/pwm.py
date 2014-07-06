@@ -10,7 +10,11 @@ def initialize():
 	print('P9_14 initialized')
 	time.sleep(1)
 
-def set_pwm(a,b):
+def set_pwm(a):
+	PWM.set_duty_cycle("P8_13",a)
+	PWM.set_duty_cycle("P9_14",a)
+
+def set_pwm2(a,b):
 	PWM.set_duty_cycle("P8_13",a)
 	PWM.set_duty_cycle("P9_14",b)
 

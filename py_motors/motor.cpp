@@ -11,12 +11,23 @@ motor::motor(int argc,char** argv){
 	}
 }
 
-void motor::setPWM(std::string a, std::string b){
+void motor::setPWM(std::string a){
+	try{
+		pyembed::Arg_map args;
+		args[a] = pyembed::Py_long;
+		py->call("set_pwm",args);
+	}
+	catch (pyembed::Python_exception ex){
+		std::cout << ex.what() << '\n';
+	}
+}
+
+void motor::setPWM2(std::string a, std::string b){
 	try{
 		pyembed::Arg_map args;
 		args[a] = pyembed::Py_long;
 		args[b] = pyembed::Py_long;
-		py->call("set_pwm",args);
+		py->call("set_pwm2",args);
 	}
 	catch (pyembed::Python_exception ex){
 		std::cout << ex.what() << '\n';

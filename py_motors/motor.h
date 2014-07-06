@@ -10,7 +10,8 @@ using namespace pyembed;
 class motor{
 public:
 	motor(int argc,char** argv);
-	void setPWM(std::string a, std::string b);
+	void setPWM2(std::string a, std::string b);
+	void setPWM(std::string a);
 	void closePWM();
 	Python* py;
 
