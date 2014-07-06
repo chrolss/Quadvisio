@@ -2,11 +2,30 @@
 #include "pyembed.h"
 #include <string>
 #include "motor.h"
+#include <sstream>
 
 using namespace pyembed;
-
+std::ostringstream strs;
 std::string val;
 
+
+int main(int argc, char** argv){
+	motor motor(argc, argv);
+	sleep(1);
+	for (double i = 20.0; i < 30.0; i=i+0.001){
+		strs << i;
+		printf("PWM is at %f\n", i);
+		std::string str = strs.str();
+		std::cout << "string is: " << str << std::endl;
+		motor.setPWM(str);
+		strs.str("");
+		strs.clear();
+		sleep(0.4);
+	}
+	motor.closePWM();
+}
+
+/*
 int main(int argc, char** argv){
 	motor motor(argc, argv);
 	for (int i = 0; i < 3; i++)
@@ -19,7 +38,7 @@ int main(int argc, char** argv){
 	}
 	motor.closePWM();
 }
-
+*/
 
 
 /*
@@ -31,6 +50,10 @@ int main(int argc, char** argv){
 
 		Arg_map args;
 		printf("Give a PWM value 20 - 49: \n");
+		std::cin >> val;
+		args[val] = Py_long;
+		py.call("set_pwm",args);
+		sleep(1);
 		std::cin >> val;
 		args[val] = Py_long;
 		py.call("set_pwm",args);

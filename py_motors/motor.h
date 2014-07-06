@@ -12,7 +12,7 @@ public:
 	motor(int argc,char** argv);
 	void setPWM(std::string a);
 	void closePWM();
-	Python *py;
+	Python* py;
 
 private:
 	//void initialize();
