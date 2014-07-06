@@ -15,17 +15,21 @@ float val;
 
 int main(){
 	pwms[0]->setRunState(run);
+	usleep(1000);
 	pwms[1]->setRunState(run);
-	sleep(1);
+	usleep(1000);
 	pwms[0]->setPeriodTime(5000000);
+	usleep(1000);
 	pwms[1]->setPeriodTime(5000000);
-	sleep(1);
+	usleep(1000);
 	pwms[0]->setDutyPercent(0.0);
+	usleep(1000);
 	pwms[1]->setDutyPercent(0.0);
-	sleep(1);
+	usleep(1000);
 	pwms[0]->setDutyPercent(20.0);
+	usleep(1000);
 	pwms[1]->setDutyPercent(20.0); //Speciellt för vår ESC
-	sleep(1);
+	usleep(1000);
 	while (true){
 		printf("Give pwm value 0 - 100\n");
 		std::cin >> val;
