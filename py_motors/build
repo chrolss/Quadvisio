@@ -1,3 +1,2 @@
-g++ -o users -I/usr/include/python2.7 pyembed.cpp users.cpp -L/usr/lib/python2.7/config -Xlinker -export-dynamic lpython2.7
--lm -lpthread -ltk -lutil
+g++ -o users -I/usr/include/python2.7 pyembed.cpp motor.cpp main.cpp -L/usr/lib/python2.7/config -Xlinker -export-dynamic -lpython2.7 -lm -lpthread -lutil
 
