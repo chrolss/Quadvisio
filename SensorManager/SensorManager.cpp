@@ -12,8 +12,12 @@ SensorManager::SensorManager(){
     mpu = new mpu6050(1, 0x68);
 }
 
-void SensorManager::initializeMPU(){
+void SensorManager::initializeMPU() {
     mpu->initialize();
+}
+
+void SensorManager::initializeMPUdmp() {
+    mpu->initializeDMP();
 }
 
 void SensorManager::readMPU(double *input) {
