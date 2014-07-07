@@ -17,7 +17,7 @@ void SensorManager::initializeMPU() {
 }
 
 bool SensorManager::initializeMPUdmp() {
-    devStatus = mpu->dmpInitialize()
+    devStatus = mpu->dmpInitialize();
     if (devStatus==0) {
         printf("Enabling DMP...\n");
         mpu->setDMPEnable(true);
