@@ -12,14 +12,17 @@
 #include <iostream>
 #include <string>
 
-#include "mpu6050.h"
+//#include "mpu6050.h"
+#include "I2Cdev.h"
+#include "mpu6050_dmp.h"
 
 class SensorManager {
     
 public:
     SensorManager();
     void initializeMPU();
-    void initializeMPUdmp();
+    bool initializeMPUdmp();
+    bool testMPU();
     void readMPU(double *input);
     
 private:

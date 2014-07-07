@@ -1,17 +1,42 @@
 #include <iostream>
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include <stdint.h>
+#include <string.h>
 
 #include "SensorManager.h"
-#include "I2Cdev.h"
 
 double input[6];
+uint8_t devStatus;
 
 int main(int argc, const char * argv[])
 {
+    int i;
+    std::cout << "Do you want use raw data ot DMP data? (1 or 2)" << std::endl;
+    std::cin >> i;
+    
     SensorManager sm;
+    printf("Initializing MPU...\n");
     sm.initializeMPU();
     
-    while (true) {
-        sm.readMPU(input);
+    printf("Testing device connections...\n");
+    printf(sm.testMPU() ? "MPU6050 connection successful\n" : "MPU6050 connection failed\n");
+    
+    usleep(100000);
+    
+    printf("Initializing DMP...\n");
+    if (sm.initializeMPUdmp()){
+        
+    }
+    
+    if (i==2) {
+        
+    }
+    else if (i==1){
+        while (true) {
+            sm.readMPU(input);
+        }
     }
     
 }

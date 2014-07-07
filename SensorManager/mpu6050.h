@@ -2,6 +2,7 @@
 #define MPU6050_H_
 
 #include "I2Cdev.h"
+
 //#include <avr/pgmspace.h>
 
 #define pgm_read_byte(p) (*(uint8_t *)(p))
@@ -363,6 +364,12 @@
 class mpu6050 {
 
 private:
+    void setSleep(bool enabled);
+    void setClockSource(uint8_t source);
+    void setFullScaleGyroRange(uint8_t range);
+    void setFullScaleAccelRange(uint8_t range);
+    uint8_t getDeviceID();
+    
     int I2CBus;
     uint8_t I2CAdress;
     
@@ -374,15 +381,13 @@ private:
 	int16_t ax,ay,az,gx,gy,gz;
     double pitch, roll, yaw;
     
-    void setSleep(bool enabled);
-    void setClockSource(uint8_t source);
-    void setFullScaleGyroRange(uint8_t range);
-    void setFullScaleAccelRange(uint8_t range);
+    
     
 public:
 	mpu6050(int bus, uint8_t adress);
     void initialize();
     void initializeDMP();
+    bool testConnection();
     
 	double getAccX() {return accX;}
 	double getAccY() {return accY;}

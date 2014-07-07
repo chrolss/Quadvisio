@@ -16,8 +16,20 @@ void SensorManager::initializeMPU() {
     mpu->initialize();
 }
 
-void SensorManager::initializeMPUdmp() {
-    mpu->initializeDMP();
+bool SensorManager::initializeMPUdmp() {
+    if (mpu->dmpInitialize()==0) {
+        return true;
+    }
+    return false;
+}
+
+bool SensorManager::testMPU() {
+    if (mpu->testConnection()) {
+        return true;
+    }
+    else {
+        return false;
+    }
 }
 
 void SensorManager::readMPU(double *input) {

@@ -1,5 +1,4 @@
 #include <iostream>
-#include "mpu6050.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <fcntl.h>
@@ -9,6 +8,8 @@
 #include <sys/stat.h>
 #include <unistd.h>
 #include <math.h>
+
+#include "mpu6050.h"
 
 using namespace std;
 #define MAX_BUS 64
@@ -33,6 +34,10 @@ void mpu6050::initialize() {
 
 void mpu6050::initializeDMP() {
     
+}
+
+bool mpu6050::testConnection() {
+    return getDeviceID() == 0x34;
 }
 
 void mpu6050::getMotion(double* dax, double* day, double* daz, double* dgx, double* dgy, double* dgz) {
@@ -66,6 +71,11 @@ void mpu6050::setFullScaleAccelRange(uint8_t range) {
 
 void mpu6050::setFullScaleGyroRange(uint8_t range) {
     I2Cdev::writeBits(I2CAdress, MPU6050_RA_GYRO_CONFIG, MPU6050_GCONFIG_FS_SEL_BIT, MPU6050_GCONFIG_FS_SEL_LENGTH, range);
+}
+
+uint8_t mpu6050::getDeviceID() {
+    I2Cdev::readBits(I2CAdress, MPU6050_RA_WHO_AM_I, MPU6050_WHO_AM_I_BIT, MPU6050_WHO_AM_I_LENGTH, buf);
+    return buf[0];
 }
 
 mpu6050::~mpu6050(){}
