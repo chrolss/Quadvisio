@@ -432,6 +432,8 @@ public:
     uint8_t getDMPConfig2();
     void setDMPConfig2(uint8_t config);
     
+    
+    
     // I2C_SLV* registers (Slave 0-3)
     uint8_t getSlaveAddress(uint8_t num);
     void setSlaveAddress(uint8_t num, uint8_t address);

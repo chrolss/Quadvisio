@@ -294,7 +294,6 @@ uint8_t mpu6050::dmpInitialize() {
     DEBUG_PRINTLN(F("\n\nResetting MPU6050..."));
     reset();
     usleep(30000); // wait after reset
-    int i;
 
     // enable sleep mode and wake cycle
     /*Serial.println(F("Enabling sleep mode..."));
