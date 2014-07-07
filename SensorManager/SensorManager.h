@@ -20,7 +20,7 @@
 
 //#include "mpu6050.h"
 #include "I2Cdev.h"
-#include "mpu6050_6axis_motionapps20.h"
+#include "MPU6050_6AXIS_MOTIONAPPS20.h"
 
 class SensorManager {
     
