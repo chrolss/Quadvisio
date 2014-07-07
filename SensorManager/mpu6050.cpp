@@ -17,6 +17,7 @@ using namespace std;
 mpu6050::mpu6050( int bus, uint8_t adress) {
     I2CBus = bus;
     I2CAdress = adress;
+    int i;
 }
 
 void mpu6050::initialize() {
