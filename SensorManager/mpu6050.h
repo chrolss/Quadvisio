@@ -365,7 +365,6 @@ class mpu6050 {
 
 private:
     void setSleep(bool enabled);
-    void setClockSource(uint8_t source);
     void setFullScaleGyroRange(uint8_t range);
     void setFullScaleAccelRange(uint8_t range);
     uint8_t getDeviceID();
@@ -390,10 +389,46 @@ public:
     
     // DMP stuff
     void setDMPEnable(bool enabled);
-    void resetFIFO();
     uint8_t getIntStatus();
     uint16_t getFIFOCount();
     void getFIFOBytes(uint8_t *data, uint8_t length);
+    
+    // USER_CTRL register
+    bool getFIFOEnabled();
+    void setFIFOEnabled(bool enabled);
+    bool getI2CMasterModeEnabled();
+    void setI2CMasterModeEnabled(bool enabled);
+    void switchSPIEnabled(bool enabled);
+    void resetFIFO();
+    void resetI2CMaster();
+    void resetSensors();
+    
+    // PWR_MGMT_1 register
+    void reset();
+    bool getSleepEnabled();
+    void setSleepEnabled(bool enabled);
+    bool getWakeCycleEnabled();
+    void setWakeCycleEnabled(bool enabled);
+    bool getTempSensorEnabled();
+    void setTempSensorEnabled(bool enabled);
+    uint8_t getClockSource();
+    void setClockSource(uint8_t source);
+    
+    // BANK_SEL register
+    void setMemoryBank(uint8_t bank, bool prefetchEnabled=false, bool userBank=false);
+    
+    // MEM_START_ADDR register
+    void setMemoryStartAddress(uint8_t address);
+    
+    // MEM_R_W register
+    uint8_t readMemoryByte();
+    void writeMemoryByte(uint8_t data);
+    void readMemoryBlock(uint8_t *data, uint16_t dataSize, uint8_t bank=0, uint8_t address=0);
+    bool writeMemoryBlock(const uint8_t *data, uint16_t dataSize, uint8_t bank=0, uint8_t address=0, bool verify=true, bool useProgMem=false);
+    bool writeProgMemoryBlock(const uint8_t *data, uint16_t dataSize, uint8_t bank=0, uint8_t address=0, bool verify=true);
+    
+    bool writeDMPConfigurationSet(const uint8_t *data, uint16_t dataSize, bool useProgMem=false);
+    bool writeProgDMPConfigurationSet(const uint8_t *data, uint16_t dataSize);
     
     #ifdef MPU6050_INCLUDE_DMP_MOTIONAPPS20
         uint16_t dmpGetFIFOPacketSize();
