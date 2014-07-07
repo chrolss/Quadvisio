@@ -39,7 +39,8 @@ void loop(){
 
         // Calculate control action
         controller->calcPWM(sInput, sOutput);
-
+        
+        // Tillfälligt avstängd tills motorkoden är klar
         // Send PWM values to motors
         //motor->setPWM(output);
 
@@ -48,7 +49,7 @@ void loop(){
             std::cout << "Sending data" << std::endl;
             communicate->sendMsg(sInput);
         }
-        usleep(200000);
+        usleep(100000);
     }
 }
 
