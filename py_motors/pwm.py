@@ -8,6 +8,12 @@ def initialize():
 	PWM.start("P9_14",20,200)
 	time.sleep(0.5)
 	print('P9_14 initialized')
+	PWM.start("P8_19",20,200)
+	time.sleep(0.5)
+	print('P8_19 initialized')
+	PWM.start("P9_16",20,200)
+	time.sleep(0.5)
+	print('P9_16 initialized')
 	time.sleep(2)
 
 def set_pwm1(a):
@@ -15,6 +21,12 @@ def set_pwm1(a):
 	
 def set_pwm2(a):
 	PWM.set_duty_cycle("P9_14",a)
+	
+def set_pwm3(a):
+	PWM.set_duty_cycle("P8_19",a)
+
+def set_pwm4(a):
+	PWM.set_duty_cycle("P9_16",a)
 
 def set_pwm(a):
 	PWM.set_duty_cycle("P8_13",a)
@@ -24,8 +36,12 @@ def set_pwm(a):
 def close_pwm():
 	PWM.set_duty_cycle("P8_13",20)
 	PWM.set_duty_cycle("P9_14",20)
+	PWM.set_duty_cycle("P8_19",20)
+	PWM.set_duty_cycle("P9_16",20)
 	time.sleep(1)
 	PWM.stop("P8_13")
 	PWM.stop("P9_14")
+	PWM.stop("P8_19")
+	PWM.stop("P9_16")
 	PWM.cleanup()
 	exit()
