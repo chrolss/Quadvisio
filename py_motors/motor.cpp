@@ -11,10 +11,19 @@ motor::motor(int argc,char** argv){
 	}
 }
 
-void motor::setPWM(std::string a, std::string b){
+std::string motor::mapper(float b){
+	float val = float(float(29.0/100.0)*b) + float(20); //Konverterar input 0 - 100 till pwmsignal
+	std::ostringstream stm;
+	stm << val;
+	return stm.str();;
+}
+
+void motor::setPWM(float a, float b){
 	try{
-		args2[a] = pyembed::Py_long;
-		args3[b] = pyembed::Py_long;
+		std::string c = mapper(a);
+		std::string d = mapper(b);
+		args2[c] = pyembed::Py_long;
+		args3[d] = pyembed::Py_long;
 		py->call("set_pwm1",args2);
 		py->call("set_pwm2",args3);
 		args2.clear();
