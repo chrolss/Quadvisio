@@ -403,6 +403,94 @@ public:
     void resetI2CMaster();
     void resetSensors();
     
+    // USER_CTRL register (DMP functions)
+    bool getDMPEnabled();
+    void setDMPEnabled(bool enabled);
+    void resetDMP();
+    
+    // DMP_CFG_1 register
+    uint8_t getDMPConfig1();
+    void setDMPConfig1(uint8_t config);
+    
+    // DMP_CFG_2 register
+    uint8_t getDMPConfig2();
+    void setDMPConfig2(uint8_t config);
+    
+    // FIFO_EN register
+    bool getTempFIFOEnabled();
+    void setTempFIFOEnabled(bool enabled);
+    bool getXGyroFIFOEnabled();
+    void setXGyroFIFOEnabled(bool enabled);
+    bool getYGyroFIFOEnabled();
+    void setYGyroFIFOEnabled(bool enabled);
+    bool getZGyroFIFOEnabled();
+    void setZGyroFIFOEnabled(bool enabled);
+    bool getAccelFIFOEnabled();
+    void setAccelFIFOEnabled(bool enabled);
+    bool getSlave2FIFOEnabled();
+    void setSlave2FIFOEnabled(bool enabled);
+    bool getSlave1FIFOEnabled();
+    void setSlave1FIFOEnabled(bool enabled);
+    bool getSlave0FIFOEnabled();
+    void setSlave0FIFOEnabled(bool enabled);
+    
+    
+    // XG_OFFS_TC register
+    uint8_t getOTPBankValid();
+    void setOTPBankValid(bool enabled);
+    int8_t getXGyroOffset();
+    void setXGyroOffset(int8_t offset);
+    
+    // YG_OFFS_TC register
+    int8_t getYGyroOffset();
+    void setYGyroOffset(int8_t offset);
+    
+    // ZG_OFFS_TC register
+    int8_t getZGyroOffset();
+    void setZGyroOffset(int8_t offset);
+    
+    // X_FINE_GAIN register
+    int8_t getXFineGain();
+    void setXFineGain(int8_t gain);
+    
+    // Y_FINE_GAIN register
+    int8_t getYFineGain();
+    void setYFineGain(int8_t gain);
+    
+    // Z_FINE_GAIN register
+    int8_t getZFineGain();
+    void setZFineGain(int8_t gain);
+    
+    // XA_OFFS_* registers
+    int16_t getXAccelOffset();
+    void setXAccelOffset(int16_t offset);
+    
+    // YA_OFFS_* register
+    int16_t getYAccelOffset();
+    void setYAccelOffset(int16_t offset);
+    
+    // ZA_OFFS_* register
+    int16_t getZAccelOffset();
+    void setZAccelOffset(int16_t offset);
+    
+    // XG_OFFS_USR* registers
+    int16_t getXGyroOffsetUser();
+    void setXGyroOffsetUser(int16_t offset);
+    
+    // YG_OFFS_USR* register
+    int16_t getYGyroOffsetUser();
+    void setYGyroOffsetUser(int16_t offset);
+    
+    // ZG_OFFS_USR* register
+    int16_t getZGyroOffsetUser();
+    void setZGyroOffsetUser(int16_t offset);
+    
+    // INT_ENABLE register (DMP functions)
+    bool getIntPLLReadyEnabled();
+    void setIntPLLReadyEnabled(bool enabled);
+    bool getIntDMPEnabled();
+    void setIntDMPEnabled(bool enabled);
+    
     // PWR_MGMT_1 register
     void reset();
     bool getSleepEnabled();
