@@ -21,20 +21,23 @@ main(int argc, char** argv)
       // our argument list that maps string values
       // to their python types
       Arg_map args;
+
       std::string val;
       std::string val2;
-      std::cin >> val;
-      std::cin >> val2;
-      // fill up argument strings and their types.
-      args[val] = Py_long;
-      args[val2] = Py_long;
 
-      // make the call
-      py.call("multiply", args, ret);
+      for (int i=0; i<10; i++){
+    	  std::cin >> val;
+    	  std::cin >> val2;
+    	  // fill up argument strings and their types.
+    	  args[val] = Py_long;
+    	  args[val2] = Py_long;
 
-      // will print 200
+    	  // make the call
+    	  py.call("spit", args,ret);
+    	  args.clear();
+
       std::cout << ret << '\n';
-
+      }
       return 0;
     }
   catch (Python_exception ex)

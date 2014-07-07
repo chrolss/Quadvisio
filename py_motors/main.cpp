@@ -36,7 +36,7 @@ int main(int argc, char** argv){
 		printf("Give a PWM value, 20 - 49: \n");
 		std::cin >> val;
 		std::cin >> val2;
-		motor.setPWM2(val,val2);
+		motor.setPWM(val,val2);
 		printf("Duty cycle set \n");
 	}
 	motor.closePWM();
