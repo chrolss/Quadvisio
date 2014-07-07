@@ -26,15 +26,17 @@ int main(int argc, const char * argv[])
     
     usleep(100000);
     
-    printf("Initializing DMP...\n");
-    if (sm.initializeMPUdmp() && i ==2){
-        printf("DMP ready!\n");
-        runDMP = true;
+    if (i ==2){
+        printf("Initializing DMP...");
+        if (sm.initializeMPUdmp()) {
+            printf("DMP ready!\n");
+            runDMP = true;
+        }
         usleep(100000);
     }
     
     while (runDMP) {
-        sm.readDMP();
+        sm.readDMP(input);
     }
     
     if (i==1){
