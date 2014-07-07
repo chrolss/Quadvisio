@@ -28,16 +28,16 @@ int main(int argc, char** argv){
 
 //Manual Test
 
-
+std::string val2;
 int main(int argc, char** argv){
 	motor motor(argc, argv);
-	for (int i = 0; i < 3; i++)
+	for (int i = 0; i < 5; i++)
 	{
 		printf("Give a PWM value, 20 - 49: \n");
 		std::cin >> val;
-		motor.setPWM(val);
+		std::cin >> val2;
+		motor.setPWM2(val,val2);
 		printf("Duty cycle set \n");
-		sleep(2);
 	}
 	motor.closePWM();
 }

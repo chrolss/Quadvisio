@@ -20,5 +20,6 @@ time.sleep(1)
 print('PWM program shutting down')
 PWM.stop("P8_13")
 PWM.stop("P9_14")
+PWM.cleanup()
 exit()
 
