@@ -85,13 +85,8 @@ void SensorManager::readDMP(double *input) {
     
     printf("\n");
     
-    // display initial world-frame acceleration, adjusted to remove gravity
-    // and rotated based on known orientation from quaternion
     mpu->dmpGetQuaternion(&q, fifoBuffer);
-    mpu->dmpGetAccel(&aa, fifoBuffer);
-    mpu->dmpGetGravity(&gravity, &q);
-    mpu->dmpGetLinearAccelInWorld(&aaWorld, &aaReal, &q);
-    printf("aworld %6d %6d %6d    ", aaWorld.x, aaWorld.y, aaWorld.z);
+    printf("quat %7.2f %7.2f %7.2f %7.2f    ", q.w,q.x,q.y,q.z);
     
     printf("\n");
     
