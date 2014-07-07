@@ -7,6 +7,15 @@
 //
 
 #include "SensorManager.h"
+#include "MPU6050_6AXIS_MOTIONAPPS20.h"
+
+MPU6050 *mpu;
+
+Quaternion q;           // [w, x, y, z]         quaternion container
+VectorInt16 aa;         // [x, y, z]            accel sensor measurements
+VectorInt16 aaReal;     // [x, y, z]            gravity-free accel sensor measurements
+VectorInt16 aaWorld;    // [x, y, z]            world-frame accel sensor measurements
+VectorFloat gravity;    // [x, y, z]            gravity vector
 
 SensorManager::SensorManager(){
     mpu = new MPU6050(0x68);
@@ -39,7 +48,9 @@ bool SensorManager::testMPU() {
     else {
         return false;
     }
+    return false;
 }
+
 /*
 void SensorManager::readMPU(double *input) {
     
