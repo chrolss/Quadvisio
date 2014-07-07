@@ -11,6 +11,12 @@
 
 #include <iostream>
 #include <string>
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include <stdint.h>
+#include <string.h>
+#include <math.h>
 
 //#include "mpu6050.h"
 #include "I2Cdev.h"

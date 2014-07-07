@@ -7,8 +7,6 @@
 //
 
 #include "SensorManager.h"
-#include <math.h>
-
 
 SensorManager::SensorManager(){
     mpu = new mpu6050(1, 0x68);
