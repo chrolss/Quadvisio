@@ -33,7 +33,7 @@ public:
     void readDMP(double *input);
     
 private:
-    mpu6050 *mpu;
+    MPU6050 *mpu;
     
     uint8_t mpuIntStatus;   // holds actual interrupt status byte from MPU
     uint8_t devStatus;

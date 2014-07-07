@@ -9,7 +9,7 @@
 #include "SensorManager.h"
 
 SensorManager::SensorManager(){
-    mpu = new mpu6050(1, 0x68);
+    mpu = new MPU6050(0x68);
 }
 
 void SensorManager::initializeMPU() {
@@ -20,7 +20,7 @@ bool SensorManager::initializeMPUdmp() {
     devStatus = mpu->dmpInitialize();
     if (devStatus==0) {
         printf("Enabling DMP...\n");
-        mpu->setDMPEnable(true);
+        mpu->setDMPEnabled(true);
         
         mpuIntStatus = mpu->getIntStatus();
         
@@ -40,13 +40,14 @@ bool SensorManager::testMPU() {
         return false;
     }
 }
-
+/*
 void SensorManager::readMPU(double *input) {
     
-    mpu->getMotion(&input[0], &input[1], &input[2], &input[3], &input[4], &input[5]);
+    mpu->getMotion6(&input[0], &input[1], &input[2], &input[3], &input[4], &input[5]);
     
     printf("X: %f\nY: %f\n Z: %f\nRoll: %f\nPitch: %f\nYaw %f\n\n",input[0],input[1],input[2],input[3],input[4],input[5]);
 }
+ */
 
 void SensorManager::readDMP(double *input) {
     if (!dmpReady) {
