@@ -20,7 +20,7 @@ Com *communicate;
 Motor *motor;
 double sInput[6];
 double sOutput[4];
-bool runAtlas=true;
+bool runAtlas=false;
 
 void initailize(){
     sensorManager = new SensorManager;
@@ -28,14 +28,16 @@ void initailize(){
     communicate = new Com;
     motor = new Motor;
     
-    sensorManager->initializeMPU();
+    if(sensorManager->initializeMPUdmp()) {
+        runAtlas = true;
+    }
 }
 
 void loop(){
     while (runAtlas) {
 
         // Read sensor data
-        sensorManager->readMPU(sInput);
+        sensorManager->readDMP(sInput);
 
         // Calculate control action
         controller->calcPWM(sInput, sOutput);
