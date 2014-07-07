@@ -32,10 +32,6 @@ void mpu6050::initialize() {
     std::cout << "MPU initialized!" << std::endl;
 }
 
-void mpu6050::initializeDMP() {
-    
-}
-
 bool mpu6050::testConnection() {
     return getDeviceID() == 0x34;
 }

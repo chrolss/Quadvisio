@@ -386,14 +386,30 @@ private:
 public:
 	mpu6050(int bus, uint8_t adress);
     void initialize();
-    void initializeDMP();
     bool testConnection();
     
+    // DMP stuff
     void setDMPEnable(bool enabled);
     void resetFIFO();
     uint8_t getIntStatus();
     uint16_t getFIFOCount();
     void getFIFOBytes(uint8_t *data, uint8_t length);
+    uint16_t dmpGetFIFOPacketSize();
+    uint8_t dmpGetQuaternion(int32_t *data, const uint8_t* packet=0);
+    uint8_t dmpGetQuaternion(int16_t *data, const uint8_t* packet=0);
+    uint8_t dmpGetQuaternion(Quaternion *q, const uint8_t* packet=0);
+    uint8_t dmpGetGravity(int32_t *data, const uint8_t* packet=0);
+    uint8_t dmpGetGravity(int16_t *data, const uint8_t* packet=0);
+    uint8_t dmpGetGravity(VectorInt16 *v, const uint8_t* packet=0);
+    uint8_t dmpGetGravity(VectorFloat *v, Quaternion *q);
+    uint8_t dmpGetYawPitchRoll(float *data, Quaternion *q, VectorFloat *gravity);
+    uint8_t dmpGetAccel(int32_t *data, const uint8_t* packet=0);
+    uint8_t dmpGetAccel(int16_t *data, const uint8_t* packet=0);
+    uint8_t dmpGetAccel(VectorInt16 *v, const uint8_t* packet=0);
+    uint8_t dmpGetLinearAccelInWorld(int32_t *data, const uint8_t* packet=0);
+    uint8_t dmpGetLinearAccelInWorld(int16_t *data, const uint8_t* packet=0);
+    uint8_t dmpGetLinearAccelInWorld(VectorInt16 *v, const uint8_t* packet=0);
+    uint8_t dmpGetLinearAccelInWorld(VectorInt16 *v, VectorInt16 *vReal, Quaternion *q);
     
 	double getAccX() {return accX;}
 	double getAccY() {return accY;}
