@@ -36,6 +36,8 @@ int main(int argc, const char * argv[])
     }
     
     while (runDMP) {
+        
+        std::cin >> i;
         sm.readDMP(input);
     }
     /*
