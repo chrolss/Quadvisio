@@ -393,6 +393,22 @@ public:
     uint16_t getFIFOCount();
     void getFIFOBytes(uint8_t *data, uint8_t length);
     
+    // INT_ENABLE register
+    uint8_t getIntEnabled();
+    void setIntEnabled(uint8_t enabled);
+    bool getIntFreefallEnabled();
+    void setIntFreefallEnabled(bool enabled);
+    bool getIntMotionEnabled();
+    void setIntMotionEnabled(bool enabled);
+    bool getIntZeroMotionEnabled();
+    void setIntZeroMotionEnabled(bool enabled);
+    bool getIntFIFOBufferOverflowEnabled();
+    void setIntFIFOBufferOverflowEnabled(bool enabled);
+    bool getIntI2CMasterEnabled();
+    void setIntI2CMasterEnabled(bool enabled);
+    bool getIntDataReadyEnabled();
+    void setIntDataReadyEnabled(bool enabled);
+    
     // USER_CTRL register
     bool getFIFOEnabled();
     void setFIFOEnabled(bool enabled);
@@ -573,6 +589,16 @@ public:
     
     bool writeDMPConfigurationSet(const uint8_t *data, uint16_t dataSize, bool useProgMem=false);
     bool writeProgDMPConfigurationSet(const uint8_t *data, uint16_t dataSize);
+    
+    // CONFIG register
+    uint8_t getExternalFrameSync();
+    void setExternalFrameSync(uint8_t sync);
+    uint8_t getDLPFMode();
+    void setDLPFMode(uint8_t bandwidth);
+    
+    // SMPLRT_DIV register
+    uint8_t getRate();
+    void setRate(uint8_t rate);
     
     #ifdef MPU6050_INCLUDE_DMP_MOTIONAPPS20
         uint16_t dmpGetFIFOPacketSize();
