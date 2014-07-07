@@ -416,6 +416,62 @@ public:
     uint8_t getDMPConfig2();
     void setDMPConfig2(uint8_t config);
     
+    // I2C_SLV* registers (Slave 0-3)
+    uint8_t getSlaveAddress(uint8_t num);
+    void setSlaveAddress(uint8_t num, uint8_t address);
+    uint8_t getSlaveRegister(uint8_t num);
+    void setSlaveRegister(uint8_t num, uint8_t reg);
+    bool getSlaveEnabled(uint8_t num);
+    void setSlaveEnabled(uint8_t num, bool enabled);
+    bool getSlaveWordByteSwap(uint8_t num);
+    void setSlaveWordByteSwap(uint8_t num, bool enabled);
+    bool getSlaveWriteMode(uint8_t num);
+    void setSlaveWriteMode(uint8_t num, bool mode);
+    bool getSlaveWordGroupOffset(uint8_t num);
+    void setSlaveWordGroupOffset(uint8_t num, bool enabled);
+    uint8_t getSlaveDataLength(uint8_t num);
+    void setSlaveDataLength(uint8_t num, uint8_t length);
+    
+    // I2C_SLV* registers (Slave 4)
+    uint8_t getSlave4Address();
+    void setSlave4Address(uint8_t address);
+    uint8_t getSlave4Register();
+    void setSlave4Register(uint8_t reg);
+    void setSlave4OutputByte(uint8_t data);
+    bool getSlave4Enabled();
+    void setSlave4Enabled(bool enabled);
+    bool getSlave4InterruptEnabled();
+    void setSlave4InterruptEnabled(bool enabled);
+    bool getSlave4WriteMode();
+    void setSlave4WriteMode(bool mode);
+    uint8_t getSlave4MasterDelay();
+    void setSlave4MasterDelay(uint8_t delay);
+    uint8_t getSlate4InputByte();
+    
+    // FF_THR register
+    uint8_t getFreefallDetectionThreshold();
+    void setFreefallDetectionThreshold(uint8_t threshold);
+    
+    // FF_DUR register
+    uint8_t getFreefallDetectionDuration();
+    void setFreefallDetectionDuration(uint8_t duration);
+    
+    // MOT_THR register
+    uint8_t getMotionDetectionThreshold();
+    void setMotionDetectionThreshold(uint8_t threshold);
+    
+    // MOT_DUR register
+    uint8_t getMotionDetectionDuration();
+    void setMotionDetectionDuration(uint8_t duration);
+    
+    // ZRMOT_THR register
+    uint8_t getZeroMotionDetectionThreshold();
+    void setZeroMotionDetectionThreshold(uint8_t threshold);
+    
+    // ZRMOT_DUR register
+    uint8_t getZeroMotionDetectionDuration();
+    void setZeroMotionDetectionDuration(uint8_t duration);
+    
     // FIFO_EN register
     bool getTempFIFOEnabled();
     void setTempFIFOEnabled(bool enabled);
