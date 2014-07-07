@@ -38,11 +38,11 @@ int main(int argc, const char * argv[])
     while (runDMP) {
         sm.readDMP(input);
     }
-    
+    /*
     if (i==1){
         while (true) {
             sm.readMPU(input);
         }
     }
-    
+    */
 }
