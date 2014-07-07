@@ -2,4 +2,4 @@
 
 echo "Building Atlas…”
 
-g++ -O2 -W -I /home/root/Desktop/Quadvisio/ /home/root/Desktop/Quadvisio/BlackLib/BlackLib.cpp main.cpp Com.cpp SensorManager.cpp mpu6050.cpp Motor.cpp Controller.cpp -o Atlas -pthread -std=c++11
+g++ -O2 -W -I /home/root/Desktop/Quadvisio/ /home/root/Desktop/Quadvisio/BlackLib/BlackLib.cpp main.cpp Com.cpp SensorManager.cpp MPU6050.cpp Motor.cpp Controller.cpp -o Atlas -pthread -std=c++11
