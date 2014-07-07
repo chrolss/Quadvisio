@@ -1,0 +1,5 @@
+#!/bin/bash
+
+echo "Building DMP test program for the MPU6050"
+
+g++ -O2 -W testRaw.cpp SensorManager.cpp mpu6050.cpp I2Cdev.cpp -o mpuDmpTest -std=c++11

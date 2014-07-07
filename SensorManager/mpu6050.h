@@ -389,6 +389,12 @@ public:
     void initializeDMP();
     bool testConnection();
     
+    void setDMPEnable(bool enabled);
+    void resetFIFO();
+    uint8_t getIntStatus();
+    uint16_t getFIFOCount();
+    void getFIFOBytes(uint8_t *data, uint8_t length);
+    
 	double getAccX() {return accX;}
 	double getAccY() {return accY;}
 	double getAccZ() {return accZ;}

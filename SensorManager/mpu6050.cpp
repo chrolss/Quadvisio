@@ -73,9 +73,31 @@ void mpu6050::setFullScaleGyroRange(uint8_t range) {
     I2Cdev::writeBits(I2CAdress, MPU6050_RA_GYRO_CONFIG, MPU6050_GCONFIG_FS_SEL_BIT, MPU6050_GCONFIG_FS_SEL_LENGTH, range);
 }
 
+void mpu6050::setDMPEnable(bool enabled) {
+    I2Cdev::writeBit(I2CAdress, MPU6050_RA_USER_CTRL, MPU6050_USERCTRL_DMP_EN_BIT, enabled);
+}
+
 uint8_t mpu6050::getDeviceID() {
     I2Cdev::readBits(I2CAdress, MPU6050_RA_WHO_AM_I, MPU6050_WHO_AM_I_BIT, MPU6050_WHO_AM_I_LENGTH, buf);
     return buf[0];
+}
+
+uint8_t mpu6050::getIntStatus() {
+    I2Cdev::readByte(I2CAdress, MPU6050_RA_INT_STATUS, buf);
+    return buf[0];
+}
+
+uint16_t mpu6050::getFIFOCount() {
+    I2Cdev::readBytes(I2CAdress, MPU6050_RA_FIFO_COUNTH, 2, buf);
+    return (((uint16_t)buf[0]) << 8) | buf[1];
+}
+
+void mpu6050::getFIFOBytes(uint8_t *data, uint8_t length) {
+    I2Cdev::readBytes(I2CAdress, MPU6050_RA_FIFO_R_W, length, data);
+}
+
+void mpu6050::resetFIFO() {
+    I2Cdev::writeBit(I2CAdress, MPU6050_RA_USER_CTRL, MPU6050_USERCTRL_FIFO_RESET_BIT, true);
 }
 
 mpu6050::~mpu6050(){}

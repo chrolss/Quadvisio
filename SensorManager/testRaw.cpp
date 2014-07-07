@@ -9,6 +9,7 @@
 
 double input[6];
 uint8_t devStatus;
+bool runDMP=false;
 
 int main(int argc, const char * argv[])
 {
@@ -26,14 +27,17 @@ int main(int argc, const char * argv[])
     usleep(100000);
     
     printf("Initializing DMP...\n");
-    if (sm.initializeMPUdmp()){
-        
+    if (sm.initializeMPUdmp() && i ==2){
+        printf("DMP ready!\n");
+        runDMP = true;
+        usleep(100000);
     }
     
-    if (i==2) {
-        
+    while (runDMP) {
+        sm.readDMP();
     }
-    else if (i==1){
+    
+    if (i==1){
         while (true) {
             sm.readMPU(input);
         }
