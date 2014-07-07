@@ -93,6 +93,8 @@ void SensorManager::readDMP(double *input) {
     mpu->dmpGetLinearAccelInWorld(&aaWorld, &aaReal, &q);
     printf("aworld %6d %6d %6d    ", aaWorld.x, aaWorld.y, aaWorld.z);
     
+    printf("\n");
+    
 }
 
 
