@@ -86,7 +86,10 @@ void SensorManager::readDMP(double *input) {
     printf("\n");
     
     mpu->dmpGetQuaternion(&q, fifoBuffer);
-    printf("quat %7.2f %7.2f %7.2f %7.2f    ", q.w,q.x,q.y,q.z);
+    mpu->dmpGetAccel(&aa, fifoBuffer);
+    mpu->dmpGetGravity(&gravity, &q);
+    mpu->dmpGetLinearAccel(&aaReal, &aa, &gravity);
+    printf("areal %6d %6d %6d    ", aaReal.x, aaReal.y, aaReal.z);
     
     printf("\n");
     
