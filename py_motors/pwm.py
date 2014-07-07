@@ -10,7 +10,7 @@ def initialize():
 	print('P9_14 initialized')
 	PWM.start("P9_21",20,200)
 	time.sleep(0.5)
-	print('P8_19 initialized')
+	print('P9_21 initialized')
 	PWM.start("P9_42",20,200)
 	time.sleep(0.5)
 	print('P9_42 initialized')
