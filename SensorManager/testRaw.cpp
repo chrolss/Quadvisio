@@ -19,7 +19,7 @@ int main(int argc, const char * argv[])
     
     SensorManager sm;
     printf("Initializing MPU...\n");
-    sm.initializeMPU();
+    //sm.initializeMPU();
     
     printf("Testing device connections...\n");
     printf(sm.testMPU() ? "MPU6050 connection successful\n" : "MPU6050 connection failed\n");
