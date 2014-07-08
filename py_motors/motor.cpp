@@ -15,7 +15,7 @@ std::string motor::mapper(float b){
 	float val = float(float(29.0/100.0)*b) + float(20); //Konverterar input 0 - 100 till pwmsignal
 	std::ostringstream stm;
 	stm << val;
-	return stm.str();;
+	return stm.str();
 }
 
 void motor::setPWM(float a, float b, float c, float d){
