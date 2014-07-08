@@ -48,8 +48,8 @@ void loop(){
         //motor->setPWM(output);
 
         // If connected to Qvis send data
-        if (communicate->connected==true && counter>100) {
-            std::cout << "Sending data" << std::endl;
+        if (communicate->connected==true && counter>10) {
+            //std::cout << "Sending data" << std::endl;
             communicate->sendMsg(sInput);
             counter = 0;
         }
