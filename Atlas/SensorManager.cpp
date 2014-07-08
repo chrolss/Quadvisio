@@ -82,17 +82,24 @@ void SensorManager::readDMP(double *input) {
         mpu->dmpGetQuaternion(&q, fifoBuffer);
         mpu->dmpGetGravity(&gravity, &q);
         mpu->dmpGetYawPitchRoll(ypr, &q, &gravity);
-        printf("ypr  %7.2f %7.2f %7.2f    ", ypr[0] * 180/M_PI, ypr[1] * 180/M_PI, ypr[2] * 180/M_PI);
+        //printf("ypr  %7.2f %7.2f %7.2f    ", ypr[0] * 180/M_PI, ypr[1] * 180/M_PI, ypr[2] * 180/M_PI);
         
-        printf("\n");
+        //printf("\n");
         
         mpu->dmpGetQuaternion(&q, fifoBuffer);
         mpu->dmpGetAccel(&aa, fifoBuffer);
         mpu->dmpGetGravity(&gravity, &q);
         mpu->dmpGetLinearAccel(&aaReal, &aa, &gravity);
-        printf("areal %6d %6d %6d    ", aaReal.x, aaReal.y, aaReal.z);
+        //printf("areal %6d %6d %6d    ", aaReal.x, aaReal.y, aaReal.z);
         
-        printf("\n");
+        //printf("\n");
+        
+        input[0] = aaReal.x;
+        input[1] = aaReal.y;
+        input[2] = aaReal.z;
+        input[3] = ypr[2] * 180/M_PI;
+        input[4] = ypr[1] * 180/M_PI;
+        input[5] = ypr[0] * 180/M_PI;
 
     }
     else {
