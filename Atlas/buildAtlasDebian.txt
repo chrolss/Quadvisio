@@ -1,5 +1,5 @@
 #!/bin/bash
 
-echo "Building Atlas…”
+echo "Building Atlas software…”
 
 g++ -O2 -W -I /root/code/Quadvisio/ /root/code/Quadvisio/BlackLib/BlackLib.cpp main.cpp Com.cpp SensorManager.cpp MPU6050.cpp Motor.cpp Controller.cpp I2Cdev.cpp -o Atlas -pthread -std=c++11
