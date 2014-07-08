@@ -52,11 +52,11 @@ void loop(){
         if (communicate->connected==true && counter>10) {
             
             communicate->sendMsg(sInput);
+            globalCounter++;
             std::cout << "Sent data " << globalCounter << std::endl;
             counter = 0;
         }
         counter++;
-        globalCounter++;
     }
 }
 
