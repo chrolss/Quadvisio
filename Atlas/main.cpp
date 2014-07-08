@@ -22,6 +22,7 @@ double sInput[6];
 double sOutput[4];
 bool runAtlas=false;
 int counter = 0;
+int globalCounter = 0;
 
 void initailize(){
     sensorManager = new SensorManager;
@@ -49,11 +50,13 @@ void loop(){
 
         // If connected to Qvis send data
         if (communicate->connected==true && counter>10) {
-            //std::cout << "Sending data" << std::endl;
+            
             communicate->sendMsg(sInput);
+            std::cout << "Sent data " << globalCounter << std::endl;
             counter = 0;
         }
         counter++;
+        globalCounter++;
     }
 }
 
