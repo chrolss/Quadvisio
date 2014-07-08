@@ -51,7 +51,6 @@ void loop(){
             std::cout << "Sending data" << std::endl;
             communicate->sendMsg(sInput);
         }
-        usleep(50000);
     }
 }
 
