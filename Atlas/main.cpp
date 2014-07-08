@@ -21,6 +21,7 @@ Motor *motor;
 double sInput[6];
 double sOutput[4];
 bool runAtlas=false;
+int counter = 0;
 
 void initailize(){
     sensorManager = new SensorManager;
@@ -47,10 +48,12 @@ void loop(){
         //motor->setPWM(output);
 
         // If connected to Qvis send data
-        if (communicate->connected==true) {
+        if (communicate->connected==true && counter>100) {
             std::cout << "Sending data" << std::endl;
             communicate->sendMsg(sInput);
+            counter = 0;
         }
+        counter++;
     }
 }
 
