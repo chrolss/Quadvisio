@@ -32,20 +32,14 @@ def set_pwm3(a):
 def set_pwm4(a):
 	PWM.set_duty_cycle("P9_42",a)
 
-def set_pwm(a):
-	PWM.set_duty_cycle("P8_13",a)
-	PWM.set_duty_cycle("P9_14",a)
-
-
 def close_pwm():
 	PWM.set_duty_cycle("P8_13",20)
 	PWM.set_duty_cycle("P9_14",20)
 	PWM.set_duty_cycle("P9_21",20)
 	PWM.set_duty_cycle("P9_42",20)
 	time.sleep(1)
-	PWM.stop("P8_13")
-	PWM.stop("P9_14")
-	PWM.stop("P9_21")
-	PWM.stop("P9_42")
-	PWM.cleanup()
+	PWM.set_duty_cycle("P8_13",0)
+	PWM.set_duty_cycle("P9_14",0)
+	PWM.set_duty_cycle("P9_21",0)
+	PWM.set_duty_cycle("P9_42",0)
 	exit()
