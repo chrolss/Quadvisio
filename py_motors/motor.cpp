@@ -29,9 +29,7 @@ void motor::setPWM(float a, float b, float c, float d){
 		args2[f] = pyembed::Py_long;
 		args3[g] = pyembed::Py_long;
 		args4[h] = pyembed::Py_long;
-		printf("py_string\n");
 		py->call("set_pwm1",args1);
-		printf("py_call\n");
 		py->call("set_pwm2",args2);
 		py->call("set_pwm3",args3);
 		py->call("set_pwm4",args4);

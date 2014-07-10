@@ -25,16 +25,19 @@ main(int argc, char** argv)
       Arg_map args2;
       args.clear();
       std::string val;
+      std::string val2;
       //double val;
       std::cin >> val;
+      std::cin >> val2;
       printf("Innan argumentpassningen\n");
       // fill up argument strings and their types.
       printf("Gick förbi py_real\n");
-      args2[val] = Py_string;
+      args2[val] = Py_long;
+      args2[val2] = Py_long;
 
       // make the call
-      py.call("fupp", args2, ret);
-      //py.call("mupp", args,ret);
+      //py.call("fupp", args2, ret);
+      py.call("mupp", args2,ret);
       printf("lyckades ropa\n");
       //py.call("double", args2, ret2);
 
