@@ -26,10 +26,10 @@ void motor::setPWM(float a, float b, float c, float d){
 		std::string h = mapper(d);
 		std::cout << e << std::endl;
 		args1[e] = pyembed::Py_long;
-		printf("py_string\n");
 		args2[f] = pyembed::Py_long;
 		args3[g] = pyembed::Py_long;
 		args4[h] = pyembed::Py_long;
+		printf("py_string\n");
 		py->call("set_pwm1",args1);
 		printf("py_call\n");
 		py->call("set_pwm2",args2);

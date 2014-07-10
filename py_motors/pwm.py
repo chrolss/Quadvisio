@@ -1,5 +1,7 @@
 import Adafruit_BBIO.PWM as PWM
 import time
+import __future__
+
 
 def initialize():
 	PWM.start("P8_13",0,200)
@@ -21,16 +23,16 @@ def initialize():
 	PWM.set_duty_cycle("P9_21",20)
 
 def set_pwm1(a):
-	PWM.set_duty_cycle("P8_13",a)
+	PWM.set_duty_cycle("P8_13",b)
 	
 def set_pwm2(a):
-	PWM.set_duty_cycle("P9_14",a)
+	PWM.set_duty_cycle("P9_14",b)
 	
 def set_pwm3(a):
-	PWM.set_duty_cycle("P9_21",a)
+	PWM.set_duty_cycle("P9_21",b)
 
 def set_pwm4(a):
-	PWM.set_duty_cycle("P9_42",a)
+	PWM.set_duty_cycle("P9_42",b)
 
 def close_pwm():
 	PWM.set_duty_cycle("P8_13",20)
