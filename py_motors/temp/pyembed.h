@@ -106,7 +106,7 @@ namespace pyembed
      * takes no arguments.
      */
     void call(const std::string& func_name, 
-		       double* args)
+		       const Arg_map& args)
       throw (Python_exception);
 
     /**
@@ -120,7 +120,7 @@ namespace pyembed
      * here.
      */
     void call(const std::string& func_name, 
-		       double* args,
+		       const Arg_map& args,
 		       long& ret
 		       )
       throw (Python_exception);
@@ -136,7 +136,7 @@ namespace pyembed
      * here.
      */
     void call(const std::string& func_name, 
-		       double* args,
+		       const Arg_map& args,
 		       double& ret
 		       )
       throw (Python_exception);
@@ -152,7 +152,7 @@ namespace pyembed
      * here.
      */
     void call(const std::string& func_name, 
-		       double* args,
+		       const Arg_map& args,
 		       std::string& ret
 		       )
       throw (Python_exception);
@@ -168,7 +168,7 @@ namespace pyembed
      * here.
      */
     void call(const std::string& func_name, 
-		       double* args,
+		       const Arg_map& args,
 		       String_list& ret
 		       )
       throw (Python_exception);
@@ -184,7 +184,7 @@ namespace pyembed
      * here.
      */
     void call(const std::string& func_name, 
-		       double* args,
+		       const Arg_map& args,
 		       String_map& ret
 		       )
       throw (Python_exception);
@@ -206,7 +206,7 @@ namespace pyembed
      * @param args Arg_map to convert
      * @return PyObject* args converted to a python tuple.
      */
-    PyObject* create_args(double* args)
+    PyObject* create_args(const Arg_map& args)
       throw (Python_exception);
 
     /**
@@ -218,7 +218,7 @@ namespace pyembed
      * or null if no value is returned.
      */
     PyObject* make_call(const std::string& func_name,
-			double* args)
+			const pyembed::Arg_map& args)
       throw (Python_exception);
 
   private:

@@ -20,10 +20,10 @@ static void raise_func_failed_exception(const std::string& func_name)
 
 // functions to convert complex python data structures to their C++ 
 // counterparts
-//static void make_list_from_tuple(PyObject* tuple, pyembed::String_list& out);
-//static void make_list_from_list(PyObject* list, pyembed::String_list& out);
-//static void make_map_from_dict(PyObject* dict, pyembed::String_map& out);
-//static std::string to_string(PyObject* val);
+static void make_list_from_tuple(PyObject* tuple, pyembed::String_list& out);
+static void make_list_from_list(PyObject* list, pyembed::String_list& out);
+static void make_map_from_dict(PyObject* dict, pyembed::String_map& out);
+static std::string to_string(PyObject* val);
 // :~
 
 // class Python_env
@@ -116,7 +116,7 @@ void
 pyembed::Python::call(const std::string& func_name)			       
   throw (pyembed::Python_exception)
 {
-  double args[4];
+  Arg_map args;
   PyObject* ret_val = make_call(func_name, args);
   if (ret_val)
     Py_DECREF(ret_val);
@@ -124,7 +124,7 @@ pyembed::Python::call(const std::string& func_name)
 
 void 
 pyembed::Python::call(const std::string& func_name, 
-			       double* args)
+			       const pyembed::Arg_map& args)
   throw (pyembed::Python_exception)
 {
   PyObject* ret_val = make_call(func_name, args);
@@ -134,7 +134,7 @@ pyembed::Python::call(const std::string& func_name,
 
 void 
 pyembed::Python::call(const std::string& func_name, 
-			       double* args,
+			       const pyembed::Arg_map& args,
 			       long& ret
 			       )
   throw (pyembed::Python_exception)
@@ -156,7 +156,7 @@ pyembed::Python::call(const std::string& func_name,
 
 void 
 pyembed::Python::call(const std::string& func_name, 
-				    double* args,
+				    const pyembed::Arg_map& args,
 				    double& ret
 				    )
   throw (pyembed::Python_exception)
@@ -178,7 +178,7 @@ pyembed::Python::call(const std::string& func_name,
 
 void 
 pyembed::Python::call(const std::string& func_name, 
-			       double* args,
+			       const pyembed::Arg_map& args,
 			       std::string& ret
 			       )
   throw (pyembed::Python_exception)
@@ -197,10 +197,10 @@ pyembed::Python::call(const std::string& func_name,
   else
     raise_func_failed_exception(func_name);
 }
-/*
+
 void 
 pyembed::Python::call(const std::string& func_name, 
-			       double* args,
+			       const pyembed::Arg_map& args,
 			       pyembed::String_list& ret
 			       )
   throw (pyembed::Python_exception)
@@ -222,11 +222,10 @@ pyembed::Python::call(const std::string& func_name,
   else
     raise_func_failed_exception(func_name);
 }
-*/
-/*
+
 void 
 pyembed::Python::call(const std::string& func_name, 
-			       double* args,
+			       const pyembed::Arg_map& args,
 			       pyembed::String_map& ret
 			       )
   throw (pyembed::Python_exception)
@@ -245,7 +244,6 @@ pyembed::Python::call(const std::string& func_name,
   else
     raise_func_failed_exception(func_name);
 }
- */
 
 // private functions
 
@@ -266,18 +264,17 @@ pyembed::Python::get_function_object(const std::string& func_name)
 }
 
 PyObject* 
-pyembed::Python::create_args(double* args)
+pyembed::Python::create_args(const Arg_map& args)
   throw (pyembed::Python_exception)
 {
   if (!module)
     throw Python_exception("No module loaded.");
-  //size_t sz = args.size();
-  //if (!sz)
-    //return 0;
-  PyObject* tuple = PyTuple_New(4);
+  size_t sz = args.size();  
+  if (!sz)
+    return 0;
+  PyObject* tuple = PyTuple_New(sz);
   size_t i = 0;
   PyObject* val = 0;
-    /*
   Arg_map::const_iterator it;
   for (it = args.begin(); it != args.end(); it++)
     {
@@ -316,23 +313,14 @@ pyembed::Python::create_args(double* args)
       PyTuple_SetItem(tuple, i++, val);
       Py_DECREF(val);      
     }
-     */
-    
-    PyObject* pArgs = PyTuple_New(4);
-    PyObject* pValue;
-    for (int i=0; i<4; i++) {
-        pValue = PyFloat_FromDouble(args[i]);
-        PyTuple_SetItem(pArgs, i, pValue);
-    }
-
-  return pArgs;
+  return tuple;
 }
 
 static bool cleared = false;
 
 PyObject*
 pyembed::Python::make_call(const std::string& func_name,
-			   double* args)
+			   const pyembed::Arg_map& args)
   throw (pyembed::Python_exception)
 {
   PyObject* func = get_function_object(func_name);
@@ -354,7 +342,7 @@ raise_func_failed_exception(const std::string& func_name)
   oss << "Call to function <" << func_name << "> failed.";
   throw pyembed::Python_exception(oss.str());
 }
-/*
+
 void 
 make_list_from_tuple(PyObject* tuple, pyembed::String_list& out)
 {
@@ -382,8 +370,7 @@ make_list_from_list(PyObject* list, pyembed::String_list& out)
 	}
     }
 }
-*/
-/*
+
 void 
 make_map_from_dict(PyObject* dict, pyembed::String_map& out)
 {
@@ -396,8 +383,7 @@ make_map_from_dict(PyObject* dict, pyembed::String_map& out)
 	out[to_string(key)] = to_string(value);
     }
 }
-*/
-/*
+
 std::string 
 to_string(PyObject* val)
 {
@@ -464,4 +450,3 @@ to_string(PyObject* val)
   else
     return "";
 }
-*/
