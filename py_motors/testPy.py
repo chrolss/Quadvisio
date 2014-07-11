@@ -22,11 +22,12 @@ def mupp(a,b):
 	return d
 	
 def fupp(a):
-	b = float(a)
+	print(a)
+	print("Hejsan")
 	PWM.start("P8_13",20,200)
 	time.sleep(1)
-	PWM.set_duty_cycle("P8_13",b)
+	PWM.set_duty_cycle("P8_13",0)
 	time.sleep(2)
 	PWM.set_duty_cycle("P8_13",20)
 	PWM.stop("P8_13")
-	return a
+	return 
