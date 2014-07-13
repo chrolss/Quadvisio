@@ -13,6 +13,11 @@ public:
     void intitialize(std::string name);
     void cleanUp();
     
+    void setDuty(std::string pwmName, double value);
+    void setPolarity(std::string pwmName, int value);
+    void setPeriod(std::string pwmName, double value);
+    void setRun(std::string pwmName, int value);
+    
 private:
     std::string pwmName;
     bool initialized;
