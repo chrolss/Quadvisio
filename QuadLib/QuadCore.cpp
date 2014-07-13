@@ -80,7 +80,7 @@ int QuadCore::unloadDeviceTree(std::string nameTree) {
 
 }
 
-int buildPath(const char *partial_path, const char *prefix, char *full_path, size_t full_path_len)
+int QuadCore::buildPath(const char *partial_path, const char *prefix, char *full_path, size_t full_path_len)
 {
     DIR *dp;
     struct dirent *ep;
