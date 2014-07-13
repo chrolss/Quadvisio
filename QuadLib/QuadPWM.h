@@ -9,8 +9,7 @@ class QuadPWM : protected virtual QuadCore {
 public:
     QuadPWM();
     
-    // Laddar ett device tree för porten name och gör den redo för användning
-    void intitialize(std::string name);
+    void intitialize(std::string pwmName);
     void cleanUp();
     
     void setDuty(std::string pwmName, double value);
@@ -20,6 +19,7 @@ public:
     
 private:
     std::string pwmName;
+    std::string pwmNames[4];
     bool initialized;
 };
 

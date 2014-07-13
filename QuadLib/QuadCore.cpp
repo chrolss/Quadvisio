@@ -16,8 +16,10 @@
 
 QuadCore::QuadCore() {
     this->setSlotsPath();
-    loadDeviceTree("am33xx_pwm");
-    this->am33Loaded = true;
+    if (!this->deviceTreeLoaded("am33xx_pwm")) {
+        loadDeviceTree("am33xx_pwm");
+        this->am33Loaded = true;
+    }
 }
 
 int QuadCore::loadDeviceTree(std::string pwmName) {
@@ -38,6 +40,16 @@ int QuadCore::loadDeviceTree(std::string pwmName) {
         slotsFile.close();
     }
     return 0;
+}
+
+int QuadCore::unloadDeviceTree(std::string pwmName) {
+    
+    return 0;
+}
+
+bool QuadCore::deviceTreeLoaded(std::string pwmName) {
+    
+    return false;
 }
 
 void QuadCore::setSlotsPath() {
