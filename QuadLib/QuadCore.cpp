@@ -15,7 +15,7 @@
 #include "QuadCore.h"
 
 QuadCore::QuadCore() {
-    this->setSlotsPath();
+    //this->setSlotsPath();
     loadDeviceTree("am33xx_pwm");
 }
 
