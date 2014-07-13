@@ -17,6 +17,7 @@ int main(int argc, const char * argv[]) {
     std::cout << "Enter the port that you want to start" << std::endl;
     std::cin >> s;
     QuadPWM pwm;
+    pwm.intitialize(s);
     
     std::cout << "Press enter to unload" << std::endl;
     pwm.cleanUp();
