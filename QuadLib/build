@@ -1,0 +1,5 @@
+#!/bin/bash
+
+echo "Building quad pwm program"
+
+g++ -std=c++11 -W test.cpp QuadCore.cpp QuadPWM.cpp -o pwm_test
