@@ -7,6 +7,7 @@ public:
     QuadCore();
     
 protected:
+    bool am33Loaded = false;
     
     // Tries to load the device three, returns true if successfull
     int loadDeviceTree(std::string nameTree);
