@@ -8,6 +8,7 @@
 #include <dirent.h>
 #include <time.h>
 #include <stdio.h>
+#include <unistd.h>
 
 #include <inttypes.h>
 
@@ -42,7 +43,7 @@ int QuadCore::loadDeviceTree(std::string nameTree) {
     fclose(file);
     
     //0.2 second delay
-    nanosleep((struct timespec[]){{0, 200000000}}, NULL);
+    sleep(1);
     return 1;
 }
 
