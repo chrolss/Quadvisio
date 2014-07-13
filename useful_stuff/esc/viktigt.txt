@@ -1,0 +1,11 @@
+För att starta en motor från terminalen:
+
+1. Lägg till am33xx_pwm i slots samt den pin som du vill använda
+
+2. gå in i devices och i mappen till pinnen
+
+3. sätt polarity till 0, period till 2 000 000 och duty till 1 000 000 för att göra motorn redo.
+
+
+max duty: någonstans runt 1900000
+tomgång duty: 1090000
