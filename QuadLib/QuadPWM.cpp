@@ -13,5 +13,5 @@ void QuadPWM::intitialize(std::string name) {
 }
 
 void QuadPWM::cleanUp() {
-    unloadDeviceTree("am33xx_pwm");
+
 }

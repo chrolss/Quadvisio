@@ -18,13 +18,9 @@ protected:
 private:
     std::string slotsPath;
     std::string dtboName;
-    char ctrl_dir[35];
     
     // Generates the slot file path and sets variable slotsPath
-    //void setSlotsPath();
-    
-    int buildPath(const char *partial_path, const char *prefix, char *full_path, size_t full_path_len);
-
+    void setSlotsPath();
     
 };
 
