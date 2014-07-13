@@ -11,9 +11,9 @@
 #include "QuadPWM.h"
 
 int main(int argc, const char * argv[]) {
-    // insert code here...
+
+    QuadPWM pwm;
+    pwm.intitialize("P8_13");
     
-    
-    std::cout << "Hello, World!\n";
     return 0;
 }

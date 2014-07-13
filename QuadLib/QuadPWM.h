@@ -2,14 +2,19 @@
 #define QUADPWM_H_
 
 #include "QuadCore.h"
+#include <string>
 
-class QuadPWM {
+class QuadPWM : protected virtual QuadCore {
     
 public:
     QuadPWM();
     
-private:
+    // Laddar ett device tree för porten name och gör den redo för användning
+    void intitialize(std::string name);
     
+private:
+    std::string pwmName;
+    bool initialized;
 };
 
 
