@@ -27,6 +27,10 @@ bool QuadCore::loadAm33xx() {
 bool QuadCore::loadDeviceTree(std::string name) {
     std::string file = this->getSlotsPath();
     this->dtboName = "bone_pwm_" + name;
+    std::ofstream slotsFile;
+    slotsFile.open(file.c_str(),std::ios::out);
+    slotsFile << dtboName;
+    slotsFile.close();
     return true;
 }
 
