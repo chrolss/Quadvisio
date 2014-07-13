@@ -7,13 +7,15 @@
 //
 
 #include <iostream>
+#include <string>
 
 #include "QuadPWM.h"
 
 int main(int argc, const char * argv[]) {
-
-    QuadPWM pwm;
-    pwm.intitialize("P8_13");
+    std::string s = "";
     
+    std::cout << "Enter the port that you want to start" << std::endl;
+    std::cin >> s;
+    QuadPWM pwm;
     return 0;
 }

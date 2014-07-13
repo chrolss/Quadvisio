@@ -9,18 +9,21 @@ public:
 protected:
     
     // Tries to load the device three, returns true if successfull
-    bool loadDeviceTree(std::string name);
+    int loadDeviceTree(std::string nameTree);
+    int unloadDeviceTree(std::string nameTree);
     
     // Returns the slot file path
     std::string getSlotsPath();
     
-    
 private:
     std::string slotsPath;
     std::string dtboName;
+    char ctrl_dir[35];
+    
     // Generates the slot file path and sets variable slotsPath
     void setSlotsPath();
-    bool loadAm33xx();
+    
+    int buildPath(const char *partial_path, const char *prefix, char *full_path, size_t full_path_len);
 
     
 };

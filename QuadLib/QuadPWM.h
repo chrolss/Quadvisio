@@ -11,6 +11,7 @@ public:
     
     // Laddar ett device tree för porten name och gör den redo för användning
     void intitialize(std::string name);
+    void cleanUp();
     
 private:
     std::string pwmName;
