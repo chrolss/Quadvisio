@@ -23,6 +23,7 @@ QuadCore::QuadCore() {
 }
 
 int QuadCore::loadDeviceTree(std::string pwmName) {
+    printf("Inside loadDeviceTree");
     
     const char *name = pwmName.c_str();
     
@@ -61,6 +62,7 @@ int QuadCore::unloadDeviceTree(std::string pwmName) {
 }
 
 bool QuadCore::deviceTreeLoaded(std::string pwmName) {
+    printf("Inside deviceTreeLoaded");
     const char *name = pwmName.c_str();
     
     FILE *file = NULL;
