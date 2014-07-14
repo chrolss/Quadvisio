@@ -82,7 +82,7 @@ void QuadPWM::cleanUp() {
 }
 
 void QuadPWM::setPolarity(std::string pwmName, int polarity) {
-    for (int pwm = 0; pwm<sizeof(pwmDatas); pwm++) {
+    for (int pwm = 0; pwm<pwmDatas.size(); pwm++) {
         if (pwmName.compare(pwmDatas.at(pwm).name)==0) {
             int fd;
             int len;
@@ -90,6 +90,7 @@ void QuadPWM::setPolarity(std::string pwmName, int polarity) {
             fd = open(pwmDatas.at(pwm).polarityPath.c_str(), O_RDWR);
             len = snprintf(buffer, sizeof(buffer), "%d", polarity);
             write(fd, buffer, len);
+            close(fd);
         }
     }
 }
