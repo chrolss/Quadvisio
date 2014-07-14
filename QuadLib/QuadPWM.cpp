@@ -31,13 +31,15 @@ void QuadPWM::intitialize(std::string pwmName) {
     //creates the fragment in order to build the pwm_test_filename, such as "pwm_test_P9_13"
     snprintf(pwmTestFragment, sizeof(pwmTestFragment), "pwm_test_%s", pwmName.c_str());
     
-    printf("Path to ocp: %s\n", pwmTestFragment);
-    
     //finds and builds the pwm_test_path, as it can be variable...
     buildPath(getOcpPath().c_str(), pwmTestFragment, pwmTestPath, sizeof(pwmTestPath));
     
     printf("Path to ocp: %s\n", pwmTestPath);
-
+    
+    /////////////////////////////////////////
+    //          FORTSÄTT HÄR IDAG          //
+    /////////////////////////////////////////
+ 
 }
 
 void QuadPWM::checkLoaded(std::string pwmName) {
