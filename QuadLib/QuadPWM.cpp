@@ -108,7 +108,7 @@ void QuadPWM::setPeriod(std::string pwmName, int period) {
         if (pwmName.compare(pwmDatas.at(pwm).name)==0) {
             int fd;
             int len;
-            char buffer[7]; /* allow room for trailing NUL byte */
+            char buffer[20]; /* allow room for trailing NUL byte */
             fd = open(pwmDatas.at(pwm).periodPath.c_str(), O_RDWR);
             len = snprintf(buffer, sizeof(buffer), "%d", period);
             write(fd, buffer, len);
@@ -122,7 +122,7 @@ void QuadPWM::setDuty(std::string pwmName, int duty) {
         if (pwmName.compare(pwmDatas.at(pwm).name)==0) {
             int fd;
             int len;
-            char buffer[7]; /* allow room for trailing NUL byte */
+            char buffer[20]; /* allow room for trailing NUL byte */
             fd = open(pwmDatas.at(pwm).dutyPath.c_str(), O_RDWR);
             len = snprintf(buffer, sizeof(buffer), "%d", duty);
             write(fd, buffer, len);

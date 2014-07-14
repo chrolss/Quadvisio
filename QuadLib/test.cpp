@@ -18,7 +18,7 @@ int main(int argc, const char * argv[]) {
     QuadPWM pwm;
     pwm.intitialize("P8_13");
     
-    sleep(1);
+    sleep(2);
     
     pwm.setDuty("P8_13", 1200000);
     
