@@ -16,14 +16,13 @@ void QuadPWM::intitialize(std::string pwmName) {
 
 void QuadPWM::checkLoaded(std::string pwmName) {
     printf("Inside checkLoades");
-    if (deviceTreeLoaded(pwmName)) {
-        printf("%s is loaded", pwmName.c_str());
-    }
-    else {
-        printf("%s is not loaded", pwmName.c_str());
-    }
+    deviceTreeLoaded(pwmName);
 }
 
 void QuadPWM::cleanUp() {
 
+}
+
+void QuadPWM::setPolarity(std::string pwmNAme, int polarity) {
+    
 }
