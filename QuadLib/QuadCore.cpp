@@ -24,21 +24,34 @@ QuadCore::QuadCore() {
 
 int QuadCore::loadDeviceTree(std::string pwmName) {
     
-    std::string file = this->slotsPath;
-    std::ofstream slotsFile;
-    if (am33Loaded) {
-        slotsFile.open(file.c_str(),std::ios::out);
-        this->dtboName = "bone_pwm_" + pwmName;
-        slotsFile << this->dtboName;
-		slotsFile.close();
-        std::ofstream slotsFile;
-
+    const char *name = pwmName.c_str();
+    
+    FILE *file = NULL;
+    char line[256];
+    
+    const char *slots = slotsPath.c_str();
+    
+    printf("Slots path is: %s\n", slots);
+    
+    file = fopen(slots, "r+");
+    if (!file) {
+        printf("Error trying to open slots");
+        return -1;
     }
-    else {
-        slotsFile.open(file.c_str(),std::ios::out);
-        slotsFile << pwmName;
-        slotsFile.close();
+    
+    while (fgets(line, sizeof(line), file)) {
+        //the device is already loaded, return 1
+        if (strstr(line, name)) {
+            printf("%s is already loaded\n", name);
+            fclose(file);
+            return 0;
+        }
     }
+    
+    //if the device isn't already loaded, load it, and return
+    fprintf(file, name);
+    fclose(file);
+    
     return 0;
 }
 
@@ -48,7 +61,29 @@ int QuadCore::unloadDeviceTree(std::string pwmName) {
 }
 
 bool QuadCore::deviceTreeLoaded(std::string pwmName) {
+    const char *name = pwmName.c_str();
     
+    FILE *file = NULL;
+    char line[256];
+    
+    const char *slots = slotsPath.c_str();
+    
+    printf("Slots path is: %s\n", slots);
+    
+    file = fopen(slots, "r+");
+    if (!file) {
+        printf("Error trying to open slots");
+        return false;
+    }
+    
+    while (fgets(line, sizeof(line), file)) {
+        //the device is already loaded, return 1
+        if (strstr(line, name)) {
+            fclose(file);
+            return true;
+        }
+    }
+
     return false;
 }
 

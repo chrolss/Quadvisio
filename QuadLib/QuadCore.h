@@ -24,6 +24,7 @@ protected:
     std::string getSlotsPath();
     
 private:
+    
     // Holds the path to slots
     std::string slotsPath;
     
