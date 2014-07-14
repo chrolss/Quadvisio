@@ -81,6 +81,7 @@ bool QuadCore::deviceTreeLoaded(std::string pwmName) {
     while (fgets(line, sizeof(line), file)) {
         //the device is already loaded, return 1
         if (strstr(line, name)) {
+            printf("%s is already loaded\n", name);
             fclose(file);
             return true;
         }
