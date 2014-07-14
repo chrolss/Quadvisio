@@ -66,6 +66,12 @@ void QuadPWM::intitialize(std::string pwmName) {
     
     sleep(1);
     
+    setPeriod(newPwm.name, 2000000);
+    
+    sleep(1);
+    
+    setDuty(newPwm.name, 1000000);
+    
     /////////////////////////////////////////
     //          FORTSÄTT HÄR IDAG          //
     /////////////////////////////////////////
@@ -89,6 +95,34 @@ void QuadPWM::setPolarity(std::string pwmName, int polarity) {
             char buffer[7]; /* allow room for trailing NUL byte */
             fd = open(pwmDatas.at(pwm).polarityPath.c_str(), O_RDWR);
             len = snprintf(buffer, sizeof(buffer), "%d", polarity);
+            write(fd, buffer, len);
+            close(fd);
+        }
+    }
+}
+
+void QuadPWM::setPeriod(std::string pwmName, int period) {
+    for (int pwm = 0; pwm<pwmDatas.size(); pwm++) {
+        if (pwmName.compare(pwmDatas.at(pwm).name)==0) {
+            int fd;
+            int len;
+            char buffer[7]; /* allow room for trailing NUL byte */
+            fd = open(pwmDatas.at(pwm).polarityPath.c_str(), O_RDWR);
+            len = snprintf(buffer, sizeof(buffer), "%d", period);
+            write(fd, buffer, len);
+            close(fd);
+        }
+    }
+}
+
+void QuadPWM::setDuty(std::string pwmName, int duty) {
+    for (int pwm = 0; pwm<pwmDatas.size(); pwm++) {
+        if (pwmName.compare(pwmDatas.at(pwm).name)==0) {
+            int fd;
+            int len;
+            char buffer[7]; /* allow room for trailing NUL byte */
+            fd = open(pwmDatas.at(pwm).polarityPath.c_str(), O_RDWR);
+            len = snprintf(buffer, sizeof(buffer), "%d", duty);
             write(fd, buffer, len);
             close(fd);
         }

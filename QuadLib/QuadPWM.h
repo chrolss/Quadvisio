@@ -28,9 +28,9 @@ public:
     void checkLoaded(std::string pwmName);
     void cleanUp();
     
-    void setDuty(std::string pwmName, double value);
+    void setDuty(std::string pwmName, int value);
     void setPolarity(std::string pwmName, int value);
-    void setPeriod(std::string pwmName, double value);
+    void setPeriod(std::string pwmName, int value);
     void setRun(std::string pwmName, int value);
     
 private:
