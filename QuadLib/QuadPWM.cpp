@@ -1,4 +1,5 @@
 #include <iostream>
+#include <sstream>
 
 #include "QuadPWM.h"
 
@@ -15,10 +16,10 @@ void QuadPWM::intitialize(std::string pwmName) {
     char periodPath[50];
     char dutyPath[50];
     char polarityPath[55];
-    int period_fd, duty_fd, polarity_fd;
-    struct pwmData *newPwm;
+    struct pwmData newPwm;
+    std::stringstream ss;
     
-    newPwm = new pwmData;
+    newPwm.name = pwmName;
     
     // Get to dtbo filename
     snprintf(dtboFile, sizeof(dtboFile), "bone_pwm_%s\n", pwmName.c_str());
@@ -35,6 +36,26 @@ void QuadPWM::intitialize(std::string pwmName) {
     buildPath(getOcpPath().c_str(), pwmTestFragment, pwmTestPath, sizeof(pwmTestPath));
     
     printf("Path to ocp: %s\n", pwmTestPath);
+    
+    snprintf(periodPath, sizeof(periodPath), "%s/period", pwmTestPath);
+    snprintf(dutyPath, sizeof(dutyPath), "%s/duty", pwmTestPath);
+    snprintf(polarityPath, sizeof(polarityPath), "%s/polarity", pwmTestPath);
+    
+    
+    ss << periodPath;
+    ss >> newPwm.periodPath;
+    ss.clear();
+    ss << dutyPath;
+    ss >> newPwm.dutyPath;
+    ss.clear();
+    ss << polarityPath;
+    ss >> newPwm.polarityPath;
+    pwmDatas.push_back(newPwm);
+    
+    printf("period path %s", newPwm.periodPath.c_str());
+    printf("duty path %s", newPwm.dutyPath.c_str());
+    printf("polarity path %s", newPwm.polarityPath.c_str());
+
     
     /////////////////////////////////////////
     //          FORTSÄTT HÄR IDAG          //

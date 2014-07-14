@@ -11,11 +11,12 @@ struct pwmData
 {
     std::string name;
     char key[KEYLEN+1]; /* leave room for terminating NUL byte */
-    int period_fd;
-    int duty_fd;
-    int polarity_fd;
     unsigned long duty;
     unsigned long period_ns;
+    std::string pwmTestPath;
+    std::string periodPath;
+    std::string dutyPath;
+    std::string polarityPath;
 };
 
 class QuadPWM : protected QuadCore {
@@ -33,6 +34,7 @@ public:
     void setRun(std::string pwmName, int value);
     
 private:
+    std::vector<struct pwmData> pwmDatas;
     bool initialized;
     void mapper();
 };
