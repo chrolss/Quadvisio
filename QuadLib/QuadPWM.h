@@ -5,7 +5,20 @@
 #include <string>
 #include <vector>
 
-class QuadPWM : protected virtual QuadCore {
+#define KEYLEN 7
+
+struct pwmData
+{
+    std::string name;
+    char key[KEYLEN+1]; /* leave room for terminating NUL byte */
+    int period_fd;
+    int duty_fd;
+    int polarity_fd;
+    unsigned long duty;
+    unsigned long period_ns;
+};
+
+class QuadPWM : protected QuadCore {
     
 public:
     QuadPWM();
@@ -20,8 +33,8 @@ public:
     void setRun(std::string pwmName, int value);
     
 private:
-    std::vector<std::string> pwmNames;
     bool initialized;
+    void mapper();
 };
 
 

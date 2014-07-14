@@ -15,8 +15,8 @@ int main(int argc, const char * argv[]) {
     std::string s = "";
     
     QuadPWM pwm;
-    pwm.checkLoaded("am33xx_pwm");
-    //pwm.intitialize("P8_13");
+    //pwm.checkLoaded("am33xx_pwm");
+    pwm.intitialize("P8_13");
     
     return 0;
 }

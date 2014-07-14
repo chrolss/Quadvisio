@@ -8,11 +8,8 @@ public:
     
 protected:
     
-    // Is am33xx_pwm loaded or not
-    bool am33Loaded = false;
-    
     // Tries to load the device three, returns 0 if successfull
-    int loadDeviceTree(std::string pwmName);
+    int loadDeviceTree(const char *name);
     
     // Tries to unload the device three, returns 0 if successfull
     int unloadDeviceTree(std::string pwmName);
@@ -20,8 +17,13 @@ protected:
     // Checks if a certain device tree is loaded, returns true if so
     bool deviceTreeLoaded(std::string pwmName);
     
+    int buildPath(const char *partial_path, const char *prefix, char *full_path, size_t full_path_len);
+    
     // Returns the slot file path
     std::string getSlotsPath();
+    
+    // Returns the ocp file path
+    std::string getOcpPath();
     
 private:
     
@@ -31,8 +33,14 @@ private:
     // Holds the name of a dtbo file
     std::string dtboName;
     
+    // Holds the path to ocp.3 directory
+    std::string ocpPath;
+    
     // Generates the slot file path and sets variable slotsPath
     void setSlotsPath();
+    
+    // Generates the ocp file path and sets variable ocpPath
+    void setOcpPath();
     
 };
 
