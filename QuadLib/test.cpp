@@ -19,11 +19,11 @@ int main(int argc, const char * argv[]) {
     pwm.intitialize("P8_13");
     
     sleep(2);
-    printf("Setting duty to 1200000");
+    std::cout << "Setting duty to 1200000" << std::endl;
     pwm.setDuty("P8_13", 1200000);
     
     sleep(2);
-    printf("Setting duty to 1000000");
+    std::cout << "Setting duty to 1000000" << std::endl;
     pwm.setDuty("P8_13", 1000000);
     
     return 0;
