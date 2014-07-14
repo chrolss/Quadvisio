@@ -1,5 +1,9 @@
 #include <iostream>
 #include <sstream>
+#include <unistd.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <fcntl.h>
 
 #include "QuadPWM.h"
 
@@ -52,10 +56,15 @@ void QuadPWM::intitialize(std::string pwmName) {
     ss >> newPwm.polarityPath;
     pwmDatas.push_back(newPwm);
     
-    printf("period path %s", newPwm.periodPath.c_str());
-    printf("duty path %s", newPwm.dutyPath.c_str());
-    printf("polarity path %s", newPwm.polarityPath.c_str());
+    printf("period path %s\n", newPwm.periodPath.c_str());
+    printf("duty path %s\n", newPwm.dutyPath.c_str());
+    printf("polarity path %s\n", newPwm.polarityPath.c_str());
 
+    sleep(1);
+    
+    setPolarity(newPwm.name, 0);
+    
+    sleep(1);
     
     /////////////////////////////////////////
     //          FORTSÄTT HÄR IDAG          //
@@ -73,5 +82,14 @@ void QuadPWM::cleanUp() {
 }
 
 void QuadPWM::setPolarity(std::string pwmName, int polarity) {
-    
+    for (int pwm = 0; pwm<sizeof(pwmDatas); pwm++) {
+        if (pwmName.compare(pwmDatas.at(pwm).name)==0) {
+            int fd;
+            int len;
+            char buffer[7]; /* allow room for trailing NUL byte */
+            fd = open(pwmDatas.at(pwm).polarityPath.c_str(), O_RDWR);
+            len = snprintf(buffer, sizeof(buffer), "%d", polarity);
+            write(fd, buffer, len);
+        }
+    }
 }
