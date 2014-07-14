@@ -62,16 +62,16 @@ void QuadPWM::intitialize(std::string pwmName) {
 
     sleep(1);
     
-    printf("Setting polarity to 0\n");
+    printf("Starting %s\n", newPwm.name.c_str());
     setPolarity(newPwm.name, 0);
     
     sleep(1);
     
-    printf("Setting period to 2000000\n");
+    //printf("Setting period to 2000000\n");
     setPeriod(newPwm.name, 2000000);
     
     sleep(1);
-    printf("Setting duty to 1000000\n");
+    //printf("Setting duty to 1000000\n");
     setDuty(newPwm.name, 1000000);
     
     /////////////////////////////////////////
