@@ -22,7 +22,7 @@ int main(int argc, const char * argv[]) {
     std::cout << "Setting duty to 1200000" << std::endl;
     pwm.setDuty("P8_13", 1200000);
     
-    sleep(2);
+    sleep(4);
     std::cout << "Setting duty to 1000000" << std::endl;
     pwm.setDuty("P8_13", 1000000);
     
