@@ -15,6 +15,7 @@ void QuadPWM::intitialize(std::string pwmName) {
 }
 
 void QuadPWM::checkLoaded(std::string pwmName) {
+    printf("Inside checkLoades");
     if (deviceTreeLoaded(pwmName)) {
         printf("%s is loaded", pwmName.c_str());
     }
