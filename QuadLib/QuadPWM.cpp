@@ -75,7 +75,7 @@ void QuadPWM::initialize(std::string pwmName) {
     //printf("Setting duty to 1000000\n");
     setDuty(newPwm.name, 1000000);
     
-    sleep(2);
+    sleep(1);
     /////////////////////////////////////////
     //          FORTSÄTT HÄR IDAG          //
     /////////////////////////////////////////
