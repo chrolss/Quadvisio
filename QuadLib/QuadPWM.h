@@ -7,12 +7,13 @@
 
 #define KEYLEN 7
 
+// Struct for holding data about a pwm port
 struct pwmData
 {
     std::string name;
-    char key[KEYLEN+1]; /* leave room for terminating NUL byte */
-    unsigned long duty;
-    unsigned long period_ns;
+    //char key[KEYLEN+1]; /* leave room for terminating NUL byte */
+    //unsigned long duty;
+    //unsigned long period_ns;
     std::string pwmTestPath;
     std::string periodPath;
     std::string dutyPath;
@@ -36,7 +37,6 @@ public:
 private:
     std::vector<struct pwmData> pwmDatas;
     bool initialized;
-    void mapper();
 };
 
 

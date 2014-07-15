@@ -17,14 +17,17 @@ int main(int argc, const char * argv[]) {
     
     QuadPWM pwm;
     pwm.intitialize("P8_13");
+    pwm.intitialize("P9_14");
     
     sleep(2);
     std::cout << "Setting duty to 1200000" << std::endl;
     pwm.setDuty("P8_13", 1200000);
+    pwm.setDuty("P9_14", 1200000);
     
     sleep(4);
     std::cout << "Setting duty to 1000000" << std::endl;
     pwm.setDuty("P8_13", 1000000);
-    
+    pwm.setDuty("P9_14", 1000000);
+
     return 0;
 }
