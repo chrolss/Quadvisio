@@ -11,7 +11,7 @@
 
 #include <iostream>
 #include <unistd.h>
-#include <Quadlib/QuadPWM.h>
+#include <QuadLib/QuadPWM.h>
 
 class Motor{
     

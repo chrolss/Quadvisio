@@ -43,7 +43,8 @@ void loop(){
 
         // Calculate control action
         controller->calcPWM(sInput, sOutput);
-        
+	
+	std::cout << sOutput[1] << " " << sOutput[3] << std::endl;        
         // Tillfälligt avstängd tills motorkoden är klar
         // Send PWM values to motors
         motor->setPWM(sOutput);
@@ -57,6 +58,7 @@ void loop(){
             counter = 0;
         }
         counter++;
+	std::cout << counter << std::endl;
     }
     motor->closePWM();
     std::cout << "Test klart" << std::endl;
