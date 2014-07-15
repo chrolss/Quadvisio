@@ -91,7 +91,7 @@ void QuadPWM::cleanUp() {
 
 void QuadPWM::setPolarity(std::string pwmName, int polarity) {
     for (int pwm = 0; pwm<pwmDatas.size(); pwm++) {
-        if (strcmp(pwmName.c_str(), pwmDatas.at(pwm).name.c_str())==0) {
+        if (pwmName.compare(pwmDatas.at(pwm).name)==0) {
             std::cout << "hej" << std::endl;
             int fd;
             int len;
@@ -106,7 +106,7 @@ void QuadPWM::setPolarity(std::string pwmName, int polarity) {
 
 void QuadPWM::setPeriod(std::string pwmName, int period) {
     for (int pwm = 0; pwm<pwmDatas.size(); pwm++) {
-        if (strcmp(pwmName.c_str(), pwmDatas.at(pwm).name.c_str())==0) {
+        if (pwmName.compare(pwmDatas.at(pwm).name)==0) {
             int fd;
             int len;
             char buffer[20]; /* allow room for trailing NUL byte */
@@ -120,7 +120,7 @@ void QuadPWM::setPeriod(std::string pwmName, int period) {
 
 void QuadPWM::setDuty(std::string pwmName, int duty) {
     for (int pwm = 0; pwm<pwmDatas.size(); pwm++) {
-        if (strcmp(pwmName.c_str(), pwmDatas.at(pwm).name.c_str())==0) {
+        if (pwmName.compare(pwmDatas.at(pwm).name)==0) {
             int fd;
             int len;
             char buffer[20]; /* allow room for trailing NUL byte */
