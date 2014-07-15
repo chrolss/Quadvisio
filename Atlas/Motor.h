@@ -11,23 +11,19 @@
 
 #include <iostream>
 #include <unistd.h>
-#include <BlackLib/BlackLib.h>
+#include <Quadlib/QuadPWM.h>
 
 class Motor{
     
 public:
     Motor();
-    void setPWM(double *output); //min 22% max 49%
+    void setPWM(int *output); //min 22% max 49%
     void closePWM();
-    BlackPWM* pwmLF; //Left Front, pin P8_13
-    BlackPWM* pwmRF; //right front, pin P8_19
-    BlackPWM* pwmLR; //left rear, pin P9_14
-    BlackPWM* pwmRR; //right rear, pin P9_16
+    QuadPWM* pwm;
 
     
 private:
-    float PWM[4];
-    void initialize();
+    void initializeAll();
     float mapper(float b);
 };
 

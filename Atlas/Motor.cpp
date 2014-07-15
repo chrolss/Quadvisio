@@ -9,60 +9,31 @@
 #include "Motor.h"
 
 Motor::Motor(){
-	initialize();
+	initializeAll();
 }
 
-void Motor::initialize(){
-	pwmLF = new BlackPWM(EHRPWM2B); //P8_13
-	pwmRF = new BlackPWM(EHRPWM2A); //P8_19
-	pwmLR = new BlackPWM(EHRPWM1A);	//P9_14
-	pwmRR = new BlackPWM(EHRPWM1B); //P9_16
-
-	pwmLF->setRunState(run); //sätt igång signalen
-	pwmRF->setRunState(run);
-	pwmLR->setRunState(run);
-	pwmRR->setRunState(run);
-
-	pwmLF->setPeriodTime(5000000);
-	pwmRF->setPeriodTime(5000000);
-	pwmLR->setPeriodTime(5000000);
-	pwmRR->setPeriodTime(5000000);
-
-	pwmLF->setDutyPercent(0.0);
-	pwmRF->setDutyPercent(0.0);
-	pwmLR->setDutyPercent(0.0);
-	pwmRR->setDutyPercent(0.0);
-
-	sleep(1);
-	pwmLF->setDutyPercent(20.0); //Speciellt för vår ESC
-	pwmRF->setDutyPercent(20.0);
-	pwmLR->setDutyPercent(20.0);
-	pwmRR->setDutyPercent(20.0);
-
-
-	sleep(1);
+void Motor::initializeAll(){
+	pwm = new QuadPWM;
+	pwm->initialize("P8_13"); //Left Rear
+	pwm->initialize("P9_14"); //Right Rear
+	pwm->initialize("P9_21"); //Right Front
+	pwm->initialize("P9_42"); //Left Front
+	printf("Motors initialized\n");
 }
 
-float Motor::mapper(float b){
-	float val = float(float(29.0/100.0)*b) + float(20); //Konverterar input 0 - 100 till pwmsignal
-	return val;
-}
 
 void Motor::closePWM(){
-	pwmLF->setRunState(stop); //stäng alla fyra pwmportar
-	pwmRF->setRunState(stop);
-	pwmLR->setRunState(stop);
-	pwmRR->setRunState(stop);
+	pwm->setDuty("P8_13", 1000000);
+	pwm->setDuty("P9_14", 1000000);
+	pwm->setDuty("P9_21", 1000000);
+	pwm->setDuty("P9_42", 1000000);
+	printf("Motors are closed\n");
+
 }
 
-void Motor::setPWM(double *sOutput) {
-	for (int i = 0; i<4; i++)
-		PWM[i] = mapper(sOutput[i]);
-
-    pwmLF->setDutyPercent(PWM[0]);
-    pwmRF->setDutyPercent(PWM[1]);
-    pwmLR->setDutyPercent(PWM[2]);
-    pwmRR->setDutyPercent(PWM[3]);
-    
-    printf("The PWM values are: %f %f %f %f", PWM[0], PWM[1], PWM[2], PWM[3]);
+void Motor::setPWM(int *sOutput) {
+	pwm->setDuty("P8_13", sOutput[0]);
+	pwm->setDuty("P9_14", sOutput[1]);
+	pwm->setDuty("P9_21", sOutput[2]);
+	pwm->setDuty("P9_42", sOutput[3]);
 }

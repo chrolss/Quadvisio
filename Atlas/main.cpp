@@ -19,7 +19,7 @@ Controller *controller;
 Com *communicate;
 Motor *motor;
 double sInput[6];
-double sOutput[4];
+int sOutput[4];
 bool runAtlas=false;
 int counter = 0;
 int globalCounter = 0;
@@ -46,7 +46,7 @@ void loop(){
         
         // Tillfälligt avstängd tills motorkoden är klar
         // Send PWM values to motors
-        //motor->setPWM(output);
+        motor->setPWM(sOutput);
 
         // If connected to Qvis send data
         if (communicate->connected==true && counter>10) {

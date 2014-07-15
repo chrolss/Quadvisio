@@ -25,7 +25,7 @@ class QuadPWM : protected QuadCore {
 public:
     QuadPWM();
     
-    void intitialize(std::string pwmName);
+    void initialize(std::string pwmName);
     void checkLoaded(std::string pwmName);
     void cleanUp();
     

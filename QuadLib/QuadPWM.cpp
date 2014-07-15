@@ -10,7 +10,7 @@
 QuadPWM::QuadPWM() {
 }
 
-void QuadPWM::intitialize(std::string pwmName) {
+void QuadPWM::initialize(std::string pwmName) {
     printf("Inside initialize\n");
     
     char dtboFile[18];

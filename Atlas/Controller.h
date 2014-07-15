@@ -15,7 +15,7 @@ class Controller{
     
 public:
     Controller();
-    void calcPWM(double *sInput, double *sOutput);
+    void calcPWM(double *sInput, int *sOutput);
     
 private:
     

@@ -97,9 +97,9 @@ void SensorManager::readDMP(double *input) {
         input[0] = aaReal.x;
         input[1] = aaReal.y;
         input[2] = aaReal.z;
-        input[3] = ypr[2] * 180/M_PI;
-        input[4] = ypr[1] * 180/M_PI;
-        input[5] = ypr[0] * 180/M_PI;
+        input[3] = ypr[2] * 180/M_PI; // Roll
+        input[4] = ypr[1] * 180/M_PI; // Pitch
+        input[5] = ypr[0] * 180/M_PI; // Yaw
 
     }
     else {
