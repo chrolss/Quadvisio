@@ -36,7 +36,7 @@ void initailize(){
 }
 
 void loop(){
-    while (runAtlas) {
+    while (runAtlas && counter<1000) {
 
         // Read sensor data
         sensorManager->readDMP(sInput);
@@ -58,6 +58,8 @@ void loop(){
         }
         counter++;
     }
+    motor->closePWM();
+    std::cout << "Test klart" << std::endl;
 }
 
 int main(int argc, const char * argv[])
