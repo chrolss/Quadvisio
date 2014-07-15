@@ -36,7 +36,7 @@ void initailize(){
 }
 
 void loop(){
-    while (runAtlas && counter<1000) {
+    while (runAtlas && counter<2000) {
 
         // Read sensor data
         sensorManager->readDMP(sInput);
@@ -44,7 +44,7 @@ void loop(){
         // Calculate control action
         controller->calcPWM(sInput, sOutput);
 	
-	std::cout << sOutput[1] << " " << sOutput[3] << std::endl;        
+        std::cout << "Right rear: " << sOutput[1] << " Left front: " << sOutput[3] << std::endl;
         // Tillfälligt avstängd tills motorkoden är klar
         // Send PWM values to motors
         motor->setPWM(sOutput);
