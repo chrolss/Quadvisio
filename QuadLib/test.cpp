@@ -16,10 +16,10 @@ int main(int argc, const char * argv[]) {
     std::string s = "";
     
     QuadPWM pwm;
-    pwm.intitialize("P8_13");
-    pwm.intitialize("P9_14");
-    pwm.intitialize("P9_21");
-    pwm.intitialize("P9_42");
+    pwm.initialize("P8_13");
+    pwm.initialize("P9_14");
+    pwm.initialize("P9_21");
+    pwm.initialize("P9_42");
     
     sleep(2);
     std::cout << "Setting duty to 1200000" << std::endl;
