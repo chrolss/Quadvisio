@@ -58,7 +58,8 @@ void loop(){
             counter = 0;
         }
         counter++;
-	std::cout << counter << std::endl;
+        std::cout << counter << std::endl;
+        usleep(1000);
     }
     motor->closePWM();
     std::cout << "Test klart" << std::endl;
