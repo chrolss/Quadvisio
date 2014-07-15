@@ -60,20 +60,22 @@ void QuadPWM::initialize(std::string pwmName) {
     printf("duty path %s\n", newPwm.dutyPath.c_str());
     printf("polarity path %s\n", newPwm.polarityPath.c_str());
     
+    sleep(1);
+    
     // Getting the new port ready for run
     printf("Starting %s\n", newPwm.name.c_str());
     setPolarity(newPwm.name, 0);
     
-    sleep(0.5);
+    sleep(1);
     
     //printf("Setting period to 2000000\n");
     setPeriod(newPwm.name, 2000000);
     
-    sleep(0.5);
+    sleep(1);
     //printf("Setting duty to 1000000\n");
     setDuty(newPwm.name, 1000000);
     
-    sleep(0.5);
+    sleep(2);
     /////////////////////////////////////////
     //          FORTSÄTT HÄR IDAG          //
     /////////////////////////////////////////
