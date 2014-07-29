@@ -38,6 +38,7 @@ void Com::Listen()
     newsockfd = accept(sockfd,(struct sockaddr *) &cli_addr, &clilen);
     if (newsockfd < 0)
         error("ERROR on accept");
+    
     bzero(buffer,256);
     connected = true;
     std::cout << "Connection estabilished" << std::endl;
@@ -58,6 +59,14 @@ void Com::sendMsg(std::string s, size_t i) {
     
     if (send(newsockfd, s.c_str(), s.length(), 0) == -1)
         perror("send");
+}
+
+void Com::sendImg(cv::Mat sendFrame) {
+    sendFrame = (sendFrame.reshape(0,1));
+    int imgSize = sendFrame.total()*sendFrame.elemSize();
+    if (send(newsockfd, sendFrame.data, imgSize, 0) == -1) {
+        perror("send");
+    }
 }
 
 void Com::checkClient() {

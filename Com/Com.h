@@ -19,6 +19,7 @@
 #include <netinet/in.h>
 #include <thread>
 #include <sstream>
+#include <opencv2/highgui/highgui.hpp>
 
 #define PORT "3490"  // the port users will be connecting to
 #define BACKLOG 10
@@ -29,6 +30,7 @@ public:
     Com();
     void Listen();
     void sendMsg(std::string s, size_t i);
+    void sendImg(cv::Mat sendFrame);
     void checkClient();
     void closeClient();
     
