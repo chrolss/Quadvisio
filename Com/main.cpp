@@ -9,6 +9,7 @@
 #include <iostream>
 #include <string>
 #include <sstream>
+#include <unistd.h>
 #include <opencv2/core/core.hpp>
 #include <opencv2/highgui/highgui.hpp>
 #include "Com.h"
@@ -22,8 +23,6 @@ int main(int argc, const char * argv[])
     cv::VideoCapture cap;
     
     cv::Mat frame, sendFrame;
-    int imgSize;
-    int i=0;
     
     cap.open(1);
     cap.set(CV_CAP_PROP_FRAME_HEIGHT, 240);
@@ -32,10 +31,15 @@ int main(int argc, const char * argv[])
     while (true) {
         cap >> frame;
         cv::imshow("Video", frame);
+        /*
+        imgSize = (int)frame.total()*(int)frame.elemSize();
+        std::cout << imgSize << std::endl;
+        */
         if (C.connected) {
             C.sendImg(frame);
         }
-        else { }
+        if(cv::waitKey(30) >= 0) break;
+        sleep(0.5);
     }
     C.closeClient();
     return 0;

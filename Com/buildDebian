@@ -1,0 +1,5 @@
+#!/bin/bash
+
+echo "Building Com test software…"
+
+g++ -O2 -W main.cpp Com.cpp -o Com_test -pthread -std=c++11
