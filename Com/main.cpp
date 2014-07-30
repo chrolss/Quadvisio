@@ -24,13 +24,13 @@ int main(int argc, const char * argv[])
     
     cv::Mat frame, sendFrame;
     
-    cap.open(1);
+    cap.open(0);
     cap.set(CV_CAP_PROP_FRAME_HEIGHT, 240);
     cap.set(CV_CAP_PROP_FRAME_WIDTH, 320);
     
     while (true) {
         cap >> frame;
-        cv::imshow("Video", frame);
+        //cv::imshow("Video", frame);
         /*
         imgSize = (int)frame.total()*(int)frame.elemSize();
         std::cout << imgSize << std::endl;
@@ -39,7 +39,7 @@ int main(int argc, const char * argv[])
             C.sendImg(frame);
         }
         if(cv::waitKey(30) >= 0) break;
-        sleep(0.5);
+        usleep(1000000);
     }
     C.closeClient();
     return 0;
