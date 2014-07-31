@@ -108,7 +108,7 @@ void Com::sendMsg() {
     else {
         ostr << length << " 0 " << s;
         s = ostr.str();
-        //std::cout << s << std::endl;
+        std::cout << s << std::endl;
         if (send(newsockfd, s.c_str(), s.length(), 0) == -1)
             perror("send");
     }

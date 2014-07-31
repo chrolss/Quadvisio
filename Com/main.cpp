@@ -17,29 +17,38 @@
 int main(int argc, const char * argv[])
 {
     double output[6] = {1.0, 2.0, 3.0, 4.0, 5.0, 6.0};
+    int count = 0;
+    std::cout << "Starting communication thread" << std::endl;
     Com C;
     sleep(1);
     
     cv::VideoCapture cap;
-    
     cv::Mat frame;
     
+    std::cout << "Setting up camera" << std::endl;
     cap.open(0);
     cap.set(CV_CAP_PROP_FRAME_HEIGHT, 240);
     cap.set(CV_CAP_PROP_FRAME_WIDTH, 320);
     sleep(1);
     
+    std::cout << "Starting main loop" << std::endl;
     while (true) {
-        cap >> frame;
+        
         //cv::imshow("Video", frame);
         if (C.connected && !C.reciveMsg) {
             C.setOutputData(output);
-            C.sendFrame = frame;
-            C.imgSend = true;
+            
+            if (count>=5) {
+                cap >> frame;
+                C.sendFrame = frame;
+                C.imgSend = true;
+                count=0;
+            }
             C.msgSend=true;
         }
         if(cv::waitKey(30) >= 0) break;
-        usleep(100000);
+        count++;
+        usleep(1000000);
     }
     C.closeClient();
     return 0;
