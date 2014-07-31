@@ -77,9 +77,7 @@ void Com::Listen()
             std::cout << "Sending message" << std::endl;
 
             reciveMsg=true;
-            
             sendMsg();
-            
             msgSend=false;
         }
     }

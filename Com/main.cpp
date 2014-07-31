@@ -34,7 +34,6 @@ int main(int argc, const char * argv[])
     std::cout << "Starting main loop" << std::endl;
     while (true) {
         
-        //cv::imshow("Video", frame);
         if (C.connected && !C.reciveMsg) {
             C.setOutputData(output);
             
@@ -46,6 +45,7 @@ int main(int argc, const char * argv[])
             }
             C.msgSend=true;
         }
+        
         if(cv::waitKey(30) >= 0) break;
         count++;
         usleep(1000000);
