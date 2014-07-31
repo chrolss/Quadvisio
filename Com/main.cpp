@@ -37,7 +37,7 @@ int main(int argc, const char * argv[])
         if (C.connected && !C.reciveMsg) {
             C.setOutputData(output);
             
-            if (count>=10) {
+            if (count>=5) {
                 cap >> frame;
                 C.sendFrame = frame;
                 C.imgSend = true;
