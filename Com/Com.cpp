@@ -120,6 +120,8 @@ void Com::sendImg() {
     if (send(newsockfd, sendFrame.data, imgSize, 0) == -1) {
         perror("send");
     }
+    std::cout << "Image sent" << std::endl;
+
 }
 
 void Com::checkClient() {
