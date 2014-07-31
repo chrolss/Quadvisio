@@ -50,7 +50,7 @@ int main(int argc, const char * argv[])
         
         if(cv::waitKey(30) >= 0) break;
         count++;
-        usleep(100000);
+        usleep(10000);
     }
     C.closeClient();
     return 0;
