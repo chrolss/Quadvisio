@@ -31,15 +31,9 @@ int main(int argc, const char * argv[])
     cap.set(CV_CAP_PROP_FRAME_WIDTH, 320);
     sleep(1);
     
-    std::cout << "Clearing video buffer" << std::endl;
-    
-    for (int i=0; i<21; i++) {
-        cap >> frame;
-    }
-    
     std::cout << "Starting main loop" << std::endl;
     while (true) {
-        cap >> frame;
+        cap.read(frame);
         if (C.connected && !C.reciveMsg) {
             C.setOutputData(output);
             
