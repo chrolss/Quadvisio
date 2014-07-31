@@ -39,7 +39,7 @@ int main(int argc, const char * argv[])
             C.msgSend=true;
         }
         if(cv::waitKey(30) >= 0) break;
-        usleep(1000000);
+        usleep(100000);
     }
     C.closeClient();
     return 0;
