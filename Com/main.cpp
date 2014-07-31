@@ -38,8 +38,10 @@ int main(int argc, const char * argv[])
             C.setOutputData(output);
             
             if (count>=5) {
+                std::cout << "capturing frame" << std::endl;
                 cap >> frame;
                 C.sendFrame = frame;
+                std::cout << "frame captured" << std::endl;
                 C.imgSend = true;
                 count=0;
             }

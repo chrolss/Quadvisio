@@ -114,6 +114,7 @@ void Com::sendMsg() {
 }
 
 void Com::sendImg() {
+    std::cout << "Sending image" << std::endl;
     sendFrame = (sendFrame.reshape(0,1));
     int imgSize = (int)sendFrame.total()*(int)sendFrame.elemSize();
     if (send(newsockfd, sendFrame.data, imgSize, 0) == -1) {
