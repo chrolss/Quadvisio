@@ -37,7 +37,7 @@ int main(int argc, const char * argv[])
         if (C.connected && !C.reciveMsg) {
             C.setOutputData(output);
             
-            if (count>=5) {
+            if (count>=0) {
                 std::cout << "capturing frame" << std::endl;
                 //cv::imshow("window", frame);
                 C.sendFrame = frame;
