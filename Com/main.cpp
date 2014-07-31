@@ -39,12 +39,12 @@ int main(int argc, const char * argv[])
     
     std::cout << "Starting main loop" << std::endl;
     while (true) {
+        cap >> frame;
         if (C.connected && !C.reciveMsg) {
             C.setOutputData(output);
             
             if (count>=5) {
                 std::cout << "capturing frame" << std::endl;
-                cap >> frame;
                 //cv::imshow("window", frame);
                 C.sendFrame = frame;
                 std::cout << "frame captured" << std::endl;
