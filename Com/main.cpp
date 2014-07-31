@@ -45,7 +45,7 @@ int main(int argc, const char * argv[])
             if (count>=5) {
                 std::cout << "capturing frame" << std::endl;
                 cap >> frame;
-                cv::imshow("window", frame);
+                //cv::imshow("window", frame);
                 C.sendFrame = frame;
                 std::cout << "frame captured" << std::endl;
                 C.imgSend = true;
