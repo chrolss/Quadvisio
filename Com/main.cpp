@@ -31,7 +31,7 @@ int main(int argc, const char * argv[])
     
     while (true) {
         cap >> frame;
-        cv::imshow("Video", frame);
+        //cv::imshow("Video", frame);
         if (C.connected && !C.reciveMsg) {
             C.setOutputData(output);
             C.sendFrame = frame;
@@ -39,7 +39,7 @@ int main(int argc, const char * argv[])
             C.msgSend=true;
         }
         if(cv::waitKey(30) >= 0) break;
-        usleep(100000);
+        usleep(1000000);
     }
     C.closeClient();
     return 0;
