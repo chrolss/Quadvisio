@@ -37,7 +37,7 @@ int main(int argc, const char * argv[])
         if (C.connected && !C.reciveMsg) {
             C.setOutputData(output);
             
-            if (count>=5) {
+            if (count>=10) {
                 cap >> frame;
                 C.sendFrame = frame;
                 C.imgSend = true;
@@ -48,7 +48,7 @@ int main(int argc, const char * argv[])
         
         if(cv::waitKey(30) >= 0) break;
         count++;
-        usleep(1000000);
+        usleep(100000);
     }
     C.closeClient();
     return 0;
