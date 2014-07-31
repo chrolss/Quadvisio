@@ -29,12 +29,23 @@ class Com{
 public:
     Com();
     void Listen();
-    void sendMsg(std::string s, size_t i);
-    void sendImg(cv::Mat sendFrame);
+    void sendMsg();
+    void sendImg();
     void checkClient();
     void closeClient();
     
+    void getNewInputData(int value);
+    void setOutputData(double *output);
+    
     bool connected;
+    bool imgSend;
+    bool msgSend;
+    bool reciveMsg;
+    
+    double output[6];
+    int verticalThrust;
+    
+    cv::Mat sendFrame;
     
 private:
     void error(const char *msg);

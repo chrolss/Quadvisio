@@ -9,6 +9,17 @@
 #include "Com.h"
 
 Com::Com(){
+    msgSend=false;
+    imgSend=false;
+    verticalThrust=0;
+    
+    output[0]=0.0;
+    output[1]=0.0;
+    output[2]=0.0;
+    output[3]=0.0;
+    output[4]=0.0;
+    output[5]=0.0;
+    
     std::thread t1(&Com::Listen, this);
     t1.detach();
 }
@@ -41,29 +52,72 @@ void Com::Listen()
     
     bzero(buffer,256);
     connected = true;
+    reciveMsg=true;
     std::cout << "Connection estabilished" << std::endl;
+    
+    while (connected) {
+        
+        if (reciveMsg) {
+            std::cout << "Waitning for message" << std::endl;
+            char buf[10];
+            // Recive message from Qvis
+            ssize_t numbytes = recv(newsockfd, buf, 9, 0);
+            if (numbytes==-1) {
+                perror("recive");
+            }
+            std::string s;
+            s.push_back(buf[0]);
+            s.push_back(buf[1]);
+            std::cout << "Thrust: " << s << std::endl;
+            
+            reciveMsg=false;
+        }
+        
+        if (msgSend) {
+            std::cout << "Sending message" << std::endl;
+
+            reciveMsg=true;
+            
+            sendMsg();
+            
+            msgSend=false;
+        }
+    }
 }
 
-void Com::sendMsg(std::string s, size_t i) {
+void Com::sendMsg() {
     
     ostr.str("");
-    if (i<10) {
-        ostr << i << "  " << s;
+    
+    ostr << output[0] << " " << output[1] << " " << output[2] << " " << output[3] << " " << output[4] << " " << output[5];
+    std::string s;
+    s=ostr.str();
+    size_t length = s.size();
+    
+    ostr.str("");
+    
+    if (imgSend) {
+        ostr << length << " 1 " << s;
+        s = ostr.str();
+        std::cout << s << std::endl;
+        if (send(newsockfd, s.c_str(), s.length(), 0) == -1)
+            perror("send");
+        sendImg();
+        imgSend=false;
     }
     else {
-        ostr << i << " " << s;
+        ostr << length << " 0 " << s;
+        s = ostr.str();
+        //std::cout << s << std::endl;
+        if (send(newsockfd, s.c_str(), s.length(), 0) == -1)
+            perror("send");
     }
     
-    s=ostr.str();
-    std::cout << s << std::endl;
-    
-    if (send(newsockfd, s.c_str(), s.length(), 0) == -1)
-        perror("send");
 }
 
-void Com::sendImg(cv::Mat sendFrame) {
+void Com::sendImg() {
     sendFrame = (sendFrame.reshape(0,1));
-    int imgSize = sendFrame.total()*sendFrame.elemSize();
+    int imgSize = (int)sendFrame.total()*(int)sendFrame.elemSize();
     if (send(newsockfd, sendFrame.data, imgSize, 0) == -1) {
         perror("send");
     }
@@ -76,6 +130,17 @@ void Com::checkClient() {
 void Com::closeClient() {
     close(newsockfd);
     std::cout << "Connection closed." << std::endl;
+}
+
+void Com::setOutputData(double *out) {
+    output[0] = out[0];
+    output[1] = out[1];
+    output[2] = out[2];
+    output[3] = out[3];
+    output[4] = out[4];
+    output[5] = out[5];
+
+    
 }
 
 
