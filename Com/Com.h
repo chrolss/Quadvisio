@@ -52,9 +52,13 @@ private:
     int sockfd, newsockfd, portno;
     socklen_t clilen;
     char buffer[256];
+    char recvBuf[4];
     struct sockaddr_in serv_addr, cli_addr;
     int n;
     std::ostringstream ostr;
+    
+    cv::VideoCapture cap;
+
 };
 
 #endif /* defined(__Atlas__Com__) */

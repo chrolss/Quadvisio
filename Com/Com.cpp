@@ -20,6 +20,12 @@ Com::Com(){
     output[4]=0.0;
     output[5]=0.0;
     
+    std::cout << "Setting up camera" << std::endl;
+    cap.open(0);
+    cap.set(CV_CAP_PROP_FRAME_HEIGHT, 240);
+    cap.set(CV_CAP_PROP_FRAME_WIDTH, 320);
+    sleep(1);
+    
     std::thread t1(&Com::Listen, this);
     t1.detach();
 }
@@ -57,23 +63,26 @@ void Com::Listen()
     
     while (connected) {
         
+        cap >> sendFrame;
+        cv::imshow("Window", sendFrame);
+        
         if (reciveMsg) {
             std::cout << "Waitning for message" << std::endl;
-            char buf[10];
-            // Recive message from Qvis
-            ssize_t numbytes = recv(newsockfd, buf, 9, 0);
+            
+            ssize_t numbytes = recv(newsockfd, recvBuf, 3, 0);
             if (numbytes==-1) {
                 perror("recive");
             }
             std::string s;
-            s.push_back(buf[0]);
-            s.push_back(buf[1]);
+            s.push_back(recvBuf[0]);
+            s.push_back(recvBuf[1]);
             std::cout << "Thrust: " << s << std::endl;
             
             reciveMsg=false;
         }
         
         if (msgSend) {
+            
             std::cout << "Sending message" << std::endl;
 
             reciveMsg=true;
@@ -81,6 +90,7 @@ void Com::Listen()
             msgSend=false;
         }
     }
+    //Add Closure stuff
 }
 
 void Com::sendMsg() {

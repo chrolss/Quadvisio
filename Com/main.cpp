@@ -22,26 +22,12 @@ int main(int argc, const char * argv[])
     Com C;
     sleep(1);
     
-    cv::VideoCapture cap;
-    cv::Mat frame;
-    
-    std::cout << "Setting up camera" << std::endl;
-    cap.open(0);
-    cap.set(CV_CAP_PROP_FRAME_HEIGHT, 240);
-    cap.set(CV_CAP_PROP_FRAME_WIDTH, 320);
-    sleep(1);
-    
     std::cout << "Starting main loop" << std::endl;
     while (true) {
-        cap.read(frame);
+        
         if (C.connected && !C.reciveMsg) {
             C.setOutputData(output);
-            
-            if (count>=0) {
-                std::cout << "capturing frame" << std::endl;
-                //cv::imshow("window", frame);
-                C.sendFrame = frame;
-                std::cout << "frame captured" << std::endl;
+            if (count>=5) {
                 C.imgSend = true;
                 count=0;
             }
@@ -50,7 +36,7 @@ int main(int argc, const char * argv[])
         
         if(cv::waitKey(30) >= 0) break;
         count++;
-        usleep(10000);
+        usleep(100000);
     }
     C.closeClient();
     return 0;
