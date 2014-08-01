@@ -64,7 +64,7 @@ void Com::Listen()
     while (connected) {
         
         cap >> sendFrame;
-        cv::imshow("Window", sendFrame);
+        //cv::imshow("Window", sendFrame);
         
         if (reciveMsg) {
             std::cout << "Waitning for message" << std::endl;
