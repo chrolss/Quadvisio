@@ -63,33 +63,44 @@ void Com::Listen()
     
     while (connected) {
         
-        cap >> sendFrame;
-        //cv::imshow("Window", sendFrame);
+        if (videoStream) {
+            cap >> sendFrame;
+        }
         
         if (reciveMsg) {
-            std::cout << "Waitning for message" << std::endl;
-            
-            ssize_t numbytes = recv(newsockfd, recvBuf, 3, 0);
+            ssize_t numbytes = recv(newsockfd, recvBuf, 5, 0);
             if (numbytes==-1) {
                 perror("recive");
             }
             std::string s;
             s.push_back(recvBuf[0]);
             s.push_back(recvBuf[1]);
-            std::cout << "Thrust: " << s << std::endl;
+            s.push_back(recvBuf[2]);
+            int i = atoi(s.c_str());
+            std::cout << "Thrust: " << i << std::endl;
+
+            s="";
+            s.push_back(recvBuf[4]);
+            int video = atoi(s.c_str());
+            
+            if (video==1) {
+                videoStream=true;
+            }
+            else {
+                videoStream=false;
+            }
             
             reciveMsg=false;
         }
         
         if (msgSend) {
-            
-            std::cout << "Sending message" << std::endl;
 
             reciveMsg=true;
             sendMsg();
             msgSend=false;
         }
     }
+    
     //Add Closure stuff
 }
 
@@ -107,7 +118,6 @@ void Com::sendMsg() {
     if (imgSend) {
         ostr << length << " 1 " << s;
         s = ostr.str();
-        std::cout << s << std::endl;
         if (send(newsockfd, s.c_str(), s.length(), 0) == -1)
             perror("send");
         sendImg();
@@ -116,7 +126,6 @@ void Com::sendMsg() {
     else {
         ostr << length << " 0 " << s;
         s = ostr.str();
-        std::cout << s << std::endl;
         if (send(newsockfd, s.c_str(), s.length(), 0) == -1)
             perror("send");
     }
@@ -124,13 +133,10 @@ void Com::sendMsg() {
 }
 
 void Com::sendImg() {
-    std::cout << "Sending image" << std::endl;
     sendFrame = (sendFrame.reshape(0,1));
-    //int imgSize = (int)sendFrame.total()*(int)sendFrame.elemSize();
     if (send(newsockfd, sendFrame.data, 230400, 0) == -1) {
         perror("send");
     }
-    std::cout << "Image sent" << std::endl;
 
 }
 
@@ -150,8 +156,6 @@ void Com::setOutputData(double *out) {
     output[3] = out[3];
     output[4] = out[4];
     output[5] = out[5];
-
-    
 }
 
 

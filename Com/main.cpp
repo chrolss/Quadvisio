@@ -27,7 +27,7 @@ int main(int argc, const char * argv[])
         
         if (C.connected && !C.reciveMsg) {
             C.setOutputData(output);
-            if (count>=5) {
+            if (count>=0 && C.videoStream) {
                 C.imgSend = true;
                 count=0;
             }

@@ -19,6 +19,7 @@
 #include <netinet/in.h>
 #include <thread>
 #include <sstream>
+#include <string>
 #include <opencv2/highgui/highgui.hpp>
 
 #define PORT "3490"  // the port users will be connecting to
@@ -41,6 +42,7 @@ public:
     bool imgSend;
     bool msgSend;
     bool reciveMsg;
+    bool videoStream=false;
     
     double output[6];
     int verticalThrust;
@@ -52,13 +54,12 @@ private:
     int sockfd, newsockfd, portno;
     socklen_t clilen;
     char buffer[256];
-    char recvBuf[4];
+    char recvBuf[6];
     struct sockaddr_in serv_addr, cli_addr;
     int n;
     std::ostringstream ostr;
     
     cv::VideoCapture cap;
-
 };
 
 #endif /* defined(__Atlas__Com__) */
