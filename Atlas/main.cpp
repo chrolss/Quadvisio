@@ -22,7 +22,7 @@ double sInput[6];
 int sOutput[4];
 bool runAtlas=false;
 int counter = 0;
-int globalCounter = 0;
+int vidCount = 0;
 
 void initailize(){
     sensorManager = new SensorManager;
@@ -40,23 +40,24 @@ void loop(){
 
         // Read sensor data
         sensorManager->readDMP(sInput);
+        
+        // If connected to Qvis send data
+        if (communicate->connected==true && communicate->reciveMsg==false) {
+            communicate->setOutputData(sInput);
+            if (vidCount>=int(((double(5.0/communicate->imgSendRate))-1)*10) && communicate->videoStream) {
+                communicate->imgSend=true;
+                vidCount=0;
+            }
+            communicate->msgSend=true;
+        }
 
         // Calculate control action
         controller->calcPWM(sInput, sOutput);
-	
-        std::cout << "Right rear: " << sOutput[1] << " Left front: " << sOutput[3] << std::endl;
-        // Tillfälligt avstängd tills motorkoden är klar
+
         // Send PWM values to motors
         motor->setPWM(sOutput);
 
-        // If connected to Qvis send data
-        if (communicate->connected==true && counter>10) {
-            
-            communicate->sendMsg(sInput);
-            globalCounter++;
-            std::cout << "Sent data " << globalCounter << std::endl;
-            counter = 0;
-        }
+        vidCount++;
         counter++;
         std::cout << counter << std::endl;
         usleep(1000);

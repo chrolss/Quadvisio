@@ -19,6 +19,8 @@
 #include <netinet/in.h>
 #include <thread>
 #include <sstream>
+#include <string>
+#include <opencv2/highgui/highgui.hpp>
 
 #define PORT "3490"  // the port users will be connecting to
 #define BACKLOG 10
@@ -28,22 +30,36 @@ class Com{
 public:
     Com();
     void Listen();
-    void sendMsg(double *input);
+    void sendMsg();
+    void sendImg();
     void checkClient();
     void closeClient();
     
+    void getNewInputData(int value);
+    void setOutputData(double *output);
+    
     bool connected;
+    bool imgSend;
+    bool msgSend;
+    bool reciveMsg;
+    bool videoStream=false;
+    
+    double output[6];
+    int verticalThrust, imgSendRate;
+    
+    cv::Mat sendFrame;
     
 private:
     void error(const char *msg);
     int sockfd, newsockfd, portno;
     socklen_t clilen;
     char buffer[256];
+    char recvBuf[8];
     struct sockaddr_in serv_addr, cli_addr;
     int n;
     std::ostringstream ostr;
-    std::string s;
-    size_t strLength;
+    
+    cv::VideoCapture cap;
 };
 
 #endif /* defined(__Atlas__Com__) */

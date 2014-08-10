@@ -9,6 +9,23 @@
 #include "Com.h"
 
 Com::Com(){
+    msgSend=false;
+    imgSend=false;
+    verticalThrust=0;
+    
+    output[0]=0.0;
+    output[1]=0.0;
+    output[2]=0.0;
+    output[3]=0.0;
+    output[4]=0.0;
+    output[5]=0.0;
+    
+    std::cout << "Setting up camera" << std::endl;
+    cap.open(0);
+    cap.set(CV_CAP_PROP_FRAME_HEIGHT, 240);
+    cap.set(CV_CAP_PROP_FRAME_WIDTH, 320);
+    sleep(1);
+    
     std::thread t1(&Com::Listen, this);
     t1.detach();
 }
@@ -38,24 +55,100 @@ void Com::Listen()
     newsockfd = accept(sockfd,(struct sockaddr *) &cli_addr, &clilen);
     if (newsockfd < 0)
         error("ERROR on accept");
+    
     bzero(buffer,256);
     connected = true;
+    reciveMsg=true;
     std::cout << "Connection estabilished" << std::endl;
+    
+    while (connected) {
+        
+        if (videoStream) {
+            cap >> sendFrame;
+        }
+        
+        if (reciveMsg) {
+            ssize_t numbytes = recv(newsockfd, recvBuf, 7, 0);
+            if (numbytes==-1) {
+                perror("recive");
+            }
+            
+            printf(recvBuf);
+            printf("\n");
+            
+            std::string s="";
+            s.push_back(recvBuf[0]);
+            s.push_back(recvBuf[1]);
+            s.push_back(recvBuf[2]);
+            int i = atoi(s.c_str());
+            std::cout << "Thrust: " << i << std::endl;
+            verticalThrust=i;
+
+            s="";
+            s.push_back(recvBuf[4]);
+            int video = atoi(s.c_str());
+            
+            s="";
+            s.push_back(recvBuf[6]);
+            int fps = atoi(s.c_str());
+            
+            if (video==1) {
+                videoStream=true;
+            }
+            else {
+                videoStream=false;
+            }
+            
+            imgSendRate = fps;
+            
+            reciveMsg=false;
+        }
+        
+        if (msgSend) {
+
+            reciveMsg=true;
+            sendMsg();
+            msgSend=false;
+        }
+    }
+    
+    //Add Closure stuff
 }
 
-void Com::sendMsg(double *input) {
+void Com::sendMsg() {
     
     ostr.str("");
-    ostr << input[0] << " " << input[1] << " " << input[2] << " " << input[3] << " " << input[4] << " " << input[5];
+    
+    ostr << output[0] << " " << output[1] << " " << output[2] << " " << output[3] << " " << output[4] << " " << output[5];
+    std::string s;
     s=ostr.str();
-    ostr.str("");
-    strLength = s.length();
-    ostr << strLength << " " << s;
-    s = ostr.str();
-    //std::cout << s << std::endl;
+    size_t length = s.size();
     
-    if (send(newsockfd, s.c_str(), s.length(), 0) == -1)
+    ostr.str("");
+    
+    if (imgSend) {
+        ostr << length << " 1 " << s;
+        s = ostr.str();
+        if (send(newsockfd, s.c_str(), s.length(), 0) == -1)
+            perror("send");
+        sendImg();
+        imgSend=false;
+    }
+    else {
+        ostr << length << " 0 " << s;
+        s = ostr.str();
+        if (send(newsockfd, s.c_str(), s.length(), 0) == -1)
+            perror("send");
+    }
+    
+}
+
+void Com::sendImg() {
+    sendFrame = (sendFrame.reshape(0,1));
+    if (send(newsockfd, sendFrame.data, 230400, 0) == -1) {
         perror("send");
+    }
+
 }
 
 void Com::checkClient() {
@@ -65,6 +158,15 @@ void Com::checkClient() {
 void Com::closeClient() {
     close(newsockfd);
     std::cout << "Connection closed." << std::endl;
+}
+
+void Com::setOutputData(double *out) {
+    output[0] = out[0];
+    output[1] = out[1];
+    output[2] = out[2];
+    output[3] = out[3];
+    output[4] = out[4];
+    output[5] = out[5];
 }
 
 
