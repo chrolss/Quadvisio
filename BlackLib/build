@@ -1,5 +1,0 @@
-#!/bin/bash
-
-echo "Building quad pwm program"
-
-g++ -std=c++11 -W quad.cpp BlackLib.cpp -o quadvisio

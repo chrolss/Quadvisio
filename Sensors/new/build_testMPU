@@ -1,5 +1,0 @@
-#!/bin/bash
-
-echo building mpu test program
-
-g++ -O2 main.cpp MPU6050.cpp I2Cdev.cpp sensorHub.cpp communicate.cpp -o testMPU -std=c++0x -pthread
