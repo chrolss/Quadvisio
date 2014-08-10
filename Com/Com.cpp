@@ -68,20 +68,29 @@ void Com::Listen()
         }
         
         if (reciveMsg) {
-            ssize_t numbytes = recv(newsockfd, recvBuf, 5, 0);
+            ssize_t numbytes = recv(newsockfd, recvBuf, 7, 0);
             if (numbytes==-1) {
                 perror("recive");
             }
-            std::string s;
+            
+            printf(recvBuf);
+            printf("\n");
+            
+            std::string s="";
             s.push_back(recvBuf[0]);
             s.push_back(recvBuf[1]);
             s.push_back(recvBuf[2]);
             int i = atoi(s.c_str());
             std::cout << "Thrust: " << i << std::endl;
+            verticalThrust=i;
 
             s="";
             s.push_back(recvBuf[4]);
             int video = atoi(s.c_str());
+            
+            s="";
+            s.push_back(recvBuf[6]);
+            int fps = atoi(s.c_str());
             
             if (video==1) {
                 videoStream=true;
@@ -89,6 +98,8 @@ void Com::Listen()
             else {
                 videoStream=false;
             }
+            
+            imgSendRate = fps;
             
             reciveMsg=false;
         }

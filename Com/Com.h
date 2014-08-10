@@ -45,7 +45,7 @@ public:
     bool videoStream=false;
     
     double output[6];
-    int verticalThrust;
+    int verticalThrust, imgSendRate;
     
     cv::Mat sendFrame;
     
@@ -54,7 +54,7 @@ private:
     int sockfd, newsockfd, portno;
     socklen_t clilen;
     char buffer[256];
-    char recvBuf[6];
+    char recvBuf[8];
     struct sockaddr_in serv_addr, cli_addr;
     int n;
     std::ostringstream ostr;
