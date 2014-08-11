@@ -1,0 +1,468 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		0C6D4628EE0B0D1479A20551 /* AGL.framework in Frameworks & Libraries */ = {isa = PBXBuildFile; fileRef = C6766F86E49E9C8701C8E637 /* AGL.framework */; };
+		2B093CA6F071B023A473CED0 /* main.cpp in Build Sources */ = {isa = PBXBuildFile; fileRef = 118FCBAABA162BA17933C789 /* main.cpp */; settings = {ATTRIBUTES = (); }; };
+		2E812FBC8E1A8F8CA0084814 /* glwidget.cpp in Build Sources */ = {isa = PBXBuildFile; fileRef = 5F02801ACF9C72A274A802D8 /* glwidget.cpp */; settings = {ATTRIBUTES = (); }; };
+		325F6FF378F6DD8CF807450C /* QtCore.framework in Frameworks & Libraries */ = {isa = PBXBuildFile; fileRef = 4CCBAF4988F7A032A2009181 /* QtCore.framework */; };
+		3713F7A85132745BD56C9C3E /* QtOpenGL.framework in Frameworks & Libraries */ = {isa = PBXBuildFile; fileRef = 351D87E9B1A518F40DF0E8EF /* QtOpenGL.framework */; };
+		3BBD6E3E630068B57C2CEC5B /* moc_glwidget.cpp in Build Sources */ = {isa = PBXBuildFile; fileRef = 24FC5F21B8D858EDB1CC09E6 /* moc_glwidget.cpp */; settings = {ATTRIBUTES = (); }; };
+		40434D2D87215F96B5865B15 /* QtGui.framework in Frameworks & Libraries */ = {isa = PBXBuildFile; fileRef = 016B0949A417F07816C9304A /* QtGui.framework */; };
+		5A2BF259C7BE6ADBE140EBF8 /* moc_layout.cpp in Build Sources */ = {isa = PBXBuildFile; fileRef = 9247710B6D4855B57AEFFE89 /* moc_layout.cpp */; settings = {ATTRIBUTES = (); }; };
+		5CC6069A243A49CEF6DD8F84 /* model.cpp in Build Sources */ = {isa = PBXBuildFile; fileRef = 322455435C69A68B54C5050A /* model.cpp */; settings = {ATTRIBUTES = (); }; };
+		5DD7CC5FC6FE93A0D5F5A035 /* controller.cpp in Build Sources */ = {isa = PBXBuildFile; fileRef = 3F78978BE8551886B28CF396 /* controller.cpp */; settings = {ATTRIBUTES = (); }; };
+		73723DC97FA5E83B5766ED83 /* moc_controller.cpp in Build Sources */ = {isa = PBXBuildFile; fileRef = 9E8116BBB72466212694F56F /* moc_controller.cpp */; settings = {ATTRIBUTES = (); }; };
+		7BCE8089198818B300401E15 /* libopencv_calib3d.2.4.9.dylib in Frameworks & Libraries */ = {isa = PBXBuildFile; fileRef = 7BCE8085198818B300401E15 /* libopencv_calib3d.2.4.9.dylib */; };
+		7BCE808A198818B300401E15 /* libopencv_contrib.2.4.9.dylib in Frameworks & Libraries */ = {isa = PBXBuildFile; fileRef = 7BCE8086198818B300401E15 /* libopencv_contrib.2.4.9.dylib */; };
+		7BCE808B198818B300401E15 /* libopencv_core.2.4.9.dylib in Frameworks & Libraries */ = {isa = PBXBuildFile; fileRef = 7BCE8087198818B300401E15 /* libopencv_core.2.4.9.dylib */; };
+		7BCE808C198818B300401E15 /* libopencv_highgui.2.4.9.dylib in Frameworks & Libraries */ = {isa = PBXBuildFile; fileRef = 7BCE8088198818B300401E15 /* libopencv_highgui.2.4.9.dylib */; };
+		9B33801CB4075FFE7B50345A /* layout.cpp in Build Sources */ = {isa = PBXBuildFile; fileRef = F4D90837F8A8838DB0DC1A0A /* layout.cpp */; settings = {ATTRIBUTES = (); }; };
+		BCEF71E1EDFB18DA77DC750B /* OpenGL.framework in Frameworks & Libraries */ = {isa = PBXBuildFile; fileRef = DA18A6831232F53228631AD1 /* OpenGL.framework */; };
+		F8FA26DB7D5A87020E200983 /* QtNetwork.framework in Frameworks & Libraries */ = {isa = PBXBuildFile; fileRef = 5FAF7904ADB95F0D427210A1 /* QtNetwork.framework */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		016B0949A417F07816C9304A /* QtGui.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QtGui.framework; path = /usr/local/Cellar/qt/4.8.6/lib/QtGui.framework; sourceTree = "<absolute>"; };
+		118FCBAABA162BA17933C789 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = SOURCE_ROOT; };
+		174B4969275AA57F83F57165 /* glwidget.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = glwidget.h; sourceTree = SOURCE_ROOT; };
+		24FC5F21B8D858EDB1CC09E6 /* moc_glwidget.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = moc_glwidget.cpp; sourceTree = SOURCE_ROOT; };
+		322455435C69A68B54C5050A /* model.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = model.cpp; sourceTree = SOURCE_ROOT; };
+		351D87E9B1A518F40DF0E8EF /* QtOpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QtOpenGL.framework; path = /usr/local/Cellar/qt/4.8.6/lib/QtOpenGL.framework; sourceTree = "<absolute>"; };
+		3F78978BE8551886B28CF396 /* controller.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = controller.cpp; sourceTree = SOURCE_ROOT; };
+		4A9D8C2630ACE04995268DA6 /* layout.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = layout.h; sourceTree = SOURCE_ROOT; };
+		4CCBAF4988F7A032A2009181 /* QtCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QtCore.framework; path = /usr/local/Cellar/qt/4.8.6/lib/QtCore.framework; sourceTree = "<absolute>"; };
+		5F02801ACF9C72A274A802D8 /* glwidget.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = glwidget.cpp; sourceTree = SOURCE_ROOT; };
+		5FAF7904ADB95F0D427210A1 /* QtNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QtNetwork.framework; path = /usr/local/Cellar/qt/4.8.6/lib/QtNetwork.framework; sourceTree = "<absolute>"; };
+		7B9D08C7196C833C00EE56C9 /* Qvis.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Qvis.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		7BCE8085198818B300401E15 /* libopencv_calib3d.2.4.9.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libopencv_calib3d.2.4.9.dylib; path = usr/local/Cellar/opencv/2.4.9/lib/libopencv_calib3d.2.4.9.dylib; sourceTree = "<group>"; };
+		7BCE8086198818B300401E15 /* libopencv_contrib.2.4.9.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libopencv_contrib.2.4.9.dylib; path = usr/local/Cellar/opencv/2.4.9/lib/libopencv_contrib.2.4.9.dylib; sourceTree = "<group>"; };
+		7BCE8087198818B300401E15 /* libopencv_core.2.4.9.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libopencv_core.2.4.9.dylib; path = usr/local/Cellar/opencv/2.4.9/lib/libopencv_core.2.4.9.dylib; sourceTree = "<group>"; };
+		7BCE8088198818B300401E15 /* libopencv_highgui.2.4.9.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libopencv_highgui.2.4.9.dylib; path = usr/local/Cellar/opencv/2.4.9/lib/libopencv_highgui.2.4.9.dylib; sourceTree = "<group>"; };
+		9247710B6D4855B57AEFFE89 /* moc_layout.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = moc_layout.cpp; sourceTree = SOURCE_ROOT; };
+		9E8116BBB72466212694F56F /* moc_controller.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = moc_controller.cpp; sourceTree = SOURCE_ROOT; };
+		B099DA1E90FEB19F8D8D3E08 /* model.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = model.h; sourceTree = SOURCE_ROOT; };
+		B4E1D2869A68C99DA4F449A9 /* controller.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = controller.h; sourceTree = SOURCE_ROOT; };
+		C6766F86E49E9C8701C8E637 /* AGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AGL.framework; path = /System/Library/Frameworks/AGL.framework; sourceTree = "<absolute>"; };
+		DA18A6831232F53228631AD1 /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = /System/Library/Frameworks/OpenGL.framework; sourceTree = "<absolute>"; };
+		ED84C25443C27A42085AFC64 /* Qvis.pro */ = {isa = PBXFileReference; lastKnownFileType = text; path = Qvis.pro; sourceTree = SOURCE_ROOT; };
+		F4D90837F8A8838DB0DC1A0A /* layout.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = layout.cpp; sourceTree = SOURCE_ROOT; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		2A1043669E6E5A7426EA502A /* Frameworks & Libraries */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7BCE8089198818B300401E15 /* libopencv_calib3d.2.4.9.dylib in Frameworks & Libraries */,
+				3713F7A85132745BD56C9C3E /* QtOpenGL.framework in Frameworks & Libraries */,
+				7BCE808C198818B300401E15 /* libopencv_highgui.2.4.9.dylib in Frameworks & Libraries */,
+				7BCE808A198818B300401E15 /* libopencv_contrib.2.4.9.dylib in Frameworks & Libraries */,
+				7BCE808B198818B300401E15 /* libopencv_core.2.4.9.dylib in Frameworks & Libraries */,
+				40434D2D87215F96B5865B15 /* QtGui.framework in Frameworks & Libraries */,
+				325F6FF378F6DD8CF807450C /* QtCore.framework in Frameworks & Libraries */,
+				F8FA26DB7D5A87020E200983 /* QtNetwork.framework in Frameworks & Libraries */,
+				BCEF71E1EDFB18DA77DC750B /* OpenGL.framework in Frameworks & Libraries */,
+				0C6D4628EE0B0D1479A20551 /* AGL.framework in Frameworks & Libraries */,
+			);
+			name = "Frameworks & Libraries";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		05596AB53D8D521C69802C27 /* Qvis */ = {
+			isa = PBXGroup;
+			children = (
+				FB61758D0F0FDA4BA867C3D5 /* Sources */,
+				46E892BBB6BB6952967E0561 /* Temporary Sources */,
+				883D7615C4D2DE3FA1218F12 /* Headers */,
+				7CABE3C80E79AD2B307756D2 /* Sources [qmake] */,
+				ED1E82605DD74B483AF3C982 /* External Frameworks and Libraries */,
+				7B9D08C8196C833C00EE56C9 /* Products */,
+			);
+			name = Qvis;
+			sourceTree = "<Group>";
+		};
+		46E892BBB6BB6952967E0561 /* Temporary Sources */ = {
+			isa = PBXGroup;
+			children = (
+				9E8116BBB72466212694F56F /* moc_controller.cpp */,
+				24FC5F21B8D858EDB1CC09E6 /* moc_glwidget.cpp */,
+				9247710B6D4855B57AEFFE89 /* moc_layout.cpp */,
+			);
+			name = "Temporary Sources";
+			sourceTree = "<Group>";
+		};
+		7B9D08C8196C833C00EE56C9 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				7B9D08C7196C833C00EE56C9 /* Qvis.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		7BCE80841988020700401E15 /* OpenCV */ = {
+			isa = PBXGroup;
+			children = (
+				7BCE8085198818B300401E15 /* libopencv_calib3d.2.4.9.dylib */,
+				7BCE8086198818B300401E15 /* libopencv_contrib.2.4.9.dylib */,
+				7BCE8087198818B300401E15 /* libopencv_core.2.4.9.dylib */,
+				7BCE8088198818B300401E15 /* libopencv_highgui.2.4.9.dylib */,
+			);
+			name = OpenCV;
+			sourceTree = "<group>";
+		};
+		7CABE3C80E79AD2B307756D2 /* Sources [qmake] */ = {
+			isa = PBXGroup;
+			children = (
+				ED84C25443C27A42085AFC64 /* Qvis.pro */,
+			);
+			name = "Sources [qmake]";
+			sourceTree = "<Group>";
+		};
+		883D7615C4D2DE3FA1218F12 /* Headers */ = {
+			isa = PBXGroup;
+			children = (
+				B4E1D2869A68C99DA4F449A9 /* controller.h */,
+				174B4969275AA57F83F57165 /* glwidget.h */,
+				4A9D8C2630ACE04995268DA6 /* layout.h */,
+				B099DA1E90FEB19F8D8D3E08 /* model.h */,
+			);
+			name = Headers;
+			sourceTree = "<Group>";
+		};
+		ED1E82605DD74B483AF3C982 /* External Frameworks and Libraries */ = {
+			isa = PBXGroup;
+			children = (
+				7BCE80841988020700401E15 /* OpenCV */,
+				351D87E9B1A518F40DF0E8EF /* QtOpenGL.framework */,
+				016B0949A417F07816C9304A /* QtGui.framework */,
+				4CCBAF4988F7A032A2009181 /* QtCore.framework */,
+				5FAF7904ADB95F0D427210A1 /* QtNetwork.framework */,
+				DA18A6831232F53228631AD1 /* OpenGL.framework */,
+				C6766F86E49E9C8701C8E637 /* AGL.framework */,
+			);
+			name = "External Frameworks and Libraries";
+			sourceTree = "<Group>";
+		};
+		FB61758D0F0FDA4BA867C3D5 /* Sources */ = {
+			isa = PBXGroup;
+			children = (
+				3F78978BE8551886B28CF396 /* controller.cpp */,
+				5F02801ACF9C72A274A802D8 /* glwidget.cpp */,
+				F4D90837F8A8838DB0DC1A0A /* layout.cpp */,
+				118FCBAABA162BA17933C789 /* main.cpp */,
+				322455435C69A68B54C5050A /* model.cpp */,
+			);
+			name = Sources;
+			sourceTree = "<Group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		4482DA6E9C40C9E25D613735 /* Qvis */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 17B3380A4D6A7D415E7F2E1E /* Build configuration list for PBXNativeTarget "Qvis" */;
+			buildPhases = (
+				D7BA7D76DAB5DD13389D6332 /* Qt Qmake */,
+				A0A52A2ADF7A1E2A99738674 /* Qt Preprocessors */,
+				C29B8785722055ED95EF7B57 /* Build Sources */,
+				2A1043669E6E5A7426EA502A /* Frameworks & Libraries */,
+				3787F99312C85FF0073FD7BA /* Bundle Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = Qvis;
+			productName = Qvis;
+			productReference = 7B9D08C7196C833C00EE56C9 /* Qvis.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		91B15E841AA80083484172DE /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0500;
+			};
+			buildConfigurationList = CC82A9286117DFED018F418F /* Build configuration list for PBXProject "Qvis" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 1;
+			knownRegions = (
+				en,
+			);
+			mainGroup = 05596AB53D8D521C69802C27 /* Qvis */;
+			productRefGroup = 7B9D08C8196C833C00EE56C9 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				4482DA6E9C40C9E25D613735 /* Qvis */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		3787F99312C85FF0073FD7BA /* Bundle Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			name = "Bundle Resources";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		A0A52A2ADF7A1E2A99738674 /* Qt Preprocessors */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			name = "Qt Preprocessors";
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "make -C /Users/toniaxelsson/Documents/Kod/Qt/Qvis -f 'Qvis.xcodeproj/qt_preprocess.mak'";
+		};
+		D7BA7D76DAB5DD13389D6332 /* Qt Qmake */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			name = "Qt Qmake";
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "make -C /Users/toniaxelsson/Documents/Kod/Qt/Qvis -f 'Qvis.xcodeproj/qt_makeqmake.mak'";
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		C29B8785722055ED95EF7B57 /* Build Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				5DD7CC5FC6FE93A0D5F5A035 /* controller.cpp in Build Sources */,
+				2E812FBC8E1A8F8CA0084814 /* glwidget.cpp in Build Sources */,
+				9B33801CB4075FFE7B50345A /* layout.cpp in Build Sources */,
+				2B093CA6F071B023A473CED0 /* main.cpp in Build Sources */,
+				5CC6069A243A49CEF6DD8F84 /* model.cpp in Build Sources */,
+				73723DC97FA5E83B5766ED83 /* moc_controller.cpp in Build Sources */,
+				3BBD6E3E630068B57C2CEC5B /* moc_glwidget.cpp in Build Sources */,
+				5A2BF259C7BE6ADBE140EBF8 /* moc_layout.cpp in Build Sources */,
+			);
+			name = "Build Sources";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		4B72B24813252891014BCF61 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+				FRAMEWORK_SEARCH_PATHS = (
+					/usr/local/Cellar/qt/4.8.6/lib,
+					/usr/local/Cellar/qt/4.8.6/lib,
+					/usr/local/Cellar/qt/4.8.6/lib,
+				);
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				HEADER_SEARCH_PATHS = (
+					/usr/local/Cellar/qt/4.8.6/lib/QtCore.framework/Versions/4/Headers,
+					/usr/local/Cellar/qt/4.8.6/lib/QtCore.framework/Versions/4/Headers,
+					/usr/local/Cellar/qt/4.8.6/lib/QtNetwork.framework/Versions/4/Headers,
+					/usr/local/Cellar/qt/4.8.6/lib/QtNetwork.framework/Versions/4/Headers,
+					/usr/local/Cellar/qt/4.8.6/lib/QtGui.framework/Versions/4/Headers,
+					/usr/local/Cellar/qt/4.8.6/lib/QtGui.framework/Versions/4/Headers,
+					/usr/local/Cellar/qt/4.8.6/lib/QtOpenGL.framework/Versions/4/Headers,
+					/usr/local/Cellar/qt/4.8.6/lib/QtOpenGL.framework/Versions/4/Headers,
+					/usr/local/Cellar/qt/4.8.6/include,
+					.,
+					/System/Library/Frameworks/OpenGL.framework/Versions/A/Headers,
+					/System/Library/Frameworks/AGL.framework/Headers,
+					.,
+					/usr/local/include,
+					/System/Library/Frameworks/CarbonCore.framework/Headers,
+					"/usr/local/Cellar/qt/4.8.6/mkspecs/macx-xcode",
+				);
+				INFOPLIST_FILE = Info.plist;
+				LIBRARY_SEARCH_PATHS = (
+					/usr/local/Cellar/qt/4.8.6/lib,
+					/opt/X11/lib,
+					/usr/local/Cellar/qt/4.8.6/lib,
+					/System/Library/Frameworks/,
+					/usr/local/include,
+				);
+				MACOSX_DEPLOYMENT_TARGET = 10.9;
+				ONLY_ACTIVE_ARCH = YES;
+				OTHER_CFLAGS = (
+					"-pipe",
+					"-O2",
+					"-Wall",
+					"-W",
+					"-DQT_NO_DEBUG",
+					"-DQT_OPENGL_LIB",
+					"-DQT_GUI_LIB",
+					"-DQT_NETWORK_LIB",
+					"-DQT_CORE_LIB",
+					"-DQT_SHARED",
+				);
+				OTHER_CPLUSPLUSFLAGS = (
+					"-pipe",
+					"-O2",
+					"-Wall",
+					"-W",
+					"-DQT_NO_DEBUG",
+					"-DQT_OPENGL_LIB",
+					"-DQT_GUI_LIB",
+					"-DQT_NETWORK_LIB",
+					"-DQT_CORE_LIB",
+					"-DQT_SHARED",
+				);
+				OTHER_LDFLAGS = (
+					"-headerpad_max_install_names",
+					"-L/usr/local/Cellar/qt/4.8.6/lib",
+					"-F/usr/local/Cellar/qt/4.8.6/lib",
+					"-L/opt/X11/lib",
+					"-L/usr/local/Cellar/qt/4.8.6/lib",
+					"-F/usr/local/Cellar/qt/4.8.6/lib",
+				);
+				PRODUCT_NAME = Qvis;
+			};
+			name = Debug;
+		};
+		8C7174830A1E4DCBA0332EC1 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				COPY_PHASE_STRIP = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					/usr/local/Cellar/opencv/2.4.9/lib,
+				);
+				PRODUCT_NAME = Qvis;
+			};
+			name = Release;
+		};
+		BEC09A62E69C3553534FF35E /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				COPY_PHASE_STRIP = NO;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					/usr/local/Cellar/opencv/2.4.9/lib,
+				);
+				PRODUCT_NAME = Qvis;
+			};
+			name = Debug;
+		};
+		D70590BEB531B51029F711BB /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					/usr/local/Cellar/qt/4.8.6/lib,
+					/usr/local/Cellar/qt/4.8.6/lib,
+					/usr/local/Cellar/qt/4.8.6/lib,
+				);
+				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
+				HEADER_SEARCH_PATHS = (
+					/usr/local/Cellar/qt/4.8.6/lib/QtCore.framework/Versions/4/Headers,
+					/usr/local/Cellar/qt/4.8.6/lib/QtCore.framework/Versions/4/Headers,
+					/usr/local/Cellar/qt/4.8.6/lib/QtNetwork.framework/Versions/4/Headers,
+					/usr/local/Cellar/qt/4.8.6/lib/QtNetwork.framework/Versions/4/Headers,
+					/usr/local/Cellar/qt/4.8.6/lib/QtGui.framework/Versions/4/Headers,
+					/usr/local/Cellar/qt/4.8.6/lib/QtGui.framework/Versions/4/Headers,
+					/usr/local/Cellar/qt/4.8.6/lib/QtOpenGL.framework/Versions/4/Headers,
+					/usr/local/Cellar/qt/4.8.6/lib/QtOpenGL.framework/Versions/4/Headers,
+					/usr/local/Cellar/qt/4.8.6/include,
+					.,
+					/System/Library/Frameworks/OpenGL.framework/Versions/A/Headers,
+					/System/Library/Frameworks/AGL.framework/Headers,
+					.,
+					/usr/local/include,
+					/System/Library/Frameworks/CarbonCore.framework/Headers,
+					"/usr/local/Cellar/qt/4.8.6/mkspecs/macx-xcode",
+				);
+				INFOPLIST_FILE = Info.plist;
+				LIBRARY_SEARCH_PATHS = (
+					/usr/local/Cellar/qt/4.8.6/lib,
+					/opt/X11/lib,
+					/usr/local/Cellar/qt/4.8.6/lib,
+					/System/Library/Frameworks/,
+					/usr/local/include,
+				);
+				MACOSX_DEPLOYMENT_TARGET = 10.9;
+				OTHER_CFLAGS = (
+					"-pipe",
+					"-O2",
+					"-Wall",
+					"-W",
+					"-DQT_NO_DEBUG",
+					"-DQT_OPENGL_LIB",
+					"-DQT_GUI_LIB",
+					"-DQT_NETWORK_LIB",
+					"-DQT_CORE_LIB",
+					"-DQT_SHARED",
+				);
+				OTHER_CPLUSPLUSFLAGS = (
+					"-pipe",
+					"-O2",
+					"-Wall",
+					"-W",
+					"-DQT_NO_DEBUG",
+					"-DQT_OPENGL_LIB",
+					"-DQT_GUI_LIB",
+					"-DQT_NETWORK_LIB",
+					"-DQT_CORE_LIB",
+					"-DQT_SHARED",
+				);
+				OTHER_LDFLAGS = (
+					"-headerpad_max_install_names",
+					"-L/usr/local/Cellar/qt/4.8.6/lib",
+					"-F/usr/local/Cellar/qt/4.8.6/lib",
+					"-L/opt/X11/lib",
+					"-L/usr/local/Cellar/qt/4.8.6/lib",
+					"-F/usr/local/Cellar/qt/4.8.6/lib",
+				);
+				PRODUCT_NAME = Qvis;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		17B3380A4D6A7D415E7F2E1E /* Build configuration list for PBXNativeTarget "Qvis" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				BEC09A62E69C3553534FF35E /* Debug */,
+				8C7174830A1E4DCBA0332EC1 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		CC82A9286117DFED018F418F /* Build configuration list for PBXProject "Qvis" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4B72B24813252891014BCF61 /* Debug */,
+				D70590BEB531B51029F711BB /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 91B15E841AA80083484172DE /* Project object */;
+}

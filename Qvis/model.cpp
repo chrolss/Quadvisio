@@ -13,6 +13,11 @@ QvisModel::QvisModel()
 
 }
 
+void QvisModel::setPIDParameters(double p_, double i_, double d_) {
+    p = p_;
+    i = i_;
+    d = d_;
+}
 
 
 

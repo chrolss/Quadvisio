@@ -14,36 +14,78 @@
 #include <QObject>
 #include <QDialog>
 
+class GLWidget;
+
 class QvisLayout : public QDialog
 {
     Q_OBJECT
     
 public:
     QvisLayout();
+    
+    void createPIDWindow();
+    void openPIDWindow();
+    void closePIDWindow();
+    
+    void updateImg(QImage img);
+    
+    // Setters
     void setConnectionStatus(bool state);
     void setConnected();
+    void setDataFields(QStringList strList);
+    void setInfoText(QString s);
+    
+    // Getters
     int getPort();
     QString getIp();
-    void setDataFields(QStringList strList);
+    int getThrustValue();
+    int getFPSValue();
+    void getPIDValues(double *pid);
     
+    // Objects
     QPushButton *connectButton, *closeButton;
+    QLabel *videoLabel;
+    
+    //Control Objects
+    QPushButton *takeOfButton, *landButton, *videoButton, *stopButton, *altitudeLock, *pidButton;
+    QSpinBox *verticalThrustSpin;
+    
+    // PID window objects
+    QLabel *pLabel, *iLabel, *dLabel;
+    QLineEdit *pField, *iField, *dField;
+    QPushButton *setPIDButton;
+    
+signals:
+    void valueChanged(int value);
     
 private slots:
     void saveData();
     void createAccBox();
-    void createConnectBox();
     void createAngBox();
+    void createAltBox();
+    void createConnectBox();
     void createVideoBox();
     void createOrientationBox();
+    void createControls();
     
 private:
     enum { NumGridRows = 3};
     QLabel *labelsAcc[NumGridRows], *labelsAng[NumGridRows];
     QLabel *valAcc[NumGridRows], *valAng[NumGridRows];
-    QGroupBox *connectGroupBox, *gridAccBox, *gridAngBox, *gridVideoBox, *gridOrientationBox;
+    QLabel *altLabel;
+    QDoubleSpinBox *desiredAlt;
+    QGroupBox *connectGroupBox, *gridAccBox, *gridAngBox, *gridVideoBox, *gridOrientationBox, *gridControls;
+    QGroupBox *gridAltBox;
     QGridLayout *connectLayout;
     QLineEdit *ipField, *portField;
-    QLabel *connectLabel, *ipLabel, *portLabel;
+    QLabel *connectLabel, *ipLabel, *portLabel, *infoLabel;
+    
+    // Control objects
+    QSlider *verticalThrustSlider, *videoFPSSlider;
+    
+    GLWidget *glwidget;
+    
+    QDialog *pidWindow;
     
 };
 

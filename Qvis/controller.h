@@ -16,7 +16,7 @@
 #include <QTcpSocket>
 #include <string.h>
 #include <unistd.h>
-
+#include <opencv2/highgui/highgui.hpp>
 
 #include "layout.h"
 #include "model.h"
@@ -38,25 +38,40 @@ public:
     
 private slots:
     void createTCPThread();
+    void videoButtonPushed();
+    void pidButtonClicked();
+    void setPIDButtonClicked();
     void closeTCP();
     void readTCP();
-    void displayError(QAbstractSocket::SocketError socketError);
+    void displayError(QAbstractSocket::SocketError socketError);    
     
 private:
-    void setTCPButton();
+    void setButtons();
     
     QvisLayout *ui;
     QvisModel *model;
     
-    // Networking
-    pthread_t t;
+    // Network communication
+    QByteArray getSendData();
+    
     QTcpSocket *tcpSocket;
     QByteArray data;
     QString qs;
-    quint16 blockSize;
+    QStringList pieces;
     QNetworkSession *networkSession;
     int numbytes=0;
-    int count = 0;
+    int imgSize = 230400; // 320x240 resolution
+    cv::Mat bufFrame;
+    bool recvImg=false;
+    bool readData=false;
+    int imgChar;
+    const uchar *qImageBuffer;
+    
+    bool videoStream=false;
+    
+    //
+    double pid[3];
+    
 };
 
 #endif /* defined(__layout_test__controller__) */

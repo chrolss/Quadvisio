@@ -16,8 +16,12 @@ class QvisModel
 public:
     QvisModel();
     
+    void setPIDParameters(double p, double i, double d);
+    
 private:
-
+    double p;
+    double i;
+    double d;
 };
 
 #endif /* defined(__layout_test__model__) */
