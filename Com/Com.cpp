@@ -68,7 +68,7 @@ void Com::Listen()
         }
         
         if (reciveMsg) {
-            ssize_t numbytes = recv(newsockfd, recvBuf, 5, 0);
+            ssize_t numbytes = recv(newsockfd, recvBuf, 43, 0);
             if (numbytes==-1) {
                 perror("recive");
             }
@@ -122,27 +122,26 @@ void Com::sendImg() {
 }
 
 void Com::readMsg() {
-    printf(recvBuf);
-    printf("\n");
-    
     std::string msg(recvBuf);
     std::cout << msg << std::endl;
+    pos = 0;
     
-    std::string s="";
-    s.push_back(recvBuf[0]);
-    s.push_back(recvBuf[1]);
-    s.push_back(recvBuf[2]);
-    int i = atoi(s.c_str());
-    std::cout << "Thrust: " << i << std::endl;
-    verticalThrust=i;
+    int i=0;
+    while ((pos = msg.find(delimiter)) != std::string::npos) {
+        token = msg.substr(0, pos);
+        msg.erase(0, pos + delimiter.length());
+        stringList[i] = token;
+        i++;
+    }
+    stringList[11] = msg;
     
-    s="";
-    s.push_back(recvBuf[3]);
-    int video = atoi(s.c_str());
+    verticalThrust = atoi(stringList[0].c_str());
+    int video = atoi(stringList[1].c_str());
+    int fps = atoi(stringList[2].c_str());
     
-    s="";
-    s.push_back(recvBuf[4]);
-    int fps = atoi(s.c_str());
+    for (int j=3; j<12; j++) {
+        pidParam[j-3] = atof(stringList[j].c_str());
+    }
     
     if (video==1) {
         videoStream=true;
