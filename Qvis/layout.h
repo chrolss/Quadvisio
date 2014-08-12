@@ -51,8 +51,8 @@ public:
     QSpinBox *verticalThrustSpin;
     
     // PID window objects
-    QLabel *pLabel, *iLabel, *dLabel;
-    QLineEdit *pField, *iField, *dField;
+    QLabel *pRollLabel, *iRollLabel, *dRollLabel, *pPitchLabel, *iPitchLabel, *dPitchLabel, *pYawLabel, *iYawLabel, *dYawLabel;
+    QLineEdit *pRollField, *iRollField, *dRollField, *pPitchField, *iPitchField, *dPitchField,*pYawField, *iYawField, *dYawField;
     QPushButton *setPIDButton;
     
 signals:

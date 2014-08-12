@@ -8,6 +8,7 @@
 
 #include <iostream>
 #include <string>
+#include <chrono>
 
 #include "SensorManager.h"
 #include "Controller.h"
@@ -24,6 +25,11 @@ bool runAtlas=false;
 int counter = 0;
 int vidCount = 0;
 
+// Loop time measurement
+double loopTime;
+int Hz = 1;
+int loopSleep;
+
 void initailize(){
     sensorManager = new SensorManager;
     controller = new Controller;
@@ -36,8 +42,14 @@ void initailize(){
 }
 
 void loop(){
+    
+    std::chrono::time_point<std::chrono::high_resolution_clock> start;
+    
     while (runAtlas && counter<2000) {
-
+        
+        // Start clock
+        auto start = std::chrono::high_resolution_clock::now();
+        
         // Read sensor data
         sensorManager->readDMP(sInput);
         
@@ -60,8 +72,21 @@ void loop(){
         vidCount++;
         counter++;
         std::cout << counter << std::endl;
-        usleep(1000);
+        
+        // Measure duration
+        auto duration = std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::high_resolution_clock::now() - start).count();
+        
+        loopSleep = 1000000/Hz - (int)duration;
+        
+        // Sleep
+        usleep(loopSleep);
+        
+        // Measure duration again and print out the frequency
+        auto duration2 = std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::high_resolution_clock::now() - start).count();
+        loopTime = double(1000000)/(duration2);
+        std::cout << "Running at: " << loopTime << "Hz" << std::endl;
     }
+    
     motor->closePWM();
     std::cout << "Test klart" << std::endl;
 }

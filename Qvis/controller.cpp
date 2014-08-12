@@ -49,7 +49,7 @@ void QvisController::createTCPThread()
     
     QObject::connect(ui->connectButton, SIGNAL(clicked()), this, SLOT(closeTCP()));
     std::cout << "Connection button set to close" << std::endl;
-    tcpSocket->write(getSendData(), 7);
+    tcpSocket->write(getSendData(), 5);
     ui->setConnected();
 }
 
@@ -93,7 +93,7 @@ void QvisController::readTCP()
             numbytes = 0;
 
             // When done reading send back the input data
-            tcpSocket->write(getSendData(), 7);
+            tcpSocket->write(getSendData(), 5);
         }
         
         if (recvImg && tcpSocket->bytesAvailable()>=(numbytes+230400)) {
@@ -122,7 +122,7 @@ void QvisController::readTCP()
             }
             
             // When done reading, send back the input data
-            tcpSocket->write(getSendData(), 7);
+            tcpSocket->write(getSendData(), 5);
         }
         
         else {
@@ -183,6 +183,7 @@ void QvisController::pidButtonClicked() {
 void QvisController::setPIDButtonClicked() {
     ui->getPIDValues(pid);
     ui->closePIDWindow();
+    std::cout << pid[0] << std::endl;
 }
 
 void QvisController::displayError(QAbstractSocket::SocketError socketError)

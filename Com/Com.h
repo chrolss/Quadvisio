@@ -51,6 +51,7 @@ public:
     
 private:
     void error(const char *msg);
+    void readMsg();
     int sockfd, newsockfd, portno;
     socklen_t clilen;
     char buffer[256];

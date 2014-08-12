@@ -70,7 +70,7 @@ private:
     bool videoStream=false;
     
     //
-    double pid[3];
+    double pid[9];
     
 };
 

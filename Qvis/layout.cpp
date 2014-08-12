@@ -32,7 +32,7 @@ QvisLayout::QvisLayout()
     mainLayout->addWidget(connectGroupBox, 3, 0, 1, 2);
     setLayout(mainLayout);
     setWindowTitle(tr("Qvis v0.3 (alpha)"));
-    setFixedSize(700, 650);
+    setFixedSize(695, 660);
 }
 
 void QvisLayout::saveData()
@@ -96,6 +96,7 @@ void QvisLayout::createAltBox() {
     
     QLabel *desiredAltLabel = new QLabel(tr("Desired Altitude"));
     QLabel *currentAlt = new QLabel(tr("0"));
+    currentAlt->setAlignment(Qt::AlignCenter);
                                          
     layout->addWidget(altLabel,0,0);
     layout->addWidget(currentAlt,1,0);
@@ -130,10 +131,12 @@ void QvisLayout::createControls() {
     QGroupBox *movementBox = new QGroupBox(tr("Vertical Thrust"));
     QGroupBox *videoBox = new QGroupBox(tr("Video"));
     QGroupBox *commandsBox = new QGroupBox(tr("Commands"));
+    QGroupBox *parametersBox = new QGroupBox(tr("Parameters"));
     
     QVBoxLayout *videoLayout = new QVBoxLayout;
     QVBoxLayout *thrustLayout = new QVBoxLayout;
     QVBoxLayout *commandsLayout = new QVBoxLayout;
+    QVBoxLayout *paramLayout = new QVBoxLayout;
 
     
     // Labels
@@ -173,21 +176,24 @@ void QvisLayout::createControls() {
     videoLayout->addWidget(videoFPSSlider);
     videoLayout->addWidget(videoButton);
     
-    commandsLayout->addWidget(pidButton);
     commandsLayout->addWidget(altitudeLock);
     commandsLayout->addWidget(takeOfButton);
     commandsLayout->addWidget(landButton);
     commandsLayout->addWidget(stopButton);
     
+    paramLayout->addWidget(pidButton);
+    
+    parametersBox->setLayout(paramLayout);
     movementBox->setLayout(thrustLayout);
     videoBox->setLayout(videoLayout);
     commandsBox->setLayout(commandsLayout);
     
-    videoBox->setFixedHeight(110);
+    //videoBox->setFixedHeight(110);
     
     layout->addWidget(videoBox,0,0);
     layout->addWidget(commandsBox,1,0);
-    layout->addWidget(movementBox,0,1,2,1);
+    layout->addWidget(parametersBox,2,0);
+    layout->addWidget(movementBox,0,1,3,1);
     
     gridControls->setLayout(layout);
 }
@@ -230,27 +236,68 @@ void QvisLayout::createConnectBox()
 
 void QvisLayout::createPIDWindow() {
     pidWindow = new QDialog;
+    
+    QGroupBox *rollBox = new QGroupBox(tr("Roll"));
+    QGroupBox *pitchBox = new QGroupBox(tr("Pitch"));
+    QGroupBox *yawBox = new QGroupBox(tr("Yaw"));
+    
     QGridLayout *layout = new QGridLayout;
+    QGridLayout *rollLayout = new QGridLayout;
+    QGridLayout *pitchLayout = new QGridLayout;
+    QGridLayout *yawLayout = new QGridLayout;
+    
     setPIDButton = new QPushButton(tr("Set Parameters"));
-    pLabel = new QLabel(tr("P:"));
-    iLabel = new QLabel(tr("I:"));
-    dLabel = new QLabel(tr("D:"));
+    pRollLabel = new QLabel(tr("P:"));
+    iRollLabel = new QLabel(tr("I:"));
+    dRollLabel = new QLabel(tr("D:"));
+    pPitchLabel = new QLabel(tr("P:"));
+    iPitchLabel = new QLabel(tr("I:"));
+    dPitchLabel = new QLabel(tr("D:"));
+    pYawLabel = new QLabel(tr("P:"));
+    iYawLabel = new QLabel(tr("I:"));
+    dYawLabel = new QLabel(tr("D:"));
     
-    pField = new QLineEdit();
-    iField = new QLineEdit();
-    dField = new QLineEdit();
+    pRollField = new QLineEdit(tr("0.0"));
+    iRollField = new QLineEdit(tr("0.0"));
+    dRollField = new QLineEdit(tr("0.0"));
     
-    pField->setText("0.0");
-    iField->setText("0.0");
-    dField->setText("0.0");
+    pPitchField = new QLineEdit(tr("0.0"));
+    iPitchField = new QLineEdit(tr("0.0"));
+    dPitchField = new QLineEdit(tr("0.0"));
     
-    layout->addWidget(pLabel,0,0);
-    layout->addWidget(iLabel,1,0);
-    layout->addWidget(dLabel,2,0);
-    layout->addWidget(pField,0,1);
-    layout->addWidget(iField,1,1);
-    layout->addWidget(dField,2,1);
-    layout->addWidget(setPIDButton,3,0,1,2);
+    pYawField = new QLineEdit(tr("0.0"));
+    iYawField = new QLineEdit(tr("0.0"));
+    dYawField = new QLineEdit(tr("0.0"));
+    
+    rollLayout->addWidget(pRollLabel,0,0);
+    rollLayout->addWidget(iRollLabel,1,0);
+    rollLayout->addWidget(dRollLabel,2,0);
+    rollLayout->addWidget(pRollField,0,1);
+    rollLayout->addWidget(iRollField,1,1);
+    rollLayout->addWidget(dRollField,2,1);
+    
+    pitchLayout->addWidget(pPitchLabel,0,0);
+    pitchLayout->addWidget(iPitchLabel,1,0);
+    pitchLayout->addWidget(dPitchLabel,2,0);
+    pitchLayout->addWidget(pPitchField,0,1);
+    pitchLayout->addWidget(iPitchField,1,1);
+    pitchLayout->addWidget(dPitchField,2,1);
+    
+    yawLayout->addWidget(pYawLabel,0,0);
+    yawLayout->addWidget(iYawLabel,1,0);
+    yawLayout->addWidget(dYawLabel,2,0);
+    yawLayout->addWidget(pYawField,0,1);
+    yawLayout->addWidget(iYawField,1,1);
+    yawLayout->addWidget(dYawField,2,1);
+    
+    rollBox->setLayout(rollLayout);
+    pitchBox->setLayout(pitchLayout);
+    yawBox->setLayout(yawLayout);
+    
+    layout->addWidget(rollBox,0,0);
+    layout->addWidget(pitchBox,0,1);
+    layout->addWidget(yawBox,0,2);
+    layout->addWidget(setPIDButton,4,1,1,1);
     
     pidWindow->setLayout(layout);
 }
@@ -330,8 +377,14 @@ int QvisLayout::getFPSValue() {
 }
 
 void QvisLayout::getPIDValues(double *pid) {
-    pid[0] = 0.0;
-    pid[1] = 0.0;
-    pid[2] = 0.0;
+    pid[0] = pRollField->text().toDouble();
+    pid[1] = iRollField->text().toDouble();
+    pid[2] = dRollField->text().toDouble();
+    pid[3] = pPitchField->text().toDouble();
+    pid[4] = iPitchField->text().toDouble();
+    pid[5] = dPitchField->text().toDouble();
+    pid[6] = pYawField->text().toDouble();
+    pid[7] = iYawField->text().toDouble();
+    pid[8] = dYawField->text().toDouble();
 }
 
