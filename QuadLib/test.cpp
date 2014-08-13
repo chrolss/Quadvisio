@@ -37,6 +37,10 @@ int main(int argc, const char * argv[]) {
             break;
         }
         pwm.setDuty(MOTOR_FR, pwmInput);
+        pwm.setDuty(MOTOR_FL, pwmInput);
+        pwm.setDuty(MOTOR_BL, pwmInput);
+        pwm.setDuty(MOTOR_BR, pwmInput);
+
     }
     /*
     std::cout << "Setting duty to 1200000" << std::endl;
