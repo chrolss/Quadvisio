@@ -33,12 +33,26 @@ void Controller::calcPWM(double *input, double *output) {
 
 
 	printf("Ma = %f, Mb = %f, Mg = %f, F = %f \n", Ma, Mb, Mg, F);
-
-    output[0] = (1/(4*THRUST_CONSTANT))*(F+Ma+Mb+Mg);
-    output[1] = (1/(2*THRUST_CONSTANT*ARM_RADIUS))*(Ma+Mg);
-    output[2] = (1/(2*THRUST_CONSTANT*ARM_RADIUS))*(F-Mb);
-    output[3] = (1/(4*DRAG_CONSTANT))*(F-Ma+Mb-Mg);
     
+    Ma = Ma*COS45 - Mb*SIN45;
+    Mb = Ma*SIN45 + Mb*COS45;
+
+    output[0] = 0.25*(F*CONST1 + Mb*CONST2 + Mg*CONST3);
+    output[1] = 0.25*(F*CONST1 - Ma*CONST2 - CONST3*Mg);
+    output[2] = 0.25*(F*CONST1 - Mb*CONST2 + Mg*CONST3);
+    output[3] = 0.25*(F*CONST1 + Ma*CONST2 - Mg*CONST3);
+    
+    
+    
+    for (int i=0; i<4; i++) {
+        if (output[i]<0) {
+            output[i]=0.0;
+        }
+        output[i]=sqrt(output[i]);
+        if (output[i]>100) {
+            output[i]=100;
+        }
+    }
 }
 
 void Controller::setReference(double *ref){
@@ -47,8 +61,8 @@ void Controller::setReference(double *ref){
 	this->refs[2] = ref[2];
 }
 
-void Controller::setF(double _thrust){
-	this->F = _thrust; 		//Toni fixar denna rad
+void Controller::setF(int _thrust){
+	this->F = 4*THRUST_CONSTANT*_thrust*_thrust; 		//Toni fixar denna rad
 }
 
 void Controller::setParameters(double *params){

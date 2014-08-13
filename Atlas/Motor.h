@@ -17,14 +17,14 @@ class Motor{
     
 public:
     Motor();
-    void setPWM(int *output); //min 22% max 49%
+    void setPWM(double *output); //min 22% max 49%
     void closePWM();
     QuadPWM* pwm;
 
     
 private:
     void initializeAll();
-    float mapper(float b);
+    int mapper(double b);
 };
 
 #endif /* defined(__Atlas__Motor__) */

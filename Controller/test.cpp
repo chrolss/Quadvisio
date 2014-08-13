@@ -13,12 +13,12 @@ Controller *controller;
 
 int main(){
 
-	params[0] = 0.9;
-	params[1] = 0.3;
-	params[2] = 0.2;
-	params[3] = 0.9;
-	params[4] = 0.3;
-	params[5] = 0.2;
+	params[0] = 0.09;
+	params[1] = 0.03;
+	params[2] = 0.02;
+	params[3] = 0.09;
+	params[4] = 0.03;
+	params[5] = 0.02;
 	params[6] = 0.06;
 	params[7] = 0.3;
 	params[8] = 0.02;
@@ -33,7 +33,7 @@ int main(){
 	controller = new Controller;
 	controller->setParameters(params);
 	controller->setReference(refs);
-	controller->setF(1);
+	controller->setF(50);
 
 	for (int i=0;i<20;i++)
 	{

@@ -20,7 +20,7 @@ Controller *controller;
 Com *communicate;
 Motor *motor;
 double sInput[6];
-int sOutput[4];
+double sOutput[4];
 bool runAtlas=false;
 int counter = 0;
 int vidCount = 0;
@@ -29,6 +29,7 @@ int vidCount = 0;
 double loopTime;
 int Hz = 50;
 int loopSleep=0;
+double ref[3];
 
 void initailize(){
     for (int i =0 ; i<6; i++) {
@@ -46,6 +47,13 @@ void initailize(){
         runAtlas = true;
     }
      */
+    
+    ref[0]=0.0;
+    ref[1]=0.0;
+    ref[2]=0.0;
+    
+    controller->setReference(ref);
+    
     runAtlas = true;
 }
 
@@ -59,7 +67,7 @@ void loop(){
         auto start = std::chrono::high_resolution_clock::now();
         
         // Read sensor data
-        //sensorManager->readDMP(sInput);
+        sensorManager->readDMP(sInput);
         
         // If connected to Qvis send data
         if (communicate->connected==true && communicate->reciveMsg==false && communicate->msgSend==false) {
@@ -73,6 +81,8 @@ void loop(){
         
         std::cout << "Calculate control action" << std::endl;
         // Calculate control action
+        controller->setF(communicate->verticalThrust);
+        controller->setParameters(communicate->pidParam);
         controller->calcPWM(sInput, sOutput);
         
         std::cout << "Setting PWM values" << std::endl;

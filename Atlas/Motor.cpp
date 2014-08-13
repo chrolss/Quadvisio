@@ -31,9 +31,15 @@ void Motor::closePWM(){
 
 }
 
-void Motor::setPWM(int *sOutput) {
-	pwm->setDuty("P8_13", sOutput[0]);
-	pwm->setDuty("P9_14", sOutput[1]);
-	pwm->setDuty("P9_21", sOutput[2]);
-	pwm->setDuty("P9_42", sOutput[3]);
+void Motor::setPWM(double *sOutput) {
+    
+	pwm->setDuty("P8_13", mapper(sOutput[0]));
+	pwm->setDuty("P9_14", mapper(sOutput[1]));
+	pwm->setDuty("P9_21", mapper(sOutput[2]));
+	pwm->setDuty("P9_42", mapper(sOutput[3]));
 }
+
+int Motor::mapper(double _d) {
+    return _d*10000 + 1000000;
+}
+

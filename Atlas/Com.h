@@ -47,6 +47,8 @@ public:
     double output[6];
     int verticalThrust, imgSendRate;
     
+    double pidParam[9];
+    
     cv::Mat sendFrame;
     
 private:
@@ -55,13 +57,12 @@ private:
     int sockfd, newsockfd, portno;
     socklen_t clilen;
     char buffer[256];
-    char recvBuf[44];
+    char recvBuf[53];
     struct sockaddr_in serv_addr, cli_addr;
     std::ostringstream ostr;
     
     cv::VideoCapture cap;
     
-    double pidParam[9];
     size_t pos;
     std::string stringList[12];
     std::string delimiter = ":";
