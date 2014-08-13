@@ -68,16 +68,19 @@ void Com::Listen()
         }
         
         if (reciveMsg) {
+            std::cout << "Reciving message" << std::endl;
             ssize_t numbytes = recv(newsockfd, recvBuf, 43, 0);
             if (numbytes==-1) {
                 perror("recive");
             }
             readMsg();
+            reciveMsg=false;
         }
         
         if (msgSend) {
-            reciveMsg=true;
+            std::cout << "Sending message" << std::endl;
             sendMsg();
+            reciveMsg=true;
             msgSend=false;
         }
     }
@@ -152,9 +155,6 @@ void Com::readMsg() {
     }
     
     imgSendRate = fps;
-    
-    reciveMsg=false;
-
 }
 
 void Com::checkClient() {
