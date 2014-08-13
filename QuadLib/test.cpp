@@ -20,6 +20,8 @@
 int main(int argc, const char * argv[]) {
     std::string s = "";
     
+    int pwmInput = 0;
+    
     QuadPWM pwm;
     pwm.initialize("P8_13");
     pwm.initialize("P9_14");
@@ -27,13 +29,22 @@ int main(int argc, const char * argv[]) {
     pwm.initialize("P9_42");
     
     sleep(1);
+    
+    while (true) {
+        std::cin >> pwmInput;
+        if (pwmInput<0) {
+            break;
+        }
+        pwm.setDuty(MOTOR_FR, pwmInput);
+    }
+    /*
     std::cout << "Setting duty to 1200000" << std::endl;
     pwm.setDuty("P8_13", 1200000);
     pwm.setDuty("P9_14", 1200000);
     pwm.setDuty("P9_21", 1200000);
     pwm.setDuty("P9_42", 1200000);
-    
-    sleep(4);
+    */
+    sleep(1);
     std::cout << "Setting duty to 1000000" << std::endl;
     pwm.setDuty("P8_13", 1000000);
     pwm.setDuty("P9_14", 1000000);
