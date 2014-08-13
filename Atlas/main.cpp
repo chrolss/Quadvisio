@@ -37,14 +37,16 @@ void initailize(){
     for (int i =0 ; i<4; i++) {
         sOutput[i] = 0.0;
     }
-    sensorManager = new SensorManager;
+    //sensorManager = new SensorManager;
     controller = new Controller;
     communicate = new Com;
     motor = new Motor;
-    
+    /*
     if(sensorManager->initializeMPUdmp()) {
         runAtlas = true;
     }
+     */
+    runAtlas = true;
 }
 
 void loop(){
