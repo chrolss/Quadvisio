@@ -51,15 +51,22 @@ public:
     
 private:
     void error(const char *msg);
+    void readMsg();
     int sockfd, newsockfd, portno;
     socklen_t clilen;
     char buffer[256];
-    char recvBuf[8];
+    char recvBuf[44];
     struct sockaddr_in serv_addr, cli_addr;
-    int n;
     std::ostringstream ostr;
     
     cv::VideoCapture cap;
+    
+    double pidParam[9];
+    size_t pos;
+    std::string stringList[12];
+    std::string delimiter = ":";
+    std::string token;
+
 };
 
 #endif /* defined(__Atlas__Com__) */

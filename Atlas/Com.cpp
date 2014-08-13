@@ -68,44 +68,14 @@ void Com::Listen()
         }
         
         if (reciveMsg) {
-            ssize_t numbytes = recv(newsockfd, recvBuf, 7, 0);
+            ssize_t numbytes = recv(newsockfd, recvBuf, 43, 0);
             if (numbytes==-1) {
                 perror("recive");
             }
-            
-            printf(recvBuf);
-            printf("\n");
-            
-            std::string s="";
-            s.push_back(recvBuf[0]);
-            s.push_back(recvBuf[1]);
-            s.push_back(recvBuf[2]);
-            int i = atoi(s.c_str());
-            std::cout << "Thrust: " << i << std::endl;
-            verticalThrust=i;
-
-            s="";
-            s.push_back(recvBuf[4]);
-            int video = atoi(s.c_str());
-            
-            s="";
-            s.push_back(recvBuf[6]);
-            int fps = atoi(s.c_str());
-            
-            if (video==1) {
-                videoStream=true;
-            }
-            else {
-                videoStream=false;
-            }
-            
-            imgSendRate = fps;
-            
-            reciveMsg=false;
+            readMsg();
         }
         
         if (msgSend) {
-
             reciveMsg=true;
             sendMsg();
             msgSend=false;
@@ -148,6 +118,41 @@ void Com::sendImg() {
     if (send(newsockfd, sendFrame.data, 230400, 0) == -1) {
         perror("send");
     }
+
+}
+
+void Com::readMsg() {
+    std::string msg(recvBuf);
+    std::cout << msg << std::endl;
+    pos = 0;
+    
+    int i=0;
+    while ((pos = msg.find(delimiter)) != std::string::npos) {
+        token = msg.substr(0, pos);
+        msg.erase(0, pos + delimiter.length());
+        stringList[i] = token;
+        i++;
+    }
+    stringList[11] = msg;
+    
+    verticalThrust = atoi(stringList[0].c_str());
+    int video = atoi(stringList[1].c_str());
+    int fps = atoi(stringList[2].c_str());
+    
+    for (int j=3; j<12; j++) {
+        pidParam[j-3] = atof(stringList[j].c_str());
+    }
+    
+    if (video==1) {
+        videoStream=true;
+    }
+    else {
+        videoStream=false;
+    }
+    
+    imgSendRate = fps;
+    
+    reciveMsg=false;
 
 }
 

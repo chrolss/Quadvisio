@@ -31,6 +31,12 @@ int Hz = 100;
 int loopSleep;
 
 void initailize(){
+    for (int i =0 ; i<6; i++) {
+        sInput[i] = 0.0;
+    }
+    for (int i =0 ; i<4; i++) {
+        sOutput[i] = 0.0;
+    }
     sensorManager = new SensorManager;
     controller = new Controller;
     communicate = new Com;
@@ -51,7 +57,7 @@ void loop(){
         auto start = std::chrono::high_resolution_clock::now();
         
         // Read sensor data
-        sensorManager->readDMP(sInput);
+        //sensorManager->readDMP(sInput);
         
         // If connected to Qvis send data
         if (communicate->connected==true && communicate->reciveMsg==false) {
