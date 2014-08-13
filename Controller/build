@@ -1,0 +1,5 @@
+#!/bin/bash
+
+echo "Building the controller test program"
+
+g++ -W Controller.cpp test.cpp -o testProgram

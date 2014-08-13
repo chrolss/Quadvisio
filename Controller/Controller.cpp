@@ -32,6 +32,7 @@ void Controller::calcPWM(double *input, double *output) {
 	eg[0] = this->eg[1];		// set old error
 
 
+	printf("Ma = %f, Mb = %f, Mg = %f, F = %f \n", Ma, Mb, Mg, F);
 
     output[0] = (1/(4*THRUST_CONSTANT))*(F+Ma+Mb+Mg);
     output[1] = (1/(2*THRUST_CONSTANT*ARM_RADIUS))*(Ma+Mg);

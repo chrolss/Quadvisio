@@ -10,11 +10,12 @@
 #define __Atlas__Controller__
 
 #include <iostream>
+#include <cstdio>
 
 #define THRUST_CONSTANT 0.0003
 #define ARM_RADIUS 0.176
 #define DRAG_CONSTANT 9.9768e-8
-#define dt 0.001	//påhittad
+#define dt 0.02	//påhittad
 
 class Controller{
     
