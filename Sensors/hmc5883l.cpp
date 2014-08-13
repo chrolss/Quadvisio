@@ -78,10 +78,7 @@ int hmc5883l::readSensorData() {
 	      	printf("Unable to read from slave\n");
 	      	exit(1);
 	}
-	else
-	{
-		heading = 0.0;
-	}
+
 
 	this->hX = ((short)buf[1]<<8) | (short) buf[0];
 	this->hY = ((short)buf[3]<<8) | (short) buf[2];

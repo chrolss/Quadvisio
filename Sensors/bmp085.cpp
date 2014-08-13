@@ -62,8 +62,14 @@ int bmp085::readSensorData(){
 		printf("Failed to write to i2c bus");
 		exit(1);
 	}
-	usleep((2 + (3<<3)) * 1000);
-	buf[0] = 0xF4;
+	usleep((2 + (3<<oss)) * 1000);
+
+	buf[0] = 0xF6;
+	if ((write(fd, buf, 1)) != 1) {                        // Send the register to read from
+	      	printf("Error writing to i2c slave\n");
+	      	exit(1);
+	}
+
 	if (read(fd, buf, 3) != 3)
 	{
 	      	printf("Unable to read from slave\n");
@@ -72,6 +78,7 @@ int bmp085::readSensorData(){
 	else
 	{
 		int up = ((int) buf[0] << 16) | (int) buf[1] << 8 | (int) buf[2] >> (8-3); //uncompensated pressure reading
+		//int up = (((int)buf[0] << 16) + ((int)buf[1] << 8) + ((int)buf[2]) >> (8 - oss));
 		printf("Up = %d \n",up);
 	}
 
@@ -86,10 +93,10 @@ int bmp085::readSensorData(){
 
 	x1 = (ac3 * b6)>>13;
 	x2 = (b1 * ((b6 * b6)>>12))>>16;
-	x3 = x1 + x2;
+	x3 = ((x1 + x2) + 2)>>2;
 	b4 = (ac4 * (unsigned int)(x3 + 32768))>>15;
 
-	b7 = ((unsigned int)(up - b3) * (50000>>3));
+	b7 = ((unsigned int)(up - b3) * (50000>>oss));
 	if (b7 < 0x80000000)
 		p = (b7<<1)/b4;
 	else
@@ -99,6 +106,8 @@ int bmp085::readSensorData(){
 	x1 = (x1 * 3038)>>16;
 	x2 = (-7357 * p)>>16;
 	p += (x1 + x2 + 3791)>>4; //final pressure value
+
+	this->pressure = p;
 
 	double A = p/101794.58;
 	double B = 1.0/5.25588;

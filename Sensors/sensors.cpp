@@ -43,19 +43,23 @@ int main(int argc, char *argv[]){
 		std::cout<< "measured x: " << x << ", and estimated: " 
 << est << std::endl;
 	}
-
+	*/
 
 	bmp085 bmp;
 	bmp.readSensorData();
 	double altitude = bmp.getAltitude();
-	std::cout << "Current altitude: " << altitude << std::endl;
-*/
+	double pressure = bmp.getPressure();
+	std::cout << "Current altitude: " << altitude << " Current pressure: " << pressure << std::endl;
 
+/*
 	hmc5883l hmc;
-	hmc.readSensorData();
-	double X = hmc.getXHeading();
-	double Y = hmc.getYHeading();
-	double Z = hmc.getZHeading();
+	for (int i=0; i<4; i++){
+		hmc.readSensorData();
+		double X = hmc.getXHeading();
+		double Y = hmc.getYHeading();
+		double Z = hmc.getZHeading();
 
-	printf("X: %f, Y: %f, Z: %f\n", X, Y, Z);
+		printf("X: %f, Y: %f, Z: %f\n", X, Y, Z);
+	}
+*/
 }
