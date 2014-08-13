@@ -14,14 +14,21 @@
 #define THRUST_CONSTANT 0.0003
 #define ARM_RADIUS 0.176
 #define DRAG_CONSTANT 9.9768e-8
+#define dt 0.001	//påhittad
 
 class Controller{
     
 public:
     Controller();
     void calcPWM(double *input, double *output);
-    
+    void setParameters(double *params);
+    void setReference(double *ref);
+    void setF(double _thrust);
 private:
+    double parameters[9];
+    double refs[3];
+    double ea[3], eb[3], eg[3];
+    double F, Ma, Mb, Mg;
     
 };
 
