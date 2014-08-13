@@ -141,6 +141,7 @@ void Com::readMsg() {
     
     for (int j=3; j<12; j++) {
         pidParam[j-3] = atof(stringList[j].c_str());
+        std::cout << pidParam[j-3] << std::endl;
     }
     
     if (video==1) {
