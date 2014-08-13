@@ -21,7 +21,7 @@ void hmc5883l::initialize(){
 	this-> fd = open(fileName, O_RDWR);  //fd blir en address till den öppna porten och måste vara en och samma genom hela klassen. Den får inte omdeklareras i readSensorData() och och måste då ha en this->
 
    	char *fileName = "/dev/i2c-1";
-   	int address = 0x53;					//fixa adressen till den korrekta
+   	int address = 0x1e;					//korrekta addressen
    	char buf[8];
 
    	if ((fd = open(fileName, O_RDWR)) < 0) {               // Open port for reading and writing
