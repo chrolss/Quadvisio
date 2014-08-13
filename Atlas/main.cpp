@@ -27,7 +27,7 @@ int vidCount = 0;
 
 // Loop time measurement
 double loopTime;
-int Hz = 1;
+int Hz = 100;
 int loopSleep;
 
 void initailize(){
