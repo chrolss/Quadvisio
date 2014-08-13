@@ -28,7 +28,7 @@ int vidCount = 0;
 // Loop time measurement
 double loopTime;
 int Hz = 100;
-int loopSleep;
+int loopSleep=0;
 
 void initailize(){
     for (int i =0 ; i<6; i++) {
@@ -64,7 +64,7 @@ void loop(){
         // If connected to Qvis send data
         if (communicate->connected==true && communicate->reciveMsg==false) {
             communicate->setOutputData(sInput);
-            if (vidCount>=int(((double(5.0/communicate->imgSendRate))-1)*10) && communicate->videoStream) {
+            if (vidCount>=int(((double(5.0/communicate->imgSendRate))-1)*10) && communicate->videoStream==true) {
                 communicate->imgSend=true;
                 vidCount=0;
             }
@@ -86,12 +86,14 @@ void loop(){
         
         loopSleep = 1000000/Hz - (int)duration;
         
+        /*
         // Sleep
         usleep(loopSleep);
         
         // Measure duration again and print out the frequency
         auto duration2 = std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::high_resolution_clock::now() - start).count();
-        loopTime = double(1000000)/(duration2);
+         */
+        loopTime = double(1000000)/(duration);
         std::cout << "Running at: " << loopTime << "Hz" << std::endl;
     }
     
