@@ -75,6 +75,7 @@ void Com::Listen()
             }
             readMsg();
             reciveMsg=false;
+            std::cout << "Message recived!" << std::endl;
         }
         
         if (msgSend) {
@@ -82,6 +83,7 @@ void Com::Listen()
             sendMsg();
             reciveMsg=true;
             msgSend=false;
+            std::cout << "Message sent!" << std::endl;
         }
     }
     
