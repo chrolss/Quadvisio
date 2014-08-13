@@ -27,7 +27,7 @@ int vidCount = 0;
 
 // Loop time measurement
 double loopTime;
-int Hz = 100;
+int Hz = 200;
 int loopSleep=0;
 
 void initailize(){
@@ -86,14 +86,14 @@ void loop(){
         
         loopSleep = 1000000/Hz - (int)duration;
         
-        /*
+        
         // Sleep
         usleep(loopSleep);
         
         // Measure duration again and print out the frequency
         auto duration2 = std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::high_resolution_clock::now() - start).count();
-         */
-        loopTime = double(1000000)/(duration);
+         
+        loopTime = double(1000000)/(duration2);
         std::cout << "Running at: " << loopTime << "Hz" << std::endl;
     }
     
