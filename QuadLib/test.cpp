@@ -31,6 +31,7 @@ int main(int argc, const char * argv[]) {
     sleep(1);
     
     while (true) {
+        std::cout << "Enter pwm value" << std::endl;
         std::cin >> pwmInput;
         if (pwmInput<0) {
             break;
