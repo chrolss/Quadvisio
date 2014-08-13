@@ -153,6 +153,8 @@ void Com::readMsg() {
     imgSendRate = fps;
     
     reciveMsg=false;
+    
+    std::cout << "End of readMsg()" << std::endl;
 
 }
 
