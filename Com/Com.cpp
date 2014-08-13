@@ -144,6 +144,8 @@ void Com::readMsg() {
     int video = atoi(stringList[1].c_str());
     int fps = atoi(stringList[2].c_str());
     
+    std::cout << verticalThrust << " " << video << " " << fps << std::endl;
+    
     for (int j=3; j<12; j++) {
         pidParam[j-3] = atof(stringList[j].c_str());
         std::cout << pidParam[j-3] << std::endl;

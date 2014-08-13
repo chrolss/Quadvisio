@@ -68,17 +68,22 @@ void Com::Listen()
         }
         
         if (reciveMsg) {
+            std::cout << "Reciving message" << std::endl;
             ssize_t numbytes = recv(newsockfd, recvBuf, 43, 0);
             if (numbytes==-1) {
                 perror("recive");
             }
             readMsg();
+            std::cout << "Message recived!" << std::endl;
+            reciveMsg=false;
         }
         
         if (msgSend) {
-            reciveMsg=true;
+            std::cout << "Sending message" << std::endl;
             sendMsg();
+            reciveMsg=true;
             msgSend=false;
+            std::cout << "Message sent!" << std::endl;
         }
     }
     
@@ -139,8 +144,11 @@ void Com::readMsg() {
     int video = atoi(stringList[1].c_str());
     int fps = atoi(stringList[2].c_str());
     
+    std::cout << verticalThrust << " " << video << " " << fps << std::endl;
+    
     for (int j=3; j<12; j++) {
         pidParam[j-3] = atof(stringList[j].c_str());
+        std::cout << pidParam[j-3] << std::endl;
     }
     
     if (video==1) {
@@ -151,11 +159,6 @@ void Com::readMsg() {
     }
     
     imgSendRate = fps;
-    
-    reciveMsg=false;
-    
-    std::cout << "End of readMsg()" << std::endl;
-
 }
 
 void Com::checkClient() {

@@ -27,7 +27,7 @@ int vidCount = 0;
 
 // Loop time measurement
 double loopTime;
-int Hz = 200;
+int Hz = 50;
 int loopSleep=0;
 
 void initailize(){
@@ -62,7 +62,7 @@ void loop(){
         //sensorManager->readDMP(sInput);
         
         // If connected to Qvis send data
-        if (communicate->connected==true && communicate->reciveMsg==false) {
+        if (communicate->connected==true && communicate->reciveMsg==false && communicate->msgSend==false) {
             communicate->setOutputData(sInput);
             if (vidCount>=int(((double(5.0/communicate->imgSendRate))-1)*10) && communicate->videoStream==true) {
                 communicate->imgSend=true;
