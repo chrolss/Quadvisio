@@ -25,7 +25,8 @@ int main(int argc, const char * argv[])
     std::cout << "Starting main loop" << std::endl;
     while (true) {
         
-        if (C.connected && !C.reciveMsg) {
+        if (C.connected && !C.reciveMsg && !C.msgSend) {
+            std::cout << "Send a Message" << std::endl;
             C.setOutputData(output);
             int i = int(((double(5.0/C.imgSendRate))-1)*10);
             std::cout << i << std::endl;

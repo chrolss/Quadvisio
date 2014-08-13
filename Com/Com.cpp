@@ -74,8 +74,8 @@ void Com::Listen()
                 perror("recive");
             }
             readMsg();
-            reciveMsg=false;
             std::cout << "Message recived!" << std::endl;
+            reciveMsg=false;
         }
         
         if (msgSend) {
