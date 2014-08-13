@@ -11,6 +11,10 @@
 
 #include <iostream>
 
+#define THRUST_CONSTANT 0.0003
+#define ARM_RADIUS 0.176
+#define DRAG_CONSTANT 9.9768e-8
+
 class Controller{
     
 public:
