@@ -36,6 +36,8 @@ int main(int argc, const char * argv[]) {
         if (pwmInput<0) {
             break;
         }
+        pwmInput = pwmInput*10000;
+        
         pwm.setDuty(MOTOR_FR, pwmInput);
         pwm.setDuty(MOTOR_FL, pwmInput);
         pwm.setDuty(MOTOR_BL, pwmInput);
