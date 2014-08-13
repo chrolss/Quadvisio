@@ -26,17 +26,14 @@ int main(int argc, const char * argv[])
     while (true) {
         
         if (C.connected && !C.reciveMsg && !C.msgSend) {
-            std::cout << "Send a Message" << std::endl;
             C.setOutputData(output);
             int i = int(((double(5.0/C.imgSendRate))-1)*10);
-            std::cout << i << std::endl;
             if (count>=i && C.videoStream) {
                 C.imgSend = true;
                 count=0;
             }
             C.msgSend=true;
         }
-        std::cout << count << std::endl;
         count++;
     }
     C.closeClient();

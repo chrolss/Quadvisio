@@ -20,6 +20,16 @@ Com::Com(){
     output[4]=0.0;
     output[5]=0.0;
     
+    pidParam[0] = 0.09;
+	pidParam[1] = 0.03;
+	pidParam[2] = 0.02;
+	pidParam[3] = 0.09;
+	pidParam[4] = 0.03;
+	pidParam[5] = 0.02;
+	pidParam[6] = 0.06;
+	pidParam[7] = 0.3;
+	pidParam[8] = 0.02;
+    
     std::cout << "Setting up camera" << std::endl;
     cap.open(0);
     cap.set(CV_CAP_PROP_FRAME_HEIGHT, 240);
@@ -68,22 +78,18 @@ void Com::Listen()
         }
         
         if (reciveMsg) {
-            std::cout << "Reciving message" << std::endl;
-            ssize_t numbytes = recv(newsockfd, recvBuf, 43, 0);
+            ssize_t numbytes = recv(newsockfd, recvBuf, 52, 0);
             if (numbytes==-1) {
                 perror("recive");
             }
             readMsg();
-            std::cout << "Message recived!" << std::endl;
             reciveMsg=false;
         }
         
         if (msgSend) {
-            std::cout << "Sending message" << std::endl;
             sendMsg();
             reciveMsg=true;
             msgSend=false;
-            std::cout << "Message sent!" << std::endl;
         }
     }
     
@@ -143,12 +149,9 @@ void Com::readMsg() {
     verticalThrust = atoi(stringList[0].c_str());
     int video = atoi(stringList[1].c_str());
     int fps = atoi(stringList[2].c_str());
-    
-    std::cout << verticalThrust << " " << video << " " << fps << std::endl;
-    
+        
     for (int j=3; j<12; j++) {
         pidParam[j-3] = atof(stringList[j].c_str());
-        std::cout << pidParam[j-3] << std::endl;
     }
     
     if (video==1) {
