@@ -27,7 +27,9 @@ int main(int argc, const char * argv[])
         
         if (C.connected && !C.reciveMsg) {
             C.setOutputData(output);
-            if (count>=int(((double(5.0/C.imgSendRate))-1)*10) && C.videoStream) {
+            int i = int(((double(5.0/C.imgSendRate))-1)*10);
+            std::cout << i << std::endl;
+            if (count>=i && C.videoStream) {
                 C.imgSend = true;
                 count=0;
             }
