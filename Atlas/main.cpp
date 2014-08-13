@@ -70,10 +70,12 @@ void loop(){
             }
             communicate->msgSend=true;
         }
-
+        
+        std::cout << "Calculate control action" << std::endl;
         // Calculate control action
         controller->calcPWM(sInput, sOutput);
-
+        
+        std::cout << "Setting PWM values" << std::endl;
         // Send PWM values to motors
         motor->setPWM(sOutput);
 
