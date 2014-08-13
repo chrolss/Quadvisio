@@ -12,6 +12,11 @@
 
 #include "QuadPWM.h"
 
+#define MOTOR_FL "P8_13"
+#define MOTOR_FR "P9_14"
+#define MOTOR_BL "P9_21"
+#define MOTOR_BR "P9_42"
+
 int main(int argc, const char * argv[]) {
     std::string s = "";
     
@@ -21,7 +26,7 @@ int main(int argc, const char * argv[]) {
     pwm.initialize("P9_21");
     pwm.initialize("P9_42");
     
-    sleep(2);
+    sleep(1);
     std::cout << "Setting duty to 1200000" << std::endl;
     pwm.setDuty("P8_13", 1200000);
     pwm.setDuty("P9_14", 1200000);
