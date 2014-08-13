@@ -36,7 +36,8 @@ int main(int argc, const char * argv[])
             }
             C.msgSend=true;
         }
-    count++;
+        std::cout << count << std::endl;
+        count++;
     }
     C.closeClient();
     return 0;
