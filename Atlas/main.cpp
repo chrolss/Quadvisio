@@ -41,15 +41,15 @@ void initailize(){
     for (int i =0 ; i<4; i++) {
         sOutput[i] = 0.0;
     }
-    //sensorManager = new SensorManager;
+    sensorManager = new SensorManager;
     controller = new Controller;
     communicate = new Com;
     motor = new Motor;
-    /*
+    
     if(sensorManager->initializeMPUdmp()) {
         runAtlas = true;
     }
-     */
+    
     
     ref[0]=0.0;
     ref[1]=0.0;
@@ -61,7 +61,7 @@ void initailize(){
 }
 
 void loop(){
-    
+    std::cout << "Starting Loop" << std::endl;
     std::chrono::time_point<std::chrono::high_resolution_clock> start;
     
     while (runAtlas && counter<2000) {
