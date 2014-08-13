@@ -20,7 +20,6 @@
 #include <thread>
 #include <sstream>
 #include <string>
-#include <opencv2/core/core.hpp>
 #include <opencv2/highgui/highgui.hpp>
 
 #define PORT "3490"  // the port users will be connecting to
