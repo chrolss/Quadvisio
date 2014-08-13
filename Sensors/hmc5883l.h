@@ -5,7 +5,9 @@ class hmc5883l{
 public:
 	hmc5883l();
 	int readSensorData();
-	double getHeading(){return heading;};
+	double getXHeading(){return hX;};
+	double getYHeading(){return hY;};
+	double getZHeading(){return hZ;};
 private:
 	void initialize();
 	int calibratie();

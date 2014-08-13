@@ -1,10 +1,12 @@
 #include <iostream>
 #include <string>
 #include <unistd.h>
+#include <cstdio>
 #include "adxl345.h"
 #include "mpu6050.h"
 #include "l3g4200d.h"
 #include "bmp085.h"
+#include "hmc5883l.h"
 #include <Kalman/kalman.h>
 
 // []
@@ -41,11 +43,19 @@ int main(int argc, char *argv[]){
 		std::cout<< "measured x: " << x << ", and estimated: " 
 << est << std::endl;
 	}
-*/
+
 
 	bmp085 bmp;
 	bmp.readSensorData();
 	double altitude = bmp.getAltitude();
 	std::cout << "Current altitude: " << altitude << std::endl;
+*/
 
+	hmc5883l hmc;
+	hmc.readSensorData();
+	double X = hmc.getXHeading();
+	double Y = hmc.getYHeading();
+	double Z = hmc.getZHeading();
+
+	printf("X: %f, Y: %f, Z: %f\n", X, Y, Z);
 }
