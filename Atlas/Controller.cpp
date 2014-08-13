@@ -13,23 +13,29 @@ Controller::Controller(){
 }
 
 void Controller::calcPWM(double *input, double *output) {
+    
+    for (int i=3; i<6; i++) {
+        std::cout << input[i] << " ";
+    }
+    std::cout << std::endl;
+    
     //alphadelen
 	ea[0] = refs[0] - input[3];  	// set new error
 	this->ea[2] += ea[0]*dt;
 	Ma = parameters[0]*ea[0] + parameters[1]*(ea[2]) + parameters[2]*(ea[0]-ea[1]);
-	ea[0] = this->ea[1];		// set old error
+	this->ea[1] = ea[0];		// set old error
 
 	//betadelen
 	eb[0] = refs[1] - input[4];  	// set new error
 	this->eb[2] += eb[0]*dt;
 	Mb = parameters[3]*eb[0] + parameters[4]*(eb[2]) + parameters[5]*(eb[0]-eb[1]);
-	eb[0] = this->eb[1];		// set old error
+	this->eb[1] = eb[0];		// set old error
 
 	//gammadelen
 	eg[0] = refs[2] - input[5];  	// set new error
 	this->eg[2] += eg[0]*dt;
 	Mg = parameters[6]*eg[0] + parameters[7]*(eg[2]) + parameters[8]*(eg[0]-eg[1]);
-	eg[0] = this->eg[1];		// set old error
+	this->eg[1] = eg[0];		// set old error
 
 
 	printf("Ma = %f, Mb = %f, Mg = %f, F = %f \n", Ma, Mb, Mg, F);
@@ -53,6 +59,8 @@ void Controller::calcPWM(double *input, double *output) {
             output[i]=100;
         }
     }
+    printf("LF = %f, RF = %f, RR = %f, RL = %f \n", output[0], output[1],output[2], output[3]);
+
 }
 
 void Controller::setReference(double *ref){
