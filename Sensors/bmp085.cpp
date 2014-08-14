@@ -77,7 +77,7 @@ int bmp085::readSensorData(){
 	}
 	else
 	{
-		int up = ((int) buf[0] << 16) | (int) buf[1] << 8 | (int) buf[2] >> (8-3); //uncompensated pressure reading
+		int up = ((int) buf[0] << 16) | (int) buf[1] << 8 | (int) buf[2] >> (8-oss); //uncompensated pressure reading
 		//int up = (((int)buf[0] << 16) + ((int)buf[1] << 8) + ((int)buf[2]) >> (8 - oss));
 		printf("Up = %d \n",up);
 	}
