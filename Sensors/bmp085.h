@@ -21,6 +21,7 @@ public:
 	double getAltitude() {return alt;}
 	double getTemperature() {return temp;}
 	double getPressure() {return pressure;}
+	int readTemperature();
 	short int i2cRead(char address);
 	~bmp085();
 

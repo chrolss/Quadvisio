@@ -62,6 +62,8 @@ void hmc5883l::initialize(){
    	}
 }
 
+
+
 int hmc5883l::readSensorData() {
 
 	buf[0] = 0x3D;
@@ -79,6 +81,9 @@ int hmc5883l::readSensorData() {
 	      	exit(1);
 	}
 
+
+	short int res = ((buf[0]<<8) & 0xFF00) | ((buf[1]>>8) & 0xFF);
+	std::cout << res << std::endl;
 
 	this->hX = ((short)buf[1]<<8) | (short) buf[0];
 	this->hY = ((short)buf[3]<<8) | (short) buf[2];

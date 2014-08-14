@@ -2,4 +2,4 @@
 
 echo "Building the sensor class project"
 
-g++ -O2 -I /home/root/Desktop/Quadvisio/ /home/root/Desktop/Quadvisio/Kalman/kalman.cpp sensors.cpp bmp085.cpp -o testSensor
+g++ -O2 -I /home/root/Desktop/Quadvisio/ /home/root/Desktop/Quadvisio/Kalman/kalman.cpp sensors.cpp hmc5883l.cpp -o testSensor
