@@ -7,7 +7,7 @@
 #include "l3g4200d.h"
 #include "bmp085.h"
 #include "hmc5883l.h"
-#include <Kalman/kalman.h>
+//#include <Kalman/kalman.h>
 
 // []
 // {}
@@ -56,8 +56,12 @@ int main(int argc, char *argv[]){
 
 */
 	hmc5883l hmc;
-	hmc.readSensorData();
-	double head = hmc.getXHeading();
-	printf("X: %f", head);
+	for (int i = 0; i<60; i++){
+		hmc.readSensorData();
+		double head = hmc.getXHeading();
+		printf("X: %f \n", head);
+		usleep(100000);
+	}
+
 
 }

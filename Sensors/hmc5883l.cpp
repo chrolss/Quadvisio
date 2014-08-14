@@ -31,6 +31,17 @@ int hmc5883l::findHeading(short _x, short _z){
 
 void hmc5883l::initialize(){
 
+	useconds_t dtime = 8; //delay for usleep
+	char write0[4]; // command to set reg 0 - AKA Configuration Register A
+	char write1[4]; // command to set reg 1 - AKA Configuration Register B
+	char write2[4]; // command to set reg 2 - AKA Mode Register
+	write0[0] = 0x00; // reg 00
+	write0[1] = 0x70; // average 8 samples, 15Hz output
+	write1[0] = 0x01; // reg 01
+	write1[1] = 0xA0; // gain 5
+	write2[0] = 0x02; // reg 02
+	write2[1] = 0x01; // mode single measurement
+
    	char *fileName = "/dev/i2c-1";
    	int address = 0x1e;					//korrekta addressen
    	char buf[10];
@@ -58,6 +69,16 @@ void hmc5883l::initialize(){
 
 
 int hmc5883l::readSensorData() {
+	useconds_t dtime = 8; //delay for usleep
+	char write0[4]; // command to set reg 0 - AKA Configuration Register A
+	char write1[4]; // command to set reg 1 - AKA Configuration Register B
+	char write2[4]; // command to set reg 2 - AKA Mode Register
+	write0[0] = 0x00; // reg 00
+	write0[1] = 0x70; // average 8 samples, 15Hz output
+	write1[0] = 0x01; // reg 01
+	write1[1] = 0xA0; // gain 5
+	write2[0] = 0x02; // reg 02
+	write2[1] = 0x01; // mode single measurement
 
 	if (write(fd,write0,2) != 2) {
 	   printf("Write to zero failed\n");
