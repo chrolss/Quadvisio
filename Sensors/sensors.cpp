@@ -57,10 +57,7 @@ int main(int argc, char *argv[]){
 */
 	hmc5883l hmc;
 	hmc.readSensorData();
-	double X = hmc.getXHeading();
-	double Y = hmc.getYHeading();
-	double Z = hmc.getZHeading();
-
-	printf("X: %f, Y: %f, Z: %f\n", X, Y, Z);
+	double head = hmc.getXHeading();
+	printf("X: %f", head);
 
 }

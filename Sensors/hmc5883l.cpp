@@ -2,6 +2,7 @@
 #include "hmc5883l.h"
 #include <stdio.h>
 #include <stdlib.h>
+#include <termios.h>
 #include <linux/i2c-dev.h>
 #include <fcntl.h>
 #include <string.h>
@@ -10,6 +11,7 @@
 #include <sys/stat.h>
 #include <unistd.h>
 #include <math.h>
+#include <time.h>
 
 using namespace std;
 
@@ -17,48 +19,39 @@ hmc5883l::hmc5883l() {
 	initialize();
 }
 
+int hmc5883l::findHeading(short _x, short _z){
+	if (_z > 0){
+		heading = k*_x + m;
+	}
+	else{
+		heading = 360 - k*_x - m;
+	}
+	return heading;
+}
+
 void hmc5883l::initialize(){
-	this-> fd = open(fileName, O_RDWR);  //fd blir en address till den öppna porten och måste vara en och samma genom hela klassen. Den får inte omdeklareras i readSensorData() och och måste då ha en this->
 
    	char *fileName = "/dev/i2c-1";
    	int address = 0x1e;					//korrekta addressen
-   	char buf[8];
+   	char buf[10];
 
-   	if ((fd = open(fileName, O_RDWR)) < 0) {               // Open port for reading and writing
-     		printf("Failed to open i2c port\n");
-      		exit(1);
-   	}
+   	this-> fd = open(fileName, O_RDWR);  //fd
 
    	if (ioctl(fd, I2C_SLAVE, address) < 0) {
       		printf("Unable to get bus access to talk to slave\n");
       		exit(1);
    	}
 
-   	buf[0] = 0x3C;                                       // wake up
-   	buf[1] = 0x00;
-   	buf[2] = 0x70;
-
-   	if ((write(fd, buf, 3)) != 3) {                        // Write commands to the i2c port
-      		printf("Error writing to i2c slave\n");
-      		exit(1);
+   	if (write(fd,write0,2) != 2) {
+   	   printf("Write to zero failed\n");
    	}
-
-   	buf[0] = 0x3C;                                       // Set gain to 5
-   	buf[1] = 0x01;
-   	buf[2] = 0xA0;
-
-   	if ((write(fd, buf, 3)) != 3) {                        // Write commands to the i2c port
-      		printf("Error writing to i2c slave\n");
-      		exit(1);
+   	//Set reg 1
+   	if (write(fd,write1,2) != 2) {
+   	   printf("Write to one failed\n");
    	}
-
-   	buf[0] = 0x3C;                                       // Set continous measuring mode
-   	buf[1] = 0x02;
-   	buf[2] = 0x00;
-
-   	if ((write(fd, buf, 3)) != 3) {                        // Write commands to the i2c port
-   	      	printf("Error writing to i2c slave\n");
-   	      	exit(1);
+   	//Set reg 2
+   	if (write(fd,write2,2) != 2) {
+   	   printf("Write to two failed\n");
    	}
 }
 
@@ -66,29 +59,31 @@ void hmc5883l::initialize(){
 
 int hmc5883l::readSensorData() {
 
-	buf[0] = 0x3D;
-	buf[1] = 0x06;
-	                                     			// Skriv "read-kod" och till vilken address vi vill läsa ifrån
-	if ((write(fd, buf, 2)) != 2) {                        // Send the register to read from
-	    printf("Error writing to i2c slave\n");
-	    exit(1);
+	if (write(fd,write0,2) != 2) {
+	   printf("Write to zero failed\n");
+	}
+	//Set reg 1
+	if (write(fd,write1,2) != 2) {
+	   printf("Write to one failed\n");
+	}
+	//Set reg 2
+	if (write(fd,write2,2) != 2) {
+	   printf("Write to two failed\n");
 	}
 
-	usleep(1000);
-	memset(&buf,0,sizeof(buf));
-	if (read(fd, buf, 6) != 6) {                        // Read back data into buf[]
-	      	printf("Unable to read from slave\n");
-	      	exit(1);
+	//datasheet says to delay here.
+	if ( usleep(dtime)  < 0) {
+	   printf("sleep error\n");
 	}
 
-
-	short int res = ((buf[0]<<8) & 0xFF00) | ((buf[1]>>8) & 0xFF);
-	std::cout << res << std::endl;
-
-	this->hX = ((short)buf[1]<<8) | (short) buf[0];
-	this->hY = ((short)buf[3]<<8) | (short) buf[2];
-	this->hZ = ((short)buf[5]<<8) | (short) buf[4];
-
+	//read the 6 data.
+	if (read(fd, buf, 6) != 6) {
+	   printf("Read failed\n");
+	}
+	short hX = ((short)buf[1]<<8) | (short) buf[0];
+	short hY = ((short)buf[3]<<8) | (short) buf[2];
+	short hZ = ((short)buf[5]<<8) | (short) buf[4];
+	this->heading = findHeading(hX,hZ);
 	return 0;
 }
 
