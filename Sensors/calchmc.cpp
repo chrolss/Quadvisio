@@ -221,7 +221,6 @@ public:
            ((float)measuredMagZ * magScale[ZAXIS] + magOffset[ZAXIS]) * sinRoll;
 
     tmp  = sqrt(magX * magX + magY * magY);
-
     hdgX = magX / tmp;
     hdgY = -magY / tmp;
 

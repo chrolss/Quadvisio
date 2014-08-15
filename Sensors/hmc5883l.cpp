@@ -25,15 +25,16 @@ double hmc5883l::findHeading(double roll, double pitch){	//user input roll and p
 	sinRoll = sin(roll);
 	sinPitch = sin(pitch);
 
-	hX = ((float)measuredMagX * magScaleX + magOffsetX) * cosPitch + \
-	     ((float)measuredMagY * magScaleY + magOffsetY) * sinRoll * sinPitch + \
-	     ((float)measuredMagZ * magScaleZ + magOffsetZ) * cosRoll * sinPitch;
+	hX = ((double)measuredMagX * magScaleX + magOffsetX) * cosPitch + \
+	     ((double)measuredMagY * magScaleY + magOffsetY) * sinRoll * sinPitch + \
+	     ((double)measuredMagZ * magScaleZ + magOffsetZ) * cosRoll * sinPitch;
 
-    hY = ((float)measuredMagY * magScaleY + magOffsetY) * cosRoll - \
-         ((float)measuredMagZ * magScaleZ + magOffsetZ) * sinRoll;
+    hY = ((double)measuredMagY * magScaleY + magOffsetY) * cosRoll - \
+         ((double)measuredMagZ * magScaleZ + magOffsetZ) * sinRoll;
 
     tmp = sqrt(hX*hX + hY*hY);
 
+    printf("X mag: %f \n", measuredMagX);
     this->headingX = hX/tmp;
     this->headingY = -hY/tmp;
 
@@ -78,12 +79,12 @@ void hmc5883l::initialize(){
 
    	// Find offset and scale readings
 
-   	this->magScaleX = 2.0 / (1 - (-1));
-   	this->magOffsetX = -(magScaleX * (-1)) - 1;
-   	this->magScaleY = 2.0 / (1 - (-1));
-   	this->magOffsetY = -(magScaleY * (-1)) - 1;
-   	this->magScaleZ = 2.0 / (1 - (-1));
-   	this->magOffsetZ = -(magScaleZ * (-1)) - 1;
+   	this->magScaleX = 2.0 / (1.0 - (-1.0));
+   	this->magOffsetX = -(magScaleX * (-1.0)) - 1.0;
+   	this->magScaleY = 2.0 / (1.0 - (-1.0));
+   	this->magOffsetY = -(magScaleY * (-1.0)) - 1.0;
+   	this->magScaleZ = 2.0 / (1.0 - (-1.0));
+   	this->magOffsetZ = -(magScaleZ * (-1.0)) - 1.0;
 }
 
 int hmc5883l::calibrate(){
@@ -123,9 +124,9 @@ int hmc5883l::readSensorData() {
 	if (read(fd, buf, 6) != 6) {
 	   printf("Read failed\n");
 	}
-	this->measuredMagX = ((short)buf[1]<<8) | (short) buf[0];	//kanske ska byta plats på buf[]
-	this->measuredMagZ = ((short)buf[3]<<8) | (short) buf[2];	//z kommer föra y av ngn anledning
-	this->measuredMagY = ((short)buf[5]<<8) | (short) buf[4];
+	this->measuredMagX = ((short)buf[1]<<8) | (short) buf[0];	//byta plats gav inget
+	this->measuredMagZ = -((short)buf[3]<<8) | (short) buf[2];	//z kommer föra y av ngn anledning
+	this->measuredMagY = -((short)buf[5]<<8) | (short) buf[4];
 
 	return 0;
 }

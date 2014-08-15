@@ -56,8 +56,9 @@ int main(int argc, char *argv[]){
 
 */
 	hmc5883l hmc;
-	for (int i = 0; i<60; i++){
+	for (int i = 0; i<1000; i++){
 		hmc.readSensorData();
+		hmc.findHeading(0.0,0.0);	//simulate zero roll zero pitch
 		double headX = hmc.getXHeading();
 		double headY = hmc.getYHeading();
 		printf("X: %f, Y: %f \n", headX, headY);
