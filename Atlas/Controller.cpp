@@ -15,8 +15,9 @@ Controller::Controller(){
 void Controller::calcPWM(double *input, double *output) {
     
     for (int i=3; i<6; i++) {
-        std::cout << input[i] << " ";
+        std::cout << "Deg: " << input[i] << " ";
         input[i] = input[i]*M_PI/180;
+        std::cout << "Rad: " << input[i] << " ";
     }
     std::cout << std::endl;
     
