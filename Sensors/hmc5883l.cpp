@@ -19,14 +19,25 @@ hmc5883l::hmc5883l() {
 	initialize();
 }
 
-int hmc5883l::findHeading(short _x, short _z){
-	if (_z > 0){
-		heading = k*_x + m;
-	}
-	else{
-		heading = 360 - k*_x - m;
-	}
-	return heading;
+double hmc5883l::findHeading(double roll, double pitch){	//user input roll and pitch
+	cosRoll = cos(roll);	//given in radians
+	cosPitch = cos(pitch);
+	sinRoll = sin(roll);
+	sinPitch = sin(pitch);
+
+	hX = ((float)measuredMagX * magScaleX + magOffsetX) * cosPitch + \
+	     ((float)measuredMagY * magScaleY + magOffsetY) * sinRoll * sinPitch + \
+	     ((float)measuredMagZ * magScaleZ + magOffsetZ) * cosRoll * sinPitch;
+
+    hY = ((float)measuredMagY * magScaleY + magOffsetY) * cosRoll - \
+         ((float)measuredMagZ * magScaleZ + magOffsetZ) * sinRoll;
+
+    tmp = sqrt(hX*hX + hY*hY);
+
+    this->headingX = hX/tmp;
+    this->headingY = -hY/tmp;
+
+    return 0.0;
 }
 
 void hmc5883l::initialize(){
@@ -64,9 +75,20 @@ void hmc5883l::initialize(){
    	if (write(fd,write2,2) != 2) {
    	   printf("Write to two failed\n");
    	}
+
+   	// Find offset and scale readings
+
+   	this->magScaleX = 2.0 / (1 - (-1));
+   	this->magOffsetX = -(magScaleX * (-1)) - 1;
+   	this->magScaleY = 2.0 / (1 - (-1));
+   	this->magOffsetY = -(magScaleY * (-1)) - 1;
+   	this->magScaleZ = 2.0 / (1 - (-1));
+   	this->magOffsetZ = -(magScaleZ * (-1)) - 1;
 }
 
-
+int hmc5883l::calibrate(){
+	return 0;
+}
 
 int hmc5883l::readSensorData() {
 	useconds_t dtime = 8; //delay for usleep
@@ -101,10 +123,10 @@ int hmc5883l::readSensorData() {
 	if (read(fd, buf, 6) != 6) {
 	   printf("Read failed\n");
 	}
-	short hX = ((short)buf[1]<<8) | (short) buf[0];
-	short hY = ((short)buf[3]<<8) | (short) buf[2];
-	short hZ = ((short)buf[5]<<8) | (short) buf[4];
-	this->heading = findHeading(hX,hZ);
+	this->measuredMagX = ((short)buf[1]<<8) | (short) buf[0];	//kanske ska byta plats på buf[]
+	this->measuredMagZ = ((short)buf[3]<<8) | (short) buf[2];	//z kommer föra y av ngn anledning
+	this->measuredMagY = ((short)buf[5]<<8) | (short) buf[4];
+
 	return 0;
 }
 
