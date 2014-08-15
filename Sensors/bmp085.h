@@ -20,6 +20,8 @@ public:
 	int readSensorData();
 	double getAltitude() {return alt;}
 	double getTemperature() {return temp;}
+	double getPressure() {return pressure;}
+	int readTemperature();
 	short int i2cRead(char address);
 	~bmp085();
 
@@ -30,7 +32,7 @@ private:
 	int fd;
 	char *fileName;
 
-	double alt, temp;
+	double alt, temp, pressure;
 
 	short int ac1;
 	short int ac2;

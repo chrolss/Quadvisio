@@ -1,16 +1,20 @@
 #ifndef HMC5883L_H
 #define HMC5883L_H
+#define k 0.0041175
+#define m 235.62
 
 class hmc5883l{
 public:
 	hmc5883l();
 	int readSensorData();
-	double getXHeading(){return hX;};
+	int findHeading(short _x, short _z);
+	double getXHeading(){return heading;};
 	double getYHeading(){return hY;};
 	double getZHeading(){return hZ;};
 private:
 	void initialize();
 	int calibratie();
+
 
 	double heading;
 	char i2c_bus;

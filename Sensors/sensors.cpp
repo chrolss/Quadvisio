@@ -7,7 +7,7 @@
 #include "l3g4200d.h"
 #include "bmp085.h"
 #include "hmc5883l.h"
-#include <Kalman/kalman.h>
+//#include <Kalman/kalman.h>
 
 // []
 // {}
@@ -47,15 +47,21 @@ int main(int argc, char *argv[]){
 
 	bmp085 bmp;
 	bmp.readSensorData();
+	bmp.readTemperature();
 	double altitude = bmp.getAltitude();
-	std::cout << "Current altitude: " << altitude << std::endl;
+	double pressure = bmp.getPressure();
+	double temperature = bmp.getTemperature();
+	std::cout << "Current altitude: " << altitude << " Current pressure: " << pressure << std::endl;
+	std::cout << "Temperature: " << temperature << std::endl;
+
 */
-
 	hmc5883l hmc;
-	hmc.readSensorData();
-	double X = hmc.getXHeading();
-	double Y = hmc.getYHeading();
-	double Z = hmc.getZHeading();
+	for (int i = 0; i<60; i++){
+		hmc.readSensorData();
+		double head = hmc.getXHeading();
+		printf("X: %f \n", head);
+		usleep(100000);
+	}
 
-	printf("X: %f, Y: %f, Z: %f\n", X, Y, Z);
+
 }
