@@ -49,7 +49,9 @@ void Controller::calcPWM(double *input, double *output) {
     output[2] = 0.25*(F*CONST1 - Mb*CONST2 + Mg*CONST3);
     output[3] = 0.25*(F*CONST1 + Ma*CONST2 - Mg*CONST3);
     
-    
+    printf("Before saturation \n");
+    printf("LF = %f, RF = %f, RR = %f, RL = %f \n", output[0], output[1],output[2], output[3]);
+
     // Make sure output is between 0-100
     for (int i=0; i<4; i++) {
         if (output[i]<0) {
