@@ -16,7 +16,7 @@
 #define THRUST_CONSTANT 0.0003
 #define ARM_RADIUS 0.176
 #define DRAG_CONSTANT 9.9768e-8
-#define dt 0.02	//påhittad
+#define dt 0.01	//påhittad
 
 #define CONST1 3333.33
 #define CONST2 37878

@@ -16,6 +16,7 @@ void Controller::calcPWM(double *input, double *output) {
     
     for (int i=3; i<6; i++) {
         std::cout << input[i] << " ";
+        input[i] = input[i]*M_PI/180;
     }
     std::cout << std::endl;
     

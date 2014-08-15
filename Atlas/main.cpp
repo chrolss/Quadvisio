@@ -50,7 +50,6 @@ void initailize(){
         runAtlas = true;
     }
     
-    
     ref[0]=0.0;
     ref[1]=0.0;
     ref[2]=0.0;
