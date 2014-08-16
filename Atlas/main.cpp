@@ -35,6 +35,7 @@ double loopTime;
 int Hz = 200;
 int loopSleep=0;
 double ref[3];
+double params[9];
 
 void initailize(){
     for (int i =0 ; i<6; i++) {
@@ -55,9 +56,24 @@ void initailize(){
     ref[0]=0.0;
     ref[1]=0.0;
     ref[2]=0.0;
-    
+
+    /*
+
+    params[0] = 0.00009;
+    params[1] = 0.0; 	//0.00003;
+    params[2] = 0.00002;
+    params[3] = 0.00009;
+    params[4] = 0.0;	//0.00003;
+    params[5] = 0.00002;
+    params[6] = 0.00006;
+    params[7] = 0.0;	//0.00003;
+    params[8] = 0.00002;
+	controller->setParameters(params);
+    */
+
     controller->setReference(ref);
     
+
     runAtlas = true;
 }
 
@@ -65,7 +81,7 @@ void loop(){
     std::cout << "Starting Loop" << std::endl;
     std::chrono::time_point<std::chrono::high_resolution_clock> start;
     
-    while (runAtlas && counter<2500) {
+    while (runAtlas && counter<6000) {
         
         // Start clock
         auto start = std::chrono::high_resolution_clock::now();
@@ -83,13 +99,13 @@ void loop(){
             communicate->msgSend=true;
         }
         
-        std::cout << "Calculate control action" << std::endl;
+        //std::cout << "Calculate control action" << std::endl;
         // Calculate control action
         controller->setF(communicate->verticalThrust);
         controller->setParameters(communicate->pidParam);
         controller->calcPWM(sInput, sOutput);
         
-        std::cout << "Setting PWM values" << std::endl;
+        //std::cout << "Setting PWM values" << std::endl;
         // Send PWM values to motors
         if (communicate->runMotor==true) {
             motor->setPWM(sOutput);

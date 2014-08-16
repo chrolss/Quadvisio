@@ -135,7 +135,7 @@ void Com::sendImg() {
 
 void Com::readMsg() {
     std::string msg(recvBuf);
-    std::cout << msg << std::endl;
+    //std::cout << msg << std::endl;
     pos = 0;
     
     int i=0;
