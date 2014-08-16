@@ -82,7 +82,7 @@ void SensorManager::readDMP(double *input) {
         mpu->dmpGetAccel(&aa, fifoBuffer);
         mpu->dmpGetGravity(&gravity, &q);
         mpu->dmpGetLinearAccel(&aaReal, &aa, &gravity);
-        printf("areal %6d %6d %6d    ", aaReal.x/4096, aaReal.y/4096, aaReal.z/4096);
+        printf("areal %6f %6f %6f    ", double(aaReal.x/4096.0), double(aaReal.y/4096.0), double(aaReal.z/4096.0));
         
         printf("\n");
 
