@@ -51,15 +51,6 @@ bool SensorManager::testMPU() {
     return false;
 }
 
-/*
-void SensorManager::readMPU(double *input) {
-    
-    mpu->getMotion6(&input[0], &input[1], &input[2], &input[3], &input[4], &input[5]);
-    
-    printf("X: %f\nY: %f\n Z: %f\nRoll: %f\nPitch: %f\nYaw %f\n\n",input[0],input[1],input[2],input[3],input[4],input[5]);
-}
-*/
-
 void SensorManager::readDMP(double *input) {
     if (!dmpReady) {
         return;
@@ -70,9 +61,10 @@ void SensorManager::readDMP(double *input) {
     if (fifoCount == 1024) {
         mpu->resetFIFO();
         printf("FIFO overflow! Reseting...\n");
+        return;
     }
     
-    while (fifoCount<84) {
+    while (fifoCount<42) {
         fifoCount = mpu->getFIFOCount();
     }
     if (fifoCount>=42) {
@@ -82,24 +74,17 @@ void SensorManager::readDMP(double *input) {
         mpu->dmpGetQuaternion(&q, fifoBuffer);
         mpu->dmpGetGravity(&gravity, &q);
         mpu->dmpGetYawPitchRoll(ypr, &q, &gravity);
-        //printf("ypr  %7.2f %7.2f %7.2f    ", ypr[0] * 180/M_PI, ypr[1] * 180/M_PI, ypr[2] * 180/M_PI);
+        printf("ypr  %7.2f %7.2f %7.2f    ", ypr[0] * 180/M_PI, ypr[1] * 180/M_PI, ypr[2] * 180/M_PI);
         
-        //printf("\n");
+        printf("\n");
         
         mpu->dmpGetQuaternion(&q, fifoBuffer);
         mpu->dmpGetAccel(&aa, fifoBuffer);
         mpu->dmpGetGravity(&gravity, &q);
         mpu->dmpGetLinearAccel(&aaReal, &aa, &gravity);
-        //printf("areal %6d %6d %6d    ", aaReal.x, aaReal.y, aaReal.z);
+        printf("areal %6f %6f %6f    ", double(aaReal.x/4096.0), double(aaReal.y/4096.0), double(aaReal.z/4096.0));
         
-        //printf("\n");
-        
-        input[0] = aaReal.x;
-        input[1] = aaReal.y;
-        input[2] = aaReal.z;
-        input[3] = ypr[2] * 180/M_PI; // Roll
-        input[4] = ypr[1] * 180/M_PI; // Pitch
-        input[5] = ypr[0] * 180/M_PI; // Yaw
+        printf("\n");
 
     }
     else {
