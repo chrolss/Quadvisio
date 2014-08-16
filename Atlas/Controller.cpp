@@ -49,8 +49,8 @@ void Controller::calcPWM(double *input, double *output) {
 	//printf("P: %f, I: %f, D: %f, e: %f\n",parameters[6]*eg[0], parameters[7]*(eg[2]), parameters[8]*(eg[0]-eg[1]),eg[0]);
 	//printf("Ma = %f, Mb = %f, Mg = %f, F = %f \n", Ma, Mb, Mg, F);
     
-    Ma = Ma*COS45 - Mb*SIN45;
-    Mb = Ma*SIN45 + Mb*COS45;
+    Ma = 0.0*(Ma*COS45 - Mb*SIN45);
+    Mb = 0.0*(Ma*SIN45 + Mb*COS45);
     Mg = 0.0;
 
     output[0] = 0.25*(F*CONST1 + Mb*CONST2 + Mg*CONST3);
