@@ -61,6 +61,7 @@ void SensorManager::readDMP(double *input) {
     if (fifoCount == 1024) {
         mpu->resetFIFO();
         printf("FIFO overflow! Reseting...\n");
+        return;
     }
     
     while (fifoCount<42) {
