@@ -110,11 +110,7 @@ void loop(){
         if (communicate->runMotor==true) {
             motor->setPWM(sOutput);
         }
-        else if (motorIdle==false) {
-            motor->setPWM(idleMotorValues);
-        }
         else {
-            motorIdle=true;
             motor->setPWM(idleMotorValues);
         }
 

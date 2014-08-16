@@ -29,7 +29,7 @@ void Controller::calcPWM(double *input, double *output) {
 	Ma = parameters[0]*ea[0] + parameters[1]*(ea[2]) + parameters[2]*(ea[0]-ea[1]);
 	this->ea[1] = ea[0];		// set old error
 
-	printf("P: %f, I: %f, D: %f, e: %f\n",parameters[0]*ea[0], parameters[1]*(ea[2]), parameters[2]*(ea[0]-ea[1]),ea[0]);
+	//printf("P: %f, I: %f, D: %f, e: %f\n",parameters[0]*ea[0], parameters[1]*(ea[2]), parameters[2]*(ea[0]-ea[1]),ea[0]);
 
 	//betadelen
 	eb[0] = refs[1] - input[4];  	// set new error
@@ -37,7 +37,7 @@ void Controller::calcPWM(double *input, double *output) {
 	Mb = parameters[3]*eb[0] + parameters[4]*(eb[2]) + parameters[5]*(eb[0]-eb[1]);
 	this->eb[1] = eb[0];		// set old error
 
-	printf("P: %f, I: %f, D: %f, e: %f\n",parameters[3]*eb[0], parameters[4]*(eb[2]), parameters[5]*(eb[0]-eb[1]),eb[0]);
+	//printf("P: %f, I: %f, D: %f, e: %f\n",parameters[3]*eb[0], parameters[4]*(eb[2]), parameters[5]*(eb[0]-eb[1]),eb[0]);
 
 
 	//gammadelen
@@ -46,7 +46,7 @@ void Controller::calcPWM(double *input, double *output) {
 	Mg = parameters[6]*eg[0] + parameters[7]*(eg[2]) + parameters[8]*(eg[0]-eg[1]);
 	this->eg[1] = eg[0];		// set old error
 
-	printf("P: %f, I: %f, D: %f, e: %f\n",parameters[6]*eg[0], parameters[7]*(eg[2]), parameters[8]*(eg[0]-eg[1]),eg[0]);
+	//printf("P: %f, I: %f, D: %f, e: %f\n",parameters[6]*eg[0], parameters[7]*(eg[2]), parameters[8]*(eg[0]-eg[1]),eg[0]);
 	//printf("Ma = %f, Mb = %f, Mg = %f, F = %f \n", Ma, Mb, Mg, F);
     
     Ma = Ma*COS45 - Mb*SIN45;
