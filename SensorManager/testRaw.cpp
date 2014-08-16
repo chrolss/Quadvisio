@@ -50,7 +50,9 @@ int main(int argc, const char * argv[])
         std::cout << duration << std::endl;
         
         loopSleep = 1000000/Hz - (int)duration;
-        usleep(loopSleep);
+        if (loopSleep>0) {
+            usleep(loopSleep);
+        }
         auto duration2 = std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::high_resolution_clock::now() - start).count();
         runTime = double(1000000)/(duration2);
         std::cout << "Running at: " << runTime << "Hz" << std::endl;
