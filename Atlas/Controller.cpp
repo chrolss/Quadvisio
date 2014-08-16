@@ -9,17 +9,19 @@
 #include "Controller.h"
 
 Controller::Controller(){
-    
+    this->ea[1] = 0.0;
+    this->eb[1] = 0.0;
+    this->eg[1]	= 0.0;
 }
 
 void Controller::calcPWM(double *input, double *output) {
     
     for (int i=3; i<6; i++) {
-        std::cout << "Deg: " << input[i] << " ";
+        //std::cout << "Deg: " << input[i] << " ";
         input[i] = input[i]*M_PI/180;
-        std::cout << "Rad: " << input[i] << " ";
+        //std::cout << "Rad: " << input[i] << " ";
     }
-    std::cout << std::endl;
+    //std::cout << std::endl;
     
     //alphadelen
 	ea[0] = refs[0] - input[3];  	// set new error
@@ -27,11 +29,16 @@ void Controller::calcPWM(double *input, double *output) {
 	Ma = parameters[0]*ea[0] + parameters[1]*(ea[2]) + parameters[2]*(ea[0]-ea[1]);
 	this->ea[1] = ea[0];		// set old error
 
+	printf("P: %f, I: %f, D: %f, e: %f\n",parameters[0]*ea[0], parameters[1]*(ea[2]), parameters[2]*(ea[0]-ea[1]),ea[0]);
+
 	//betadelen
 	eb[0] = refs[1] - input[4];  	// set new error
 	this->eb[2] += eb[0]*dt;
 	Mb = parameters[3]*eb[0] + parameters[4]*(eb[2]) + parameters[5]*(eb[0]-eb[1]);
 	this->eb[1] = eb[0];		// set old error
+
+	printf("P: %f, I: %f, D: %f, e: %f\n",parameters[3]*eb[0], parameters[4]*(eb[2]), parameters[5]*(eb[0]-eb[1]),eb[0]);
+
 
 	//gammadelen
 	eg[0] = refs[2] - input[5];  	// set new error
@@ -39,19 +46,20 @@ void Controller::calcPWM(double *input, double *output) {
 	Mg = parameters[6]*eg[0] + parameters[7]*(eg[2]) + parameters[8]*(eg[0]-eg[1]);
 	this->eg[1] = eg[0];		// set old error
 
-
-	printf("Ma = %f, Mb = %f, Mg = %f, F = %f \n", Ma, Mb, Mg, F);
+	printf("P: %f, I: %f, D: %f, e: %f\n",parameters[6]*eg[0], parameters[7]*(eg[2]), parameters[8]*(eg[0]-eg[1]),eg[0]);
+	//printf("Ma = %f, Mb = %f, Mg = %f, F = %f \n", Ma, Mb, Mg, F);
     
     Ma = Ma*COS45 - Mb*SIN45;
     Mb = Ma*SIN45 + Mb*COS45;
+    Mg = 0.0;
 
     output[0] = 0.25*(F*CONST1 + Mb*CONST2 + Mg*CONST3);
     output[1] = 0.25*(F*CONST1 - Ma*CONST2 - CONST3*Mg);
     output[2] = 0.25*(F*CONST1 - Mb*CONST2 + Mg*CONST3);
     output[3] = 0.25*(F*CONST1 + Ma*CONST2 - Mg*CONST3);
     
-    printf("Before saturation \n");
-    printf("LF = %f, RF = %f, RR = %f, RL = %f \n", output[0], output[1],output[2], output[3]);
+    //printf("Before saturation \n");
+    //printf("LF = %f, RF = %f, RR = %f, RL = %f \n", output[0], output[1],output[2], output[3]);
 
     // Make sure output is between 0-100
     for (int i=0; i<4; i++) {
@@ -59,11 +67,12 @@ void Controller::calcPWM(double *input, double *output) {
             output[i]=0.0;
         }
         output[i]=sqrt(output[i]);
+        //printf("Squared value: %f", output[i]);
         if (output[i]>100) {
             output[i]=100;
         }
     }
-    printf("LF = %f, RF = %f, RR = %f, RL = %f \n", output[0], output[1],output[2], output[3]);
+    printf("LF = %f, RF = %f, RR = %f, LR = %f \n", output[0], output[1],output[2], output[3]);
 
 }
 

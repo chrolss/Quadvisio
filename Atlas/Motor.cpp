@@ -35,8 +35,8 @@ void Motor::setPWM(double *sOutput) {
     
 	pwm->setDuty("P9_42", mapper(sOutput[0])); // Left Front
 	pwm->setDuty("P9_14", mapper(sOutput[1])); // Right Front
-	pwm->setDuty("P9_21", mapper(sOutput[2])); // Right Rear
-	pwm->setDuty("P8_13", mapper(sOutput[3])); // Left Rear
+	pwm->setDuty("P8_13", mapper(sOutput[2])); // Right Rear
+	pwm->setDuty("P9_21", mapper(sOutput[3])); // Left Rear
 }
 
 int Motor::mapper(double _d) {
