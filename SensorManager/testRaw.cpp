@@ -13,7 +13,7 @@ uint8_t devStatus;
 bool runDMP=false;
 
 double runTime;
-int Hz = 70;
+int Hz = 75;
 int loopSleep;
 
 std::chrono::time_point<std::chrono::high_resolution_clock> start;
@@ -46,8 +46,6 @@ int main(int argc, const char * argv[])
         auto start = std::chrono::high_resolution_clock::now();
         sm.readDMP(input);
         auto duration = std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::high_resolution_clock::now() - start).count();
-        
-        std::cout << duration << std::endl;
         
         loopSleep = 1000000/Hz - (int)duration;
         if (loopSleep>0) {
