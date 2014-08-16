@@ -13,7 +13,7 @@ uint8_t devStatus;
 bool runDMP=false;
 
 double runTime;
-int Hz = 130;
+int Hz = 70;
 int loopSleep;
 
 std::chrono::time_point<std::chrono::high_resolution_clock> start;
