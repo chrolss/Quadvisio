@@ -4,12 +4,19 @@
 #include <unistd.h>
 #include <stdint.h>
 #include <string.h>
+#include <chrono>
 
 #include "SensorManager.h"
 
 double input[6];
 uint8_t devStatus;
 bool runDMP=false;
+
+double runTime;
+int Hz = 130;
+int loopSleep;
+
+std::chrono::time_point<std::chrono::high_resolution_clock> start;
 
 int main(int argc, const char * argv[])
 {
@@ -36,7 +43,17 @@ int main(int argc, const char * argv[])
     }
     
     while (runDMP) {
+        auto start = std::chrono::high_resolution_clock::now();
         sm.readDMP(input);
+        auto duration = std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::high_resolution_clock::now() - start).count();
+        
+        std::cout << duration << std::endl;
+        
+        loopSleep = 1000000/Hz - (int)duration;
+        usleep(loopSleep);
+        auto duration2 = std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::high_resolution_clock::now() - start).count();
+        runTime = double(1000000)/(duration2);
+        std::cout << "Running at: " << runTime << "Hz" << std::endl;
     }
     /*
     if (i==1){
