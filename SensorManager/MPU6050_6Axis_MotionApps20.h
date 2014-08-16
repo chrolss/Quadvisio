@@ -368,7 +368,7 @@ uint8_t MPU6050::dmpInitialize() {
             setIntEnabled(0x12);
 
             DEBUG_PRINTLN(F("Setting sample rate to 100Hz..."));
-            setRate(9); // 1khz / (1 + 4) = 200 Hz
+            setRate(19); // 1khz / (1 + 4) = 200 Hz
 
             DEBUG_PRINTLN(F("Setting external frame sync to TEMP_OUT_L[0]..."));
             setExternalFrameSync(MPU6050_EXT_SYNC_TEMP_OUT_L);
