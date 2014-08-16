@@ -51,15 +51,6 @@ bool SensorManager::testMPU() {
     return false;
 }
 
-/*
-void SensorManager::readMPU(double *input) {
-    
-    mpu->getMotion6(&input[0], &input[1], &input[2], &input[3], &input[4], &input[5]);
-    
-    printf("X: %f\nY: %f\n Z: %f\nRoll: %f\nPitch: %f\nYaw %f\n\n",input[0],input[1],input[2],input[3],input[4],input[5]);
-}
- */
-
 void SensorManager::readDMP(double *input) {
     if (!dmpReady) {
         return;
@@ -90,7 +81,7 @@ void SensorManager::readDMP(double *input) {
         mpu->dmpGetAccel(&aa, fifoBuffer);
         mpu->dmpGetGravity(&gravity, &q);
         mpu->dmpGetLinearAccel(&aaReal, &aa, &gravity);
-        printf("areal %6d %6d %6d    ", aaReal.x, aaReal.y, aaReal.z);
+        printf("areal %6d %6d %6d    ", aaReal.x/4096, aaReal.y/4096, aaReal.z/4096);
         
         printf("\n");
 

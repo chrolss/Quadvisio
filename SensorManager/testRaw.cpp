@@ -13,7 +13,7 @@ uint8_t devStatus;
 bool runDMP=false;
 
 double runTime;
-int Hz = 130;
+int Hz = 60;
 int loopSleep;
 
 std::chrono::time_point<std::chrono::high_resolution_clock> start;
@@ -55,11 +55,4 @@ int main(int argc, const char * argv[])
         runTime = double(1000000)/(duration2);
         std::cout << "Running at: " << runTime << "Hz" << std::endl;
     }
-    /*
-    if (i==1){
-        while (true) {
-            sm.readMPU(input);
-        }
-    }
-    */
 }
