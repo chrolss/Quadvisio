@@ -24,7 +24,9 @@ Com *communicate;
 Motor *motor;
 double sInput[6];
 double sOutput[4];
+double idleMotorValues[] = {0.0, 0.0, 0.0, 0.0};
 bool runAtlas=false;
+bool motorIdle=false;
 int counter = 0;
 int vidCount = 0;
 
@@ -89,7 +91,16 @@ void loop(){
         
         std::cout << "Setting PWM values" << std::endl;
         // Send PWM values to motors
-        motor->setPWM(sOutput);
+        if (communicate->runMotor==true) {
+            motor->setPWM(sOutput);
+        }
+        else if (motorIdle==false) {
+            motor->setPWM(idleMotorValues);
+        }
+        else {
+            motorIdle=true;
+            motor->setPWM(idleMotorValues);
+        }
 
         vidCount++;
         counter++;

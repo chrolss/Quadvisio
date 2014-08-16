@@ -12,6 +12,7 @@ Com::Com(){
     msgSend=false;
     imgSend=false;
     verticalThrust=0;
+    runMotor=false;
     
     output[0]=0.0;
     output[1]=0.0;
@@ -146,12 +147,21 @@ void Com::readMsg() {
     }
     stringList[11] = msg;
     
-    verticalThrust = atoi(stringList[0].c_str());
-    int video = atoi(stringList[1].c_str());
-    int fps = atoi(stringList[2].c_str());
+    int runMotorValue = atoi(stringList[0].c_str());
+    verticalThrust = atoi(stringList[1].c_str());
+    int video = atoi(stringList[2].c_str());
+    int fps = atoi(stringList[3].c_str());
         
-    for (int j=3; j<12; j++) {
-        pidParam[j-3] = atof(stringList[j].c_str());
+    for (int j=4; j<13; j++) {
+        pidParam[j-4] = atof(stringList[j].c_str());
+    }
+    
+    if (runMotorValue==1) {
+        runMotor=true;
+    }
+    
+    else {
+        runMotor=false;
     }
     
     if (video==1) {

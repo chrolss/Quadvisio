@@ -43,6 +43,7 @@ public:
     bool msgSend;
     bool reciveMsg;
     bool videoStream=false;
+    bool runMotor;
     
     double output[6];
     int verticalThrust, imgSendRate;
@@ -64,7 +65,7 @@ private:
     cv::VideoCapture cap;
     
     size_t pos;
-    std::string stringList[12];
+    std::string stringList[13];
     std::string delimiter = ":";
     std::string token;
 
