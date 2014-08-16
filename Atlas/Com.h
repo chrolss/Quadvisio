@@ -58,7 +58,7 @@ private:
     int sockfd, newsockfd, portno;
     socklen_t clilen;
     char buffer[256];
-    char recvBuf[53];
+    char recvBuf[55];
     struct sockaddr_in serv_addr, cli_addr;
     std::ostringstream ostr;
     

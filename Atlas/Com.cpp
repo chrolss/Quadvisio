@@ -79,7 +79,7 @@ void Com::Listen()
         }
         
         if (reciveMsg) {
-            ssize_t numbytes = recv(newsockfd, recvBuf, 52, 0);
+            ssize_t numbytes = recv(newsockfd, recvBuf, 54, 0);
             if (numbytes==-1) {
                 perror("recive");
             }
