@@ -19,11 +19,11 @@
 #define dt 0.02	//påhittad
 
 #define CONST1 3333.33
-#define CONST2 37878
+#define CONST2 37878.7
 #define CONST3 1e7
 
-#define COS45 0.7071
-#define SIN45 0.7071
+#define COS45 0.7071067812
+#define SIN45 0.7071067812
 
 class Controller{
     
@@ -32,12 +32,13 @@ public:
     void calcPWM(double *input, double *output);
     void setParameters(double *params);
     void setReference(double *ref);
-    void setF(int _thrust);
+    void setThrust(int _thrust);
 private:
     double parameters[9];
     double refs[3];
     double ea[3], eb[3], eg[3];
     double F, Ma, Mb, Mg;
+    double MaT, MbT;
     
 };
 

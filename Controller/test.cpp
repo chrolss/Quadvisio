@@ -1,6 +1,7 @@
 #include "Controller.h"
 #include <iostream>
 #include <cstdio>
+#include <unistd.h>
 
 double params[9];
 double refs[3];
@@ -13,15 +14,15 @@ Controller *controller;
 
 int main(){
 
-	params[0] = 0.09;
-	params[1] = 0.03;
-	params[2] = 0.02;
-	params[3] = 0.09;
-	params[4] = 0.03;
-	params[5] = 0.02;
-	params[6] = 0.06;
+	params[0] = 0.9;
+	params[1] = 0.3;
+	params[2] = 0.2;
+	params[3] = 0.9;
+	params[4] = 0.3;
+	params[5] = 0.2;
+	params[6] = 0.6;
 	params[7] = 0.3;
-	params[8] = 0.02;
+	params[8] = 0.2;
 
 	for (int j = 0; j<6; j++){
 		in[j] = 0;
@@ -33,17 +34,19 @@ int main(){
 	controller = new Controller;
 	controller->setParameters(params);
 	controller->setReference(refs);
-	controller->setF(50);
+	controller->setThrust(30);
 
-	for (int i=0;i<20;i++)
+	double input[10] = {0.0, 0.0, 0.0, 0.50, 0.50, 0.50, 0.50, 0.0, 0.0, 0.0};
+
+
+	for (int i=0;i<10;i++)
 	{
-		std::cout << "Give an alpha angle" << std::endl;
-		std::cin >> alpha;
-		in[3] = alpha;
+		in[3] = input[i];
 
 		controller->calcPWM(in,ut);
 
-		printf("u1 = %f, u2 = %f, u3 = %f, u4 = %f \n", ut[0], ut[1], ut[2], ut[3]);
+		//printf("u1 = %f, u2 = %f, u3 = %f, u4 = %f \n", ut[0], ut[1], ut[2], ut[3]);
+		sleep(1);
 	}
 
 }

@@ -101,7 +101,7 @@ void loop(){
         
         //std::cout << "Calculate control action" << std::endl;
         // Calculate control action
-        controller->setF(communicate->verticalThrust);
+        controller->setThrust(communicate->verticalThrust);
         controller->setParameters(communicate->pidParam);
         controller->calcPWM(sInput, sOutput);
         

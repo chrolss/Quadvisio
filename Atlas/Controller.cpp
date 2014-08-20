@@ -15,44 +15,44 @@ Controller::Controller(){
 }
 
 void Controller::calcPWM(double *input, double *output) {
-    
+
     for (int i=3; i<6; i++) {
         //std::cout << "Deg: " << input[i] << " ";
         input[i] = input[i]*M_PI/180;
         //std::cout << "Rad: " << input[i] << " ";
     }
     //std::cout << std::endl;
-    
+
     //alphadelen
 	ea[0] = refs[0] - input[3];  	// set new error
 	this->ea[2] += ea[0]*dt;
-	Ma = parameters[0]*ea[0] + parameters[1]*(ea[2]) + parameters[2]*(ea[0]-ea[1]);
+	MaT = parameters[0]*ea[0] + parameters[1]*(ea[2]) + parameters[2]*(ea[0]-ea[1])/dt;
+	//printf("D: %f, ea0: %f, ea1: %f, eD: %f\n", parameters[2]*(ea[0]-ea[1])/dt,ea[0],ea[1],(ea[0]-ea[1]));
 	this->ea[1] = ea[0];		// set old error
 
-	//printf("P: %f, I: %f, D: %f, e: %f\n",parameters[0]*ea[0], parameters[1]*(ea[2]), parameters[2]*(ea[0]-ea[1]),ea[0]);
-
+	//printf("P: %f, I: %f, D: %f, e0: %f, e2: %f\n",parameters[0]*ea[0], parameters[1]*(ea[2]), parameters[2]*(ea[0]-ea[1])/dt,ea[0],ea[2]);
 	//betadelen
 	eb[0] = refs[1] - input[4];  	// set new error
 	this->eb[2] += eb[0]*dt;
-	Mb = parameters[3]*eb[0] + parameters[4]*(eb[2]) + parameters[5]*(eb[0]-eb[1]);
+	MbT = parameters[3]*eb[0] + parameters[4]*(eb[2]) + parameters[5]*(eb[0]-eb[1])/dt;
 	this->eb[1] = eb[0];		// set old error
 
-	//printf("P: %f, I: %f, D: %f, e: %f\n",parameters[3]*eb[0], parameters[4]*(eb[2]), parameters[5]*(eb[0]-eb[1]),eb[0]);
+	//printf("P: %f, I: %f, D: %f, e: %f\n",parameters[3]*eb[0], parameters[4]*(eb[2]), parameters[5]*(eb[0]-eb[1])/dt,eb[0]);
 
 
 	//gammadelen
 	eg[0] = refs[2] - input[5];  	// set new error
 	this->eg[2] += eg[0]*dt;
-	Mg = parameters[6]*eg[0] + parameters[7]*(eg[2]) + parameters[8]*(eg[0]-eg[1]);
+	Mg = parameters[6]*eg[0] + parameters[7]*(eg[2]) + parameters[8]*(eg[0]-eg[1])/dt;
 	this->eg[1] = eg[0];		// set old error
 
-	//printf("P: %f, I: %f, D: %f, e: %f\n",parameters[6]*eg[0], parameters[7]*(eg[2]), parameters[8]*(eg[0]-eg[1]),eg[0]);
-	//printf("Ma = %f, Mb = %f, Mg = %f, F = %f \n", Ma, Mb, Mg, F);
-    
-    Ma = 0.0*(Ma*COS45 - Mb*SIN45);
-    Mb = 0.0*(Ma*SIN45 + Mb*COS45);
-    Mg = 0.0;
+	//printf("P: %f, I: %f, D: %f, e: %f\n",parameters[6]*eg[0], parameters[7]*(eg[2]), parameters[8]*(eg[0]-eg[1])/dt,eg[0]);
 
+    printf("MaT: %f, MbT: %f\n", MaT, MbT);
+    Ma = (MaT*COS45 - MbT*SIN45);
+    Mb = (MaT*COS45 + MbT*COS45);
+    Mg = 0.0;
+    printf("Ma = %f, Mb = %f, Mg = %f, F = %f \n", Ma, Mb, Mg, F);
     output[0] = 0.25*(F*CONST1 + Mb*CONST2 + Mg*CONST3);
     output[1] = 0.25*(F*CONST1 - Ma*CONST2 - CONST3*Mg);
     output[2] = 0.25*(F*CONST1 - Mb*CONST2 + Mg*CONST3);
@@ -82,7 +82,7 @@ void Controller::setReference(double *ref){
 	this->refs[2] = ref[2];
 }
 
-void Controller::setF(int _thrust){
+void Controller::setThrust(int _thrust){
 	this->F = 4*THRUST_CONSTANT*_thrust*_thrust; 		//Toni fixar denna rad
 }
 
