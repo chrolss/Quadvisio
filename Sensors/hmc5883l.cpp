@@ -34,7 +34,7 @@ double hmc5883l::findHeading(double roll, double pitch){	//user input roll and p
 
     tmp = sqrt(hX*hX + hY*hY);
 
-    printf("X mag: %f \n", measuredMagX);
+
     this->headingX = hX/tmp;
     this->headingY = -hY/tmp;
 
@@ -77,12 +77,19 @@ void hmc5883l::initialize(){
    	}
 
    	// Find offset and scale readings
-
+   	/*
    	this->magScaleX = 2.0 / (1.0 - (-1.0));
    	this->magOffsetX = -(magScaleX * (-1.0)) - 1.0;
    	this->magScaleY = 2.0 / (1.0 - (-1.0));
    	this->magOffsetY = -(magScaleY * (-1.0)) - 1.0;
    	this->magScaleZ = 2.0 / (1.0 - (-1.0));
+   	this->magOffsetZ = -(magScaleZ * (-1.0)) - 1.0;
+   	*/
+   	this->magScaleX = 2.0;
+   	this->magOffsetX = -(magScaleX * (-1.0)) - 1.0;
+   	this->magScaleY = 2.0;
+   	this->magOffsetY = -(magScaleY * (-1.0)) - 1.0;
+   	this->magScaleZ = 2.0;
    	this->magOffsetZ = -(magScaleZ * (-1.0)) - 1.0;
    	calibrate();
 }
@@ -95,14 +102,11 @@ int hmc5883l::calibrate(){
 	double expected_z = 1177.2f;
 	readSensorData();
 
-	if ( fabs(measuredMagX) > 500.0 && fabs(measuredMagX) < (expected_xy + 300) \
-	          && fabs(measuredMagY) > 500.0 && fabs(measuredMagY) < (expected_xy + 300) \
-	          && fabs(measuredMagZ) > 500.0 && fabs(measuredMagZ) < (expected_z + 300)) {
-	        this->calX = fabs(expected_xy / measuredMagX);
-	        this->calY = fabs(expected_xy / measuredMagY);
-	        this->calZ = fabs(expected_z / measuredMagZ);
-	        std::cout << "Calibration successfull" << std::endl;
-	}
+	this->calX = fabs(expected_xy / measuredMagX);
+	this->calY = fabs(expected_xy / measuredMagY);
+	this->calZ = fabs(expected_z / measuredMagZ);
+	std::cout << "Calibration successfull" << std::endl;
+
 
 
 	return 0;

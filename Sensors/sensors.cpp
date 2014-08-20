@@ -64,6 +64,57 @@ int main(int argc, char *argv[]){
 		printf("X: %f, Y: %f \n", headX, headY);
 		usleep(100000);
 	}
+	/*
+	int a;
+	double N[2], S[2], W[2], E[2];
+	printf("Point it towards north, press enter to continue\n");
+	std::cin >> a;
+	for (int i = 0; i<5; i++){
+		hmc.readSensorData();
+		usleep(100000);
+	}
+	hmc.findHeading(0.0, 0.0);
+	N[0] = hmc.getXHeading();
+	N[1] = hmc.getYHeading();
+
+	printf("Point it towards east, press enter to continue\n");
+	std::cin >> a;
+	for (int i = 0; i<5; i++){
+		hmc.readSensorData();
+		usleep(100000);
+	}
+	hmc.findHeading(0.0, 0.0);
+	E[0] = hmc.getXHeading();
+	E[1] = hmc.getYHeading();
+
+	printf("Point it towards south, press enter to continue\n");
+	std::cin >> a;
+	for (int i = 0; i<5; i++){
+		hmc.readSensorData();
+		usleep(100000);
+	}
+	hmc.findHeading(0.0, 0.0);
+	S[0] = hmc.getXHeading();
+	S[1] = hmc.getYHeading();
+
+	printf("Point it towards west, press enter to continue\n");
+	std::cin >> a;
+	for (int i = 0; i<5; i++){
+		hmc.readSensorData();
+		usleep(100000);
+	}
+	hmc.findHeading(0.0, 0.0);
+	W[0] = hmc.getXHeading();
+	W[1] = hmc.getYHeading();
+
+	printf("North, X: %f, Y: %f\n",N[0],N[1]);
+	printf("East, X: %f, Y: %f\n",E[0],E[1]);
+	printf("South, X: %f, Y: %f\n",S[0],S[1]);
+	printf("West, X: %f, Y: %f\n",W[0],W[1]);
+
+*/
+
+
 
 
 }
