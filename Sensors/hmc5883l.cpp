@@ -19,136 +19,51 @@ hmc5883l::hmc5883l() {
 	initialize();
 }
 
-double hmc5883l::findHeading(double roll, double pitch){	//user input roll and pitch
-	cosRoll = cos(roll);	//given in radians
-	cosPitch = cos(pitch);
-	sinRoll = sin(roll);
-	sinPitch = sin(pitch);
+void hmc5883l::getData(double roll, double pitch){	//user input roll and pitch
+	double angle = atan2(measuredY, measuredX) * 180 / M_PI;
+    printf("angle = %0.1f\n\n", angle);
 
-	hX = ((double)measuredMagX * magScaleX + magOffsetX) * cosPitch + \
-	     ((double)measuredMagY * magScaleY + magOffsetY) * sinRoll * sinPitch + \
-	     ((double)measuredMagZ * magScaleZ + magOffsetZ) * cosRoll * sinPitch;
-
-    hY = ((double)measuredMagY * magScaleY + magOffsetY) * cosRoll - \
-         ((double)measuredMagZ * magScaleZ + magOffsetZ) * sinRoll;
-
-    tmp = sqrt(hX*hX + hY*hY);
-
-
-    this->headingX = hX/tmp;
-    this->headingY = -hY/tmp;
-
-    return 0.0;
 }
 
 void hmc5883l::initialize(){
-	useconds_t dtime = 8; //delay for usleep
-	char write0[4]; // command to set reg 0 - AKA Configuration Register A
-	char write1[4]; // command to set reg 1 - AKA Configuration Register B
-	char write2[4]; // command to set reg 2 - AKA Mode Register
-	write0[0] = 0x00; // reg 00
-	write0[1] = 0x70; // average 8 samples, 15Hz output
-	write1[0] = 0x01; // reg 01
-	write1[1] = 0xA0; // gain 5
-	write2[0] = 0x02; // reg 02
-	write2[1] = 0x01; // mode single measurement
-
-   	char *fileName = "/dev/i2c-1";
-   	int address = 0x1e;					//korrekta addressen
-   	char buf[10];
-
-   	this-> fd = open(fileName, O_RDWR);  //fd
-
-   	if (ioctl(fd, I2C_SLAVE, address) < 0) {
-      		printf("Unable to get bus access to talk to slave\n");
-      		exit(1);
-   	}
-
-   	if (write(fd,write0,2) != 2) {
-   	   printf("Write to zero failed\n");
-   	}
-   	//Set reg 1
-   	if (write(fd,write1,2) != 2) {
-   	   printf("Write to one failed\n");
-   	}
-   	//Set reg 2
-   	if (write(fd,write2,2) != 2) {
-   	   printf("Write to two failed\n");
-   	}
-
-   	// Find offset and scale readings
-   	/*
-   	this->magScaleX = 2.0 / (1.0 - (-1.0));
-   	this->magOffsetX = -(magScaleX * (-1.0)) - 1.0;
-   	this->magScaleY = 2.0 / (1.0 - (-1.0));
-   	this->magOffsetY = -(magScaleY * (-1.0)) - 1.0;
-   	this->magScaleZ = 2.0 / (1.0 - (-1.0));
-   	this->magOffsetZ = -(magScaleZ * (-1.0)) - 1.0;
-   	*/
-   	this->magScaleX = 2.0;
-   	this->magOffsetX = -(magScaleX * (-1.0)) - 1.0;
-   	this->magScaleY = 2.0;
-   	this->magOffsetY = -(magScaleY * (-1.0)) - 1.0;
-   	this->magScaleZ = 2.0;
-   	this->magOffsetZ = -(magScaleZ * (-1.0)) - 1.0;
-   	calibrate();
-}
-
-int hmc5883l::calibrate(){
-	this->calX = 1.0;
-	this->calY = 1.0;
-	this->calZ = 1.0;
-	double expected_xy = 1264.4f;
-	double expected_z = 1177.2f;
-	readSensorData();
-
-	this->calX = fabs(expected_xy / measuredMagX);
-	this->calY = fabs(expected_xy / measuredMagY);
-	this->calZ = fabs(expected_z / measuredMagZ);
-	std::cout << "Calibration successfull" << std::endl;
-
-
-
-	return 0;
+	char buf[2];
+	this-> fd = open("/dev/i2c-1", O_RDWR);	//open port
+	if (ioctl(fd, I2C_SLAVE, address) < 0){
+		printf("Unable to open hmc5883l port\n");
+		exit(1);
+	}
+	buf[0] = 0x01;
+	buf[1] = 32;
+	if(write(fd,buf,2)!=2){
+		printf("Unable to write to device\n");
+		exit(1);
+	}
+	buf[0] = 0x02;
+	buf[1] = 0;
+	if(write(fd,buf,2)!=2){
+		printf("Unable to write to device\n");
+		exit(1);
+	}
 }
 
 int hmc5883l::readSensorData() {
-	useconds_t dtime = 8; //delay for usleep
-	char write0[4]; // command to set reg 0 - AKA Configuration Register A
-	char write1[4]; // command to set reg 1 - AKA Configuration Register B
-	char write2[4]; // command to set reg 2 - AKA Mode Register
-	write0[0] = 0x00; // reg 00
-	write0[1] = 0x70; // average 8 samples, 15Hz output
-	write1[0] = 0x01; // reg 01
-	write1[1] = 0xA0; // gain 5
-	write2[0] = 0x02; // reg 02
-	write2[1] = 0x01; // mode single measurement
+	buf[0] = 0x03;
 
-	if (write(fd,write0,2) != 2) {
-	   printf("Write to zero failed\n");
-	}
-	//Set reg 1
-	if (write(fd,write1,2) != 2) {
-	   printf("Write to one failed\n");
-	}
-	//Set reg 2
-	if (write(fd,write2,2) != 2) {
-	   printf("Write to two failed\n");
+	if ((write(fd, buf, 1)) != 1)	//send to register we want to read
+	{
+		printf("Unable to point to register\n");
+		exit(1);
 	}
 
-	//datasheet says to delay here.
-	if ( usleep(dtime)  < 0) {
-	   printf("sleep error\n");
-	}
-
-	//read the 6 data.
 	if (read(fd, buf, 6) != 6) {
-	   printf("Read failed\n");
+		printf("Unable to read from hmc5883l\n");
+		exit(1);
 	}
-	this->measuredMagX = (((short)buf[1]<<8) | (short) buf[0])*calX;	//byta plats gav inget
-	this->measuredMagZ = -(((short)buf[3]<<8) | (short) buf[2])*calZ;	//z kommer föra y av ngn anledning
-	this->measuredMagY = -(((short)buf[5]<<8) | (short) buf[4])*calY;
-
+	else {
+	            this->measuredX = (buf[0] << 8) | buf[1];
+	            this->measuredY = (buf[4] << 8) | buf[5];
+	            this->measuredZ = (buf[2] << 8) | buf[3];
+	}
 	return 0;
 }
 

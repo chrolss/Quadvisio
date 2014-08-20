@@ -1,257 +1,89 @@
-/*
-  AeroQuad v2.4.2 - June 2011
-  www.AeroQuad.com
-  Copyright (c) 2011 Ted Carancho.  All rights reserved.
-  An Open Source Arduino based multicopter.
+#include <stdio.h>
+#include <stdlib.h>
+#include <fcntl.h>
+#include <unistd.h>
+#include <string.h>
+#include <sys/ioctl.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <linux/i2c-dev.h>
+#include <math.h>
 
-  This program is free software: you can redistribute it and/or modify
-  it under the terms of the GNU General Public License as published by
-  the Free Software Foundation, either version 3 of the License, or
-  (at your option) any later version.
+const int HMC5883L_I2C_ADDR = 0x1E;
 
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-  GNU General Public License for more details.
+void selectDevice(int fd, int addr, char * name)
+{
+    if (ioctl(fd, I2C_SLAVE, addr) < 0)
+    {
+        fprintf(stderr, "%s not present\n", name);
+        //exit(1);
+    }
+}
 
-  You should have received a copy of the GNU General Public License
-  along with this program. If not, see <http://www.gnu.org/licenses/>.
-*/
+void writeToDevice(int fd, int reg, int val)
+{
+    char buf[2];
+    buf[0]=reg;
+    buf[1]=val;
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    if (write(fd, buf, 2) != 2)
+    {
+        fprintf(stderr, "Can't write to ADXL345\n");
+        //exit(1);
+    }
+}
 
-// This class updated by jihlein
+int main(int argc, char **argv)
+{
+    int fd;
+    unsigned char buf[16];
 
-class Compass {
-public:
-  float magMax[3];
-  float magMin[3];
-  float magCalibration[3];
-  float magScale[3];
-  float magOffset[3];
-  float hdgX;
-  float hdgY;
-  int   compassAddress;
-  float measuredMagX;
-  float measuredMagY;
-  float measuredMagZ;
+    if ((fd = open("/dev/i2c-1", O_RDWR)) < 0)
+    {
+        // Open port for reading and writing
+        fprintf(stderr, "Failed to open i2c bus\n");
 
-  Compass(void) {}
-
-  const float getHdgXY(byte axis) {
-    if (axis == XAXIS) return hdgX;
-    if (axis == YAXIS) return hdgY;
-  }
-
-    const int getRawData(byte axis) {
-    if (axis == XAXIS) return measuredMagX;
-    if (axis == YAXIS) return measuredMagY;
-    if (axis == ZAXIS) return measuredMagZ;
-  }
-
-  void setMagCal(byte axis, float maxValue, float minValue) {
-    magMax[axis] = maxValue;
-    magMin[axis] = minValue;
-    // Assume max/min is scaled to +1 and -1
-    // y2 = 1, x2 = max; y1 = -1, x1 = min
-    // m = (y2 - y1) / (x2 - x1)
-    // m = 2 / (max - min)
-    magScale[axis] = 2.0 / (magMax[axis] - magMin[axis]);
-    // b = y1 - mx1; b = -1 - (m * min)
-    magOffset[axis] = -(magScale[axis] * magMin[axis]) - 1;
-  }
-
-  const float getMagMax(byte axis) {
-    return magMax[axis];
-  }
-
-  const float getMagMin(byte axis) {
-    return magMin[axis];
-  }
-};
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-////////////////////////////////////////////////////////////////////////////////
-// Magnetometer (HMC5843)
-////////////////////////////////////////////////////////////////////////////////
-
-enum {
-  typeHMC5843,
-  typeHMC5883L,
-  typeUnknown,
-};
-
-// The chip may be mounted with inverted axis
-//#define INVERTED_XY_COMPASS_BREAKOUT_BOARD
-
-// See HMC58x3 datasheet for more information on these values
-#define NormalOperation             0x10
-// Default DataOutputRate is 10hz on HMC5843 , 15hz on HMC5883L
-#define DataOutputRate_Default      ( 0x04 << 2 )
-#define HMC5883L_SampleAveraging_8  ( 0x03 << 5 )
-
-class Magnetometer_HMC5843 : public Compass {
-private:
-  float cosRoll;
-  float sinRoll;
-  float cosPitch;
-  float sinPitch;
-  byte type;
-public:
-  Magnetometer_HMC5843() : Compass() {
-    compassAddress = 0x1E;
-  }
-
-  ////////////////////////////////////////////////////////////////////////////////
-  // Initialize AeroQuad Mega v2.0 Magnetometer
-  ////////////////////////////////////////////////////////////////////////////////
-
-  void initialize(void) {
-    byte numAttempts = 0;
-    bool success = false;
-    float expected_xy, expected_z;
-    delay(10);                             // Power up delay **
-
-    // determine if we are using 5843 or 5883L
-    updateRegisterI2C(compassAddress, 0x00, HMC5883L_SampleAveraging_8 | DataOutputRate_Default | NormalOperation);
-    sendByteI2C(compassAddress, 0x00);
-    byte base_config = readByteI2C(compassAddress);
-    if ( base_config == (HMC5883L_SampleAveraging_8 | DataOutputRate_Default | NormalOperation) ) {
-        // HMC5883L supports the sample averaging config
-        type = typeHMC5883L;
-        expected_xy = 1264.4f; // xy - Gain 2 (0x20): 1090 LSB/Ga * 1.16 Ga - see HMC5883L specs
-        expected_z  = 1177.2f; // z - Gain 2 (0x20): 1090 LSB/Ga * 1.08 Ga
-    } else if ( base_config == (DataOutputRate_Default | NormalOperation) ) {
-        type = typeHMC5843;
-        expected_xy = expected_z = 715.0;
-    } else {
-        // not behaving like either supported compass type
-        type = typeUnknown;
-        return;
+        return 1;
     }
 
-    magCalibration[XAXIS] = 1.0;
-    magCalibration[YAXIS] = 1.0;
-    magCalibration[ZAXIS] = 1.0;
+    /* initialise ADXL345 */
 
-    while (success == false && numAttempts < 5 ) {
+    selectDevice(fd, HMC5883L_I2C_ADDR, "HMC5883L");
 
-      numAttempts++;
+    //writeToDevice(fd, 0x01, 0);
+    writeToDevice(fd, 0x01, 32);
+    writeToDevice(fd, 0x02, 0);
 
-      updateRegisterI2C(compassAddress, 0x00, 0x11);  // Set positive bias configuration for sensor calibraiton
-      delay(50);
+    for (int i = 0; i < 10000; ++i) {
+        buf[0] = 0x03;
 
-      updateRegisterI2C(compassAddress, 0x01, 0x20); // Set +/- 1G gain
-      delay(10);
+        if ((write(fd, buf, 1)) != 1)
+        {
+            // Send the register to read from
+            fprintf(stderr, "Error writing to i2c slave\n");
+        }
 
-      updateRegisterI2C(compassAddress, 0x02, 0x01);  // Perform single conversion
-      delay(10);
+        if (read(fd, buf, 6) != 6) {
+            fprintf(stderr, "Unable to read from HMC5883L\n");
+        } else {
+            short x = (buf[0] << 8) | buf[1];
+            short y = (buf[4] << 8) | buf[5];
+            short z = (buf[2] << 8) | buf[3];
 
-      measure(0.0, 0.0);                    // Read calibration data
-      delay(10);
+            float angle = atan2(y, x) * 180 / M_PI;
 
-      if ( fabs(measuredMagX) > 500.0 && fabs(measuredMagX) < (expected_xy + 300) \
-          && fabs(measuredMagY) > 500.0 && fabs(measuredMagY) < (expected_xy + 300) \
-          && fabs(measuredMagZ) > 500.0 && fabs(measuredMagZ) < (expected_z + 300)) {
-        magCalibration[XAXIS] = fabs(expected_xy / measuredMagX);
-        magCalibration[YAXIS] = fabs(expected_xy / measuredMagY);
-        magCalibration[ZAXIS] = fabs(expected_z / measuredMagZ);
+            //for (int b=0; b<6; ++b)
+            //{
+            //    printf("%02x ",buf[b]);
+            //}
+            //printf("\n");
 
-        success = true;
-      }
+            printf("x=%d, y=%d, z=%d\n", x, y, z);
+            printf("angle = %0.1f\n\n", angle);
+        }
 
-      updateRegisterI2C(compassAddress, 0x00, base_config);  // Set default update rate (10hz/15hz) and normal operation
-      delay(50);
-
-      updateRegisterI2C(compassAddress, 0x02, 0x00); // Continuous Update mode
-      delay(50);                           // Mode change delay (1/Update Rate) **
+        usleep(600 * 1000);
     }
 
-    measure(0.0, 0.0);  // Assume 1st measurement at 0 degrees roll and 0 degrees pitch
-  }
-
-  ////////////////////////////////////////////////////////////////////////////////
-  // Measure AeroQuad Mega v2.0 Magnetometer
-  ////////////////////////////////////////////////////////////////////////////////
-
-  void measure(float roll, float pitch) {
-    float magX;
-    float magY;
-    float tmp;
-
-    sendByteI2C(compassAddress, 0x03);
-    Wire.requestFrom(compassAddress, 6);
-
-    measuredMagX =  ((Wire.receive() << 8) | Wire.receive()) * magCalibration[XAXIS];
-    if(type == typeHMC5883L) {
-        // the Z registers comes before the Y registers in the HMC5883L
-      measuredMagZ = -((Wire.receive() << 8) | Wire.receive()) * magCalibration[ZAXIS];
-      measuredMagY = -((Wire.receive() << 8) | Wire.receive()) * magCalibration[YAXIS];
-    } else {
-      measuredMagY = -((Wire.receive() << 8) | Wire.receive()) * magCalibration[YAXIS];
-      measuredMagZ = -((Wire.receive() << 8) | Wire.receive()) * magCalibration[ZAXIS];
-    }
-
-    Wire.endTransmission();
-
-#ifdef INVERTED_XY_COMPASS_BREAKOUT_BOARD
-    measuredMagX = -measuredMagX;
-    measuredMagY = -measuredMagY;
-#endif
-
-    cosRoll =  cos(roll);
-    sinRoll =  sin(roll);
-    cosPitch = cos(pitch);
-    sinPitch = sin(pitch);
-
-    magX = ((float)measuredMagX * magScale[XAXIS] + magOffset[XAXIS]) * cosPitch + \
-           ((float)measuredMagY * magScale[YAXIS] + magOffset[YAXIS]) * sinRoll * sinPitch + \
-           ((float)measuredMagZ * magScale[ZAXIS] + magOffset[ZAXIS]) * cosRoll * sinPitch;
-
-    magY = ((float)measuredMagY * magScale[YAXIS] + magOffset[YAXIS]) * cosRoll - \
-           ((float)measuredMagZ * magScale[ZAXIS] + magOffset[ZAXIS]) * sinRoll;
-
-    tmp  = sqrt(magX * magX + magY * magY);
-    hdgX = magX / tmp;
-    hdgY = -magY / tmp;
-
-  }
-};
-
-
-#if defined(AeroQuadMega_CHR6DM) || defined(APM_OP_CHR6DM)
-class Compass_CHR6DM : public Compass {
-public:
-  Compass_CHR6DM() : Compass() {}
-  void initialize(void) {}
-  const int getRawData(byte) {}
-  void measure(float roll, float pitch) {
-    heading = chr6dm.data.yaw; //this hardly needs any filtering :)
-    // Change from +/-180 to 0-360
-    if (heading < 0) absoluteHeading = 360 + heading;
-    else absoluteHeading = heading;
-  }
-};
-
-class Compass_CHR6DM_Fake : public Compass {
-public:
-  Compass_CHR6DM_Fake() : Compass() {}
-  void initialize(void) {}
-  const int getRawData(byte) {}
-  void measure(float roll, float pitch) {
-    heading = 0;
-    // Change from +/-180 to 0-360
-    if (heading < 0) absoluteHeading = 360 + heading;
-    else absoluteHeading = heading;
-  }
-};
-#endif
+    return 0;
+}
