@@ -28,6 +28,7 @@ private:
 	double cosRoll, cosPitch, sinRoll, sinPitch;
 	double magScaleX, magScaleY, magScaleZ;
 	double magOffsetX, magOffsetY, magOffsetZ;
+	double calX, calY, calZ;
 	double tmp;
 };
 

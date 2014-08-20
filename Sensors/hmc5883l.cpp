@@ -42,7 +42,6 @@ double hmc5883l::findHeading(double roll, double pitch){	//user input roll and p
 }
 
 void hmc5883l::initialize(){
-
 	useconds_t dtime = 8; //delay for usleep
 	char write0[4]; // command to set reg 0 - AKA Configuration Register A
 	char write1[4]; // command to set reg 1 - AKA Configuration Register B
@@ -85,9 +84,27 @@ void hmc5883l::initialize(){
    	this->magOffsetY = -(magScaleY * (-1.0)) - 1.0;
    	this->magScaleZ = 2.0 / (1.0 - (-1.0));
    	this->magOffsetZ = -(magScaleZ * (-1.0)) - 1.0;
+   	calibrate();
 }
 
 int hmc5883l::calibrate(){
+	this->calX = 1.0;
+	this->calY = 1.0;
+	this->calZ = 1.0;
+	double expected_xy = 1264.4f;
+	double expected_z = 1177.2f;
+	readSensorData();
+
+	if ( fabs(measuredMagX) > 500.0 && fabs(measuredMagX) < (expected_xy + 300) \
+	          && fabs(measuredMagY) > 500.0 && fabs(measuredMagY) < (expected_xy + 300) \
+	          && fabs(measuredMagZ) > 500.0 && fabs(measuredMagZ) < (expected_z + 300)) {
+	        this->calX = fabs(expected_xy / measuredMagX);
+	        this->calY = fabs(expected_xy / measuredMagY);
+	        this->calZ = fabs(expected_z / measuredMagZ);
+	        std::cout << "Calibration successfull" << std::endl;
+	}
+
+
 	return 0;
 }
 
@@ -124,9 +141,9 @@ int hmc5883l::readSensorData() {
 	if (read(fd, buf, 6) != 6) {
 	   printf("Read failed\n");
 	}
-	this->measuredMagX = ((short)buf[1]<<8) | (short) buf[0];	//byta plats gav inget
-	this->measuredMagZ = -((short)buf[3]<<8) | (short) buf[2];	//z kommer föra y av ngn anledning
-	this->measuredMagY = -((short)buf[5]<<8) | (short) buf[4];
+	this->measuredMagX = (((short)buf[1]<<8) | (short) buf[0])*calX;	//byta plats gav inget
+	this->measuredMagZ = -(((short)buf[3]<<8) | (short) buf[2])*calZ;	//z kommer föra y av ngn anledning
+	this->measuredMagY = -(((short)buf[5]<<8) | (short) buf[4])*calY;
 
 	return 0;
 }
