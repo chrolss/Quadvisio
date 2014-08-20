@@ -19,14 +19,19 @@ hmc5883l::hmc5883l() {
 	initialize();
 }
 
-void hmc5883l::getData(double roll, double pitch){	//user input roll and pitch
-	double angle = atan2(measuredY, measuredX) * 180 / M_PI;
-    printf("angle = %0.1f\n\n", angle);
-
+int hmc5883l::getData(double roll, double pitch){	//user input roll and pitch
+	int tmp = -atan2(measuredY, measuredX) * 180 / M_PI;
+	if (tmp<0){
+		headingX = 360.0 + tmp;
+	}
+	else{
+		headingX = tmp;
+	}
+	return headingX;
 }
 
 void hmc5883l::initialize(){
-	char buf[2];
+	int address = 0x1E;
 	this-> fd = open("/dev/i2c-1", O_RDWR);	//open port
 	if (ioctl(fd, I2C_SLAVE, address) < 0){
 		printf("Unable to open hmc5883l port\n");
@@ -47,6 +52,7 @@ void hmc5883l::initialize(){
 }
 
 int hmc5883l::readSensorData() {
+    unsigned char buf[16];
 	buf[0] = 0x03;
 
 	if ((write(fd, buf, 1)) != 1)	//send to register we want to read

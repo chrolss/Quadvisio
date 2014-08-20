@@ -5,25 +5,21 @@ class hmc5883l{
 public:
 	hmc5883l();
 	int readSensorData();
-	void getData(double roll, double pitch);
-	double getXHeading(){return headingX;};
-	double getYHeading(){return headingY;};
-	double getZHeading(){return headingZ;};
+	int getData(double roll, double pitch);
+	int getX(){return measuredX;}
+	int getY(){return measuredY;}
+	int getZ(){return measuredZ;}
 private:
 	void initialize();
-	int calibrate();
-
 
 	double heading;
 	char i2c_bus;
-	int address = 0x1E;
+	int address;
 	char buf[6];
 	int fd;
 	char *fileName;
-	double headingX, headingY, headingZ;
-	double measuredX, measuredY, measuredZ;
-	double cosRoll, cosPitch, sinRoll, sinPitch;
-	double tmp;
+	int headingX, headingY, headingZ;
+	short measuredX, measuredY, measuredZ;
 };
 
 

@@ -58,12 +58,26 @@ int main(int argc, char *argv[]){
 	hmc5883l hmc;
 	for (int i = 0; i<1000; i++){
 		hmc.readSensorData();
-		hmc.findHeading(0.0,0.0);	//simulate zero roll zero pitch
-		double headX = hmc.getXHeading();
-		double headY = hmc.getYHeading();
-		printf("X: %f, Y: %f \n", headX, headY);
-		usleep(100000);
+		//int headX = hmc.getData(0.0, 0.0);
+		int X = hmc.getX();
+		int Y = hmc.getY();
+		int Z = hmc.getZ();
+		printf("X: %d, Y: %d, Z: %d\n",X,Y,Z);
+		usleep(200000);
 	}
+
+	/*
+	int a;
+	while(true){
+	printf("Place chip in correct direction, press 1 to continue\n");
+	std::cin >> a;
+	for (int i = 0; i<5; i++){
+			hmc.readSensorData();
+			usleep(100000);
+	}
+	printf("X: %f, Y: %f, Z: %f\n", hmc.getXHeading(), hmc.getYHeading(), hmc.getZHeading());
+	}
+	*/
 	/*
 	int a;
 	double N[2], S[2], W[2], E[2];
