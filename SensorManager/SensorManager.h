@@ -18,7 +18,6 @@
 #include <string.h>
 #include <math.h>
 
-//#include "mpu6050.h"
 #include "I2Cdev.h"
 
 class SensorManager {
