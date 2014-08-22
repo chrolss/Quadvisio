@@ -86,6 +86,13 @@ void SensorManager::readDMP(double *input) {
         
         printf("\n");
 
+        input[0] = aaReal.x;
+        input[1] = aaReal.y;
+        input[2] = aaReal.z;
+        input[3] = ypr[2]+offsetRoll;
+        input[4] = ypr[1]+offsetPitch;
+        input[5] = ypr[0];
+
     }
     else {
         printf("not reading");

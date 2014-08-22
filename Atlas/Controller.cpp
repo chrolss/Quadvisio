@@ -12,16 +12,18 @@ Controller::Controller(){
     this->ea[1] = 0.0;
     this->eb[1] = 0.0;
     this->eg[1]	= 0.0;
+    this->ea[2] = 0.0;
+    this->eb[2] = 0.0;
+    this->eg[2] = 0.0;
 }
 
 void Controller::calcPWM(double *input, double *output) {
 
     for (int i=3; i<6; i++) {
-        //std::cout << "Deg: " << input[i] << " ";
-        input[i] = input[i]*M_PI/180;
-        //std::cout << "Rad: " << input[i] << " ";
+        std::cout << "Rad: " << input[i] << " ";
     }
-    //std::cout << std::endl;
+    std::cout << std::endl;
+
 
     //alphadelen
 	ea[0] = refs[0] - input[3];  	// set new error
@@ -38,7 +40,7 @@ void Controller::calcPWM(double *input, double *output) {
 	this->eb[1] = eb[0];		// set old error
 
 	//printf("P: %f, I: %f, D: %f, e: %f\n",parameters[3]*eb[0], parameters[4]*(eb[2]), parameters[5]*(eb[0]-eb[1])/dt,eb[0]);
-
+	printf("rollfel: %f, pitchfel: %f\n",ea[2],eb[2]);
 
 	//gammadelen
 	eg[0] = refs[2] - input[5];  	// set new error
@@ -48,11 +50,11 @@ void Controller::calcPWM(double *input, double *output) {
 
 	//printf("P: %f, I: %f, D: %f, e: %f\n",parameters[6]*eg[0], parameters[7]*(eg[2]), parameters[8]*(eg[0]-eg[1])/dt,eg[0]);
 
-    printf("MaT: %f, MbT: %f\n", MaT, MbT);
+    //printf("MaT: %f, MbT: %f\n", MaT, MbT);
     Ma = (MaT*COS45 - MbT*SIN45);
     Mb = (MaT*COS45 + MbT*COS45);
     Mg = 0.0;
-    printf("Ma = %f, Mb = %f, Mg = %f, F = %f \n", Ma, Mb, Mg, F);
+    //printf("Ma = %f, Mb = %f, Mg = %f, F = %f \n", Ma, Mb, Mg, F);
     output[0] = 0.25*(F*CONST1 + Mb*CONST2 + Mg*CONST3);
     output[1] = 0.25*(F*CONST1 - Ma*CONST2 - CONST3*Mg);
     output[2] = 0.25*(F*CONST1 - Mb*CONST2 + Mg*CONST3);

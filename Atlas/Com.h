@@ -8,6 +8,7 @@
 
 #ifndef __Atlas__Com__
 #define __Atlas__Com__
+#define radtodeg 57.295779513
 
 #include <iostream>
 #include <stdio.h>
