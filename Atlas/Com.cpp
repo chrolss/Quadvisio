@@ -21,15 +21,15 @@ Com::Com(){
     output[4]=0.0;
     output[5]=0.0;
     
-    pidParam[0] = 0.09;
-	pidParam[1] = 0.03;
-	pidParam[2] = 0.02;
-	pidParam[3] = 0.09;
-	pidParam[4] = 0.03;
-	pidParam[5] = 0.02;
-	pidParam[6] = 0.06;
-	pidParam[7] = 0.3;
-	pidParam[8] = 0.02;
+    pidParam[0] = 0.9;
+	pidParam[1] = 0.01;
+	pidParam[2] = 0.3;
+	pidParam[3] = 0.9;
+	pidParam[4] = 0.01;
+	pidParam[5] = 0.3;
+	pidParam[6] = 0.6;
+	pidParam[7] = 0.01;
+	pidParam[8] = 0.3;
     
     std::cout << "Setting up camera" << std::endl;
     cap.open(0);
@@ -187,9 +187,9 @@ void Com::setOutputData(double *out) {
     output[0] = out[0];
     output[1] = out[1];
     output[2] = out[2];
-    output[3] = out[3];
-    output[4] = out[4];
-    output[5] = out[5];
+    output[3] = out[3]*radtodeg;
+    output[4] = out[4]*radtodeg;
+    output[5] = out[5]*radtodeg;
 }
 
 
