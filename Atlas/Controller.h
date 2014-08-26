@@ -17,6 +17,8 @@
 #define ARM_RADIUS 0.176
 #define DRAG_CONSTANT 9.9768e-8
 #define dt 0.02	//påhittad
+#define WINDUP_LIMIT_UP 50
+#define WINDUP_LIMIT_DOWN -50
 
 #define CONST1 3333.33
 #define CONST2 37878.7
@@ -33,9 +35,10 @@ public:
     void setParameters(double *params);
     void setReference(double *ref);
     void setThrust(int _thrust);
+    double windUp(double *err);
 private:
     double parameters[9];
-    double refs[3];
+    double refs[7];		//roll, pitch, yaw, ax, ay, az, altitude
     double ea[3], eb[3], eg[3];
     double F, Ma, Mb, Mg;
     double MaT, MbT;

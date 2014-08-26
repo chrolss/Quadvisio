@@ -53,23 +53,13 @@ void initailize(){
         runAtlas = true;
     }
     
-    ref[0]=0.0;
-    ref[1]=0.0;
-    ref[2]=0.0;
-
-    /*
-
-    params[0] = 0.00009;
-    params[1] = 0.0; 	//0.00003;
-    params[2] = 0.00002;
-    params[3] = 0.00009;
-    params[4] = 0.0;	//0.00003;
-    params[5] = 0.00002;
-    params[6] = 0.00006;
-    params[7] = 0.0;	//0.00003;
-    params[8] = 0.00002;
-	controller->setParameters(params);
-    */
+    ref[0] = 0.0;
+    ref[1] = 0.0;
+    ref[2] = 0.0;
+    ref[3] = 0.0;
+    ref[4] = 0.0;
+    ref[5] = 0.0;
+    ref[6] = 0.0;
 
     controller->setReference(ref);
     
