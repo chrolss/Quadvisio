@@ -2,4 +2,4 @@
 
 echo "Building Atlas program"
 
-g++ -O2 -W -I /home/ubuntu/Quadvisio/ /home/ubuntu/Quadvisio/QuadLib/QuadCore.cpp /home/ubuntu/Quadvisio/QuadLib/QuadPWM.cpp main.cpp Com.cpp SensorManager.cpp MPU6050.cpp Motor.cpp Controller.cpp I2Cdev.cpp -o Atlas `pkg-config --cflags --libs opencv` -pthread -std=c++11
+g++ -O2 -W -I /home/ubuntu/Quadvisio/ /home/ubuntu/Quadvisio/QuadLib/QuadCore.cpp /home/ubuntu/Quadvisio/QuadLib/QuadPWM.cpp main.cpp Com.cpp SensorManager.cpp MPU6050.cpp Motor.cpp Controller.cpp I2Cdev.cpp -o Atlas `pkg-config --cflags --libs opencv` -pthread -std=c++11 -lm
