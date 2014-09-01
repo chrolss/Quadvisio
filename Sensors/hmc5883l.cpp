@@ -19,7 +19,16 @@ hmc5883l::hmc5883l() {
 	initialize();
 }
 
-int hmc5883l::getData(double roll, double pitch){	//user input roll and pitch
+int hmc5883l::getData(double roll, double pitch){	//user input roll and pitch IN RADIANS
+	double cos_roll = cos(roll);
+	double cos_pitch = cos(pitch);
+	double sin_roll = sin(roll);
+	double sin_pitch = sin(pitch);
+
+	Xh = (measuredX * cos(roll)) + (measuredZ * sin(roll));
+	Yh = (measuredX * sin(pitch) * sin(roll)) + (measuredY * cos(pitch)) - (measuredZ * sin(pitch) * cos(roll));
+	tiltHeading = atan2(Yh,Xh) * 180 / M_PI;
+	std::cout << "Tilted Heading: " << tiltHeading << std::endl;
 	int tmp = -atan2(measuredY, measuredX) * 180 / M_PI;
 	if (tmp<0){
 		headingX = 360.0 + tmp;

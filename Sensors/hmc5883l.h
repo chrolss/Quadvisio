@@ -18,7 +18,8 @@ private:
 	char buf[6];
 	int fd;
 	char *fileName;
-	int headingX, headingY, headingZ;
+	double Xh, Yh;
+	int headingX, headingY, headingZ, tiltHeading;
 	short measuredX, measuredY, measuredZ;
 };
 
