@@ -19,6 +19,7 @@
 #define dt 0.02	//påhittad
 #define WINDUP_LIMIT_UP 1
 #define WINDUP_LIMIT_DOWN -1
+#define MAX_PERCENTAGE 80
 
 #define CONST1 3333.33
 #define CONST2 37878.7

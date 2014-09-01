@@ -66,22 +66,22 @@ void Controller::calcPWM(double *input, double *output) {
     Mg = 0.0;
     //printf("Ma = %f, Mb = %f, Mg = %f, F = %f \n", Ma, Mb, Mg, F);
     output[0] = 0.25*(F*CONST1 + Mb*CONST2 + Mg*CONST3);
-    output[1] = 0.25*(F*CONST1 - Ma*CONST2 - CONST3*Mg);
+    output[1] = 0.25*(F*CONST1 - Ma*CONST2 - Mg*CONST3);
     output[2] = 0.25*(F*CONST1 - Mb*CONST2 + Mg*CONST3);
     output[3] = 0.25*(F*CONST1 + Ma*CONST2 - Mg*CONST3);
     
     //printf("Before saturation \n");
     //printf("LF = %f, RF = %f, RR = %f, RL = %f \n", output[0], output[1],output[2], output[3]);
 
-    // Make sure output is between 0-100
+    // Make sure output is between 0-max percentage
     for (int i=0; i<4; i++) {
         if (output[i]<0) {
             output[i]=0.0;
         }
         output[i]=sqrt(output[i]);
         //printf("Squared value: %f", output[i]);
-        if (output[i]>100) {
-            output[i]=100;
+        if (output[i]>MAX_PERCENTAGE) {
+            output[i]=MAX_PERCENTAGE;
         }
     }
     printf("LF = %f, RF = %f, RR = %f, LR = %f \n", output[0], output[1],output[2], output[3]);
