@@ -1,11 +1,15 @@
-//By Christian
+
 #ifndef ADXL345_H
 #define ADXL345_H
+
+#define SCALE 0.004
 
 class adxl345
 {
 public:
 	adxl345();
+	double getPitch();
+	double getRoll();
 	int readSensorData(); //When called, sensor data will be read and eventually returned as readable data
 	short getAccX() {return accX;}
 	short getAccY() {return accY;}
@@ -20,6 +24,7 @@ private:
 	char *fileName;    
 
 	short accX, accY, accZ;
+	double pitch, roll;
 
 	void initialize();
 };

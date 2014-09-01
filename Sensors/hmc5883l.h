@@ -1,14 +1,16 @@
 #ifndef HMC5883L_H
 #define HMC5883L_H
 
+#define degToRad 0.01745
+
 class hmc5883l{
 public:
 	hmc5883l();
 	int readSensorData();
 	int getData(double roll, double pitch);
-	int getX(){return measuredX;}
-	int getY(){return measuredY;}
-	int getZ(){return measuredZ;}
+	int getX(){return headingX;}
+	int getY(){return headingY;}
+	int getZ(){return headingZ;}
 private:
 	void initialize();
 

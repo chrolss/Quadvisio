@@ -1,5 +1,4 @@
-//Created by Christian Olsson
-//hehe
+
 
 #include <iostream>
 #include "adxl345.h"
@@ -60,6 +59,21 @@ void adxl345::initialize(){
    	}
 }
 
+double adxl345::getRoll(){
+	double tmp = sqrt(double (accX*accX) + double (accZ *accZ));
+	double roll = atan2(accY,tmp)*180/M_PI;
+
+	return roll;
+}
+
+double adxl345::getPitch(){
+	double tmp = sqrt(double (accY*accY) + double (accZ *accZ));
+	double pitch = atan2(accX,tmp)*180/M_PI;
+
+	return pitch;
+
+}
+
 int adxl345::readSensorData(){
 	
 	//int fd;                                          
@@ -84,13 +98,12 @@ int adxl345::readSensorData(){
    	else 
 	{ 
 	accX=accY=accZ=0;
-	
-	
-	
-	this->accX = ((short)buf[1]<<8) | (short) buf[0]; 
-       	this->accY = ((short)buf[3]<<8) | (short) buf[2];
-      	this->accZ = ((short)buf[5]<<8) | (short) buf[4];
-	
+
+	this->accX = ((short)buf[1]<<8) | (short) buf[0];
+    this->accY = ((short)buf[3]<<8) | (short) buf[2];
+    this->accZ = ((short)buf[5]<<8) | (short) buf[4];
+
+
 	return 0;
 	}
 }

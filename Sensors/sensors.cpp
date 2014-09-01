@@ -18,19 +18,18 @@ short est;
 
 int main(int argc, char *argv[]){
 
-/*
-	kalman filter(0.01, 0.1, 10, 10);
-	adxl345 adxl345;
-	while (true){
-		adxl345.readSensorData();
-		short x = adxl345.getAccX();
-		est = filter.estimate(x);
-		//short y = adxl345.getAccY();
-		//short z = adxl345.getAccZ();
-		//std::cout<<"x:"<<x<<"\ty:"<<y<<"\tz:"<<z<<std::endl;
-		std::cout << "measured: " << x << ", estimated: " << est << std::endl;
-	}
 
+	//kalman filter(0.01, 0.1, 10, 10);
+	adxl345 adxl;
+	hmc5883l hmc;
+	while (true){
+		adxl.readSensorData();
+		double roll = adxl.getRoll();
+		double pitch = adxl.getPitch();
+		printf("Roll: %f, Pitch: %f \n", roll, pitch);
+		usleep(200000);
+	}
+/*
 
 	l3g4200d l3g;
 	kalman filter2(0.1,0.1,10,10);
@@ -54,18 +53,16 @@ int main(int argc, char *argv[]){
 	std::cout << "Current altitude: " << altitude << " Current pressure: " << pressure << std::endl;
 	std::cout << "Temperature: " << temperature << std::endl;
 
-*/
+
 	hmc5883l hmc;
 	for (int i = 0; i<1000; i++){
 		hmc.readSensorData();
-		//int headX = hmc.getData(0.0, 0.0);
+		hmc.getData(0.0, 0.35);
 		int X = hmc.getX();
-		int Y = hmc.getY();
-		int Z = hmc.getZ();
-		printf("X: %d, Y: %d, Z: %d\n",X,Y,Z);
+		printf("X: %d\n", X);
 		usleep(200000);
 	}
-
+*/
 	/*
 	int a;
 	while(true){
