@@ -24,11 +24,12 @@ class SensorManager {
     
 public:
     SensorManager();
-    void initializeMPU();
+    void initializeSensor();
     bool initializeMPUdmp();
     bool testMPU();
     void readMPU(double *input);
-    void readDMP(double *input);
+    void readData(double *input);
+    bool getMode() {return mpuMode;}
     
 private:
     
@@ -42,6 +43,7 @@ private:
     float euler[3];         // [psi, theta, phi]    Euler angle container
     float ypr[3];           // [yaw, pitch, roll]   yaw/pitch/roll container and gravity vector
     bool dmpReady = false;
+    bool mpuMode = true;
 };
 
 #endif /* defined(__Atlas__SensorManager__) */
