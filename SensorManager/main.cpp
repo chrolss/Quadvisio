@@ -14,14 +14,14 @@
 #include <opencv2/highgui/highgui.hpp>
 
 #include "SensorManager.h"
-#include "Controller.h"
-#include "Com.h"
-#include "Motor.h"
+//#include "Controller.h"
+//#include "Com.h"
+//#include "Motor.h"
 
 SensorManager *sensorManager;
-Controller *controller;
-Com *communicate;
-Motor *motor;
+//Controller *controller;
+//Com *communicate;
+//Motor *motor;
 double sInput[6];
 double sOutput[4];
 double idleMotorValues[] = {0.0, 0.0, 0.0, 0.0};
@@ -81,18 +81,8 @@ void loop(){
         auto start = std::chrono::high_resolution_clock::now();
 
         // Read sensor data
-        sensorManager->readDMP(sInput);
-
-        // If connected to Qvis send data
-        if (communicate->connected==true && communicate->reciveMsg==false && communicate->msgSend==false) {
-            communicate->setOutputData(sInput);
-            if (vidCount>=int(((double(5.0/communicate->imgSendRate))-1)*10) && communicate->videoStream==true) {
-                communicate->imgSend=true;
-                vidCount=0;
-            }
-            communicate->msgSend=true;
-        }
-
+        sensorManager->readData(sInput);
+        printf("Pitch: %f, Roll: %f\n", sInput[4], sInput[5]);
         //std::cout << "Calculate control action" << std::endl;
         // Calculate control action
         /*
