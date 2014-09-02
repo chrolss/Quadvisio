@@ -50,9 +50,12 @@ void initailize(){
     //motor = new Motor;
 
     if(sensorManager->getMode()){			// check if MPUmode or not
+    	printf("Hej\n");
+    	/*
     	if(sensorManager->initializeMPUdmp()) {
     		runAtlas = true;
     	}
+    	*/
     }
     else {
     	printf("Using adxl345\n");
@@ -82,7 +85,7 @@ void loop(){
 
         // Read sensor data
         sensorManager->readData(sInput);
-        printf("Pitch: %f, Roll: %f\n", sInput[4], sInput[5]);
+        printf("Pitch: %f, Roll: %f\n", sInput[4], sInput[3]);
         //std::cout << "Calculate control action" << std::endl;
         // Calculate control action
         /*
@@ -119,6 +122,7 @@ void loop(){
 
         loopTime = double(1000000)/(duration2);
         std::cout << "Running at: " << loopTime << "Hz" << std::endl;
+        sleep(0.5);
     }
 
     //motor->closePWM();

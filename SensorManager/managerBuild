@@ -1,0 +1,5 @@
+#!/bin/bash
+
+echo "Building Manager test program"
+
+g++ -W main.cpp SensorManager.cpp adxl345.cpp -std=c++11 -o testManager

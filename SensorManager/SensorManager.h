@@ -43,7 +43,7 @@ private:
     float euler[3];         // [psi, theta, phi]    Euler angle container
     float ypr[3];           // [yaw, pitch, roll]   yaw/pitch/roll container and gravity vector
     bool dmpReady = false;
-    bool mpuMode = true;
+    bool mpuMode = false;
 };
 
 #endif /* defined(__Atlas__SensorManager__) */
