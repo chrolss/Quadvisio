@@ -8,6 +8,7 @@
 
 #include "SensorManager.h"
 #include "MPU6050_6AXIS_MOTIONAPPS20.h"
+#include <Sensors/adxl345.h>
 
 MPU6050 *mpu;
 
@@ -18,10 +19,10 @@ VectorInt16 aaWorld;    // [x, y, z]            world-frame accel sensor measure
 VectorFloat gravity;    // [x, y, z]            gravity vector
 
 SensorManager::SensorManager(){
-    mpu = new MPU6050(0x68);
 }
 
-void SensorManager::initializeMPU() {
+void SensorManager::initializeSensor() {
+    mpu = new MPU6050(0x68);
     mpu->initialize();
 }
 
