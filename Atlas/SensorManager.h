@@ -39,6 +39,7 @@ public:
     void readMPU(double *input);
     void readDMP(double *input);
     void checkForSensors();
+    bool getMode(){return mpuMode;}
     
 private:
     

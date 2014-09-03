@@ -33,7 +33,7 @@ int vidCount = 0;
 
 // Loop time measurement
 double loopTime;
-int Hz = 130;
+int Hz = 25;
 int loopSleep=0;
 double ref[3];
 double params[9];
@@ -50,8 +50,10 @@ void initailize(){
     communicate = new Com;
     motor = new Motor;
     
-    if(sensorManager->initializeMPUdmp()) {
-        runAtlas = true;
+    if(sensorManager->getMode()){
+    	if(sensorManager->initializeMPUdmp()) {
+    		runAtlas = true;
+    	}
     }
     
     ref[0] = 0.0;
@@ -93,7 +95,18 @@ void loop(){
         //std::cout << "Calculate control action" << std::endl;
         // Calculate control action
         controller->setThrust(communicate->verticalThrust);
-        controller->setParameters(communicate->pidParam);
+        double pidParam[9];
+        pidParam[0] = 0.9;
+        pidParam[1] = 0.01;
+        pidParam[2] = 0.3;
+        pidParam[3] = 0.9;
+        pidParam[4] = 0.01;
+        pidParam[5] = 0.3;
+        pidParam[6] = 0.6;
+        pidParam[7] = 0.01;
+        pidParam[8] = 0.3;
+        //controller->setParameters(communicate->pidParam);
+        controller->setParameters(pidParam);
         controller->calcPWM(sInput, sOutput);
         
         //std::cout << "Setting PWM values" << std::endl;

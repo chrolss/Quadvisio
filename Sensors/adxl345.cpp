@@ -59,14 +59,14 @@ void adxl345::initialize(){
 
 double adxl345::getRoll(){
 	double tmp = sqrt(double (accX*accX) + double (accZ *accZ));
-	double roll = atan2(accY,tmp)*180/M_PI;
+	double roll = atan2(accY,tmp); //180/M_PI;
 
 	return roll;
 }
 
 double adxl345::getPitch(){
 	double tmp = sqrt(double (accY*accY) + double (accZ *accZ));
-	double pitch = atan2(accX,tmp)*180/M_PI;
+	double pitch = atan2(accX,tmp); //*180/M_PI;
 
 	return pitch;
 
