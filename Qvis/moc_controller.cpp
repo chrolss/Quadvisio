@@ -30,23 +30,23 @@ static const uint qt_meta_data_QvisController[] = {
        0,       // signalCount
 
  // slots: signature, parameters, type, tag, flags
-      15,   33,   33,   33, 0x08,
-      34,   33,   33,   33, 0x08,
-      54,   33,   33,   33, 0x08,
-      73,   33,   33,   33, 0x08,
-      95,   33,   33,   33, 0x08,
-     106,   33,   33,   33, 0x08,
-     116,  159,   33,   33, 0x08,
+      16,   15,   15,   15, 0x08,
+      34,   15,   15,   15, 0x08,
+      54,   15,   15,   15, 0x08,
+      73,   15,   15,   15, 0x08,
+      95,   15,   15,   15, 0x08,
+     106,   15,   15,   15, 0x08,
+     128,  116,   15,   15, 0x08,
 
        0        // eod
 };
 
 static const char qt_meta_stringdata_QvisController[] = {
-    "QvisController\0createTCPThread()\0\0"
+    "QvisController\0\0createTCPThread()\0"
     "videoButtonPushed()\0pidButtonClicked()\0"
     "setPIDButtonClicked()\0closeTCP()\0"
-    "readTCP()\0displayError(QAbstractSocket::SocketError)\0"
-    "socketError\0"
+    "readTCP()\0socketError\0"
+    "displayError(QAbstractSocket::SocketError)\0"
 };
 
 void QvisController::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void **_a)
