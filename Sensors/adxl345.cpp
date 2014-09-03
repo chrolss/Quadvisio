@@ -28,20 +28,18 @@ void adxl345::initialize(){
 	this-> fd = open(fileName, O_RDWR);  //fd blir en address till den öppna porten och måste vara en och samma genom hela klassen. Den får inte omdeklareras i readSensorData() och och måste då ha en this-> 
                                          
    	char *fileName = "/dev/i2c-1";                        
-   	int address = 0x53;                              
+   	int address = 0x53;
    	char buf[6];                              
    	short accX,accY,accZ;
-
    	if ((fd = open(fileName, O_RDWR)) < 0) {               // Open port for reading and writing
      		printf("Failed to open i2c port\n");
       		exit(1);
    	}
-   
-   	if (ioctl(fd, I2C_SLAVE, address) < 0) {               
+
+   	if (ioctl(fd, I2C_SLAVE, address) < 0) {
       		printf("Unable to get bus access to talk to slave\n");
       		exit(1);
    	}
-
    	buf[0] = 0x2d;                                       // Commands for performing a ranging
    	buf[1] = 0x18;
    

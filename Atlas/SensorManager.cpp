@@ -20,12 +20,20 @@ VectorInt16 aaWorld;    // [x, y, z]            world-frame accel sensor measure
 VectorFloat gravity;    // [x, y, z]            gravity vector
 
 SensorManager::SensorManager(){
-	//add a "check if available function"
+	checkForSensors();
+	initializeSensor();
 }
 
 void SensorManager::initializeSensor() {
-    mpu = new MPU6050(0x68);
-    mpu->initialize();
+	if (mpuMode){
+		mpu = new MPU6050(0x68);
+		mpu->initialize();
+		printf("Mpu initialized\n");
+	}
+	else{
+		adxl = new adxl345();
+		printf("adxl345 initialized\n");
+	}
 }
 
 bool SensorManager::initializeMPUdmp() {
@@ -102,4 +110,36 @@ void SensorManager::readDMP(double *input) {
     }
 }
 
+void SensorManager::checkForSensors(){
+	char *fileName = "/dev/i2c-1";
+	int adxlAddress = 0x53;
+	int mpuAddress = 0x68;
+	int fd = open(fileName, O_RDWR);
+
+	if (fd < 0) {
+	     printf("Failed to open i2c port\n");
+	     exit(1);
+	}
+
+	if (ioctl(fd, I2C_SLAVE, adxlAddress) > -1) {
+		char buf[6];
+		buf[0] = 0x2d;
+		buf[1] = 0x18;
+
+		if ((write(fd, buf, 2)) != 2) {
+		    printf("Gy-80 not found, going into MPU mode\n");
+		    this->mpuMode = true;
+		}
+		else{
+			printf("Going into gy-80 mode\n");
+			this->mpuMode = false;
+		}
+
+	}
+	else{
+		printf("Going into gy-80 mode\n");
+		this->mpuMode = false;
+	}
+
+}
 

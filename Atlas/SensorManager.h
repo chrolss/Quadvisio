@@ -17,6 +17,11 @@
 #include <stdint.h>
 #include <string.h>
 #include <math.h>
+#include <linux/i2c-dev.h>
+#include <fcntl.h>
+#include <sys/ioctl.h>
+#include <sys/types.h>
+#include <sys/stat.h>
 
 //#include "mpu6050.h"
 #include "I2Cdev.h"
@@ -33,6 +38,7 @@ public:
     bool testMPU();
     void readMPU(double *input);
     void readDMP(double *input);
+    void checkForSensors();
     
 private:
     
