@@ -11,6 +11,7 @@
 #include <Sensors/adxl345.h>
 
 MPU6050 *mpu;
+adxl345 *adxl;
 
 Quaternion q;           // [w, x, y, z]         quaternion container
 VectorInt16 aa;         // [x, y, z]            accel sensor measurements
@@ -19,6 +20,7 @@ VectorInt16 aaWorld;    // [x, y, z]            world-frame accel sensor measure
 VectorFloat gravity;    // [x, y, z]            gravity vector
 
 SensorManager::SensorManager(){
+	//add a "check if available function"
 }
 
 void SensorManager::initializeSensor() {
