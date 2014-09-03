@@ -73,7 +73,18 @@ void initailize(){
 void loop(){
     std::cout << "Starting Loop" << std::endl;
     std::chrono::time_point<std::chrono::high_resolution_clock> start;
-    
+    double pidParam[9];
+    pidParam[0] = 0.9;
+    pidParam[1] = 0.01;
+    pidParam[2] = 0.3;
+    pidParam[3] = 0.9;
+    pidParam[4] = 0.01;
+    pidParam[5] = 0.3;
+    pidParam[6] = 0.6;
+    pidParam[7] = 0.01;
+    pidParam[8] = 0.3;
+    controller->setThrust(10.0);
+    controller->setParameters(pidParam);
     while (runAtlas && counter<6000) {
         
         // Start clock
@@ -94,19 +105,11 @@ void loop(){
         
         //std::cout << "Calculate control action" << std::endl;
         // Calculate control action
-        controller->setThrust(communicate->verticalThrust);
-        double pidParam[9];
-        pidParam[0] = 0.9;
-        pidParam[1] = 0.01;
-        pidParam[2] = 0.3;
-        pidParam[3] = 0.9;
-        pidParam[4] = 0.01;
-        pidParam[5] = 0.3;
-        pidParam[6] = 0.6;
-        pidParam[7] = 0.01;
-        pidParam[8] = 0.3;
+
+
+        //controller->setThrust(communicate->verticalThrust);
         //controller->setParameters(communicate->pidParam);
-        controller->setParameters(pidParam);
+
         controller->calcPWM(sInput, sOutput);
         
         //std::cout << "Setting PWM values" << std::endl;
