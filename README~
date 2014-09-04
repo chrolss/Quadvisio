@@ -1,0 +1,10 @@
+Atlas-projektet av "Quadvisio"
+
+FÖRTYDLIGANDE
+Denna github tillhör studentprojektet "Quadvisio" och författas av KTH-studenterna Toni Axelsson (wynss) och Christian Olsson (chrolss). Projektet är startat av Toni och Christian och har ingen vidare koppling till tekniska högskolan KTH. Vi finansierar helt projektet själva koden är skriven av oss tillsammans med "Opensource-kod" vars skapare tydligt nämns i de berörda filerna.
+
+OM PROJEKTET
+"Quadvisio" är namnet på projektgruppen som består av studenterna Toni och Christian. "Atlas" är namnet på projektet där vi tillsammans bygger och programmerar vår egen autonoma quadrotor-drönare. All programvara och tillhörande hårdvara skrivs och kopplas på vår "Beaglebone Black". Målet med projektet är att vi ska få vår egen drönare att kunna flyga autonomt samt kunna utföra lite mer komplicerade uppdrag så som GPS-navigering och bild- och videouppfångst. Det hela har startats från scratch; vi hade varken hårdvara eller mjukvara i början och allting har införskaffats med tiden. Vi beräknar att första flygturen sker under sommaren 2014.
+
+OM OSS
+Vi är två KTH-studenter från teknisk fysik som läser den sista tiden på vår Aerospace Systems Engineering-master. Vi har läst 30+ högskolepoäng i reglerteknik och optimering samt har gedigen kunskap av programmering i C/C++. Quadvisioprojektet är ett tillfälle för oss att få sätta vår kunskap på prov när vi bygger och skapar vårt eget quadrotor-system.
