@@ -37,10 +37,10 @@ static const uint qt_meta_data_QvisLayout[] = {
       47,   35,   35,   35, 0x08,
       62,   35,   35,   35, 0x08,
       77,   35,   35,   35, 0x08,
-      92,   35,   35,   35, 0x08,
-     111,   35,   35,   35, 0x08,
-     128,   35,   35,   35, 0x08,
-     151,   35,   35,   35, 0x08,
+      94,   35,   35,   35, 0x08,
+     113,   35,   35,   35, 0x08,
+     130,   35,   35,   35, 0x08,
+     150,   35,   35,   35, 0x08,
 
        0        // eod
 };
@@ -48,8 +48,8 @@ static const uint qt_meta_data_QvisLayout[] = {
 static const char qt_meta_stringdata_QvisLayout[] = {
     "QvisLayout\0valueChanged(int)\0value\0\0"
     "saveData()\0createAccBox()\0createAngBox()\0"
-    "createAltBox()\0createConnectBox()\0"
-    "createVideoBox()\0createOrientationBox()\0"
+    "createPowerBox()\0createConnectBox()\0"
+    "createVideoBox()\0createMovementBox()\0"
     "createControls()\0"
 };
 
@@ -63,10 +63,10 @@ void QvisLayout::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, 
         case 1: _t->saveData(); break;
         case 2: _t->createAccBox(); break;
         case 3: _t->createAngBox(); break;
-        case 4: _t->createAltBox(); break;
+        case 4: _t->createPowerBox(); break;
         case 5: _t->createConnectBox(); break;
         case 6: _t->createVideoBox(); break;
-        case 7: _t->createOrientationBox(); break;
+        case 7: _t->createMovementBox(); break;
         case 8: _t->createControls(); break;
         default: ;
         }

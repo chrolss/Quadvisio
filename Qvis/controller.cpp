@@ -16,6 +16,9 @@ QvisController::QvisController() {
     
     setButtons();
     bufFrame = cv::Mat::zeros(240, 320, CV_8UC3);
+    pidString = ui->getPIDString();
+    videoStream=false;
+    runMotor = false;
 }
 
 void QvisController::showUI()
@@ -29,6 +32,7 @@ void QvisController::setButtons()
     QObject::connect(ui->videoButton, SIGNAL(clicked()), this, SLOT(videoButtonPushed()));
     QObject::connect(ui->pidButton, SIGNAL(clicked()), this, SLOT(pidButtonClicked()));
     QObject::connect(ui->setPIDButton, SIGNAL(clicked()), this, SLOT(setPIDButtonClicked()));
+    QObject::connect(ui->motorButton, SIGNAL(clicked()), this , SLOT(motorButtonClicked()));
 }
 
 void QvisController::createTCPThread()
@@ -49,7 +53,7 @@ void QvisController::createTCPThread()
     
     QObject::connect(ui->connectButton, SIGNAL(clicked()), this, SLOT(closeTCP()));
     std::cout << "Connection button set to close" << std::endl;
-    tcpSocket->write(getSendData(), 5);
+    tcpSocket->write(getSendData(), 54);
     ui->setConnected();
 }
 
@@ -93,7 +97,7 @@ void QvisController::readTCP()
             numbytes = 0;
 
             // When done reading send back the input data
-            tcpSocket->write(getSendData(), 5);
+            tcpSocket->write(getSendData(), 54);
         }
         
         if (recvImg && tcpSocket->bytesAvailable()>=(numbytes+230400)) {
@@ -122,7 +126,7 @@ void QvisController::readTCP()
             }
             
             // When done reading, send back the input data
-            tcpSocket->write(getSendData(), 5);
+            tcpSocket->write(getSendData(), 54);
         }
         
         else {
@@ -136,30 +140,40 @@ QByteArray QvisController::getSendData() {
     int thrust = ui->getThrustValue();
     int fps = ui->getFPSValue();
     
+    if (runMotor) {
+        data.append("1:");
+    }
+    else {
+        data.append("0:");
+    }
+    
     if (thrust<100 && thrust>=10) {
         data.append("0");
         data.append(QString::number(thrust));
+        data.append(":");
     }
     
     else if (thrust<10) {
         data.append("00");
         data.append(QString::number(thrust));
+        data.append(":");
     }
     else {
         data.append(QString::number(thrust));
+        data.append(":");
     }
     
     if (videoStream) {
-        data.append("1");
+        data.append("1:");
     }
     
     else {
-        data.append("0");
+        data.append("0:");
     }
     
     data.append(QString::number(fps));
-    
-    
+    data.append(":");
+    data.append(pidString);;
     
     return data;
 }
@@ -181,9 +195,19 @@ void QvisController::pidButtonClicked() {
 }
 
 void QvisController::setPIDButtonClicked() {
-    ui->getPIDValues(pid);
+    pidString = ui->getPIDString();
     ui->closePIDWindow();
-    std::cout << pid[0] << std::endl;
+}
+
+void QvisController::motorButtonClicked() {
+    if (runMotor) {
+        runMotor=false;
+        ui->motorButton->setText("Motor On");
+    }
+    else {
+        runMotor=true;
+        ui->motorButton->setText("Motor Off");
+    }
 }
 
 void QvisController::displayError(QAbstractSocket::SocketError socketError)

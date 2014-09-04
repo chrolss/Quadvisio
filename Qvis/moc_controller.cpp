@@ -22,7 +22,7 @@ static const uint qt_meta_data_QvisController[] = {
        6,       // revision
        0,       // classname
        0,    0, // classinfo
-       7,   14, // methods
+       8,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
@@ -30,23 +30,25 @@ static const uint qt_meta_data_QvisController[] = {
        0,       // signalCount
 
  // slots: signature, parameters, type, tag, flags
-      16,   15,   15,   15, 0x08,
-      34,   15,   15,   15, 0x08,
-      54,   15,   15,   15, 0x08,
-      73,   15,   15,   15, 0x08,
-      95,   15,   15,   15, 0x08,
-     106,   15,   15,   15, 0x08,
-     128,  116,   15,   15, 0x08,
+      15,   33,   33,   33, 0x08,
+      34,   33,   33,   33, 0x08,
+      54,   33,   33,   33, 0x08,
+      73,   33,   33,   33, 0x08,
+      94,   33,   33,   33, 0x08,
+     116,   33,   33,   33, 0x08,
+     127,   33,   33,   33, 0x08,
+     137,  180,   33,   33, 0x08,
 
        0        // eod
 };
 
 static const char qt_meta_stringdata_QvisController[] = {
-    "QvisController\0\0createTCPThread()\0"
+    "QvisController\0createTCPThread()\0\0"
     "videoButtonPushed()\0pidButtonClicked()\0"
-    "setPIDButtonClicked()\0closeTCP()\0"
-    "readTCP()\0socketError\0"
+    "motorButtonClicked()\0setPIDButtonClicked()\0"
+    "closeTCP()\0readTCP()\0"
     "displayError(QAbstractSocket::SocketError)\0"
+    "socketError\0"
 };
 
 void QvisController::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void **_a)
@@ -58,10 +60,11 @@ void QvisController::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _
         case 0: _t->createTCPThread(); break;
         case 1: _t->videoButtonPushed(); break;
         case 2: _t->pidButtonClicked(); break;
-        case 3: _t->setPIDButtonClicked(); break;
-        case 4: _t->closeTCP(); break;
-        case 5: _t->readTCP(); break;
-        case 6: _t->displayError((*reinterpret_cast< QAbstractSocket::SocketError(*)>(_a[1]))); break;
+        case 3: _t->motorButtonClicked(); break;
+        case 4: _t->setPIDButtonClicked(); break;
+        case 5: _t->closeTCP(); break;
+        case 6: _t->readTCP(); break;
+        case 7: _t->displayError((*reinterpret_cast< QAbstractSocket::SocketError(*)>(_a[1]))); break;
         default: ;
         }
     }
@@ -99,9 +102,9 @@ int QvisController::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 7)
+        if (_id < 8)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 7;
+        _id -= 8;
     }
     return _id;
 }

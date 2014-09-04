@@ -14,25 +14,29 @@ QvisLayout::QvisLayout()
     std::cout << "This comes from the GUI" << std::endl;
     createAccBox();
     createAngBox();
-    createAltBox();
+    createPowerBox();
     createConnectBox();
     createVideoBox();
-    createOrientationBox();
+    createMovementBox();
     createControls();
     
     createPIDWindow();
     
     QGridLayout *mainLayout = new QGridLayout;
-    mainLayout->addWidget(gridVideoBox, 0, 0, 1, 2);
-    mainLayout->addWidget(gridOrientationBox, 0, 2, 1, 2);
-    mainLayout->addWidget(gridControls,1,2,3,2);
-    mainLayout->addWidget(gridAccBox, 1, 0, 1, 1);
-    mainLayout->addWidget(gridAngBox, 1, 1, 1, 1);
-    mainLayout->addWidget(gridAltBox,2,0,1,2);
-    mainLayout->addWidget(connectGroupBox, 3, 0, 1, 2);
+    mainLayout->addWidget(gridVideoBox, 0, 2, 2, 2);
+    mainLayout->addWidget(gridAccBox, 2, 0, 1, 1);
+    mainLayout->addWidget(gridAngBox, 2, 1, 1, 1);
+    mainLayout->addWidget(batteryBox,3,0,1,2);
+    mainLayout->addWidget(connectGroupBox, 4, 0, 1, 2);
+    
+    mainLayout->addWidget(gridOrientationBox, 0, 0, 2, 2);
+    mainLayout->addWidget(mapBox,0,4,2,2);
+    //mainLayout->addWidget(altitudeBox,1,2,1,1);
+    //mainLayout->addWidget(speedBox,1,3,1,1);
+    mainLayout->addWidget(gridControls,2,2,3,2);
     setLayout(mainLayout);
-    setWindowTitle(tr("Qvis v0.3 (alpha)"));
-    setFixedSize(695, 660);
+    setWindowTitle(tr("Qvis v0.4 (alpha)"));
+    setFixedSize(1030, 660);
 }
 
 void QvisLayout::saveData()
@@ -84,26 +88,33 @@ void QvisLayout::createAngBox()
     
 }
 
-void QvisLayout::createAltBox() {
-    gridAltBox = new QGroupBox(tr("Altitude"));
+void QvisLayout::createPowerBox() {
+    batteryBox = new QGroupBox(tr("Power"));
     QGridLayout *layout = new QGridLayout;
     
-    altLabel = new QLabel(tr("Current Altitude"));
-    desiredAlt = new QDoubleSpinBox;
-    desiredAlt->setRange(0.0, 2.0);
-    desiredAlt->setSingleStep(0.1);
-    desiredAlt->setValue(0.0);
+    voltageHeaderLabel = new QLabel(tr("Voltage"));
+    QLabel *currentHeaderLabel = new QLabel(tr("Current"));
+    QLabel *consumeHeaderLabel = new QLabel(tr("Consumption"));
     
-    QLabel *desiredAltLabel = new QLabel(tr("Desired Altitude"));
-    QLabel *currentAlt = new QLabel(tr("0"));
-    currentAlt->setAlignment(Qt::AlignCenter);
+    QLabel *currentValueLabel = new QLabel(tr("0.0 A"));
+    QLabel *voltageValueLabel = new QLabel(tr("0.0 V"));
+    QLabel *consumeValueLabel = new QLabel(tr("0.0 mAh"));
+    
+    currentHeaderLabel->setAlignment(Qt::AlignCenter);
+    voltageValueLabel->setAlignment(Qt::AlignCenter);
+    voltageHeaderLabel->setAlignment(Qt::AlignCenter);
+    currentValueLabel->setAlignment(Qt::AlignCenter);
+    consumeValueLabel->setAlignment(Qt::AlignCenter);
+    consumeHeaderLabel->setAlignment(Qt::AlignCenter);
                                          
-    layout->addWidget(altLabel,0,0);
-    layout->addWidget(currentAlt,1,0);
-    layout->addWidget(desiredAltLabel,0,1);
-    layout->addWidget(desiredAlt,1,1);
+    layout->addWidget(voltageHeaderLabel,0,0);
+    layout->addWidget(voltageValueLabel,1,0);
+    layout->addWidget(currentHeaderLabel,0,1);
+    layout->addWidget(currentValueLabel,1,1);
+    layout->addWidget(consumeHeaderLabel,0,2);
+    layout->addWidget(consumeValueLabel,1,2);
     
-    gridAltBox->setLayout(layout);
+    batteryBox->setLayout(layout);
     
 }
 
@@ -118,10 +129,25 @@ void QvisLayout::createVideoBox() {
     gridVideoBox->setLayout(layout);
 }
 
-void QvisLayout::createOrientationBox(){
+void QvisLayout::createMovementBox(){
     
     gridOrientationBox = new QGroupBox(tr("Orientation"));
     gridOrientationBox->setFixedSize(320, 240);
+    mapBox = new QGroupBox(tr("Map"));
+    mapBox->setFixedSize(320, 240);
+    altitudeBox = new QGroupBox(tr("Altitude"));
+    speedBox = new QGroupBox(tr("Speed"));
+    
+    QWebView *gView = new QWebView(this);
+    gView->settings()->setAttribute( QWebSettings::JavascriptEnabled, true );
+    QString fileName = "/Users/toniaxelsson/Documents/Kod/Qt/Qvis/data/map.html";
+    
+    QVBoxLayout *mapLayout = new QVBoxLayout(this);
+    
+    QUrl url = QUrl::fromLocalFile(fileName);
+    gView->load(url);
+    mapLayout->addWidget(gView);
+    mapBox->setLayout(mapLayout);
 }
 
 void QvisLayout::createControls() {
@@ -161,8 +187,7 @@ void QvisLayout::createControls() {
     takeOfButton = new QPushButton(tr("Take Off"));
     landButton = new QPushButton(tr("Land"));
     videoButton = new QPushButton(tr("Video On"));
-    stopButton = new QPushButton(tr("STOP"));
-    stopButton->setStyleSheet("QPushButton { color : red; }");
+    motorButton = new QPushButton(tr("Motor On"));
     altitudeLock = new QPushButton(tr("Lock Altitude"));
     pidButton = new QPushButton(tr("PID Parameters"));
     
@@ -179,7 +204,7 @@ void QvisLayout::createControls() {
     commandsLayout->addWidget(altitudeLock);
     commandsLayout->addWidget(takeOfButton);
     commandsLayout->addWidget(landButton);
-    commandsLayout->addWidget(stopButton);
+    commandsLayout->addWidget(motorButton);
     
     paramLayout->addWidget(pidButton);
     
@@ -218,7 +243,7 @@ void QvisLayout::createConnectBox()
     portLabel->setAlignment(Qt::AlignRight);
     
     ipField = new QLineEdit;
-    ipField->setText("10.0.1.8");
+    ipField->setText("10.0.1.12");
     portField = new QLineEdit;
     portField->setText("3490");
     connectButton = new QPushButton(tr("Connect to Atlas"));
@@ -257,12 +282,12 @@ void QvisLayout::createPIDWindow() {
     iYawLabel = new QLabel(tr("I:"));
     dYawLabel = new QLabel(tr("D:"));
     
-    pRollField = new QLineEdit(tr("0.0"));
-    iRollField = new QLineEdit(tr("0.0"));
+    pRollField = new QLineEdit(tr("0.3"));
+    iRollField = new QLineEdit(tr("0.2"));
     dRollField = new QLineEdit(tr("0.0"));
     
-    pPitchField = new QLineEdit(tr("0.0"));
-    iPitchField = new QLineEdit(tr("0.0"));
+    pPitchField = new QLineEdit(tr("0.3"));
+    iPitchField = new QLineEdit(tr("0.2"));
     dPitchField = new QLineEdit(tr("0.0"));
     
     pYawField = new QLineEdit(tr("0.0"));
@@ -376,15 +401,9 @@ int QvisLayout::getFPSValue() {
     return videoFPSSlider->value();
 }
 
-void QvisLayout::getPIDValues(double *pid) {
-    pid[0] = pRollField->text().toDouble();
-    pid[1] = iRollField->text().toDouble();
-    pid[2] = dRollField->text().toDouble();
-    pid[3] = pPitchField->text().toDouble();
-    pid[4] = iPitchField->text().toDouble();
-    pid[5] = dPitchField->text().toDouble();
-    pid[6] = pYawField->text().toDouble();
-    pid[7] = iYawField->text().toDouble();
-    pid[8] = dYawField->text().toDouble();
+QString QvisLayout::getPIDString() {
+    
+    return pRollField->text() + ":" + iRollField->text() + ":" + dRollField->text() + ":" + pPitchField->text() + ":" + iPitchField->text() + ":" +
+    dPitchField->text() + ":" + pYawField->text() + ":" + iYawField->text() + ":" + dYawField->text();
 }
 

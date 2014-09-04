@@ -40,6 +40,7 @@ private slots:
     void createTCPThread();
     void videoButtonPushed();
     void pidButtonClicked();
+    void motorButtonClicked();
     void setPIDButtonClicked();
     void closeTCP();
     void readTCP();
@@ -60,18 +61,16 @@ private:
     QStringList pieces;
     QNetworkSession *networkSession;
     int numbytes=0;
-    int imgSize = 230400; // 320x240 resolution
+    const int imgSize = 230400; // 320x240 resolution
     cv::Mat bufFrame;
     bool recvImg=false;
     bool readData=false;
     int imgChar;
     const uchar *qImageBuffer;
     
-    bool videoStream=false;
-    
-    //
-    double pid[9];
-    
+    bool videoStream;
+    bool runMotor;
+    QString pidString;
 };
 
 #endif /* defined(__layout_test__controller__) */

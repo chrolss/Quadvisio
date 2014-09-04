@@ -13,6 +13,7 @@
 #include <QtGui>
 #include <QObject>
 #include <QDialog>
+#include <QtWebKit/QtWebKit>
 
 class GLWidget;
 
@@ -40,14 +41,14 @@ public:
     QString getIp();
     int getThrustValue();
     int getFPSValue();
-    void getPIDValues(double *pid);
+    QString getPIDString();
     
     // Objects
     QPushButton *connectButton, *closeButton;
     QLabel *videoLabel;
     
     //Control Objects
-    QPushButton *takeOfButton, *landButton, *videoButton, *stopButton, *altitudeLock, *pidButton;
+    QPushButton *takeOfButton, *landButton, *videoButton, *motorButton, *altitudeLock, *pidButton;
     QSpinBox *verticalThrustSpin;
     
     // PID window objects
@@ -62,20 +63,20 @@ private slots:
     void saveData();
     void createAccBox();
     void createAngBox();
-    void createAltBox();
+    void createPowerBox();
     void createConnectBox();
     void createVideoBox();
-    void createOrientationBox();
+    void createMovementBox();
     void createControls();
     
 private:
     enum { NumGridRows = 3};
     QLabel *labelsAcc[NumGridRows], *labelsAng[NumGridRows];
     QLabel *valAcc[NumGridRows], *valAng[NumGridRows];
-    QLabel *altLabel;
+    QLabel *voltageHeaderLabel;
     QDoubleSpinBox *desiredAlt;
     QGroupBox *connectGroupBox, *gridAccBox, *gridAngBox, *gridVideoBox, *gridOrientationBox, *gridControls;
-    QGroupBox *gridAltBox;
+    QGroupBox *batteryBox, *mapBox, *altitudeBox, *speedBox;
     QGridLayout *connectLayout;
     QLineEdit *ipField, *portField;
     QLabel *connectLabel, *ipLabel, *portLabel, *infoLabel;
