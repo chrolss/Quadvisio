@@ -33,7 +33,7 @@ int vidCount = 0;
 
 // Loop time measurement
 double loopTime;
-int Hz = 25;
+int Hz = 50;
 int loopSleep=0;
 double ref[3];
 double params[9];

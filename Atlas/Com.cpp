@@ -21,12 +21,12 @@ Com::Com(){
     output[4]=0.0;
     output[5]=0.0;
     
-    pidParam[0] = 0.9;
-	pidParam[1] = 0.01;
-	pidParam[2] = 0.3;
-	pidParam[3] = 0.9;
-	pidParam[4] = 0.01;
-	pidParam[5] = 0.3;
+    pidParam[0] = 0.17;
+	pidParam[1] = 0.08;
+	pidParam[2] = 0.11;
+	pidParam[3] = 0.17;
+	pidParam[4] = 0.08;
+	pidParam[5] = 0.11;
 	pidParam[6] = 0.6;
 	pidParam[7] = 0.01;
 	pidParam[8] = 0.3;
