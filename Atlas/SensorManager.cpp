@@ -23,8 +23,8 @@ VectorInt16 aaWorld;    // [x, y, z]            world-frame accel sensor measure
 VectorFloat gravity;    // [x, y, z]            gravity vector
 
 SensorManager::SensorManager(){
-	aFilter->setFilter(0.1,0.1,10,10);
-	bFilter->setFilter(0.1,0.1,10,10);
+	aFilter = new kalman(0.1,0.1,10,10);
+	bFilter = new kalman(0.1,0.1,10,10);
 	checkForSensors();
 	initializeSensor();
 }

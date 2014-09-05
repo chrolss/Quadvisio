@@ -15,7 +15,7 @@
 class kalman
 {
 public:
-	kalman();
+	kalman(double _p, double _r, double _x0, double _p0);
 	double estimate(double val);
 	void setFilter(double q, double r, double _x0, double _p0);
 private:

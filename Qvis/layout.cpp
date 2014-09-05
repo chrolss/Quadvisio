@@ -282,13 +282,13 @@ void QvisLayout::createPIDWindow() {
     iYawLabel = new QLabel(tr("I:"));
     dYawLabel = new QLabel(tr("D:"));
     
-    pRollField = new QLineEdit(tr("0.3"));
-    iRollField = new QLineEdit(tr("0.2"));
-    dRollField = new QLineEdit(tr("0.0"));
+    pRollField = new QLineEdit(tr("0.17"));
+    iRollField = new QLineEdit(tr("0.04"));
+    dRollField = new QLineEdit(tr("0.11"));
     
-    pPitchField = new QLineEdit(tr("0.3"));
-    iPitchField = new QLineEdit(tr("0.2"));
-    dPitchField = new QLineEdit(tr("0.0"));
+    pPitchField = new QLineEdit(tr("0.17"));
+    iPitchField = new QLineEdit(tr("0.04"));
+    dPitchField = new QLineEdit(tr("0.11"));
     
     pYawField = new QLineEdit(tr("0.0"));
     iYawField = new QLineEdit(tr("0.0"));
