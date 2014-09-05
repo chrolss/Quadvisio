@@ -63,7 +63,7 @@ void SensorManager::initializeSensor() {
 		printf("adxl345 initialized\n");
 	}
 }
-/*
+
 bool SensorManager::initializeMPUdmp() {
     devStatus = mpu->dmpInitialize();
     if (devStatus==0) {
@@ -89,11 +89,11 @@ bool SensorManager::testMPU() {
     }
     return false;
 }
-*/
+
 void SensorManager::readData(double *input) {
     if (mpuMode){
     	printf("MPU mode\n");
-    	/*
+
     	if (!dmpReady) {
     		return;
     	}
@@ -135,7 +135,7 @@ void SensorManager::readData(double *input) {
     		//input[4] = ypr[1]+offsetPitch;
     		input[5] = ypr[0];
 
-    	}*/
+    	}
     }
 
     else{
