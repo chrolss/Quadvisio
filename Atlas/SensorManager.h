@@ -54,6 +54,7 @@ private:
     float ypr[3];           // [yaw, pitch, roll]   yaw/pitch/roll container and gravity vector
     bool dmpReady = false;
     bool mpuMode = true;
+    double alpha, beta;
 };
 
 #endif /* defined(__Atlas__SensorManager__) */

@@ -15,8 +15,9 @@
 class kalman
 {
 public:
-	kalman(double q, double r, double _x0, double _p0);
+	kalman();
 	double estimate(double val);
+	void setFilter(double q, double r, double _x0, double _p0);
 private:
 	double q; //process noise covariange
 	double r; //measurement noise covariance

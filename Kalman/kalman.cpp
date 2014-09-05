@@ -8,7 +8,11 @@
 
 #include "kalman.h"
 
-kalman::kalman(double _q, double _r, double _x0, double _p0){
+kalman::kalman(){
+	std::cout << "Intializing Kalman Filter" << std::endl;
+}
+
+void kalman::setFilter(double _q, double _r, double _x0, double _p0){
 	this->q =_q;
 	this->r = _r;
 	this->x0 = _x0;

@@ -9,9 +9,12 @@
 #include "SensorManager.h"
 #include "MPU6050_6AXIS_MOTIONAPPS20.h"
 #include <Sensors/adxl345.h>
+#include <Kalman/kalman.h>
 
 MPU6050 *mpu;
 adxl345 *adxl;
+kalman *aFilter;
+kalman *bFilter;
 
 Quaternion q;           // [w, x, y, z]         quaternion container
 VectorInt16 aa;         // [x, y, z]            accel sensor measurements
@@ -20,6 +23,8 @@ VectorInt16 aaWorld;    // [x, y, z]            world-frame accel sensor measure
 VectorFloat gravity;    // [x, y, z]            gravity vector
 
 SensorManager::SensorManager(){
+	aFilter->setFilter(0.1,0.1,10,10);
+	bFilter->setFilter(0.1,0.1,10,10);
 	checkForSensors();
 	initializeSensor();
 }
@@ -101,8 +106,8 @@ void SensorManager::readDMP(double *input) {
     		input[0] = aaReal.x;
     		input[1] = aaReal.y;
     		input[2] = aaReal.z;
-    		input[3] = ypr[2]+offsetRoll;
-    		input[4] = ypr[1]+offsetPitch;
+    		input[3] = aFilter->estimate(ypr[2]+offsetRoll);
+    		input[4] = bFilter->estimate(ypr[1]+offsetPitch);
     		input[5] = ypr[0];
 
     	}
