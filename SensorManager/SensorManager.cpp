@@ -106,8 +106,10 @@ void SensorManager::readDMP(double *input) {
     		input[0] = aaReal.x;
     		input[1] = aaReal.y;
     		input[2] = aaReal.z;
-    		input[3] = aFilter->estimate(ypr[2]+offsetRoll);
-    		input[4] = bFilter->estimate(ypr[1]+offsetPitch);
+    		input[3] = (ypr[2]+offsetRoll);
+    		input[4] = (ypr[1]+offsetPitch);
+    		//input[3] = aFilter->estimate(ypr[2]+offsetRoll);
+    		//input[4] = bFilter->estimate(ypr[1]+offsetPitch);
     		input[5] = ypr[0];
 
     	}
