@@ -30,7 +30,7 @@ void Controller::calcPWM(double *input, double *output) {
 	ea[0] = refs[0] - input[3];  	// set new error
 	this->ea[2] += ea[0]*dt;
 	if (abs(ea[2])>WINDUP_LIMIT_UP){
-		ea[2] = windUp(ea);
+		this->ea[2] = windUp(ea);
 	}
 	MaT = parameters[0]*ea[0] + parameters[1]*(ea[2]) + parameters[2]*(ea[0]-ea[1])/dt;
 	//printf("D: %f, ea0: %f, ea1: %f, eD: %f\n", parameters[2]*(ea[0]-ea[1])/dt,ea[0],ea[1],(ea[0]-ea[1]));
@@ -41,7 +41,7 @@ void Controller::calcPWM(double *input, double *output) {
 	eb[0] = refs[1] - input[4];  	// set new error
 	this->eb[2] += eb[0]*dt;
 	if (abs(eb[2])>WINDUP_LIMIT_UP){
-		eb[2] = windUp(eb);
+		this->eb[2] = windUp(eb);
 	}
 	MbT = parameters[3]*eb[0] + parameters[4]*(eb[2]) + parameters[5]*(eb[0]-eb[1])/dt;
 	this->eb[1] = eb[0];		// set old error
@@ -53,7 +53,7 @@ void Controller::calcPWM(double *input, double *output) {
 	eg[0] = refs[2] - input[5];  	// set new error
 	this->eg[2] += eg[0]*dt;
 	if (abs(eg[2])>WINDUP_LIMIT_UP){
-		eg[2] = windUp(eg);
+		this->eg[2] = windUp(eg);
 	}
 	Mg = parameters[6]*eg[0] + parameters[7]*(eg[2]) + parameters[8]*(eg[0]-eg[1])/dt;
 	this->eg[1] = eg[0];		// set old error
@@ -64,24 +64,24 @@ void Controller::calcPWM(double *input, double *output) {
     Ma = (MaT*COS45 - MbT*SIN45);
     Mb = (MaT*COS45 + MbT*COS45);
     Mg = 0.0;
-    //printf("Ma = %f, Mb = %f, Mg = %f, F = %f \n", Ma, Mb, Mg, F);
+    printf("Ma = %f, Mb = %f, Mg = %f, F = %f \n", Ma, Mb, Mg, F);
     output[0] = 0.25*(F*CONST1 + Mb*CONST2 + Mg*CONST3);
-    output[1] = 0.25*(F*CONST1 - Ma*CONST2 - CONST3*Mg);
+    output[1] = 0.25*(F*CONST1 - Ma*CONST2 - Mg*CONST3);
     output[2] = 0.25*(F*CONST1 - Mb*CONST2 + Mg*CONST3);
     output[3] = 0.25*(F*CONST1 + Ma*CONST2 - Mg*CONST3);
     
     //printf("Before saturation \n");
     //printf("LF = %f, RF = %f, RR = %f, RL = %f \n", output[0], output[1],output[2], output[3]);
 
-    // Make sure output is between 0-100
+    // Make sure output is between 0-max percentage
     for (int i=0; i<4; i++) {
         if (output[i]<0) {
             output[i]=0.0;
         }
         output[i]=sqrt(output[i]);
         //printf("Squared value: %f", output[i]);
-        if (output[i]>100) {
-            output[i]=100;
+        if (output[i]>MAX_PERCENTAGE) {
+            output[i]=MAX_PERCENTAGE;
         }
     }
     printf("LF = %f, RF = %f, RR = %f, LR = %f \n", output[0], output[1],output[2], output[3]);
