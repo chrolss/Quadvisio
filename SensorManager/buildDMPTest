@@ -2,4 +2,4 @@
 
 echo "Building DMP test program for the MPU6050"
 
-g++ -O2 -W testRaw.cpp SensorManager.cpp MPU6050.cpp I2Cdev.cpp -o mpuDmpTest -std=c++11
+g++ -O2 -W -I/home/ubuntu/Quadvisio /home/ubuntu/Quadvisio/Sensors/adxl345.cpp /home/ubuntu/Quadvisio/Kalman/kalman.cpp testRaw.cpp SensorManager.cpp MPU6050.cpp I2Cdev.cpp -o mpuDmpTest -std=c++11
