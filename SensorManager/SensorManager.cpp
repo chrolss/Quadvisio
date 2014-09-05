@@ -7,56 +7,33 @@
 //
 
 #include "SensorManager.h"
-//#include "MPU6050_6Axis_MotionApps20.h"
-#include "adxl345.h"
-#include <stdio.h>
-#include <stdlib.h>
-#include <linux/i2c-dev.h>
-#include <fcntl.h>
-#include <string.h>
-#include <sys/ioctl.h>
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <unistd.h>
-#include <math.h>
+#include "MPU6050_6AXIS_MOTIONAPPS20.h"
+#include <Sensors/adxl345.h>
+#include <Kalman/kalman.h>
 
-//MPU6050 *mpu;
+MPU6050 *mpu;
 adxl345 *adxl;
-/*
+kalman *aFilter;
+kalman *bFilter;
+
 Quaternion q;           // [w, x, y, z]         quaternion container
 VectorInt16 aa;         // [x, y, z]            accel sensor measurements
 VectorInt16 aaReal;     // [x, y, z]            gravity-free accel sensor measurements
 VectorInt16 aaWorld;    // [x, y, z]            world-frame accel sensor measurements
 VectorFloat gravity;    // [x, y, z]            gravity vector
-*/
+
 SensorManager::SensorManager(){
-    char *fileName = "/dev/i2c-1";
-	int adxlAddress = 0x53;
-    int mpuAddress = 0x68;
-	int fd;
-
-	if ((fd = open(fileName, O_RDWR)) < 0) {               // Open port for reading and writing
-	    printf("Failed to open i2c port\n");
-	    exit(1);
-	}
-
-	if (ioctl(fd, I2C_SLAVE, adxlAddress) < 0) {
-	    printf("adxl not found, checking mpu ...");
-	    this->mpuMode = true;
-		printf("mpumode mode engaged\n");
-	}
-	else{
-		printf("gy-80 mode engaged\n");
-	}
+	aFilter = new kalman(0.1,0.1,10,10);
+	bFilter = new kalman(0.1,0.1,10,10);
+	checkForSensors();
 	initializeSensor();
-
 }
 
 void SensorManager::initializeSensor() {
 	if (mpuMode){
-		//mpu = new MPU6050(0x68);
-		//mpu->initialize();
-		printf("MPU initialized\n");
+		mpu = new MPU6050(0x68);
+		mpu->initialize();
+		printf("Mpu initialized\n");
 	}
 	else{
 		adxl = new adxl345();
@@ -90,10 +67,8 @@ bool SensorManager::testMPU() {
     return false;
 }
 
-void SensorManager::readData(double *input) {
-    if (mpuMode){
-    	printf("MPU mode\n");
-
+void SensorManager::readDMP(double *input) {
+    if(mpuMode){
     	if (!dmpReady) {
     		return;
     	}
@@ -131,13 +106,15 @@ void SensorManager::readData(double *input) {
     		input[0] = aaReal.x;
     		input[1] = aaReal.y;
     		input[2] = aaReal.z;
-    		//input[3] = ypr[2]+offsetRoll;
-    		//input[4] = ypr[1]+offsetPitch;
+    		input[3] = aFilter->estimate(ypr[2]+offsetRoll);
+    		input[4] = bFilter->estimate(ypr[1]+offsetPitch);
     		input[5] = ypr[0];
 
     	}
+    	else {
+    		printf("not reading");
+    	}
     }
-
     else{
     	adxl->readSensorData();
     	input[0] = adxl->getAccX();
@@ -146,10 +123,40 @@ void SensorManager::readData(double *input) {
     	input[3] = adxl->getRoll();
     	input[4] = adxl->getPitch();
         input[5] = 0.0;			// return value from hmc5883l later
-
+        //printf("Pitch: %f, Roll: %f\n", input[4],input[3]);
     }
-
 }
 
+void SensorManager::checkForSensors(){
+	char *fileName = "/dev/i2c-1";
+	int adxlAddress = 0x53;
+	int mpuAddress = 0x68;
+	int fd = open(fileName, O_RDWR);
 
+	if (fd < 0) {
+	     printf("Failed to open i2c port\n");
+	     exit(1);
+	}
+
+	if (ioctl(fd, I2C_SLAVE, adxlAddress) > -1) {
+		char buf[6];
+		buf[0] = 0x2d;
+		buf[1] = 0x18;
+
+		if ((write(fd, buf, 2)) != 2) {
+		    printf("Gy-80 not found, going into MPU mode\n");
+		    this->mpuMode = true;
+		}
+		else{
+			printf("Going into gy-80 mode\n");
+			this->mpuMode = false;
+		}
+
+	}
+	else{
+		printf("Going into gy-80 mode\n");
+		this->mpuMode = false;
+	}
+
+}
 

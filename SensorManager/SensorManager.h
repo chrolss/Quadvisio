@@ -17,8 +17,17 @@
 #include <stdint.h>
 #include <string.h>
 #include <math.h>
+#include <linux/i2c-dev.h>
+#include <fcntl.h>
+#include <sys/ioctl.h>
+#include <sys/types.h>
+#include <sys/stat.h>
 
+//#include "mpu6050.h"
 #include "I2Cdev.h"
+
+#define offsetRoll -0.072605
+#define offsetPitch 0.001396
 
 class SensorManager {
     
@@ -28,8 +37,9 @@ public:
     bool initializeMPUdmp();
     bool testMPU();
     void readMPU(double *input);
-    void readData(double *input);
-    bool getMode() {return mpuMode;}
+    void readDMP(double *input);
+    void checkForSensors();
+    bool getMode(){return mpuMode;}
     
 private:
     
@@ -43,7 +53,8 @@ private:
     float euler[3];         // [psi, theta, phi]    Euler angle container
     float ypr[3];           // [yaw, pitch, roll]   yaw/pitch/roll container and gravity vector
     bool dmpReady = false;
-    bool mpuMode = false;
+    bool mpuMode = true;
+    double alpha, beta;
 };
 
 #endif /* defined(__Atlas__SensorManager__) */
