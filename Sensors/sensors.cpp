@@ -7,7 +7,7 @@
 #include "l3g4200d.h"
 #include "bmp085.h"
 #include "hmc5883l.h"
-//#include <Kalman/kalman.h>
+#include <Kalman/kalman.h>
 
 // []
 // {}
@@ -19,14 +19,17 @@ short est;
 int main(int argc, char *argv[]){
 
 
-	//kalman filter(0.01, 0.1, 10, 10);
+	kalman filter(0.01, 0.1, 10, 10);
+	kalman filter2(0.01, 0.1, 10, 10);
 	adxl345 adxl;
 	hmc5883l hmc;
 	while (true){
 		adxl.readSensorData();
 		double roll = adxl.getRoll();
 		double pitch = adxl.getPitch();
-		printf("Roll: %f, Pitch: %f \n", roll, pitch);
+		double roll2 = filter.estimate(roll);
+		double pitch2 = filter2.estimate(pitch);
+		printf("-Roll: %f, -Pitch: %f \nRoll2: %f, Pitch2: %f \n", roll, pitch, roll2, pitch2);
 		usleep(200000);
 	}
 /*

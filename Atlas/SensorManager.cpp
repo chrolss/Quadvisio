@@ -120,10 +120,10 @@ void SensorManager::readDMP(double *input) {
     	input[0] = adxl->getAccX();
     	input[1] = adxl->getAccY();
     	input[2] = adxl->getAccZ();
-    	input[3] = adxl->getRoll();
-    	input[4] = adxl->getPitch();
+    	input[3] = aFilter->estimate(adxl->getRoll());
+    	input[4] = bFilter->estimate(adxl->getPitch());
         input[5] = 0.0;			// return value from hmc5883l later
-        //printf("Pitch: %f, Roll: %f\n", input[4],input[3]);
+        printf("Pitch: %f, Roll: %f\n", input[4],input[3]);
     }
 }
 

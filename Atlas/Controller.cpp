@@ -36,7 +36,7 @@ void Controller::calcPWM(double *input, double *output) {
 	//printf("D: %f, ea0: %f, ea1: %f, eD: %f\n", parameters[2]*(ea[0]-ea[1])/dt,ea[0],ea[1],(ea[0]-ea[1]));
 	this->ea[1] = ea[0];		// set old error
 
-	//printf("P: %f, I: %f, D: %f, e0: %f, e2: %f\n",parameters[0]*ea[0], parameters[1]*(ea[2]), parameters[2]*(ea[0]-ea[1])/dt,ea[0],ea[2]);
+	printf("P: %f, I: %f, D: %f, e0: %f, e2: %f\n",parameters[0]*ea[0], parameters[1]*(ea[2]), parameters[2]*(ea[0]-ea[1])/dt,ea[0],ea[2]);
 	//betadelen
 	eb[0] = refs[1] - input[4];  	// set new error
 	this->eb[2] += eb[0]*dt;
