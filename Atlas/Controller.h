@@ -43,8 +43,10 @@ private:
     double innerParameters[9];
     double outerParameters[9];
     double refs[7];		//roll, pitch, yaw, ax, ay, az, altitude
-    double ea[3], eb[3], eg[3];
+    double ea[3], eb[3], eg[3];	//angle errors
+    double ex[3], ey[3], ez[3];	//acceleration errors
     double F, Ma, Mb, Mg;
+    double dA, dB, dG;			//Desired changes in angles
     double MaT, MbT;
     
 };
