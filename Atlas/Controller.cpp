@@ -40,7 +40,7 @@ void Controller::calcPWM(double *input, double *output) {
 	//printf("D: %f, ea0: %f, ea1: %f, eD: %f\n", innerParameters[2]*(ea[0]-ea[1])/dt,ea[0],ea[1],(ea[0]-ea[1]));
 	this->ea[1] = ea[0];		// set old error
 
-	printf("P: %f, I: %f, D: %f, e0: %f, e2: %f\n",innerParameters[0]*ea[0], innerParameters[1]*(ea[2]), innerParameters[2]*(ea[0]-ea[1])/dt,ea[0],ea[2]);
+	//printf("P: %f, I: %f, D: %f, e0: %f, e2: %f\n",innerParameters[0]*ea[0], innerParameters[1]*(ea[2]), innerParameters[2]*(ea[0]-ea[1])/dt,ea[0],ea[2]);
 	//betadelen
 	eb[0] = refs[1] - input[4];  	// set new error
 	this->eb[2] += eb[0]*dt;
@@ -94,14 +94,13 @@ void Controller::calcPWM(double *input, double *output) {
 
 
 void Controller::calcRef(double *sensorInput, double *refs){
-	printf("Här räknar vi ut referensvinklar baserad på accelerationsmätningar\n");
 	//Read refs 3 and 4  + accInput 0 and 1, while returning ref 0 and 1
 	//compensate accInput 0 and 1 with accInput 3 and 4 (alpha and beta angles)
 	ex[0] = refs[3] - cos(sensorInput[4])*sensorInput[0];	//x-acc error
 	this->ex[2] += ex[0]/dt;		//store error in I-summation
 	dB = outerParameters[0]*ex[0] + outerParameters[1]*(ex[2]) + outerParameters[2]*(ex[0]-ex[1]);
 	this->ex[1] = ex[0];
-
+	printf("ex0: %f, ax: %f, dB: %f", ex[0],cos(sensorInput[4])*sensorInput[0], dB);
 	ey[0] = refs[4] - cos(sensorInput[3])*sensorInput[1];	//y-acc error
 	this->ey[2] += ey[0]/dt;		//store error in I-summation
 	dA = outerParameters[3]*ey[0] + outerParameters[4]*(ey[2]) + outerParameters[5]*(ey[0]-ey[1]);

@@ -33,7 +33,7 @@ int vidCount = 0;
 
 // Loop time measurement
 double loopTime;
-int Hz = 10;
+int Hz = 25;
 int loopSleep=0;
 double ref[7];
 double inParams[9];	//verkar vara värdelös
@@ -64,10 +64,10 @@ void initailize(){
     ref[4] = 0.0;
     ref[5] = 0.0;
     ref[6] = 0.0;
-    outParams[0] = 0.1;
+    outParams[0] = 0.001;
     outParams[1] = 0.0;
     outParams[2] = 0.0;
-    outParams[3] = 0.1;
+    outParams[3] = 0.001;
     outParams[4] = 0.0;
     outParams[5] = 0.0;
 
@@ -105,8 +105,8 @@ void loop(){
         controller->setThrust(communicate->verticalThrust);
 
         //add controller->setOuterParameters
-        controller->calcRef(sInput, ref);	//outer controller
-        controller->setReference(ref);		//set new references based on outer controller
+        //controller->calcRef(sInput, ref);	//outer controller
+        //controller->setReference(ref);		//set new references based on outer controller
 
         controller->setInnerParameters(communicate->pidParam);
 
