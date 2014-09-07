@@ -36,7 +36,7 @@ double loopTime;
 int Hz = 10;
 int loopSleep=0;
 double ref[7];
-double inParams[9];
+double inParams[9];	//verkar vara värdelös
 
 void initailize(){
     for (int i =0 ; i<6; i++) {
