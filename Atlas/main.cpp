@@ -72,7 +72,7 @@ void initailize(){
     outParams[5] = 0.0;
 
     controller->setReference(ref);
-    controller->setOuterParameters(outParams);
+    //controller->setOuterParameters(outParams);
     
 
     runAtlas = true;
