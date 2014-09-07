@@ -35,8 +35,8 @@ int vidCount = 0;
 double loopTime;
 int Hz = 10;
 int loopSleep=0;
-double ref[3];
-double params[9];
+double ref[7];
+double inParams[9];
 
 void initailize(){
     for (int i =0 ; i<6; i++) {
@@ -94,10 +94,13 @@ void loop(){
         
         //std::cout << "Calculate control action" << std::endl;
         // Calculate control action
-
-
         controller->setThrust(communicate->verticalThrust);
-        controller->setParameters(communicate->pidParam);
+        /*
+         * add controller->setOuterParameters
+        controller->calcRef(sInput, ref);	//outer controller
+        controller->setReference(ref);		//set new references based on outer controller
+         */
+        controller->setInnerParameters(communicate->pidParam);
 
         controller->calcPWM(sInput, sOutput);
         

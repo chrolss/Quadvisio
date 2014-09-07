@@ -33,12 +33,15 @@ class Controller{
 public:
     Controller();
     void calcPWM(double *input, double *output);
-    void setParameters(double *params);
+    void calcRef(double *accInput, double *refs);
+    void setInnerParameters(double *inParams);
+    void setOuterParameters(double *outParams);
     void setReference(double *ref);
     void setThrust(int _thrust);
     double windUp(double *err);
 private:
-    double parameters[9];
+    double innerParameters[9];
+    double outerParameters[9];
     double refs[7];		//roll, pitch, yaw, ax, ay, az, altitude
     double ea[3], eb[3], eg[3];
     double F, Ma, Mb, Mg;

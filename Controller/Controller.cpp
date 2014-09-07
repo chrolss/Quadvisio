@@ -32,21 +32,21 @@ void Controller::calcPWM(double *input, double *output) {
 	if (abs(ea[2])>WINDUP_LIMIT_UP){
 		this->ea[2] = windUp(ea);
 	}
-	MaT = parameters[0]*ea[0] + parameters[1]*(ea[2]) + parameters[2]*(ea[0]-ea[1])/dt;
-	//printf("D: %f, ea0: %f, ea1: %f, eD: %f\n", parameters[2]*(ea[0]-ea[1])/dt,ea[0],ea[1],(ea[0]-ea[1]));
+	MaT = innerParameters[0]*ea[0] + innerParameters[1]*(ea[2]) + innerParameters[2]*(ea[0]-ea[1])/dt;
+	//printf("D: %f, ea0: %f, ea1: %f, eD: %f\n", innerParameters[2]*(ea[0]-ea[1])/dt,ea[0],ea[1],(ea[0]-ea[1]));
 	this->ea[1] = ea[0];		// set old error
 
-	//printf("P: %f, I: %f, D: %f, e0: %f, e2: %f\n",parameters[0]*ea[0], parameters[1]*(ea[2]), parameters[2]*(ea[0]-ea[1])/dt,ea[0],ea[2]);
+	printf("P: %f, I: %f, D: %f, e0: %f, e2: %f\n",innerParameters[0]*ea[0], innerParameters[1]*(ea[2]), innerParameters[2]*(ea[0]-ea[1])/dt,ea[0],ea[2]);
 	//betadelen
 	eb[0] = refs[1] - input[4];  	// set new error
 	this->eb[2] += eb[0]*dt;
 	if (abs(eb[2])>WINDUP_LIMIT_UP){
 		this->eb[2] = windUp(eb);
 	}
-	MbT = parameters[3]*eb[0] + parameters[4]*(eb[2]) + parameters[5]*(eb[0]-eb[1])/dt;
+	MbT = innerParameters[3]*eb[0] + innerParameters[4]*(eb[2]) + innerParameters[5]*(eb[0]-eb[1])/dt;
 	this->eb[1] = eb[0];		// set old error
 
-	//printf("P: %f, I: %f, D: %f, e: %f\n",parameters[3]*eb[0], parameters[4]*(eb[2]), parameters[5]*(eb[0]-eb[1])/dt,eb[0]);
+	//printf("P: %f, I: %f, D: %f, e: %f\n",innerParameters[3]*eb[0], innerParameters[4]*(eb[2]), innerParameters[5]*(eb[0]-eb[1])/dt,eb[0]);
 	//printf("rollfel: %f, pitchfel: %f\n",ea[2],eb[2]);
 
 	//gammadelen
@@ -55,10 +55,10 @@ void Controller::calcPWM(double *input, double *output) {
 	if (abs(eg[2])>WINDUP_LIMIT_UP){
 		this->eg[2] = windUp(eg);
 	}
-	Mg = parameters[6]*eg[0] + parameters[7]*(eg[2]) + parameters[8]*(eg[0]-eg[1])/dt;
+	Mg = innerParameters[6]*eg[0] + innerParameters[7]*(eg[2]) + innerParameters[8]*(eg[0]-eg[1])/dt;
 	this->eg[1] = eg[0];		// set old error
 
-	//printf("P: %f, I: %f, D: %f, e: %f\n",parameters[6]*eg[0], parameters[7]*(eg[2]), parameters[8]*(eg[0]-eg[1])/dt,eg[0]);
+	//printf("P: %f, I: %f, D: %f, e: %f\n",innerParameters[6]*eg[0], innerParameters[7]*(eg[2]), innerParameters[8]*(eg[0]-eg[1])/dt,eg[0]);
 
     //printf("MaT: %f, MbT: %f\n", MaT, MbT);
     Ma = (MaT*COS45 - MbT*SIN45);
@@ -88,6 +88,12 @@ void Controller::calcPWM(double *input, double *output) {
 
 }
 
+
+void calcRef(double *accInput, double *refs){
+	printf("Här räknar vi ut referensvinklar baserad på accelerationsmätningar\n");
+}
+
+
 void Controller::setReference(double *ref){
 	this->refs[0] = ref[0];		//roll
 	this->refs[1] = ref[1];		//pitch
@@ -114,14 +120,26 @@ double Controller::windUp(double *err){
 }
 
 
-void Controller::setParameters(double *params){
-	this->parameters[0] = params[0];
-	this->parameters[1] = params[1];
-	this->parameters[2] = params[2];
-	this->parameters[3] = params[3];
-	this->parameters[4] = params[4];
-	this->parameters[5] = params[5];
-	this->parameters[6] = params[6];
-	this->parameters[7] = params[7];
-	this->parameters[8] = params[8];
+void Controller::setInnerParameters(double *inParams){
+	this->innerParameters[0] = inParams[0];
+	this->innerParameters[1] = inParams[1];
+	this->innerParameters[2] = inParams[2];
+	this->innerParameters[3] = inParams[3];
+	this->innerParameters[4] = inParams[4];
+	this->innerParameters[5] = inParams[5];
+	this->innerParameters[6] = inParams[6];
+	this->innerParameters[7] = inParams[7];
+	this->innerParameters[8] = inParams[8];
+}
+
+void Controller::setOuterParameters(double *outParams){
+	this->outerParameters[0] = outParams[0];
+	this->outerParameters[1] = outParams[1];
+	this->outerParameters[2] = outParams[2];
+	this->outerParameters[3] = outParams[3];
+	this->outerParameters[4] = outParams[4];
+	this->outerParameters[5] = outParams[5];
+	this->outerParameters[6] = outParams[6];
+	this->outerParameters[7] = outParams[7];
+	this->outerParameters[8] = outParams[8];
 }
