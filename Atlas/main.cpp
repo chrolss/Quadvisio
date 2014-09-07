@@ -37,6 +37,7 @@ int Hz = 10;
 int loopSleep=0;
 double ref[7];
 double inParams[9];	//verkar vara värdelös
+double outParams[6];
 
 void initailize(){
     for (int i =0 ; i<6; i++) {
@@ -63,8 +64,15 @@ void initailize(){
     ref[4] = 0.0;
     ref[5] = 0.0;
     ref[6] = 0.0;
+    outParams[0] = 0.1;
+    outParams[1] = 0.0;
+    outParams[2] = 0.0;
+    outParams[3] = 0.1;
+    outParams[4] = 0.0;
+    outParams[5] = 0.0;
 
     controller->setReference(ref);
+    controller->setOuterParameters(outParams);
     
 
     runAtlas = true;
@@ -95,11 +103,11 @@ void loop(){
         //std::cout << "Calculate control action" << std::endl;
         // Calculate control action
         controller->setThrust(communicate->verticalThrust);
-        /*
-         * add controller->setOuterParameters
+
+        //add controller->setOuterParameters
         controller->calcRef(sInput, ref);	//outer controller
         controller->setReference(ref);		//set new references based on outer controller
-         */
+
         controller->setInnerParameters(communicate->pidParam);
 
         controller->calcPWM(sInput, sOutput);
