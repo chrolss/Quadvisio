@@ -59,7 +59,7 @@ void initailize(){
     
     ref[0] = 0.0;
     ref[1] = 0.0;
-    ref[2] = 0.0;
+    ref[2] = 0.4188;
     ref[3] = 0.0;
     ref[4] = 0.0;
     ref[5] = 0.0;
@@ -76,7 +76,7 @@ void initailize(){
     inParams[3] = 0.17;
     inParams[4] = 0.04;
     inParams[5] = 0.11;
-    inParams[6] = 0.0;
+    inParams[6] = 0.001;
     inParams[7] = 0.0;
     inParams[8] = 0.0;
 
@@ -132,7 +132,7 @@ void loop(){
         
         //std::cout << "Calculate control action" << std::endl;
         // Calculate control action
-        controller->setThrust(C->stateBuf[3]);
+        controller->setJoyCom(C->stateBuf);
 
         //add controller->setOuterParameters
         //controller->calcRef(sInput, ref);	//outer controller

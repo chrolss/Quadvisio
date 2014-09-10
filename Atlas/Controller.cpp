@@ -20,19 +20,16 @@ Controller::Controller(){
     this->ey[1] = 0.0;
     this->ex[2] = 0.0;
     this->ey[2] = 0.0;
+    this->joyCom[0] = 0.0;
+    this->joyCom[1] = 0.0;
+    this->joyCom[2] = 0.0;
 }
 
 void Controller::calcPWM(double *input, double *output) {
-	/*
-    for (int i=3; i<6; i++) {
-        std::cout << "Rad: " << input[i] << " ";
-    }
-    std::cout << std::endl;
-	*/
 
-    //alphadelen
-	ea[0] = refs[0] - input[3];  	// set new error
-	this->ea[2] += ea[0]*dt;
+	//alphadelen - roll
+	ea[0] = refs[0] - input[3] + joyCom[0];  	// set new error
+	this->ea[2] += (ea[0])*dt;
 	if (abs(ea[2])>WINDUP_LIMIT_UP){
 		this->ea[2] = windUp(ea);
 	}
@@ -41,8 +38,8 @@ void Controller::calcPWM(double *input, double *output) {
 	this->ea[1] = ea[0];		// set old error
 
 	//printf("P: %f, I: %f, D: %f, e0: %f, e2: %f\n",innerParameters[0]*ea[0], innerParameters[1]*(ea[2]), innerParameters[2]*(ea[0]-ea[1])/dt,ea[0],ea[2]);
-	//betadelen
-	eb[0] = refs[1] - input[4];  	// set new error
+	//betadelen - pitch
+	eb[0] = refs[1] - input[4] + joyCom[1];  	// set new error
 	this->eb[2] += eb[0]*dt;
 	if (abs(eb[2])>WINDUP_LIMIT_UP){
 		this->eb[2] = windUp(eb);
@@ -54,12 +51,13 @@ void Controller::calcPWM(double *input, double *output) {
 	//printf("rollfel: %f, pitchfel: %f\n",ea[2],eb[2]);
 
 	//gammadelen
-	eg[0] = refs[2] - input[5];  	// set new error
+	eg[0] = refs[2] - input[5] + joyCom[2];  	// set new error
+
 	this->eg[2] += eg[0]*dt;
 	if (abs(eg[2])>WINDUP_LIMIT_UP){
 		this->eg[2] = windUp(eg);
 	}
-	Mg = innerParameters[6]*eg[0] + innerParameters[7]*(eg[2]) + innerParameters[8]*(eg[0]-eg[1])/dt;
+	MgT = innerParameters[6]*eg[0] + innerParameters[7]*(eg[2]) + innerParameters[8]*(eg[0]-eg[1])/dt;
 	this->eg[1] = eg[0];		// set old error
 
 	//printf("P: %f, I: %f, D: %f, e: %f\n",innerParameters[6]*eg[0], innerParameters[7]*(eg[2]), innerParameters[8]*(eg[0]-eg[1])/dt,eg[0]);
@@ -67,7 +65,7 @@ void Controller::calcPWM(double *input, double *output) {
     //printf("MaT: %f, MbT: %f\n", MaT, MbT);
     Ma = (MaT*COS45 - MbT*SIN45);
     Mb = (MaT*COS45 + MbT*COS45);
-    Mg = 0.0;
+    Mg = -MgT;		//change stuff
     printf("Ma = %f, Mb = %f, Mg = %f, F = %f \n", Ma, Mb, Mg, F);
     output[0] = 0.25*(F*CONST1 + Mb*CONST2 + Mg*CONST3);
     output[1] = 0.25*(F*CONST1 - Ma*CONST2 - Mg*CONST3);
@@ -122,9 +120,12 @@ void Controller::setReference(double *ref){
 
 }
 
-void Controller::setThrust(double _thrust){
-	this->F = 4*THRUST_CONSTANT*_thrust*_thrust*10000.0; 		//Toni fixar denna rad
-	printf("Thrust: %f, F: %f \n", _thrust, F);
+void Controller::setJoyCom(double *joy){
+	this->F = 4*THRUST_CONSTANT*joy[3]*joy[3]*10000.0; 		//Toni fixar denna rad
+	this->joyCom[0] = 0.25*joy[0];
+	this->joyCom[1] = -0.25*joy[1];
+	this->joyCom[2] = -0.0059*joy[2];
+	printf("Thrust: %f, F: %f \n", joy[3], F);
 }
 
 double Controller::windUp(double *err){
