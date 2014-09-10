@@ -241,7 +241,7 @@ const prog_uchar dmpMemory[MPU6050_DMP_CODE_SIZE] PROGMEM = {
 // together!
 
 #ifndef DMP_FIFO_RATE
-#define DMP_FIFO_RATE	0x09
+#define DMP_FIFO_RATE	0x02
 #endif
 
 const prog_uchar dmpConfig[MPU6050_DMP_CONFIG_SIZE] PROGMEM = {
@@ -276,7 +276,7 @@ const prog_uchar dmpConfig[MPU6050_DMP_CONFIG_SIZE] PROGMEM = {
     0x07,   0x46,   0x01,   0x9A,                     // CFG_GYRO_SOURCE inv_send_gyro
     0x07,   0x47,   0x04,   0xF1, 0x28, 0x30, 0x38,   // CFG_9 inv_send_gyro -> inv_construct3_fifo
     0x07,   0x6C,   0x04,   0xF1, 0x28, 0x30, 0x38,   // CFG_12 inv_send_accel -> inv_construct3_fifo
-    0x02,   0x16,   0x02,   0x00, 0x01       // D_0_22 inv_set_fifo_rate
+    0x02,   0x16,   0x02,   0x00, DMP_FIFO_RATE       // D_0_22 inv_set_fifo_rate
 };
 
 const prog_uchar dmpUpdates[MPU6050_DMP_UPDATES_SIZE] PROGMEM = {
@@ -368,7 +368,7 @@ uint8_t MPU6050::dmpInitialize() {
             setIntEnabled(0x12);
 
             DEBUG_PRINTLN(F("Setting sample rate to 100Hz..."));
-            setRate(19); // 1khz / (1 + 4) = 200 Hz
+            setRate(4); // 1khz / (1 + 4) = 200 Hz
 
             DEBUG_PRINTLN(F("Setting external frame sync to TEMP_OUT_L[0]..."));
             setExternalFrameSync(MPU6050_EXT_SYNC_TEMP_OUT_L);
