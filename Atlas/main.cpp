@@ -21,7 +21,7 @@
 
 SensorManager *sensorManager;
 Controller *controller;
-Com *communicate;
+Com *C;
 Motor *motor;
 double sInput[6];
 double sOutput[4];
@@ -48,7 +48,7 @@ void initailize(){
     }
     sensorManager = new SensorManager;
     controller = new Controller;
-    communicate = new Com;
+    C = new Com;
     motor = new Motor;
     
     if(sensorManager->getMode()){
@@ -70,6 +70,17 @@ void initailize(){
     outParams[3] = 0.001;
     outParams[4] = 0.0;
     outParams[5] = 0.0;
+    inParams[0] = 0.17;
+    inParams[1] = 0.04;
+    inParams[2] = 0.11;
+    inParams[3] = 0.17;
+    inParams[4] = 0.04;
+    inParams[5] = 0.11;
+    inParams[6] = 0.0;
+    inParams[7] = 0.0;
+    inParams[8] = 0.0;
+
+    controller->setInnerParameters(inParams);
 
     controller->setReference(ref);
     //controller->setOuterParameters(outParams);
@@ -82,7 +93,7 @@ void loop(){
     std::cout << "Starting Loop" << std::endl;
     std::chrono::time_point<std::chrono::high_resolution_clock> start;
 
-    while (runAtlas && counter<6000) {
+    while (runAtlas && counter<60000) {
         
         // Start clock
         auto start = std::chrono::high_resolution_clock::now();
@@ -91,6 +102,7 @@ void loop(){
         sensorManager->readDMP(sInput);
         
         // If connected to Qvis send data
+        /*
         if (communicate->connected==true && communicate->reciveMsg==false && communicate->msgSend==false) {
             communicate->setOutputData(sInput);
             if (vidCount>=int(((double(5.0/communicate->imgSendRate))-1)*10) && communicate->videoStream==true) {
@@ -99,29 +111,47 @@ void loop(){
             }
             communicate->msgSend=true;
         }
+        */
+
+        if (C->connected) {
+             if (!C->reciveMsg && !C->msgSend) {
+                 //printf("Setting output and send to true\n");
+                 C->setOutputData(sInput);
+                 if (C->vidCount>=2) {
+                     C->imgSend = true;
+                 }
+                 C->msgSend=true;
+             }
+         }
+
+         if (!C->connected && !C->listening) {
+             C->startListenThread();
+         }
+         C->vidCount++;
+
         
         //std::cout << "Calculate control action" << std::endl;
         // Calculate control action
-        controller->setThrust(communicate->verticalThrust);
+        controller->setThrust(C->stateBuf[3]);
 
         //add controller->setOuterParameters
         //controller->calcRef(sInput, ref);	//outer controller
         //controller->setReference(ref);		//set new references based on outer controller
 
-        controller->setInnerParameters(communicate->pidParam);
+        //controller->setInnerParameters(communicate->pidParam);
 
         controller->calcPWM(sInput, sOutput);
         
         //std::cout << "Setting PWM values" << std::endl;
         // Send PWM values to motors
-        if (communicate->runMotor==true) {
+        if (C->motorOn==true) {
             motor->setPWM(sOutput);
         }
         else {
             motor->setPWM(idleMotorValues);
         }
 
-        vidCount++;
+        //vidCount++;
         counter++;
         std::cout << counter << std::endl;
         

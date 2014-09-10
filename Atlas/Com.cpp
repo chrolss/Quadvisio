@@ -332,9 +332,9 @@ void Com::closeClient() {
 }
 
 void Com::setOutputData(double *out) {
-    output[0] = out[0];
-    output[1] = out[1];
-    output[2] = out[2];
+    output[0] = out[3]*180/M_PI;
+    output[1] = out[4]*180/M_PI;
+    output[2] = out[5]*180/M_PI;
 }
 
 

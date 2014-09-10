@@ -37,7 +37,7 @@ public:
     void setInnerParameters(double *inParams);
     void setOuterParameters(double *outParams);
     void setReference(double *ref);
-    void setThrust(int _thrust);
+    void setThrust(double _thrust);
     double windUp(double *err);
 private:
     double innerParameters[9];

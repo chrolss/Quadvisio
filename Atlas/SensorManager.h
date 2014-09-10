@@ -26,8 +26,8 @@
 //#include "mpu6050.h"
 #include "I2Cdev.h"
 
-#define offsetRoll -0.072605
-#define offsetPitch 0.001396
+#define offsetRoll 0.024434
+#define offsetPitch -0.05759
 
 class SensorManager {
     

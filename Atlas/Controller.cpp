@@ -122,8 +122,9 @@ void Controller::setReference(double *ref){
 
 }
 
-void Controller::setThrust(int _thrust){
-	this->F = 4*THRUST_CONSTANT*_thrust*_thrust; 		//Toni fixar denna rad
+void Controller::setThrust(double _thrust){
+	this->F = 4*THRUST_CONSTANT*_thrust*_thrust*10000.0; 		//Toni fixar denna rad
+	printf("Thrust: %f, F: %f \n", _thrust, F);
 }
 
 double Controller::windUp(double *err){
