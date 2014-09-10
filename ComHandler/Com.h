@@ -49,8 +49,9 @@ public:
     bool videoStream;
     bool msgStarted;
     bool motorOn;
+    bool colorVideo;
     
-    double output[5];
+    double output[3];
     int vidCount;
     int vidLimit;
     
@@ -63,6 +64,10 @@ private:
     void readMsg();
     int sockfd, newsockfd, portno;
     int sizeOfOutput;
+    
+    int vidRes;
+    int vidResNew;
+    
     size_t numBytes;
     
     socklen_t clilen;
@@ -72,7 +77,7 @@ private:
     
     cv::VideoCapture cap;
     
-    std::string numberInStrings[6];
+    std::string numberInStrings[8];
     
     // Message parsing
     size_t posStart;

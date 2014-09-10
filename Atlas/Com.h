@@ -8,7 +8,6 @@
 
 #ifndef __Atlas__Com__
 #define __Atlas__Com__
-#define radtodeg 57.295779513
 
 #include <iostream>
 #include <stdio.h>
@@ -22,6 +21,8 @@
 #include <sstream>
 #include <string>
 #include <opencv2/highgui/highgui.hpp>
+#include <opencv2/imgproc/imgproc.hpp>
+#include "cameraManager.h"
 
 #define PORT "3490"  // the port users will be connecting to
 #define BACKLOG 10
@@ -35,21 +36,26 @@ public:
     void sendImg();
     void checkClient();
     void closeClient();
+    void startListenThread();
     
     void getNewInputData(int value);
     void setOutputData(double *output);
     
     bool connected;
+    bool listening;
     bool imgSend;
     bool msgSend;
     bool reciveMsg;
-    bool videoStream=false;
-    bool runMotor;
+    bool videoStream;
+    bool msgStarted;
+    bool motorOn;
+    bool colorVideo;
     
-    double output[6];
-    int verticalThrust, imgSendRate;
+    double output[3];
+    int vidCount;
+    int vidLimit;
     
-    double pidParam[9];
+    double stateBuf[4];
     
     cv::Mat sendFrame;
     
@@ -57,17 +63,30 @@ private:
     void error(const char *msg);
     void readMsg();
     int sockfd, newsockfd, portno;
+    int sizeOfOutput;
+    
+    int vidRes;
+    int vidResNew;
+    
+    size_t numBytes;
+    
     socklen_t clilen;
-    char buffer[256];
-    char recvBuf[55];
+    char recvBuf[1024];
     struct sockaddr_in serv_addr, cli_addr;
     std::ostringstream ostr;
     
     cv::VideoCapture cap;
     
-    size_t pos;
-    std::string stringList[13];
-    std::string delimiter = ":";
+    std::string numberInStrings[8];
+    
+    // Message parsing
+    size_t posStart;
+    size_t posEnd;
+    std::string msg;
+    std::string msgBuffer;
+    std::string subDelimiter = ":";
+    std::string startDelimiter = "<";
+    std::string endDelimeter = ">";
     std::string token;
 
 };

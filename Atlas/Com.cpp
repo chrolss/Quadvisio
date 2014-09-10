@@ -11,48 +11,60 @@
 Com::Com(){
     msgSend=false;
     imgSend=false;
-    verticalThrust=0;
-    runMotor=false;
+    listening=false;
+    connected=false;
+    msgStarted=false;
+    videoStream=false;
+    motorOn=false;
+    colorVideo=true;
+    vidCount = 0;
+    vidLimit = 0;
+    vidRes = 2;
+    vidResNew = 2;
     
     output[0]=0.0;
     output[1]=0.0;
     output[2]=0.0;
-    output[3]=0.0;
-    output[4]=0.0;
-    output[5]=0.0;
     
-    pidParam[0] = 0.17;
-	pidParam[1] = 0.08;
-	pidParam[2] = 0.11;
-	pidParam[3] = 0.17;
-	pidParam[4] = 0.08;
-	pidParam[5] = 0.11;
-	pidParam[6] = 0.6;
-	pidParam[7] = 0.01;
-	pidParam[8] = 0.3;
+    sizeOfOutput = (sizeof(output)/sizeof(*output));
     
     std::cout << "Setting up camera" << std::endl;
+    
     cap.open(0);
     cap.set(CV_CAP_PROP_FRAME_HEIGHT, 240);
     cap.set(CV_CAP_PROP_FRAME_WIDTH, 320);
-    sleep(1);
     
-    std::thread t1(&Com::Listen, this);
-    t1.detach();
+    if (cap.isOpened()) {
+        printf("Camera opened!\n");
+    }
+    
+    usleep(1000);
 }
 
 void Com::error(const char *msg)
 {
+    closeClient();
     perror(msg);
-    exit(1);
+    //exit(1);
+}
+
+void Com::startListenThread() {
+    std::thread t1(&Com::Listen, this);
+    listening = true;
+    t1.detach();
 }
 
 void Com::Listen()
 {
-    connected = false;
+    int yes = 1;
     sockfd = socket(AF_INET, SOCK_STREAM, 0);
+    if (setsockopt(sockfd, SOL_SOCKET, SO_REUSEADDR, &yes, sizeof(yes)) == -1) {
+        perror("setsockopt");
+        exit(1);
+    }
     if (sockfd < 0)
         error("ERROR opening socket");
+    
     bzero((char *) &serv_addr, sizeof(serv_addr));
     portno = atoi(PORT);
     serv_addr.sin_family = AF_INET;
@@ -61,28 +73,23 @@ void Com::Listen()
     if (bind(sockfd, (struct sockaddr *) &serv_addr, sizeof(serv_addr)) < 0) error("ERROR on binding");
     listen(sockfd,5);
     clilen = sizeof(cli_addr);
+
     
     std::cout << "Listening for life..." << std::endl;
     newsockfd = accept(sockfd,(struct sockaddr *) &cli_addr, &clilen);
+    
     if (newsockfd < 0)
         error("ERROR on accept");
     
-    bzero(buffer,256);
     connected = true;
     reciveMsg=true;
+    listening=false;
+    vidCount = 0;
     std::cout << "Connection estabilished" << std::endl;
     
     while (connected) {
         
-        if (videoStream) {
-            cap >> sendFrame;
-        }
-        
         if (reciveMsg) {
-            ssize_t numbytes = recv(newsockfd, recvBuf, 54, 0);
-            if (numbytes==-1) {
-                perror("recive");
-            }
             readMsg();
             reciveMsg=false;
         }
@@ -93,85 +100,223 @@ void Com::Listen()
             msgSend=false;
         }
     }
-    
-    //Add Closure stuff
+    closeClient();
 }
 
 void Com::sendMsg() {
     
-    ostr.str("");
-    
-    ostr << output[0] << " " << output[1] << " " << output[2] << " " << output[3] << " " << output[4] << " " << output[5];
-    std::string s;
-    s=ostr.str();
-    size_t length = s.size();
+    printf("Sending message\n");
+    printf("Video count: %i\n", vidCount);
     
     ostr.str("");
     
-    if (imgSend) {
-        ostr << length << " 1 " << s;
-        s = ostr.str();
-        if (send(newsockfd, s.c_str(), s.length(), 0) == -1)
-            perror("send");
-        sendImg();
-        imgSend=false;
+    for (int i=0; i<sizeOfOutput; i++) {
+        ostr << output[i] << ":";
+    }
+    
+    if (imgSend && videoStream) {
+        if (vidResNew != vidRes) {
+            switch (vidResNew) {
+                case 0:
+                    cap.set(CV_CAP_PROP_FRAME_WIDTH, 80);
+                    cap.set(CV_CAP_PROP_FRAME_HEIGHT, 60);
+                    break;
+                    
+                case 1:
+                    cap.set(CV_CAP_PROP_FRAME_WIDTH, 160);
+                    cap.set(CV_CAP_PROP_FRAME_HEIGHT, 120);
+                    break;
+                    
+                case 2:
+                    cap.set(CV_CAP_PROP_FRAME_WIDTH, 320);
+                    cap.set(CV_CAP_PROP_FRAME_HEIGHT, 240);
+                    break;
+                
+                case 3:
+                    cap.set(CV_CAP_PROP_FRAME_WIDTH, 640);
+                    cap.set(CV_CAP_PROP_FRAME_HEIGHT, 480);
+                    break;
+                    
+                default:
+                    break;
+            }
+            usleep(1000);
+            printf("New resolution was set\n");
+            vidRes = vidResNew;
+        }
+        
+        cap >> sendFrame;
+        
+        if (colorVideo) {
+            cvtColor(sendFrame, sendFrame, CV_BGR2RGB);
+            ostr << sendFrame.cols << ":" << sendFrame.rows << ":";
+            ostr << sendFrame.total()*3 << ":3";
+        }
+        
+        else {
+            cvtColor(sendFrame, sendFrame, CV_BGR2GRAY);
+            ostr << sendFrame.cols << ":" << sendFrame.rows << ":";
+            ostr << sendFrame.total() << ":1";
+        }
     }
     else {
-        ostr << length << " 0 " << s;
-        s = ostr.str();
-        if (send(newsockfd, s.c_str(), s.length(), 0) == -1)
-            perror("send");
+        ostr << "0:0:0:0";
     }
     
+    std::string s;
+    s = ostr.str();
+    ostr.str("");
+    
+    if ((s.length()+1)<10) {
+        ostr << "000" << (s.length()+1) << ":" << s;
+    }
+    else if((s.length()+1)>=10 && (s.length()+1)<100) {
+        ostr << "00" << (s.length()+1) << ":" << s;
+    }
+    else if((s.length()+1)>=100 && (s.length()+1)<1000) {
+        ostr << "0" << (s.length()+1) << ":" << s;
+    }
+    else {
+        ostr << (s.length()+1) << ":" << s;
+    }
+    
+    s = ostr.str();
+    
+    printf("Sending message: %s\n", s.c_str());
+    if (send(newsockfd, s.c_str(), s.length(),0) == -1) {
+        closeClient();
+        perror("send");
+    }
+    
+    if (imgSend && videoStream) {
+        sendImg();
+        imgSend = false;
+    }
+    printf("Message sent\n");
+
 }
 
 void Com::sendImg() {
     sendFrame = (sendFrame.reshape(0,1));
-    if (send(newsockfd, sendFrame.data, 230400, 0) == -1) {
-        perror("send");
+    if(colorVideo) {
+        if (send(newsockfd, sendFrame.data, sendFrame.total()*3, 0) == -1) {
+            closeClient();
+            perror("send");
+        }
+    }
+    else {
+        if (send(newsockfd, sendFrame.data, sendFrame.total(), 0) == -1) {
+            closeClient();
+            perror("send");
+        }
     }
 
+    vidCount=0;
 }
 
 void Com::readMsg() {
-    std::string msg(recvBuf);
-    std::cout << msg << std::endl;
-    pos = 0;
+    printf("Waitning for message\n");
     
-    int i=0;
-    while ((pos = msg.find(delimiter)) != std::string::npos) {
+    msgBuffer = "";
+    msg = "";
+    bzero(recvBuf, 1024);
+    
+    while (1) {
+        numBytes = recv(newsockfd, recvBuf, sizeof(recvBuf), 0);
+        if (numBytes < 0) {
+            closeClient();
+            perror("read");
+            break;
+        }
+        else if (numBytes == 0) {
+            printf("Maybe lost connection to client, closing socket and starting to listing\n");
+            connected = false;
+            return;
+        }
+        else {
+            msgBuffer = std::string(recvBuf);
+            std::cout << "Raw message: " << msgBuffer << std::endl;
+            
+            // If msg is a complete message
+            if ((posStart = msgBuffer.find(startDelimiter)) != std::string::npos && (posEnd = msgBuffer.find(endDelimeter)) != std::string::npos) {
+                msg = msgBuffer.substr(posStart + 1, posEnd - 1);
+                //std::cout << msg << std::endl;
+                //printf("1");
+                break;
+            }
+            
+            // If msg is the start of a message
+            else if (posStart != std::string::npos && posEnd == std::string::npos) {
+                msg = msgBuffer.substr(posStart + 1, msg.length());
+                //std::cout << msg << std::endl;
+                msgStarted = true;
+                printf("2");
+            }
+            
+            // If msg is the end of a message
+            else if (posStart == std::string::npos && posEnd != std::string::npos) {
+                msg.append(msgBuffer);
+                msg.erase(msg.length(),1);
+                //std::cout << msg << std::endl;
+                msgStarted = false;
+                printf("3");
+                break;
+            }
+            
+            // If msg is a middle part of a message
+            else {
+                msg.append(msgBuffer);
+                printf("4");
+                //std::cout << msg << std::endl;
+            }
+        }
+    }
+    
+    printf("Final message:\n");
+    std::cout << msg << std::endl;
+    
+    size_t pos = 0;
+    std::string token;
+    
+    int i = 0;
+    while ((pos = msg.find(subDelimiter)) != std::string::npos) {
         token = msg.substr(0, pos);
-        msg.erase(0, pos + delimiter.length());
-        stringList[i] = token;
+        //std::cout << token << std::endl;
+        numberInStrings[i] = token;
+        msg.erase(0, pos + subDelimiter.length());
         i++;
     }
-    stringList[11] = msg;
+    //std::cout << msg << std::endl;
+    numberInStrings[7] = msg;
     
-    int runMotorValue = atoi(stringList[0].c_str());
-    verticalThrust = atoi(stringList[1].c_str());
-    int video = atoi(stringList[2].c_str());
-    int fps = atoi(stringList[3].c_str());
-        
-    for (int j=4; j<13; j++) {
-        pidParam[j-4] = atof(stringList[j].c_str());
-    }
-    
-    if (runMotorValue==1) {
-        runMotor=true;
-    }
-    
-    else {
-        runMotor=false;
-    }
-    
-    if (video==1) {
-        videoStream=true;
+    if (atoi(numberInStrings[4].c_str())==1) {
+        videoStream = true;
     }
     else {
-        videoStream=false;
+        videoStream = false;
     }
     
-    imgSendRate = fps;
+    if (atoi(numberInStrings[5].c_str())==1) {
+        colorVideo = true;
+    }
+    else {
+        colorVideo = false;
+    }
+    
+    vidResNew = atoi(numberInStrings[6].c_str());
+    //printf("Video res %i\n", vidResNew);
+    
+    if (atoi(numberInStrings[7].c_str())==1) {
+        motorOn = true;
+    }
+    else{
+        motorOn = false;
+    }
+    
+    for (int i = 0 ; i<4; i++) {
+        stateBuf[i] = atof(numberInStrings[i].c_str());
+    }
+    
 }
 
 void Com::checkClient() {
@@ -180,16 +325,16 @@ void Com::checkClient() {
 
 void Com::closeClient() {
     close(newsockfd);
+    close(sockfd);
     std::cout << "Connection closed." << std::endl;
+    sleep(2);
+    connected = false;
 }
 
 void Com::setOutputData(double *out) {
     output[0] = out[0];
     output[1] = out[1];
     output[2] = out[2];
-    output[3] = out[3]*radtodeg;
-    output[4] = out[4]*radtodeg;
-    output[5] = out[5]*radtodeg;
 }
 
 

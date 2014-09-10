@@ -16,14 +16,15 @@ Com::Com(){
     msgStarted=false;
     videoStream=false;
     motorOn=false;
+    colorVideo=true;
     vidCount = 0;
     vidLimit = 0;
+    vidRes = 2;
+    vidResNew = 2;
     
     output[0]=0.0;
     output[1]=0.0;
     output[2]=0.0;
-    output[3]=0.0;
-    output[4]=0.0;
     
     sizeOfOutput = (sizeof(output)/sizeof(*output));
     
@@ -37,7 +38,7 @@ Com::Com(){
         printf("Camera opened!\n");
     }
     
-    sleep(1);
+    usleep(1000);
 }
 
 void Com::error(const char *msg)
@@ -114,12 +115,52 @@ void Com::sendMsg() {
     }
     
     if (imgSend && videoStream) {
+        if (vidResNew != vidRes) {
+            switch (vidResNew) {
+                case 0:
+                    cap.set(CV_CAP_PROP_FRAME_WIDTH, 80);
+                    cap.set(CV_CAP_PROP_FRAME_HEIGHT, 60);
+                    break;
+                    
+                case 1:
+                    cap.set(CV_CAP_PROP_FRAME_WIDTH, 160);
+                    cap.set(CV_CAP_PROP_FRAME_HEIGHT, 120);
+                    break;
+                    
+                case 2:
+                    cap.set(CV_CAP_PROP_FRAME_WIDTH, 320);
+                    cap.set(CV_CAP_PROP_FRAME_HEIGHT, 240);
+                    break;
+                
+                case 3:
+                    cap.set(CV_CAP_PROP_FRAME_WIDTH, 640);
+                    cap.set(CV_CAP_PROP_FRAME_HEIGHT, 480);
+                    break;
+                    
+                default:
+                    break;
+            }
+            usleep(1000);
+            printf("New resolution was set\n");
+            vidRes = vidResNew;
+        }
+        
         cap >> sendFrame;
-        cvtColor(sendFrame, sendFrame, CV_BGR2RGB);
-        ostr << sendFrame.total()*3;
+        
+        if (colorVideo) {
+            cvtColor(sendFrame, sendFrame, CV_BGR2RGB);
+            ostr << sendFrame.cols << ":" << sendFrame.rows << ":";
+            ostr << sendFrame.total()*3 << ":3";
+        }
+        
+        else {
+            cvtColor(sendFrame, sendFrame, CV_BGR2GRAY);
+            ostr << sendFrame.cols << ":" << sendFrame.rows << ":";
+            ostr << sendFrame.total() << ":1";
+        }
     }
     else {
-        ostr << "0";
+        ostr << "0:0:0:0";
     }
     
     std::string s;
@@ -157,11 +198,19 @@ void Com::sendMsg() {
 
 void Com::sendImg() {
     sendFrame = (sendFrame.reshape(0,1));
-    
-    if (send(newsockfd, sendFrame.data, 230400, 0) == -1) {
-        closeClient();
-        perror("send");
+    if(colorVideo) {
+        if (send(newsockfd, sendFrame.data, sendFrame.total()*3, 0) == -1) {
+            closeClient();
+            perror("send");
+        }
     }
+    else {
+        if (send(newsockfd, sendFrame.data, sendFrame.total(), 0) == -1) {
+            closeClient();
+            perror("send");
+        }
+    }
+
     vidCount=0;
 }
 
@@ -191,30 +240,34 @@ void Com::readMsg() {
             // If msg is a complete message
             if ((posStart = msgBuffer.find(startDelimiter)) != std::string::npos && (posEnd = msgBuffer.find(endDelimeter)) != std::string::npos) {
                 msg = msgBuffer.substr(posStart + 1, posEnd - 1);
-                std::cout << msg << std::endl;
+                //std::cout << msg << std::endl;
+                //printf("1");
                 break;
             }
             
             // If msg is the start of a message
             else if (posStart != std::string::npos && posEnd == std::string::npos) {
                 msg = msgBuffer.substr(posStart + 1, msg.length());
-                std::cout << msg << std::endl;
+                //std::cout << msg << std::endl;
                 msgStarted = true;
+                printf("2");
             }
             
             // If msg is the end of a message
             else if (posStart == std::string::npos && posEnd != std::string::npos) {
                 msg.append(msgBuffer);
                 msg.erase(msg.length(),1);
-                std::cout << msg << std::endl;
+                //std::cout << msg << std::endl;
                 msgStarted = false;
+                printf("3");
                 break;
             }
             
             // If msg is a middle part of a message
             else {
                 msg.append(msgBuffer);
-                std::cout << msg << std::endl;
+                printf("4");
+                //std::cout << msg << std::endl;
             }
         }
     }
@@ -234,20 +287,30 @@ void Com::readMsg() {
         i++;
     }
     //std::cout << msg << std::endl;
-    numberInStrings[5] = msg;
-    
-    if (atoi(numberInStrings[5].c_str())==1) {
-        motorOn = true;
-    }
-    else{
-        motorOn = false;
-    }
+    numberInStrings[7] = msg;
     
     if (atoi(numberInStrings[4].c_str())==1) {
         videoStream = true;
     }
     else {
         videoStream = false;
+    }
+    
+    if (atoi(numberInStrings[5].c_str())==1) {
+        colorVideo = true;
+    }
+    else {
+        colorVideo = false;
+    }
+    
+    vidResNew = atoi(numberInStrings[6].c_str());
+    //printf("Video res %i\n", vidResNew);
+    
+    if (atoi(numberInStrings[7].c_str())==1) {
+        motorOn = true;
+    }
+    else{
+        motorOn = false;
     }
     
     for (int i = 0 ; i<4; i++) {
@@ -272,8 +335,6 @@ void Com::setOutputData(double *out) {
     output[0] = out[0];
     output[1] = out[1];
     output[2] = out[2];
-    output[3] = out[3];
-    output[4] = out[4];
 }
 
 

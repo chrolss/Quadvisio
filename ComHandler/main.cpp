@@ -18,10 +18,10 @@ int main(int argc, const char * argv[])
 {
     // Loop time measurement
     double loopTime;
-    int Hz = 60;
+    int Hz = 75;
     int loopSleep=0;
     
-    double output[8] = {1.45345, 2.34545, 3.345, 320.0, 240.0};
+    double output[8] = {1.45345, 2.34545, 3.345};
     std::cout << "Starting communication thread" << std::endl;
     Com C;
     C.startListenThread();
@@ -36,9 +36,9 @@ int main(int argc, const char * argv[])
         
         if (C.connected) {
             if (!C.reciveMsg && !C.msgSend) {
-                printf("Setting output and send to true\n");
+                //printf("Setting output and send to true\n");
                 C.setOutputData(output);
-                if (C.vidCount>100) {
+                if (C.vidCount>=2) {
                     C.imgSend = true;
                 }
                 C.msgSend=true;
@@ -65,7 +65,7 @@ int main(int argc, const char * argv[])
         auto duration2 = std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::high_resolution_clock::now() - start).count();
         
         loopTime = double(1000000)/(duration2);
-        std::cout << "Running at: " << loopTime << "Hz" << std::endl;
+        //std::cout << "Running at: " << loopTime << "Hz" << std::endl;
     }
     
     C.closeClient();
