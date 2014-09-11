@@ -30,7 +30,7 @@ void Controller::calcPWM(double *input, double *output) {
 	//alphadelen - roll
 	ea[0] = refs[0] - input[3] + joyCom[0];  	// set new error
 	this->ea[2] += (ea[0])*dt;
-	if (abs(ea[2])>WINDUP_LIMIT_UP){
+	if (fabs(ea[2])>WINDUP_LIMIT_UP){
 		this->ea[2] = windUp(ea);
 	}
 	MaT = innerParameters[0]*ea[0] + innerParameters[1]*(ea[2]) + innerParameters[2]*(ea[0]-ea[1])/dt;
@@ -41,7 +41,7 @@ void Controller::calcPWM(double *input, double *output) {
 	//betadelen - pitch
 	eb[0] = refs[1] - input[4] + joyCom[1];  	// set new error
 	this->eb[2] += eb[0]*dt;
-	if (abs(eb[2])>WINDUP_LIMIT_UP){
+	if (fabs(eb[2])>WINDUP_LIMIT_UP){
 		this->eb[2] = windUp(eb);
 	}
 	MbT = innerParameters[3]*eb[0] + innerParameters[4]*(eb[2]) + innerParameters[5]*(eb[0]-eb[1])/dt;
@@ -54,7 +54,7 @@ void Controller::calcPWM(double *input, double *output) {
 	eg[0] = refs[2] - input[5] + joyCom[2];  	// set new error
 
 	this->eg[2] += eg[0]*dt;
-	if (abs(eg[2])>WINDUP_LIMIT_UP){
+	if (fabs(eg[2])>WINDUP_LIMIT_UP){
 		this->eg[2] = windUp(eg);
 	}
 	MgT = innerParameters[6]*eg[0] + innerParameters[7]*(eg[2]) + innerParameters[8]*(eg[0]-eg[1])/dt;
@@ -121,7 +121,7 @@ void Controller::setReference(double *ref){
 }
 
 void Controller::setJoyCom(double *joy, double *sensorInput, double *ref){
-	if (abs(joy[2])>0){					//this will hopefully reset the yaw reference
+	if (fabs(joy[2])>0){					//this will hopefully reset the yaw reference
 		setYawRef(ref, sensorInput[5]);	//to the current yaw input from the sensor
 	}									//so the reference won't interfere with the controller
 	this->F = 4*THRUST_CONSTANT*joy[3]*joy[3]*10000.0;
