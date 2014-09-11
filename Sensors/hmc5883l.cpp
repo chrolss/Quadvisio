@@ -20,10 +20,22 @@ hmc5883l::hmc5883l() {
 }
 
 int hmc5883l::getData(double roll, double pitch){	//user input roll and pitch IN DEGREES
-	double cos_roll = cos(roll*degToRad);
-	double cos_pitch = cos(pitch*degToRad);
-	double sin_roll = sin(roll*degToRad);
-	double sin_pitch = sin(pitch*degToRad);
+	if (roll>0.78){
+		roll  = 0.78;
+	}
+	if (roll<-0.78){
+		roll  = -0.78;
+	}
+	if (pitch>0.78){
+		pitch  = 0.78;
+	}
+	if (pitch<-0.78){
+		pitch  = -0.78;
+	}
+	double cos_roll = cos(roll);
+	double cos_pitch = cos(pitch);
+	double sin_roll = sin(roll);
+	double sin_pitch = sin(pitch);
 
 	Xh = (measuredX * cos(roll)) + (measuredZ * sin(roll));
 	Yh = (measuredX * sin(pitch) * sin(roll)) + (measuredY * cos(pitch)) - (measuredZ * sin(pitch) * cos(roll));

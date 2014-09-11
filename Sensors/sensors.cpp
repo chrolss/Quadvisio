@@ -25,15 +25,27 @@ int main(int argc, char *argv[]){
 	hmc5883l hmc;
 	while (true){
 		adxl.readSensorData();
+		hmc.readSensorData();
 		double roll = adxl.getRoll();
 		double pitch = adxl.getPitch();
 		double roll2 = filter.estimate(roll);
 		double pitch2 = filter2.estimate(pitch);
+		hmc.getData(roll2,pitch2);
+		double head = hmc.getX();
 		printf("-Roll: %f, -Pitch: %f \nRoll2: %f, Pitch2: %f \n", roll, pitch, roll2, pitch2);
+		printf("Heading: %f\n", head);
 		usleep(200000);
 	}
 /*
 
+	hmc5883l hmc;
+	for (int i = 0; i<1000; i++){
+		hmc.readSensorData();
+		hmc.getData(0.0, 0.35);
+		int X = hmc.getX();
+		printf("X: %d\n", X);
+		usleep(200000);
+	}
 	l3g4200d l3g;
 	kalman filter2(0.1,0.1,10,10);
 	while (true){
@@ -57,14 +69,6 @@ int main(int argc, char *argv[]){
 	std::cout << "Temperature: " << temperature << std::endl;
 
 
-	hmc5883l hmc;
-	for (int i = 0; i<1000; i++){
-		hmc.readSensorData();
-		hmc.getData(0.0, 0.35);
-		int X = hmc.getX();
-		printf("X: %d\n", X);
-		usleep(200000);
-	}
 */
 	/*
 	int a;

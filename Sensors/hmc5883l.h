@@ -11,6 +11,9 @@ public:
 	int getX(){return headingX;}
 	int getY(){return headingY;}
 	int getZ(){return headingZ;}
+	short getMX(){return measuredX;}
+	short getMY(){return measuredY;}
+	short getMZ(){return measuredZ;}
 private:
 	void initialize();
 
