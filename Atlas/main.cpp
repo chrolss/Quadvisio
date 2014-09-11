@@ -132,11 +132,12 @@ void loop(){
         
         //std::cout << "Calculate control action" << std::endl;
         // Calculate control action
-        controller->setJoyCom(C->stateBuf);
-
         //add controller->setOuterParameters
         //controller->calcRef(sInput, ref);	//outer controller
         //controller->setReference(ref);		//set new references based on outer controller
+
+        controller->setJoyCom(C->stateBuf, sInput, ref);
+
 
         //controller->setInnerParameters(communicate->pidParam);
 

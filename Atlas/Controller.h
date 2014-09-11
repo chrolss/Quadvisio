@@ -37,7 +37,8 @@ public:
     void setInnerParameters(double *inParams);
     void setOuterParameters(double *outParams);
     void setReference(double *ref);
-    void setJoyCom(double *joy);
+    void setYawRef(double *ref, double _yaw);
+    void setJoyCom(double *joy, double *sensorInput, double *ref);
     double windUp(double *err);
 private:
     double innerParameters[9];
