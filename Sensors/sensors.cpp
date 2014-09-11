@@ -22,18 +22,13 @@ int main(int argc, char *argv[]){
 	kalman filter(0.01, 0.1, 10, 10);
 	kalman filter2(0.01, 0.1, 10, 10);
 	adxl345 adxl;
-	hmc5883l hmc;
 	while (true){
 		adxl.readSensorData();
-		hmc.readSensorData();
 		double roll = adxl.getRoll();
 		double pitch = adxl.getPitch();
 		double roll2 = filter.estimate(roll);
 		double pitch2 = filter2.estimate(pitch);
-		hmc.getData(roll2,pitch2);
-		double head = hmc.getX();
 		printf("-Roll: %f, -Pitch: %f \nRoll2: %f, Pitch2: %f \n", roll, pitch, roll2, pitch2);
-		printf("Heading: %f\n", head);
 		usleep(200000);
 	}
 /*
