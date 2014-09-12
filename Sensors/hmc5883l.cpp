@@ -38,8 +38,8 @@ int hmc5883l::getData(double roll, double pitch){	//user input roll and pitch IN
 	double sin_pitch = sin(pitch);
 	double Xth = measuredX*sin(pitch)+77.0;
 	double Yth = measuredY*sin(roll)+15;
-	double tyh = measuredY - (pitch*180/M_PI)*10;
-	double txh = measuredX - (roll*180/M_PI)*10;
+	double tyh = measuredY + (pitch*180/M_PI)*10;
+	double txh = measuredX + (roll*180/M_PI)*10;
 	double testHead = atan2(Yth,Xth) * 180 / M_PI;
 	int tmp2 = atan2(tyh,txh) * 180 / M_PI;
 	int tmp = atan2(measuredY, measuredX) * 180 / M_PI;
@@ -47,14 +47,14 @@ int hmc5883l::getData(double roll, double pitch){	//user input roll and pitch IN
 	printf("Testhead: %d\n", tmp2);
 	//printf("mX: %d, mY: %d, mZ: %d\n", measuredX, measuredY, measuredZ);
 	//printf("xth: %f, yth: %f\n", Xth, Yth);
-	Xh = (measuredX * cos(roll)) + (measuredZ * sin(roll));
-	Yh = (measuredX * sin(pitch) * sin(roll)) + (measuredY * cos(pitch)) - (measuredZ * sin(pitch) * cos(roll));
+	Xh = (measuredX * cos(pitch)) + (measuredZ * sin(pitch));
+	Yh = (measuredX * sin(roll) * sin(pitch)) + (measuredY * cos(roll)) - (measuredZ * sin(roll) * cos(pitch));
 	tiltHeading = atan2(Yh,Xh) * 180 / M_PI;
 	if (tiltHeading<0){
 		tiltHeading = 360.0 + tiltHeading;
 	}
 	this->headingX = tiltHeading;
-	//std::cout << "Tilted Heading: " << tiltHeading << std::endl;
+	std::cout << "Tilted Heading: " << tiltHeading << std::endl;
 	/*
 	int tmp = atan2(measuredY, measuredX) * 180 / M_PI;
 	if (tmp<0){
