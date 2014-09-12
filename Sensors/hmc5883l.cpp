@@ -36,7 +36,17 @@ int hmc5883l::getData(double roll, double pitch){	//user input roll and pitch IN
 	double cos_pitch = cos(pitch);
 	double sin_roll = sin(roll);
 	double sin_pitch = sin(pitch);
-	printf("mX: %f, mY: %f, mZ: %f\n", measuredX, measuredY, measuredZ);
+	double Xth = measuredX*sin(pitch)+77.0;
+	double Yth = measuredY*sin(roll)+15;
+	double tyh = measuredY - (pitch*180/M_PI)*10;
+	double txh = measuredX - (roll*180/M_PI)*10;
+	double testHead = atan2(Yth,Xth) * 180 / M_PI;
+	int tmp2 = atan2(tyh,txh) * 180 / M_PI;
+	int tmp = atan2(measuredY, measuredX) * 180 / M_PI;
+	printf("Heading: %d\n", tmp);
+	printf("Testhead: %d\n", tmp2);
+	//printf("mX: %d, mY: %d, mZ: %d\n", measuredX, measuredY, measuredZ);
+	//printf("xth: %f, yth: %f\n", Xth, Yth);
 	Xh = (measuredX * cos(roll)) + (measuredZ * sin(roll));
 	Yh = (measuredX * sin(pitch) * sin(roll)) + (measuredY * cos(pitch)) - (measuredZ * sin(pitch) * cos(roll));
 	tiltHeading = atan2(Yh,Xh) * 180 / M_PI;

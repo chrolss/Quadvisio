@@ -34,7 +34,7 @@ int main(int argc, char *argv[]){
 		hmc.getData(roll2,pitch2);
 		double heading = headF.estimate(hmc.getX());
 		//printf("-Roll: %f, -Pitch: %f \nRoll2: %f, Pitch2: %f \n", roll*deg, pitch*deg, roll2*deg, pitch2*deg);
-		printf("head: %f\n", heading);
+		//printf("head: %f\n", heading);
 		usleep(10000);
 	}
 /*
