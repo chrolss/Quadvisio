@@ -43,7 +43,9 @@ int hmc5883l::getData(double roll, double pitch){	//user input roll and pitch IN
 	if (tiltHeading<0){
 		tiltHeading = 360.0 + tiltHeading;
 	}
+	this->headingX = tiltHeading;
 	std::cout << "Tilted Heading: " << tiltHeading << std::endl;
+	/*
 	int tmp = atan2(measuredY, measuredX) * 180 / M_PI;
 	if (tmp<0){
 		this->headingX = 360.0 + tmp;
@@ -51,6 +53,7 @@ int hmc5883l::getData(double roll, double pitch){	//user input roll and pitch IN
 	else{
 		this->headingX = tmp;
 	}
+	*/
 	return 0.0;
 }
 

@@ -25,6 +25,7 @@ private:
 
 	short accX, accY, accZ;
 	double pitch, roll;
+	double oPitch, oRoll;
 
 	void initialize();
 };

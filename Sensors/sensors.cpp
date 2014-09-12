@@ -18,18 +18,24 @@ short est;
 
 int main(int argc, char *argv[]){
 
-
-	kalman filter(0.01, 0.1, 10, 10);
-	kalman filter2(0.01, 0.1, 10, 10);
+	double deg = 180/M_PI;
+	kalman filter(0.1, 0.1, 0, 10);
+	kalman filter2(0.1, 0.1, 0, 10);
+	kalman headF(0.1,0.1,180,10);
 	adxl345 adxl;
+	hmc5883l hmc;
 	while (true){
 		adxl.readSensorData();
+		hmc.readSensorData();
 		double roll = adxl.getRoll();
 		double pitch = adxl.getPitch();
 		double roll2 = filter.estimate(roll);
 		double pitch2 = filter2.estimate(pitch);
-		printf("-Roll: %f, -Pitch: %f \nRoll2: %f, Pitch2: %f \n", roll, pitch, roll2, pitch2);
-		usleep(200000);
+		hmc.getData(roll2,pitch2);
+		double heading = headF.estimate(hmc.getX());
+		//printf("-Roll: %f, -Pitch: %f \nRoll2: %f, Pitch2: %f \n", roll*deg, pitch*deg, roll2*deg, pitch2*deg);
+		printf("head: %f\n", heading);
+		usleep(10000);
 	}
 /*
 

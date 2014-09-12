@@ -60,7 +60,6 @@ void adxl345::initialize(){
 double adxl345::getRoll(){
 	double tmp = sqrt(double (accX*accX) + double (accZ *accZ));
 	double roll = atan2(accY,tmp); //180/M_PI;
-
 	return roll;
 }
 
