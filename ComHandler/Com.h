@@ -32,7 +32,6 @@ class Com{
 public:
     Com();
     void Listen();
-    void sendMsg();
     void sendImg();
     void checkClient();
     void closeClient();
@@ -62,8 +61,18 @@ public:
 private:
     void error(const char *msg);
     void readMsg();
+    void reciveClientIdentity();
+    void reciveMessage();
+    void qvisDevLoop();
+    void qvisLightLoop();
+    void sendQvisDevMsg();
+    void sendQvisLightMsg();
+    
     int sockfd, newsockfd, portno;
     int sizeOfOutput;
+    int clientIdentity;
+    std::string clientName;
+    std::string clientIp;
     
     int vidRes;
     int vidResNew;
@@ -88,7 +97,8 @@ private:
     std::string startDelimiter = "<";
     std::string endDelimeter = ">";
     std::string token;
-
+    
+    int msgSize;
 };
 
 #endif /* defined(__Atlas__Com__) */

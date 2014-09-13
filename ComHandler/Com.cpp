@@ -19,8 +19,9 @@ Com::Com(){
     colorVideo=true;
     vidCount = 0;
     vidLimit = 0;
-    vidRes = 2;
+    vidRes = 2; // Default 2 = 320x240
     vidResNew = 2;
+    msgSize = 0;
     
     output[0]=0.0;
     output[1]=0.0;
@@ -87,6 +88,26 @@ void Com::Listen()
     vidCount = 0;
     std::cout << "Connection estabilished" << std::endl;
     
+    reciveClientIdentity();
+    
+    printf("%s connected with %i\n", clientName.c_str(), clientIdentity);
+    //closeClient();
+    //return;
+    
+    if (clientIdentity==1) {
+        
+    }
+    else if (clientIdentity==2) {
+        qvisLightLoop();
+    }
+    else if (clientIdentity==3) {
+        qvisDevLoop();
+    }
+
+    closeClient();
+}
+
+void Com::qvisDevLoop() {
     while (connected) {
         
         if (reciveMsg) {
@@ -95,15 +116,30 @@ void Com::Listen()
         }
         
         if (msgSend) {
-            sendMsg();
+            sendQvisDevMsg();
             reciveMsg=true;
             msgSend=false;
         }
     }
-    closeClient();
 }
 
-void Com::sendMsg() {
+void Com::qvisLightLoop() {
+    while (connected) {
+        
+        if (reciveMsg) {
+            readMsg();
+            reciveMsg=false;
+        }
+        
+        if (msgSend) {
+            sendQvisLightMsg();
+            reciveMsg=true;
+            msgSend=false;
+        }
+    }
+}
+
+void Com::sendQvisLightMsg() {
     
     printf("Sending message\n");
     printf("Video count: %i\n", vidCount);
@@ -196,6 +232,10 @@ void Com::sendMsg() {
 
 }
 
+void Com::sendQvisDevMsg() {
+    
+}
+
 void Com::sendImg() {
     sendFrame = (sendFrame.reshape(0,1));
     if(colorVideo) {
@@ -228,11 +268,13 @@ void Com::readMsg() {
             perror("read");
             break;
         }
+        
         else if (numBytes == 0) {
             printf("Maybe lost connection to client, closing socket and starting to listing\n");
             connected = false;
             return;
         }
+        
         else {
             msgBuffer = std::string(recvBuf);
             std::cout << "Raw message: " << msgBuffer << std::endl;
@@ -316,7 +358,72 @@ void Com::readMsg() {
     for (int i = 0 ; i<4; i++) {
         stateBuf[i] = atof(numberInStrings[i].c_str());
     }
+}
+
+void Com::reciveMessage() {
     
+    printf("Waitning for message\n");
+    
+    msgBuffer = "";
+    msg = "";
+    bzero(recvBuf, 1024);
+    
+    while (1) {
+        numBytes = recv(newsockfd, recvBuf, sizeof(recvBuf), 0);
+        if (numBytes < 0) {
+            connected = false;
+            perror("read");
+            return;
+        }
+        
+        else if (numBytes == 0) {
+            printf("Maybe lost connection to client, closing socket and starting to listing\n");
+            connected = false;
+            return;
+        }
+        
+        else {
+            msgBuffer = std::string(recvBuf);
+            std::cout << "Raw message: " << msgBuffer << std::endl;
+        }
+        
+        if (msgSize == 0 && msgBuffer.size()>=3) {
+            msgSize = atoi(msgBuffer.substr(0,3).c_str());
+            printf("Message size: %i", msgSize);
+        }
+        
+        if (msgSize>0 && msgBuffer.size() == (msgSize+3)) {
+            printf("Message recived!\n");
+            msg = msgBuffer;
+            break;
+        }
+        
+    }
+    
+}
+
+void Com::reciveClientIdentity() {
+    
+    reciveMessage();
+    
+    printf("Final message:\n");
+    std::cout << msg << std::endl;
+    
+    size_t pos = 0;
+    std::string token;
+    
+    int i = 0;
+    while ((pos = msg.find(subDelimiter)) != std::string::npos) {
+        token = msg.substr(0, pos);
+        std::cout << token << std::endl;
+        numberInStrings[i] = token;
+        msg.erase(0, pos + subDelimiter.length());
+        i++;
+    }
+    numberInStrings[i] = msg;
+    
+    clientIdentity = atoi(numberInStrings[1].c_str());
+    clientName = numberInStrings[2];
 }
 
 void Com::checkClient() {
