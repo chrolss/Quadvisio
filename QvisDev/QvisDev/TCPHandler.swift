@@ -16,7 +16,7 @@ protocol connectionProtocol {
 
 protocol tcpProtocol {
     func setRecivedImage(image: UIImage)
-    func setRecivedData(data: [Double])
+    func setRecivedData(data: [Double], errorMsg: String)
     func getSendData() -> String
     func getIdentityMsg() -> String
 }
@@ -51,7 +51,8 @@ class TCPHandler: NSObject, NSStreamDelegate {
     var provider: CGDataProviderRef?
     var image: UIImage?
     
-    var stateData = [Double](count: 3, repeatedValue: 0)
+    var stateData = [Double](count: 14, repeatedValue: 0)
+    var errorMsg: String = ""
     
     var send: Bool = true
     var imgComing: Bool = false
@@ -217,10 +218,12 @@ class TCPHandler: NSObject, NSStreamDelegate {
         var strValues = str.componentsSeparatedByString(":") as [String]
         stateData.removeAll()
         
-        for value in 1..<(strValues.count-3) {
+        for value in 1..<(strValues.count-4) {
             stateData.append((strValues[value] as NSString).doubleValue)
             println(stateData[value-1])
         }
+        
+        errorMsg = strValues[strValues.count-5]
         
         imgChannels = strValues[strValues.count-1].toInt()!
         imgSize = strValues[strValues.count-2].toInt()!
@@ -232,7 +235,7 @@ class TCPHandler: NSObject, NSStreamDelegate {
         println("Width: \(imgWidth) Height: \(imgHeight) ImageSize: \(imgSize) TotalSize: \(totalSize)")
 
         //Set recived data
-        tcpDelegate!.setRecivedData(stateData)
+        tcpDelegate!.setRecivedData(stateData, errorMsg: errorMsg)
     }
     
     func composeMsg() -> String {
