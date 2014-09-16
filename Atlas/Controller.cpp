@@ -131,7 +131,7 @@ void Controller::setJoyCom(double *joy, double *sensorInput, double *ref){
 	this->F = 4*THRUST_CONSTANT*joy[3]*joy[3]*10000.0;
 	this->joyCom[0] = 0.25*joy[0];
 	this->joyCom[1] = -0.25*joy[1];
-	this->joyCom[2] = -0.0059*joy[2];
+	this->joyCom[2] = 0.25*joy[2];
 	//printf("Thrust: %f, F: %f \n", joy[3], F);
 }
 
