@@ -21,7 +21,6 @@ void Motor::initializeAll(){
 	printf("Motors initialized\n");
 }
 
-
 void Motor::closePWM(){
 	pwm->setDuty("P8_13", 1000000);
 	pwm->setDuty("P9_14", 1000000);
