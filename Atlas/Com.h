@@ -25,20 +25,20 @@
 
 #define PORT "3490"  // the port users will be connecting to
 #define BACKLOG 10
+#define radToDeg 57.29577
 
 class Com{
 
 public:
     Com();
     void Listen();
-    void sendMsg();
     void sendImg();
     void checkClient();
     void closeClient();
     void startListenThread();
     
     void getNewInputData(int value);
-    void setOutputData(double *output);
+    void setOutputData(double *out, double *pwm, double *refs, double &freq);
     
     bool connected;
     bool listening;
@@ -50,19 +50,31 @@ public:
     bool motorOn;
     bool colorVideo;
     
-    double output[3];
+    double output[14];
     int vidCount;
     int vidLimit;
     
     double stateBuf[4];
     
+    std::string errMsg;
+
     cv::Mat sendFrame;
     
 private:
     void error(const char *msg);
     void readMsg();
+    void reciveClientIdentity();
+    void reciveMessage();
+    void qvisDevLoop();
+    void qvisLightLoop();
+    void sendQvisDevMsg();
+    void sendQvisLightMsg();
+
     int sockfd, newsockfd, portno;
     int sizeOfOutput;
+    int clientIdentity;
+    std::string clientName;
+    std::string clientIp;
     
     int vidRes;
     int vidResNew;
@@ -76,7 +88,7 @@ private:
     
     cv::VideoCapture cap;
     
-    std::string numberInStrings[8];
+    std::string numberInStrings[9];
     
     // Message parsing
     size_t posStart;
@@ -84,10 +96,9 @@ private:
     std::string msg;
     std::string msgBuffer;
     std::string subDelimiter = ":";
-    std::string startDelimiter = "<";
-    std::string endDelimeter = ">";
     std::string token;
 
+    int msgSize;
 };
 
 #endif /* defined(__Atlas__Com__) */

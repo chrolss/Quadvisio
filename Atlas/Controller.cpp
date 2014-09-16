@@ -23,6 +23,8 @@ Controller::Controller(){
     this->joyCom[0] = 0.0;
     this->joyCom[1] = 0.0;
     this->joyCom[2] = 0.0;
+    this->dB = 0.0;
+    this->dA = 0.0;
 }
 
 void Controller::calcPWM(double *input, double *output) {
@@ -66,7 +68,7 @@ void Controller::calcPWM(double *input, double *output) {
     Ma = (MaT*COS45 - MbT*SIN45);
     Mb = (MaT*COS45 + MbT*COS45);
     Mg = -MgT;		//change stuff
-    printf("Ma = %f, Mb = %f, Mg = %f, F = %f \n", Ma, Mb, Mg, F);
+    //printf("Ma = %f, Mb = %f, Mg = %f, F = %f \n", Ma, Mb, Mg, F);
     output[0] = 0.25*(F*CONST1 + Mb*CONST2 + Mg*CONST3);
     output[1] = 0.25*(F*CONST1 - Ma*CONST2 - Mg*CONST3);
     output[2] = 0.25*(F*CONST1 - Mb*CONST2 + Mg*CONST3);
@@ -86,26 +88,28 @@ void Controller::calcPWM(double *input, double *output) {
             output[i]=MAX_PERCENTAGE;
         }
     }
-    printf("LF = %f, RF = %f, RR = %f, LR = %f \n", output[0], output[1],output[2], output[3]);
+    //printf("LF = %f, RF = %f, RR = %f, LR = %f \n", output[0], output[1],output[2], output[3]);
 
 }
 
 
-void Controller::calcRef(double *sensorInput, double *refs){
+void Controller::calcRef(double *sensorInput, double *ref){
 	//Read refs 3 and 4  + accInput 0 and 1, while returning ref 0 and 1
 	//compensate accInput 0 and 1 with accInput 3 and 4 (alpha and beta angles)
-	ex[0] = refs[3] - cos(sensorInput[4])*sensorInput[0];	//x-acc error
+	ex[0] = ref[3] - cos(sensorInput[4])*(sensorInput[0]-sin(sensorInput[4]));	//x-acc error
 	this->ex[2] += ex[0]/dt;		//store error in I-summation
 	dB = outerParameters[0]*ex[0] + outerParameters[1]*(ex[2]) + outerParameters[2]*(ex[0]-ex[1]);
 	this->ex[1] = ex[0];
-	printf("ex0: %f, ax: %f, dB: %f", ex[0],cos(sensorInput[4])*sensorInput[0], dB);
-	ey[0] = refs[4] - cos(sensorInput[3])*sensorInput[1];	//y-acc error
+	//printf("ex0: %f, ax: %f, dB: %f\n", ex[0],cos(sensorInput[4])*sensorInput[0], dB);
+	ey[0] = ref[4] - cos(sensorInput[3])*(sensorInput[1]-sin(sensorInput[3]));	//y-acc error
 	this->ey[2] += ey[0]/dt;		//store error in I-summation
 	dA = outerParameters[3]*ey[0] + outerParameters[4]*(ey[2]) + outerParameters[5]*(ey[0]-ey[1]);
 	this->ey[1] = ey[0];
 
-	refs[0] += dA;	//fråga Toni om allt detta
-	refs[1] += dB;
+	this->refs[0] = -dA;	//fråga Toni om allt detta
+	this->refs[1] = -dB;
+	ref[0] = -dA;
+	ref[1] = -dB;
 }
 
 
@@ -128,11 +132,12 @@ void Controller::setJoyCom(double *joy, double *sensorInput, double *ref){
 	this->joyCom[0] = 0.25*joy[0];
 	this->joyCom[1] = -0.25*joy[1];
 	this->joyCom[2] = -0.0059*joy[2];
-	printf("Thrust: %f, F: %f \n", joy[3], F);
+	//printf("Thrust: %f, F: %f \n", joy[3], F);
 }
 
 void Controller::setYawRef(double *ref, double _yaw){
 	ref[2] = _yaw;
+	this->refs[2] = _yaw;
 }
 
 double Controller::windUp(double *err){

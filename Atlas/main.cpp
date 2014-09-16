@@ -32,7 +32,7 @@ int counter = 0;
 int vidCount = 0;
 
 // Loop time measurement
-double loopTime;
+double loopTime = 0.0;
 int Hz = 100;
 int loopSleep=0;
 double ref[7];
@@ -59,15 +59,15 @@ void initailize(){
     
     ref[0] = 0.0;
     ref[1] = 0.0;
-    ref[2] = 0.4188;
+    ref[2] = 0.0;
     ref[3] = 0.0;
     ref[4] = 0.0;
     ref[5] = 0.0;
     ref[6] = 0.0;
-    outParams[0] = 0.001;
+    outParams[0] = 0.01;
     outParams[1] = 0.0;
     outParams[2] = 0.0;
-    outParams[3] = 0.001;
+    outParams[3] = 0.01;
     outParams[4] = 0.0;
     outParams[5] = 0.0;
     inParams[0] = 0.17;
@@ -79,6 +79,10 @@ void initailize(){
     inParams[6] = 0.001;
     inParams[7] = 0.0;
     inParams[8] = 0.0;
+    sOutput[0] = 0.0;
+    sOutput[1] = 0.0;
+    sOutput[2] = 0.0;
+    sOutput[3] = 0.0;
 
     controller->setInnerParameters(inParams);
 
@@ -116,7 +120,7 @@ void loop(){
         if (C->connected) {
              if (!C->reciveMsg && !C->msgSend) {
                  //printf("Setting output and send to true\n");
-                 C->setOutputData(sInput);
+                 C->setOutputData(sInput, sOutput, ref, loopTime);
                  if (C->vidCount>=2) {
                      C->imgSend = true;
                  }
@@ -145,7 +149,7 @@ void loop(){
         
         //std::cout << "Setting PWM values" << std::endl;
         // Send PWM values to motors
-        if (C->motorOn==true) {
+        if (C->motorOn==true && C->connected) {
             motor->setPWM(sOutput);
         }
         else {
@@ -154,7 +158,7 @@ void loop(){
 
         //vidCount++;
         counter++;
-        std::cout << counter << std::endl;
+        //std::cout << counter << std::endl;
         
         // Measure duration
         auto duration = std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::high_resolution_clock::now() - start).count();
@@ -171,7 +175,7 @@ void loop(){
         auto duration2 = std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::high_resolution_clock::now() - start).count();
          
         loopTime = double(1000000)/(duration2);
-        std::cout << "Running at: " << loopTime << "Hz" << std::endl;
+        //std::cout << "Running at: " << loopTime << "Hz" << std::endl;
     }
     
     motor->closePWM();

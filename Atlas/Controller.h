@@ -33,7 +33,7 @@ class Controller{
 public:
     Controller();
     void calcPWM(double *input, double *output);
-    void calcRef(double *sensorInput, double *refs);
+    void calcRef(double *sensorInput, double *ref);
     void setInnerParameters(double *inParams);
     void setOuterParameters(double *outParams);
     void setReference(double *ref);
