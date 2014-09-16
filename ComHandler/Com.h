@@ -50,11 +50,13 @@ public:
     bool motorOn;
     bool colorVideo;
     
-    double output[3];
+    double output[14];
     int vidCount;
     int vidLimit;
     
     double stateBuf[4];
+    
+    std::string errMsg;
     
     cv::Mat sendFrame;
     
@@ -86,7 +88,7 @@ private:
     
     cv::VideoCapture cap;
     
-    std::string numberInStrings[8];
+    std::string numberInStrings[9];
     
     // Message parsing
     size_t posStart;
@@ -94,8 +96,6 @@ private:
     std::string msg;
     std::string msgBuffer;
     std::string subDelimiter = ":";
-    std::string startDelimiter = "<";
-    std::string endDelimeter = ">";
     std::string token;
     
     int msgSize;

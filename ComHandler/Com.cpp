@@ -22,10 +22,22 @@ Com::Com(){
     vidRes = 2; // Default 2 = 320x240
     vidResNew = 2;
     msgSize = 0;
+    errMsg = "Nothing wrong here!!";
     
     output[0]=0.0;
     output[1]=0.0;
     output[2]=0.0;
+    output[3]=0.0;
+    output[4]=0.0;
+    output[5]=0.0;
+    output[6]=0.0;
+    output[7]=0.0;
+    output[8]=0.0;
+    output[9]=0.0;
+    output[10]=0.0;
+    output[11]=0.0;
+    output[12]=0.0;
+    output[13]=0.0;
     
     sizeOfOutput = (sizeof(output)/sizeof(*output));
     
@@ -91,8 +103,6 @@ void Com::Listen()
     reciveClientIdentity();
     
     printf("%s connected with %i\n", clientName.c_str(), clientIdentity);
-    //closeClient();
-    //return;
     
     if (clientIdentity==1) {
         
@@ -146,7 +156,7 @@ void Com::sendQvisLightMsg() {
     
     ostr.str("");
     
-    for (int i=0; i<sizeOfOutput; i++) {
+    for (int i=0; i<3; i++) {
         ostr << output[i] << ":";
     }
     
@@ -234,6 +244,102 @@ void Com::sendQvisLightMsg() {
 
 void Com::sendQvisDevMsg() {
     
+    printf("Sending message\n");
+    printf("Video count: %i\n", vidCount);
+    
+    ostr.str("");
+    
+    for (int i=0; i<sizeOfOutput; i++) {
+        ostr << output[i] << ":";
+    }
+    
+    if (errMsg.size()>0) {
+        ostr << errMsg << "\n:";
+        errMsg = "";
+    }
+    else {
+        ostr << "none:";
+    }
+    
+    if (imgSend && videoStream) {
+        if (vidResNew != vidRes) {
+            switch (vidResNew) {
+                case 0:
+                    cap.set(CV_CAP_PROP_FRAME_WIDTH, 80);
+                    cap.set(CV_CAP_PROP_FRAME_HEIGHT, 60);
+                    break;
+                    
+                case 1:
+                    cap.set(CV_CAP_PROP_FRAME_WIDTH, 160);
+                    cap.set(CV_CAP_PROP_FRAME_HEIGHT, 120);
+                    break;
+                    
+                case 2:
+                    cap.set(CV_CAP_PROP_FRAME_WIDTH, 320);
+                    cap.set(CV_CAP_PROP_FRAME_HEIGHT, 240);
+                    break;
+                    
+                case 3:
+                    cap.set(CV_CAP_PROP_FRAME_WIDTH, 640);
+                    cap.set(CV_CAP_PROP_FRAME_HEIGHT, 480);
+                    break;
+                    
+                default:
+                    break;
+            }
+            usleep(1000);
+            printf("New resolution was set\n");
+            vidRes = vidResNew;
+        }
+
+        cap >> sendFrame;
+        
+        if (colorVideo) {
+            cvtColor(sendFrame, sendFrame, CV_BGR2RGB);
+            ostr << sendFrame.cols << ":" << sendFrame.rows << ":";
+            ostr << sendFrame.total()*3 << ":3";
+        }
+        
+        else {
+            cvtColor(sendFrame, sendFrame, CV_BGR2GRAY);
+            ostr << sendFrame.cols << ":" << sendFrame.rows << ":";
+            ostr << sendFrame.total() << ":1";
+        }
+    }
+    else {
+        ostr << "0:0:0:0";
+    }
+    
+    std::string s;
+    s = ostr.str();
+    ostr.str("");
+    
+    if ((s.length()+1)<10) {
+        ostr << "000" << (s.length()+1) << ":" << s;
+    }
+    else if((s.length()+1)>=10 && (s.length()+1)<100) {
+        ostr << "00" << (s.length()+1) << ":" << s;
+    }
+    else if((s.length()+1)>=100 && (s.length()+1)<1000) {
+        ostr << "0" << (s.length()+1) << ":" << s;
+    }
+    else {
+        ostr << (s.length()+1) << ":" << s;
+    }
+    
+    s = ostr.str();
+    
+    printf("Sending message: %s\n", s.c_str());
+    if (send(newsockfd, s.c_str(), s.length(),0) == -1) {
+        closeClient();
+        perror("send");
+    }
+    
+    if (imgSend && videoStream) {
+        sendImg();
+        imgSend = false;
+    }
+    printf("Message sent\n");
 }
 
 void Com::sendImg() {
@@ -255,64 +361,8 @@ void Com::sendImg() {
 }
 
 void Com::readMsg() {
-    printf("Waitning for message\n");
     
-    msgBuffer = "";
-    msg = "";
-    bzero(recvBuf, 1024);
-    
-    while (1) {
-        numBytes = recv(newsockfd, recvBuf, sizeof(recvBuf), 0);
-        if (numBytes < 0) {
-            closeClient();
-            perror("read");
-            break;
-        }
-        
-        else if (numBytes == 0) {
-            printf("Maybe lost connection to client, closing socket and starting to listing\n");
-            connected = false;
-            return;
-        }
-        
-        else {
-            msgBuffer = std::string(recvBuf);
-            std::cout << "Raw message: " << msgBuffer << std::endl;
-            
-            // If msg is a complete message
-            if ((posStart = msgBuffer.find(startDelimiter)) != std::string::npos && (posEnd = msgBuffer.find(endDelimeter)) != std::string::npos) {
-                msg = msgBuffer.substr(posStart + 1, posEnd - 1);
-                //std::cout << msg << std::endl;
-                //printf("1");
-                break;
-            }
-            
-            // If msg is the start of a message
-            else if (posStart != std::string::npos && posEnd == std::string::npos) {
-                msg = msgBuffer.substr(posStart + 1, msg.length());
-                //std::cout << msg << std::endl;
-                msgStarted = true;
-                printf("2");
-            }
-            
-            // If msg is the end of a message
-            else if (posStart == std::string::npos && posEnd != std::string::npos) {
-                msg.append(msgBuffer);
-                msg.erase(msg.length(),1);
-                //std::cout << msg << std::endl;
-                msgStarted = false;
-                printf("3");
-                break;
-            }
-            
-            // If msg is a middle part of a message
-            else {
-                msg.append(msgBuffer);
-                printf("4");
-                //std::cout << msg << std::endl;
-            }
-        }
-    }
+    reciveMessage();
     
     printf("Final message:\n");
     std::cout << msg << std::endl;
@@ -323,41 +373,41 @@ void Com::readMsg() {
     int i = 0;
     while ((pos = msg.find(subDelimiter)) != std::string::npos) {
         token = msg.substr(0, pos);
-        //std::cout << token << std::endl;
+        printf("%i %s\n", i, token.c_str());
         numberInStrings[i] = token;
         msg.erase(0, pos + subDelimiter.length());
         i++;
     }
-    //std::cout << msg << std::endl;
-    numberInStrings[7] = msg;
+    numberInStrings[i] = msg;
     
-    if (atoi(numberInStrings[4].c_str())==1) {
+    if (atoi(numberInStrings[5].c_str())==1) {
         videoStream = true;
     }
     else {
         videoStream = false;
+        vidCount = 0;
     }
     
-    if (atoi(numberInStrings[5].c_str())==1) {
+    if (atoi(numberInStrings[6].c_str())==1) {
         colorVideo = true;
     }
     else {
         colorVideo = false;
     }
     
-    vidResNew = atoi(numberInStrings[6].c_str());
-    //printf("Video res %i\n", vidResNew);
+    vidResNew = atoi(numberInStrings[7].c_str());
     
-    if (atoi(numberInStrings[7].c_str())==1) {
+    if (atoi(numberInStrings[8].c_str())==1) {
         motorOn = true;
     }
     else{
         motorOn = false;
     }
     
-    for (int i = 0 ; i<4; i++) {
-        stateBuf[i] = atof(numberInStrings[i].c_str());
+    for (int i = 1 ; i<5; i++) {
+        stateBuf[i-1] = atof(numberInStrings[i].c_str());
     }
+    
 }
 
 void Com::reciveMessage() {
@@ -366,6 +416,7 @@ void Com::reciveMessage() {
     
     msgBuffer = "";
     msg = "";
+    msgSize = 0;
     bzero(recvBuf, 1024);
     
     while (1) {
@@ -389,7 +440,7 @@ void Com::reciveMessage() {
         
         if (msgSize == 0 && msgBuffer.size()>=3) {
             msgSize = atoi(msgBuffer.substr(0,3).c_str());
-            printf("Message size: %i", msgSize);
+            printf("Message size: %i\n", msgSize);
         }
         
         if (msgSize>0 && msgBuffer.size() == (msgSize+3)) {
@@ -442,6 +493,17 @@ void Com::setOutputData(double *out) {
     output[0] = out[0];
     output[1] = out[1];
     output[2] = out[2];
+    output[3] = out[3];
+    output[4] = out[4];
+    output[5] = out[5];
+    output[6] = out[6];
+    output[7] = out[7];
+    output[8] = out[8];
+    output[9] = out[9];
+    output[10] = out[10];
+    output[11] = out[11];
+    output[12] = out[12];
+    output[13] = out[13];
 }
 
 
