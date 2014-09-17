@@ -244,8 +244,8 @@ void Com::sendQvisLightMsg() {
 
 void Com::sendQvisDevMsg() {
     
-    printf("Sending message\n");
-    printf("Video count: %i\n", vidCount);
+    //printf("Sending message\n");
+    //printf("Video count: %i\n", vidCount);
     
     ostr.str("");
     
@@ -288,7 +288,7 @@ void Com::sendQvisDevMsg() {
                     break;
             }
             usleep(1000);
-            printf("New resolution was set\n");
+            //printf("New resolution was set\n");
             vidRes = vidResNew;
         }
 
@@ -329,7 +329,7 @@ void Com::sendQvisDevMsg() {
     
     s = ostr.str();
     
-    printf("Sending message: %s\n", s.c_str());
+    //printf("Sending message: %s\n", s.c_str());
     if (send(newsockfd, s.c_str(), s.length(),0) == -1) {
         closeClient();
         perror("send");
@@ -339,7 +339,7 @@ void Com::sendQvisDevMsg() {
         sendImg();
         imgSend = false;
     }
-    printf("Message sent\n");
+    //printf("Message sent\n");
 }
 
 void Com::sendImg() {
@@ -364,7 +364,7 @@ void Com::readMsg() {
     
     reciveMessage();
     
-    printf("Final message:\n");
+    //printf("Final message:\n");
     std::cout << msg << std::endl;
     
     size_t pos = 0;
@@ -373,14 +373,14 @@ void Com::readMsg() {
     int i = 0;
     while ((pos = msg.find(subDelimiter)) != std::string::npos) {
         token = msg.substr(0, pos);
-        printf("%i %s\n", i, token.c_str());
+        //printf("%i %s\n", i, token.c_str());
         numberInStrings[i] = token;
         msg.erase(0, pos + subDelimiter.length());
         i++;
     }
     numberInStrings[i] = msg;
     
-    if (atoi(numberInStrings[5].c_str())==1) {
+    if (atoi(numberInStrings[7].c_str())==1) {
         videoStream = true;
     }
     else {
@@ -388,23 +388,23 @@ void Com::readMsg() {
         vidCount = 0;
     }
     
-    if (atoi(numberInStrings[6].c_str())==1) {
+    if (atoi(numberInStrings[8].c_str())==1) {
         colorVideo = true;
     }
     else {
         colorVideo = false;
     }
     
-    vidResNew = atoi(numberInStrings[7].c_str());
+    vidResNew = atoi(numberInStrings[9].c_str());
     
-    if (atoi(numberInStrings[8].c_str())==1) {
+    if (atoi(numberInStrings[10].c_str())==1) {
         motorOn = true;
     }
     else{
         motorOn = false;
     }
     
-    for (int i = 1 ; i<5; i++) {
+    for (int i = 1 ; i<7; i++) {
         stateBuf[i-1] = atof(numberInStrings[i].c_str());
     }
     
@@ -412,7 +412,7 @@ void Com::readMsg() {
 
 void Com::reciveMessage() {
     
-    printf("Waitning for message\n");
+    //printf("Waitning for message\n");
     
     msgBuffer = "";
     msg = "";
@@ -435,16 +435,16 @@ void Com::reciveMessage() {
         
         else {
             msgBuffer = std::string(recvBuf);
-            std::cout << "Raw message: " << msgBuffer << std::endl;
+            //std::cout << "Raw message: " << msgBuffer << std::endl;
         }
         
         if (msgSize == 0 && msgBuffer.size()>=3) {
             msgSize = atoi(msgBuffer.substr(0,3).c_str());
-            printf("Message size: %i\n", msgSize);
+            //printf("Message size: %i\n", msgSize);
         }
         
         if (msgSize>0 && msgBuffer.size() == (msgSize+3)) {
-            printf("Message recived!\n");
+            //printf("Message recived!\n");
             msg = msgBuffer;
             break;
         }
@@ -457,7 +457,7 @@ void Com::reciveClientIdentity() {
     
     reciveMessage();
     
-    printf("Final message:\n");
+    //printf("Final message:\n");
     std::cout << msg << std::endl;
     
     size_t pos = 0;

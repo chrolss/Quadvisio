@@ -22,7 +22,6 @@
 #include <string>
 #include <opencv2/highgui/highgui.hpp>
 #include <opencv2/imgproc/imgproc.hpp>
-#include "cameraManager.h"
 
 #define PORT "3490"  // the port users will be connecting to
 #define BACKLOG 10
@@ -54,7 +53,7 @@ public:
     int vidCount;
     int vidLimit;
     
-    double stateBuf[4];
+    double stateBuf[6];
     
     std::string errMsg;
     
@@ -88,7 +87,7 @@ private:
     
     cv::VideoCapture cap;
     
-    std::string numberInStrings[9];
+    std::string numberInStrings[11];
     
     // Message parsing
     size_t posStart;
