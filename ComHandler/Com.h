@@ -53,7 +53,7 @@ public:
     int vidCount;
     int vidLimit;
     
-    double stateBuf[6];
+    double stateBuf[6];  // Roll:Pitch:Yaw:Throttle:rollOffset:pitchOffset
     
     std::string errMsg;
     
