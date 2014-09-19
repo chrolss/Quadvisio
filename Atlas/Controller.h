@@ -11,6 +11,7 @@
 
 #include <iostream>
 #include <cstdio>
+#include <fstream>
 #include <math.h>
 
 #define THRUST_CONSTANT 0.0003
@@ -39,7 +40,9 @@ public:
     void setYawRef(double *ref, double _yaw);
     void setJoyCom(double *joy, double *sensorInput, double *ref);
     double windUp(double *err);
+    void write_Parameters(double *inner, double *outer);
 private:
+    void get_Parameters();
     double innerParameters[9];
     double outerParameters[9];
     double refs[7];		//roll, pitch, yaw, ax, ay, az, altitude

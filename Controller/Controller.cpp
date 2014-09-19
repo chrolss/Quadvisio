@@ -20,6 +20,11 @@ Controller::Controller(){
     this->ey[1] = 0.0;
     this->ex[2] = 0.0;
     this->ey[2] = 0.0;
+    get_Parameters();
+}
+
+void Controller::get_Parameters(){
+	std::fstream params("parameters.txt");
 }
 
 void Controller::calcPWM(double *input, double *output) {

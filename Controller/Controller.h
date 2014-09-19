@@ -40,6 +40,7 @@ public:
     void setThrust(int _thrust);
     double windUp(double *err);
 private:
+    void get_Parameters();
     double innerParameters[9];
     double outerParameters[9];
     double refs[7];		//roll, pitch, yaw, ax, ay, az, altitude

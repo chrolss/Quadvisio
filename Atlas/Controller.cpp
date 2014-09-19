@@ -27,6 +27,35 @@ Controller::Controller(){
     this->dA = 0.0;
 }
 
+//reads PID parameters from two txt-files and sets them
+void Controller::get_Parameters(){
+	std::fstream params1("innerParameters.txt");
+	params1 >> this->innerParameters[0] >>  this->innerParameters[1] >>  this->innerParameters[2]
+	>>  this->innerParameters[3] >>  this->innerParameters[4] >>  this->innerParameters[5]
+	>> this->innerParameters[6] >> this->innerParameters[7] >> this->innerParameters[8];
+	params1.close();
+	std::fstream params2("outerParameters.txt");
+	params2 >> 	this->outerParameters[0] >> this->outerParameters[1]
+	>> this->outerParameters[2] >> this->outerParameters[3]
+	>> this->outerParameters[4] >> this->outerParameters[5];
+	params2.close();
+}
+
+//writes PID parameters back to txt-files
+void Controller::write_Parameters(double *inner, double *outer){
+	std::ofstream params3;	//for output
+	params3.open("innerParameters.txt");
+	params3 >> inner[0] >> "\t" >> inner[1] >> "\t" >> inner[2] >> "\t"
+	 >> inner[3] >> "\t" >> inner[4] >> "\t" >> inner[5] >> "\t"
+	 >> inner[6] >> "\t" >> inner[7] >> "\t" >> inner[8] >> "\t";
+	params3.close();
+	std::ofstream params4;	//for output
+	params4 >> outer[0] >> "\t"  >> outer[1] >> "\t" >> outer[2] >> "\t"
+	 >> outer[3] >> "\t" >> outer[4] >> "\t" >> outer[5] >> "\t";
+	params4.close();
+
+}
+
 void Controller::calcPWM(double *input, double *output, double *ref) {
 
 	//alphadelen - roll
