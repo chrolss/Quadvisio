@@ -32,11 +32,10 @@ class Controller{
     
 public:
     Controller();
-    void calcPWM(double *input, double *output);
+    void calcPWM(double *input, double *output, double *ref);
     void calcRef(double *sensorInput, double *ref);
     void setInnerParameters(double *inParams);
     void setOuterParameters(double *outParams);
-    void setReference(double *ref);
     void setYawRef(double *ref, double _yaw);
     void setJoyCom(double *joy, double *sensorInput, double *ref);
     double windUp(double *err);

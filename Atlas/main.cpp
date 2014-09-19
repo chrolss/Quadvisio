@@ -57,13 +57,13 @@ void initailize(){
     	}
     }
     
-    ref[0] = 0.0;
-    ref[1] = 0.0;
-    ref[2] = 0.0;
-    ref[3] = 0.0;
-    ref[4] = 0.0;
-    ref[5] = 0.0;
-    ref[6] = 0.0;
+    ref[0] = 0.0;	//roll
+    ref[1] = 0.0;	//pitch
+    ref[2] = 0.0;	//yaz
+    ref[3] = 0.0;	//x-acceleration
+    ref[4] = 0.0;	//y-acceleration
+    ref[5] = 0.0;	//z-accerleration
+    ref[6] = 0.0;	//altitude
     outParams[0] = 0.01;
     outParams[1] = 0.0;
     outParams[2] = 0.0;
@@ -86,7 +86,6 @@ void initailize(){
 
     controller->setInnerParameters(inParams);
 
-    controller->setReference(ref);
     //controller->setOuterParameters(outParams);
     
 
@@ -145,7 +144,7 @@ void loop(){
 
         //controller->setInnerParameters(communicate->pidParam);
 
-        controller->calcPWM(sInput, sOutput);
+        controller->calcPWM(sInput, sOutput, ref);
         
         //std::cout << "Setting PWM values" << std::endl;
         // Send PWM values to motors
