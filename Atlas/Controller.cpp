@@ -45,13 +45,13 @@ void Controller::get_Parameters(){
 void Controller::write_Parameters(double *inner, double *outer){
 	std::ofstream params3;	//for output
 	params3.open("innerParameters.txt");
-	params3 >> inner[0] >> "\t" >> inner[1] >> "\t" >> inner[2] >> "\t"
-	 >> inner[3] >> "\t" >> inner[4] >> "\t" >> inner[5] >> "\t"
-	 >> inner[6] >> "\t" >> inner[7] >> "\t" >> inner[8] >> "\t";
+	params3 << inner[0] << "\t" << inner[1] << "\t" << inner[2] << "\t"
+	 << inner[3] << "\t" << inner[4] << "\t" << inner[5] << "\t"
+	 << inner[6] << "\t" << inner[7] << "\t" << inner[8] << "\t";
 	params3.close();
 	std::ofstream params4;	//for output
-	params4 >> outer[0] >> "\t"  >> outer[1] >> "\t" >> outer[2] >> "\t"
-	 >> outer[3] >> "\t" >> outer[4] >> "\t" >> outer[5] >> "\t";
+	params4 << outer[0] << "\t"  << outer[1] << "\t" << outer[2] << "\t"
+	 << outer[3] << "\t" << outer[4] << "\t" << outer[5] << "\t";
 	params4.close();
 
 }
