@@ -525,8 +525,6 @@ int Com::getSignalInfo() {
     
     signalInfo *sigInfo;
     sigInfo = new signalInfo;
-    std::string *iwname;
-    iwname = "wlan0";
     
     strcpy(req.ifr_name, "wlan0");
     
@@ -579,7 +577,7 @@ int Com::getSignalInfo() {
     
     //SIOCGIFHWADDR for mac addr
     ifreq req2;
-    strcpy(req2.ifr_name, iwname);
+    strcpy(req2.ifr_name, "wlan0");
     //this will get the mac address of the interface
     if(ioctl(sockfd, SIOCGIFHWADDR, &req2) == -1){
         fprintf(stderr, "mac error");
