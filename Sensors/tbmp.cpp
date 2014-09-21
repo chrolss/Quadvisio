@@ -40,6 +40,7 @@
     #include <linux/i2c.h>
     #include <sys/ioctl.h>
     #include "smbus.h"
+#include "math.h"
 
     #define BMP085_I2C_ADDRESS 0x77
 
@@ -68,7 +69,7 @@
     int bmp085_i2c_Begin()
     {
        int fd;
-       char *fileName = "/dev/i2c-0";
+       char *fileName = "/dev/i2c-1";
 
        // Open port for reading and writing
        if ((fd = open(fileName, O_RDWR)) < 0)
@@ -251,13 +252,15 @@
 
        bmp085_Calibration();
 
-       temperature = bmp085_GetTemperature(bmp085_ReadUT());
-       pressure = bmp085_GetPressure(bmp085_ReadUP());
-            altitude = bmp085_Altitude(pressure);
+       for (int i = 0; i<100; i++){
+    	   temperature = bmp085_GetTemperature(bmp085_ReadUT());
+    	   pressure = bmp085_GetPressure(bmp085_ReadUP());
+    	   altitude = bmp085_Altitude(pressure);
 
-       printf("Temperature\t%0.1f *F\n", ((double)temperature)/10 * 1.8 + 32);
-       printf("Pressure\t%0.2f hPa\n", ((double)pressure)/100);
-            printf("Altitude\t%0.1f Feet\n", ((double)altitude)*3.280839895);
-
+    	   //printf("Temperature\t%0.1f *F\n", ((double)temperature)/10 * 1.8 + 32);
+    	   printf("Pressure\t%0.2f hPa\n", ((double)pressure)/100);
+    	   //printf("Altitude\t%0.1f Feet\n", ((double)altitude)*3.280839895);
+    	   usleep(100000);
+       }
        return 0;
     }

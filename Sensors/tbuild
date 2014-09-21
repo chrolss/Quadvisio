@@ -1,0 +1,6 @@
+#!/bin/bash
+
+echo "Building bmp085 test program"
+
+g++ -W tbmp.cpp smbus.c -o bmpTest
+
