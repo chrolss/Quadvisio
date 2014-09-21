@@ -523,7 +523,10 @@ void Com::sendPidParams() {
 int Com::getSignalInfo() {
     iwreq req;
     
-    signalInfo sigInfo;
+    signalInfo *sigInfo;
+    sigInfo = new signalInfo;
+    std::string *iwname;
+    iwname = "wlan0"
     
     strcpy(req.ifr_name, "wlan0");
     
