@@ -17,7 +17,7 @@ using namespace std;
 short est;
 
 int main(int argc, char *argv[]){
-
+/*
 	double deg = 180/M_PI;
 	kalman filter(0.1, 0.1, 0, 10);
 	kalman filter2(0.1, 0.1, 0, 10);
@@ -37,6 +37,7 @@ int main(int argc, char *argv[]){
 		//printf("head: %f\n", heading);
 		usleep(10000);
 	}
+	*/
 /*
 
 	hmc5883l hmc;
@@ -58,7 +59,7 @@ int main(int argc, char *argv[]){
 		std::cout<< "measured x: " << x << ", and estimated: " 
 << est << std::endl;
 	}
-
+*/
 
 	bmp085 bmp;
 	bmp.readSensorData();
@@ -68,9 +69,9 @@ int main(int argc, char *argv[]){
 	double temperature = bmp.getTemperature();
 	std::cout << "Current altitude: " << altitude << " Current pressure: " << pressure << std::endl;
 	std::cout << "Temperature: " << temperature << std::endl;
+	usleep(100000);
 
 
-*/
 	/*
 	int a;
 	while(true){
