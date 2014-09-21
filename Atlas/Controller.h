@@ -41,6 +41,7 @@ public:
     void setJoyCom(double *joy, double *sensorInput, double *ref);
     double windUp(double *err);
     void write_Parameters(double *inner, double *outer);
+    void send_Parameters(double *params);
 private:
     void get_Parameters();
     double innerParameters[9];

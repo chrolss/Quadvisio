@@ -56,6 +56,11 @@ void Controller::write_Parameters(double *inner, double *outer){
 
 }
 
+void Controller::send_Parameters(double *params){
+	for (int i = 0; i<12; i++)
+		params[i] = this->innerParameters[i];
+}
+
 void Controller::calcPWM(double *input, double *output, double *ref) {
 
 	//alphadelen - roll
