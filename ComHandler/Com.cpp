@@ -159,6 +159,8 @@ void Com::sendQvisLightMsg() {
     printf("Sending message\n");
     printf("Video count: %i\n", vidCount);
     
+    this->getSignalInfo();
+    
     ostr.str("");
     
     for (int i=0; i<3; i++) {
@@ -591,7 +593,7 @@ int Com::getSignalInfo() {
     }
     close(sockfd);
     
-    int quality = 2 * (sigInfo->Level + 100);
+    int quality = 2 * (sigInfo->level + 100);
     int mbit = sigInfo->bitrate;
     
     printf("Bitrate: %i\n", mbit);
