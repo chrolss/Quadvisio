@@ -599,7 +599,7 @@ int Com::getSignalInfo() {
     int mbit = sigInfo->bitrate;
     double mb = (double) bitrate/8000000.0;
     
-    printf("Bitrate: %i\n", mbit);
+    printf("Bitrate: %i\n", mb);
     printf("Level: %i\n", quality);
     
     return 0;
