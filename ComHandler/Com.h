@@ -43,6 +43,7 @@ public:
     void sendImg();
     void closeClient();
     void startListenThread();
+    int getSignalInfo();
     
     void getNewInputData(int value);
     void setOutputData(double *output);
@@ -78,7 +79,6 @@ private:
     void sendQvisDevMsg();
     void sendQvisLightMsg();
     void sendPidParams();
-    int getSignalInfo();
     
     double output[14];
     double pidParams[12];
