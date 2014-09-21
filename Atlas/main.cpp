@@ -36,7 +36,7 @@ double loopTime = 0.0;
 int Hz = 100;
 int loopSleep=0;
 double ref[7];
-double inParams[9];	//verkar vara värdelös
+double inParams[12];	//inte värdelös längre
 double outParams[6];
 
 void initailize(){
@@ -71,10 +71,8 @@ void initailize(){
     sOutput[3] = 0.0;
 
     controller->get_Parameters();	//läser parameters från textfil och sätter i controller
-
-
-    //controller->setOuterParameters(outParams);
-    
+    controller->send_Parameters(inParams);	//lägger parametrarna i inParams
+    //tonis funktion som skickar till Com
 
     runAtlas = true;
 }
