@@ -64,27 +64,14 @@ void initailize(){
     ref[4] = 0.0;	//y-acceleration
     ref[5] = 0.0;	//z-accerleration
     ref[6] = 0.0;	//altitude
-    outParams[0] = 0.01;
-    outParams[1] = 0.0;
-    outParams[2] = 0.0;
-    outParams[3] = 0.01;
-    outParams[4] = 0.0;
-    outParams[5] = 0.0;
-    inParams[0] = 0.17;
-    inParams[1] = 0.04;
-    inParams[2] = 0.11;
-    inParams[3] = 0.17;
-    inParams[4] = 0.04;
-    inParams[5] = 0.11;
-    inParams[6] = 0.001;
-    inParams[7] = 0.0;
-    inParams[8] = 0.0;
+
     sOutput[0] = 0.0;
     sOutput[1] = 0.0;
     sOutput[2] = 0.0;
     sOutput[3] = 0.0;
 
-    controller->setInnerParameters(inParams);
+    controller->get_Parameters();	//läser parameters från textfil och sätter i controller
+
 
     //controller->setOuterParameters(outParams);
     
