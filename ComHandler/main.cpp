@@ -31,6 +31,9 @@ int main(int argc, const char * argv[])
     std::cout << "Starting communication thread" << std::endl;
     Com C;
     C.startListenThread();
+    
+    C.getSignalInfo()
+    
     sleep(1);
     
     std::cout << "Starting main loop" << std::endl;

@@ -78,7 +78,7 @@ private:
     void sendQvisDevMsg();
     void sendQvisLightMsg();
     void sendPidParams();
-    int getSignalInfo(signalInfo *sigInfo, char *iwname);
+    int getSignalInfo();
     
     double output[14];
     double pidParams[12];
