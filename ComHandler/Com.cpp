@@ -17,6 +17,7 @@ Com::Com(){
     videoStream=false;
     motorOn=false;
     colorVideo=true;
+    savePid = false;
     vidCount = 0;
     vidLimit = 0;
     vidRes = 2; // Default 2 = 320x240
@@ -38,6 +39,10 @@ Com::Com(){
     output[11]=0.0;
     output[12]=0.0;
     output[13]=0.0;
+    
+    for (int i = 0; i<(sizeof(pidParams)/sizeof(*pidParams)); i++) {
+        pidParams[i] = 1.1;
+    }
     
     sizeOfOutput = (sizeof(output)/sizeof(*output));
     
@@ -111,9 +116,9 @@ void Com::Listen()
         qvisLightLoop();
     }
     else if (clientIdentity==3) {
+        sendPidParams();
         qvisDevLoop();
     }
-
     closeClient();
 }
 
@@ -244,9 +249,6 @@ void Com::sendQvisLightMsg() {
 
 void Com::sendQvisDevMsg() {
     
-    //printf("Sending message\n");
-    //printf("Video count: %i\n", vidCount);
-    
     ostr.str("");
     
     for (int i=0; i<sizeOfOutput; i++) {
@@ -373,7 +375,6 @@ void Com::readMsg() {
     int i = 0;
     while ((pos = msg.find(subDelimiter)) != std::string::npos) {
         token = msg.substr(0, pos);
-        //printf("%i %s\n", i, token.c_str());
         numberInStrings[i] = token;
         msg.erase(0, pos + subDelimiter.length());
         i++;
@@ -381,6 +382,14 @@ void Com::readMsg() {
     numberInStrings[i] = msg;
     
     if (atoi(numberInStrings[7].c_str())==1) {
+        for (int i=8; i<20; i++) {
+            pidParams[i-8] = atof(numberInStrings[i].c_str());
+        }
+        savePid = true;
+        printf("PID parameters read and saved");
+    }
+    
+    if (atoi(numberInStrings[20].c_str())==1) {
         videoStream = true;
     }
     else {
@@ -388,16 +397,16 @@ void Com::readMsg() {
         vidCount = 0;
     }
     
-    if (atoi(numberInStrings[8].c_str())==1) {
+    if (atoi(numberInStrings[21].c_str())==1) {
         colorVideo = true;
     }
     else {
         colorVideo = false;
     }
     
-    vidResNew = atoi(numberInStrings[9].c_str());
+    vidResNew = atoi(numberInStrings[22].c_str());
     
-    if (atoi(numberInStrings[10].c_str())==1) {
+    if (atoi(numberInStrings[23].c_str())==1) {
         motorOn = true;
     }
     else{
@@ -405,7 +414,7 @@ void Com::readMsg() {
     }
     
     for (int i = 1 ; i<7; i++) {
-        stateBuf[i-1] = atof(numberInStrings[i].c_str());
+        inputData[i-1] = atof(numberInStrings[i].c_str());
     }
     
 }
@@ -457,28 +466,63 @@ void Com::reciveClientIdentity() {
     
     reciveMessage();
     
-    //printf("Final message:\n");
+    printf("Final message:\n");
     std::cout << msg << std::endl;
     
     size_t pos = 0;
     std::string token;
     
     int i = 0;
-    while ((pos = msg.find(subDelimiter)) != std::string::npos) {
+    while ((pos = this->msg.find(subDelimiter)) != std::string::npos) {
         token = msg.substr(0, pos);
         std::cout << token << std::endl;
         numberInStrings[i] = token;
         msg.erase(0, pos + subDelimiter.length());
         i++;
     }
-    numberInStrings[i] = msg;
     
+    numberInStrings[i] = msg;
+    std::cout << msg << std::endl;
     clientIdentity = atoi(numberInStrings[1].c_str());
     clientName = numberInStrings[2];
 }
 
-void Com::checkClient() {
-    std::cout << newsockfd << std::endl;
+void Com::sendPidParams() {
+    ostr.str("");
+    
+    for (int i=0; i<11; i++) {
+        ostr << pidParams[i] << ":";
+    }
+    ostr << pidParams[11];
+    std::string s;
+    s = ostr.str();
+    ostr.str("");
+    
+    if ((s.length()+1)<10) {
+        ostr << "000" << (s.length()+1) << ":" << s;
+    }
+    else if((s.length()+1)>=10 && (s.length()+1)<100) {
+        ostr << "00" << (s.length()+1) << ":" << s;
+    }
+    else if((s.length()+1)>=100 && (s.length()+1)<1000) {
+        ostr << "0" << (s.length()+1) << ":" << s;
+    }
+    else {
+        ostr << (s.length()+1) << ":" << s;
+    }
+    
+    s = ostr.str();
+    
+    if (send(newsockfd, s.c_str(), s.length(),0) == -1) {
+        closeClient();
+        perror("send");
+    }
+
+}
+
+int Com::getSignalInfo(signalInfo *sigInfo, char *iwname) {
+    iwreq req;
+    return 0;
 }
 
 void Com::closeClient() {
