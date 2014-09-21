@@ -49,6 +49,7 @@ private:
     double refs[7];		//roll, pitch, yaw, ax, ay, az, altitude
     double ea[3], eb[3], eg[3];	//angle errors
     double joyCom[3];
+    double trim[2];		//trim for roll and pitch
     double ex[3], ey[3];	//acceleration errors
     double F, Ma, Mb, Mg;
     double dA, dB;			//Desired changes in angles

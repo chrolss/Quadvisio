@@ -66,7 +66,7 @@ void Controller::send_Parameters(double *params){
 void Controller::calcPWM(double *input, double *output, double *ref) {
 
 	//alphadelen - roll
-	ea[0] = ref[0] - input[3] + joyCom[0];  	// set new error
+	ea[0] = ref[0] - input[3] + trim[0] + joyCom[0];  	// set new error
 	this->ea[2] += (ea[0])*dt;
 	if (fabs(ea[2])>WINDUP_LIMIT_UP){
 		this->ea[2] = windUp(ea);
@@ -77,7 +77,7 @@ void Controller::calcPWM(double *input, double *output, double *ref) {
 
 	//printf("P: %f, I: %f, D: %f, e0: %f, e2: %f\n",innerParameters[0]*ea[0], innerParameters[1]*(ea[2]), innerParameters[2]*(ea[0]-ea[1])/dt,ea[0],ea[2]);
 	//betadelen - pitch
-	eb[0] = ref[1] - input[4] + joyCom[1];  	// set new error
+	eb[0] = ref[1] - input[4] + trim[1] + joyCom[1];  	// set new error
 	this->eb[2] += eb[0]*dt;
 	if (fabs(eb[2])>WINDUP_LIMIT_UP){
 		this->eb[2] = windUp(eb);
@@ -154,6 +154,8 @@ void Controller::setJoyCom(double *joy, double *sensorInput, double *ref){
 	this->joyCom[0] = 0.25*joy[0];
 	this->joyCom[1] = -0.25*joy[1];
 	this->joyCom[2] = 0.25*joy[2];
+	this->trim[0] = 0.0;	//add from *joy
+	this->trim[1] = 0.0;	//add from *joy
 	//printf("Thrust: %f, F: %f \n", joy[3], F);
 }
 
