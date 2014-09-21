@@ -251,6 +251,8 @@ void Com::sendQvisLightMsg() {
 
 void Com::sendQvisDevMsg() {
     
+    this->getSignalInfo();
+    
     ostr.str("");
     
     for (int i=0; i<sizeOfOutput; i++) {
