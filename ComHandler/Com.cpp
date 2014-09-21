@@ -630,4 +630,20 @@ void Com::setOutputData(double *out) {
     output[13] = out[13];
 }
 
+void Com::setPidParams(double *params) {
+    pidParams[0] = params[0];
+    pidParams[1] = params[1];
+    pidParams[2] = params[2];
+    pidParams[3] = params[3];
+    pidParams[4] = params[4];
+    pidParams[5] = params[5];
+    pidParams[6] = params[6];
+    pidParams[7] = params[7];
+    pidParams[8] = params[8];
+    pidParams[9] = params[9];
+    pidParams[10] = params[10];
+    pidParams[11] = params[11];
+
+}
+
 

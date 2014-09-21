@@ -44,6 +44,7 @@ public:
     void closeClient();
     void startListenThread();
     int getSignalInfo();
+    void setPidParams(double *params);
     
     void getNewInputData(int value);
     void setOutputData(double *output);
