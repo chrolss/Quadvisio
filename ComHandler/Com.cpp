@@ -526,7 +526,7 @@ int Com::getSignalInfo() {
     signalInfo *sigInfo;
     sigInfo = new signalInfo;
     std::string *iwname;
-    iwname = "wlan0"
+    iwname = "wlan0";
     
     strcpy(req.ifr_name, "wlan0");
     
