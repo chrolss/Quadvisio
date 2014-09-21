@@ -371,7 +371,7 @@ void Com::readMsg() {
     reciveMessage();
     
     //printf("Final message:\n");
-    std::cout << msg << std::endl;
+    //std::cout << msg << std::endl;
     
     size_t pos = 0;
     std::string token;
@@ -598,7 +598,7 @@ int Com::getSignalInfo() {
     int quality = 2 * (sigInfo->level + 100);
     int mbit = sigInfo->bitrate;
     
-    printf("Bitrate: %i\n", mbit);
+    printf("Bitrate: %i\n", bitrate);
     printf("Level: %i\n", quality);
     
     return 0;
