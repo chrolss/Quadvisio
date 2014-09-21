@@ -32,7 +32,8 @@ void Controller::get_Parameters(){
 	std::fstream params1("innerParameters.txt");
 	params1 >> this->innerParameters[0] >>  this->innerParameters[1] >>  this->innerParameters[2]
 	>>  this->innerParameters[3] >>  this->innerParameters[4] >>  this->innerParameters[5]
-	>> this->innerParameters[6] >> this->innerParameters[7] >> this->innerParameters[8];
+	>> this->innerParameters[6] >> this->innerParameters[7] >> this->innerParameters[8]
+	>> this->innerParameters[9] >> this->innerParameters[10] >> this->innerParameters[11];
 	params1.close();
 	std::fstream params2("outerParameters.txt");
 	params2 >> 	this->outerParameters[0] >> this->outerParameters[1]
@@ -47,7 +48,8 @@ void Controller::write_Parameters(double *inner, double *outer){
 	params3.open("innerParameters.txt");
 	params3 << inner[0] << "\t" << inner[1] << "\t" << inner[2] << "\t"
 	 << inner[3] << "\t" << inner[4] << "\t" << inner[5] << "\t"
-	 << inner[6] << "\t" << inner[7] << "\t" << inner[8] << "\t";
+	 << inner[6] << "\t" << inner[7] << "\t" << inner[8] << "\t"
+	 << inner[9] << "\t" << inner[10] << "\t" << inner[11];
 	params3.close();
 	std::ofstream params4;	//for output
 	params4 << outer[0] << "\t"  << outer[1] << "\t" << outer[2] << "\t"
