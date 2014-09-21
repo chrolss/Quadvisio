@@ -1,0 +1,5 @@
+#!/bin/bash
+
+echo "Building Atlas test software…"
+
+g++ -O2 -W -I /root/code/Quadvisio/ main.cpp Com.cpp -o ComTest `pkg-config --cflags --libs opencv` -pthread -std=c++11
