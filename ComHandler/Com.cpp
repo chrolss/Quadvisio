@@ -335,7 +335,7 @@ void Com::sendQvisDevMsg() {
     
     s = ostr.str();
     
-    //printf("Sending message: %s\n", s.c_str());
+    printf("Sending message: %s\n", s.c_str());
     if (send(newsockfd, s.c_str(), s.length(),0) == -1) {
         closeClient();
         perror("send");
@@ -345,7 +345,7 @@ void Com::sendQvisDevMsg() {
         sendImg();
         imgSend = false;
     }
-    //printf("Message sent\n");
+    printf("Message sent\n");
 }
 
 void Com::sendImg() {
@@ -370,8 +370,8 @@ void Com::readMsg() {
     
     reciveMessage();
     
-    //printf("Final message:\n");
-    //std::cout << msg << std::endl;
+    printf("Final message:\n");
+    std::cout << msg << std::endl;
     
     size_t pos = 0;
     std::string token;
@@ -425,7 +425,7 @@ void Com::readMsg() {
 
 void Com::reciveMessage() {
     
-    //printf("Waitning for message\n");
+    printf("Waitning for message\n");
     
     msgBuffer = "";
     msg = "";
