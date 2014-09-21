@@ -39,6 +39,8 @@ Com::Com(){
     output[11]=0.0;
     output[12]=0.0;
     output[13]=0.0;
+    output[14]=0.0;
+    output[15]=0.0;
     
     for (int i = 0; i<(sizeof(pidParams)/sizeof(*pidParams)); i++) {
         pidParams[i] = 1.1;
@@ -595,13 +597,10 @@ int Com::getSignalInfo() {
     }
     close(sockfd);
     
-    int quality = 2 * (sigInfo->level + 100);
-    int mbit = sigInfo->bitrate;
-    double mb = (double) bitrate/8000000.0;
-    
-    printf("Bitrate: %f\n", mb);
-    printf("Level: %i\n", quality);
-    
+    //printf("Bitrate: %f\n", mb);
+    //printf("Level: %i\n", quality);
+    this->output[14] = sigInfo->bitrate;
+    this->output[15] = (double)sigInfo->level;
     return 0;
 }
 

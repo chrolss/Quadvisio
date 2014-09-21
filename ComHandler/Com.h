@@ -81,7 +81,8 @@ private:
     void sendQvisLightMsg();
     void sendPidParams();
     
-    double output[14];
+    //angles:refangles:pwm:speed:sidespeed:altitude:Hz:bitrate:dbm:errorMessage:imgWidth:imgHeight:imgSize:imgChannels - Image
+    double output[16];
     double pidParams[12];
     
     int sockfd, newsockfd, portno;
