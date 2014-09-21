@@ -32,7 +32,7 @@ int main(int argc, const char * argv[])
     Com C;
     C.startListenThread();
     
-    C.getSignalInfo()
+    C.getSignalInfo();
     
     sleep(1);
     
