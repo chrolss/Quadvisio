@@ -591,8 +591,11 @@ int Com::getSignalInfo() {
     }
     close(sockfd);
     
-    printf("Bitrate: %i\n", sigInfo->bitrate);
-    printf("Level: %i\n", sigInfo->level);
+    int quality = 2 * (sigInfo->Level + 100);
+    int mbit = sigInfo->bitrate
+    
+    printf("Bitrate: %i\n", mbit);
+    printf("Level: %i\n", quality);
     
     return 0;
 }
