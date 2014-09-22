@@ -432,10 +432,13 @@ void Com::reciveMessage() {
     msgBuffer = "";
     msg = "";
     msgSize = 0;
+    printf("Setting Buffer to zero\n");
     bzero(recvBuf, 1024);
     
     while (1) {
+        printf("Going into recv\n");
         numBytes = recv(newsockfd, recvBuf, sizeof(recvBuf), 0);
+        printf("Done with recv\n");
         if (numBytes < 0) {
             connected = false;
             perror("read");
@@ -449,8 +452,9 @@ void Com::reciveMessage() {
         }
         
         else {
+            printf("convert buffer to string\n");
             msgBuffer = std::string(recvBuf);
-            //std::cout << "Raw message: " << msgBuffer << std::endl;
+            std::cout << "Raw message: " << msgBuffer << std::endl;
         }
         
         if (msgSize == 0 && msgBuffer.size()>=3) {
