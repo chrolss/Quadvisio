@@ -75,6 +75,7 @@ void initailize(){
 
     controller->send_Parameters(inParams);	//lägger parametrarna i inParams
     C->setPidParams(inParams);				//tonis funktion som skickar till Com
+    controller->setSensitivity(0.4);		//sätt sens, 0.25 - 0.4
 
     runAtlas = true;
 }

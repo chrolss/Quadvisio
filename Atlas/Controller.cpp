@@ -160,12 +160,16 @@ void Controller::setJoyCom(double *joy, double *sensorInput, double *ref){
 		setYawRef(ref, sensorInput[5]);	//to the current yaw input from the sensor
 	}									//so the reference won't interfere with the controller
 	this->F = 4*THRUST_CONSTANT*joy[3]*joy[3]*10000.0;
-	this->joyCom[0] = 0.4*joy[0];
-	this->joyCom[1] = -0.4*joy[1];
-	this->joyCom[2] = 0.4*joy[2];
+	this->joyCom[0] = sens*joy[0];
+	this->joyCom[1] = -sens*joy[1];
+	this->joyCom[2] = sens*joy[2];
 	this->trim[0] = joy[4];	//add from *joy
 	this->trim[1] = -joy[5];	//add from *joy
 
+}
+
+void Controller::setSensitivity(double _sens){
+	this->sens = _sens;
 }
 
 void Controller::setYawRef(double *ref, double _yaw){

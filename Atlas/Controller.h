@@ -44,6 +44,7 @@ public:
     void write_Parameters(double *inner, double *outer);
     void send_Parameters(double *params);
     void write_trim();
+    void setSensitivity(double _sens);
 private:
     void get_Parameters();
     double innerParameters[9];
@@ -56,6 +57,7 @@ private:
     double F, Ma, Mb, Mg;
     double dA, dB;			//Desired changes in angles
     double MaT, MbT, MgT;
+    double sens;		//joystick sensitivity, range 0.25 - 0.4
     
 };
 
