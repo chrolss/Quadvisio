@@ -17,6 +17,7 @@ Com::Com(){
     videoStream=false;
     motorOn=false;
     colorVideo=true;
+    savePid = false;
     vidCount = 0;
     vidLimit = 0;
     vidRes = 2; // Default 2 = 320x240
@@ -38,6 +39,12 @@ Com::Com(){
     output[11]=0.0;
     output[12]=0.0;
     output[13]=0.0;
+    output[14]=0.0;
+    output[15]=0.0;
+
+    for (int i = 0; i<(sizeof(pidParams)/sizeof(*pidParams)); i++) {
+        pidParams[i] = 1.1;
+    }
     
     sizeOfOutput = (sizeof(output)/sizeof(*output));
     
@@ -111,9 +118,9 @@ void Com::Listen()
         qvisLightLoop();
     }
     else if (clientIdentity==3) {
+        sendPidParams();
         qvisDevLoop();
     }
-
     closeClient();
 }
 
@@ -151,8 +158,10 @@ void Com::qvisLightLoop() {
 
 void Com::sendQvisLightMsg() {
     
-    //printf("Sending message\n");
-    //printf("Video count: %i\n", vidCount);
+    printf("Sending message\n");
+    printf("Video count: %i\n", vidCount);
+
+    this->getSignalInfo();
     
     ostr.str("");
     
@@ -187,7 +196,7 @@ void Com::sendQvisLightMsg() {
                     break;
             }
             usleep(1000);
-            //printf("New resolution was set\n");
+            printf("New resolution was set\n");
             vidRes = vidResNew;
         }
         
@@ -228,7 +237,7 @@ void Com::sendQvisLightMsg() {
     
     s = ostr.str();
     
-    //printf("Sending message: %s\n", s.c_str());
+    printf("Sending message: %s\n", s.c_str());
     if (send(newsockfd, s.c_str(), s.length(),0) == -1) {
         closeClient();
         perror("send");
@@ -238,14 +247,13 @@ void Com::sendQvisLightMsg() {
         sendImg();
         imgSend = false;
     }
-    //printf("Message sent\n");
+    printf("Message sent\n");
 
 }
 
 void Com::sendQvisDevMsg() {
 
-    //printf("Sending message\n");
-    //printf("Video count: %i\n", vidCount);
+    this->getSignalInfo();
 
     ostr.str("");
 
@@ -329,7 +337,7 @@ void Com::sendQvisDevMsg() {
 
     s = ostr.str();
 
-    //printf("Sending message: %s\n", s.c_str());
+    printf("Sending message: %s\n", s.c_str());
     if (send(newsockfd, s.c_str(), s.length(),0) == -1) {
         closeClient();
         perror("send");
@@ -339,7 +347,7 @@ void Com::sendQvisDevMsg() {
         sendImg();
         imgSend = false;
     }
-    //printf("Message sent\n");
+    printf("Message sent\n");
 }
 
 void Com::sendImg() {
@@ -364,8 +372,8 @@ void Com::readMsg() {
     
     reciveMessage();
     
-    //printf("Final message:\n");
-    //std::cout << msg << std::endl;
+    printf("Final message:\n");
+    std::cout << msg << std::endl;
     
     size_t pos = 0;
     std::string token;
@@ -373,14 +381,21 @@ void Com::readMsg() {
     int i = 0;
     while ((pos = msg.find(subDelimiter)) != std::string::npos) {
         token = msg.substr(0, pos);
-        //printf("%i %s\n", i, token.c_str());
         numberInStrings[i] = token;
         msg.erase(0, pos + subDelimiter.length());
         i++;
     }
     numberInStrings[i] = msg;
     
-    if (atoi(numberInStrings[5].c_str())==1) {
+    if (atoi(numberInStrings[7].c_str())==1) {
+        for (int i=8; i<20; i++) {
+            pidParams[i-8] = atof(numberInStrings[i].c_str());
+        }
+        savePid = true;
+        printf("PID parameters read and saved");
+    }
+
+    if (atoi(numberInStrings[20].c_str())==1) {
         videoStream = true;
     }
     else {
@@ -388,39 +403,42 @@ void Com::readMsg() {
         vidCount = 0;
     }
     
-    if (atoi(numberInStrings[6].c_str())==1) {
+    if (atoi(numberInStrings[21].c_str())==1) {
         colorVideo = true;
     }
     else {
         colorVideo = false;
     }
     
-    vidResNew = atoi(numberInStrings[7].c_str());
+    vidResNew = atoi(numberInStrings[22].c_str());
     
-    if (atoi(numberInStrings[8].c_str())==1) {
+    if (atoi(numberInStrings[23].c_str())==1) {
         motorOn = true;
     }
     else{
         motorOn = false;
     }
     
-    for (int i = 1 ; i<5; i++) {
-        stateBuf[i-1] = atof(numberInStrings[i].c_str());
+    for (int i = 1 ; i<7; i++) {
+        inputData[i-1] = atof(numberInStrings[i].c_str());
     }
 
 }
 
 void Com::reciveMessage() {
 
-    //printf("Waitning for message\n");
+    printf("Waitning for message\n");
 
     msgBuffer = "";
     msg = "";
     msgSize = 0;
+    printf("Setting Buffer to zero\n");
     bzero(recvBuf, 1024);
 
     while (1) {
+        printf("Going into recv\n");
         numBytes = recv(newsockfd, recvBuf, sizeof(recvBuf), 0);
+        printf("Done with recv\n");
         if (numBytes < 0) {
             connected = false;
             perror("read");
@@ -434,8 +452,9 @@ void Com::reciveMessage() {
         }
 
         else {
+            printf("convert buffer to string\n");
             msgBuffer = std::string(recvBuf);
-            //std::cout << "Raw message: " << msgBuffer << std::endl;
+            std::cout << "Raw message: " << msgBuffer << std::endl;
         }
 
         if (msgSize == 0 && msgBuffer.size()>=3) {
@@ -457,28 +476,136 @@ void Com::reciveClientIdentity() {
 
     reciveMessage();
 
-    //printf("Final message:\n");
+    printf("Final message:\n");
     std::cout << msg << std::endl;
 
     size_t pos = 0;
     std::string token;
 
     int i = 0;
-    while ((pos = msg.find(subDelimiter)) != std::string::npos) {
+    while ((pos = this->msg.find(subDelimiter)) != std::string::npos) {
         token = msg.substr(0, pos);
         std::cout << token << std::endl;
         numberInStrings[i] = token;
         msg.erase(0, pos + subDelimiter.length());
         i++;
     }
+
     numberInStrings[i] = msg;
-    
+    std::cout << msg << std::endl;
     clientIdentity = atoi(numberInStrings[1].c_str());
     clientName = numberInStrings[2];
 }
 
-void Com::checkClient() {
-    std::cout << newsockfd << std::endl;
+void Com::sendPidParams() {
+    ostr.str("");
+
+    for (int i=0; i<11; i++) {
+        ostr << pidParams[i] << ":";
+    }
+    ostr << pidParams[11];
+    std::string s;
+    s = ostr.str();
+    ostr.str("");
+
+    if ((s.length()+1)<10) {
+        ostr << "000" << (s.length()+1) << ":" << s;
+    }
+    else if((s.length()+1)>=10 && (s.length()+1)<100) {
+        ostr << "00" << (s.length()+1) << ":" << s;
+    }
+    else if((s.length()+1)>=100 && (s.length()+1)<1000) {
+        ostr << "0" << (s.length()+1) << ":" << s;
+    }
+    else {
+        ostr << (s.length()+1) << ":" << s;
+    }
+
+    s = ostr.str();
+
+    if (send(newsockfd, s.c_str(), s.length(),0) == -1) {
+        closeClient();
+        perror("send");
+    }
+
+}
+
+int Com::getSignalInfo() {
+    iwreq req;
+
+    signalInfo *sigInfo;
+    sigInfo = new signalInfo;
+
+    strcpy(req.ifr_name, "ra0");
+
+    iw_statistics *stats;
+
+    //have to use a socket for ioctl
+    int sockfd = socket(AF_INET, SOCK_DGRAM, 0);
+
+    //make room for the iw_statistics object
+    req.u.data.pointer = (iw_statistics *)malloc(sizeof(iw_statistics));
+    req.u.data.length = sizeof(iw_statistics);
+
+    //this will gather the signal strength
+    if(ioctl(sockfd, SIOCGIWSTATS, &req) == -1){
+        //die with error, invalid interface
+        fprintf(stderr, "Invalid interface.\n");
+        return(-1);
+    }
+    else if(((iw_statistics *)req.u.data.pointer)->qual.updated & IW_QUAL_DBM){
+        //signal is measured in dBm and is valid for us to use
+        sigInfo->level=((iw_statistics *)req.u.data.pointer)->qual.level - 256;
+    }
+
+    //SIOCGIWESSID for ssid
+    char buffer[32];
+    memset(buffer, 0, 32);
+    req.u.essid.pointer = buffer;
+    req.u.essid.length = 32;
+    //this will gather the SSID of the connected network
+    if(ioctl(sockfd, SIOCGIWESSID, &req) == -1){
+        //die with error, invalid interface
+        return(-1);
+    }
+    else{
+        memcpy(&sigInfo->ssid, req.u.essid.pointer, req.u.essid.length);
+        memset(&sigInfo->ssid[req.u.essid.length],0,1);
+    }
+
+    //SIOCGIWRATE for bits/sec (convert to mbit)
+    int bitrate=-1;
+    //this will get the bitrate of the link
+    if(ioctl(sockfd, SIOCGIWRATE, &req) == -1){
+        fprintf(stderr, "bitratefail");
+        return(-1);
+    }else{
+        memcpy(&bitrate, &req.u.bitrate, sizeof(int));
+        sigInfo->bitrate=bitrate/1000000;
+    }
+
+
+    //SIOCGIFHWADDR for mac addr
+    ifreq req2;
+    strcpy(req2.ifr_name, "ra0");
+    //this will get the mac address of the interface
+    if(ioctl(sockfd, SIOCGIFHWADDR, &req2) == -1){
+        fprintf(stderr, "mac error");
+        return(-1);
+    }
+    else{
+        sprintf(sigInfo->mac, "%.2X", (unsigned char)req2.ifr_hwaddr.sa_data[0]);
+        for(int s=1; s<6; s++){
+            sprintf(sigInfo->mac+strlen(sigInfo->mac), ":%.2X", (unsigned char)req2.ifr_hwaddr.sa_data[s]);
+        }
+    }
+    close(sockfd);
+
+    //printf("Bitrate: %f\n", mb);
+    //printf("Level: %i\n", quality);
+    this->output[14] = sigInfo->bitrate;
+    this->output[15] = (double)sigInfo->level;
+    return 0;
 }
 
 void Com::closeClient() {
@@ -489,21 +616,52 @@ void Com::closeClient() {
     connected = false;
 }
 
-void Com::setOutputData(double *out, double *pwm, double *refs, double &freq) {
-    output[0] = out[3]*radToDeg;	//roll
-    output[1] = out[4]*radToDeg;	//pitch
-    output[2] = out[5]*radToDeg;	//yaw
-    output[3] = refs[0]*radToDeg;	//ref-roll
-    output[4] = refs[1]*radToDeg;	//ref-pitch
-    output[5] = refs[2]*radToDeg;	//ref-yaw
-    output[6] = pwm[0];				//LF
-    output[7] = pwm[1];				//RF
-    output[8] = pwm[2];				//RR
-    output[9] = pwm[3];				//LR
-    output[10] = cos(out[4])*(out[0]-sin(out[4]));			//x-acc
-    output[11] = cos(out[3])*(out[1]-sin(out[3]));			//y-acc
-    output[12] = out[2];			//z-acc
-    output[13] = freq;				//loop frequency
+void Com::setOutputData(double *out, double *pwm, double *ref, double &freq) {
+    output[0] = out[3]*radToDeg;
+    output[1] = out[4]*radToDeg;
+    output[2] = out[5]*radToDeg;
+    output[3] = refs[0]*radToDeg;
+    output[4] = refs[1]*radToDeg;
+    output[5] = refs[2]*radToDeg;
+    output[6] = pwm[0];
+    output[7] = pwm[1];
+    output[8] = pwm[2];
+    output[9] = pwm[3];
+    output[10] = cos(out[4])*out[0]-sin(out[4]);
+    output[11] = cos(out[3])*out[1]-sin(out[3]);
+    output[12] = out[2];
+    output[13] = freq;
+}
+
+void Com::setPidParams(double *params) {
+    pidParams[0] = params[0];
+    pidParams[1] = params[1];
+    pidParams[2] = params[2];
+    pidParams[3] = params[3];
+    pidParams[4] = params[4];
+    pidParams[5] = params[5];
+    pidParams[6] = params[6];
+    pidParams[7] = params[7];
+    pidParams[8] = params[8];
+    pidParams[9] = params[9];
+    pidParams[10] = params[10];
+    pidParams[11] = params[11];
+
+}
+
+void Com::getPidParams(double *params){
+	params[0] = pidParams[0];
+	params[1] = pidParams[1];
+	params[2] = pidParams[2];
+	params[3] = pidParams[3];
+	params[4] = pidParams[4];
+	params[5] = pidParams[5];
+	params[6] = pidParams[6];
+	params[7] = pidParams[7];
+	params[8] = pidParams[8];
+	params[9] = pidParams[9];
+	params[10] = pidParams[10];
+	params[11] = pidParams[11];
 }
 
 

@@ -25,6 +25,7 @@ Controller::Controller(){
     this->joyCom[2] = 0.0;
     this->dB = 0.0;
     this->dA = 0.0;
+    get_Parameters();
 }
 
 //reads PID parameters from two txt-files and sets them
@@ -184,6 +185,10 @@ void Controller::setInnerParameters(double *inParams){
 	this->innerParameters[6] = inParams[6];
 	this->innerParameters[7] = inParams[7];
 	this->innerParameters[8] = inParams[8];
+	this->innerParameters[9] = inParams[9];
+	this->innerParameters[9] = inParams[10];
+	this->innerParameters[9] = inParams[11];
+
 }
 
 void Controller::setOuterParameters(double *outParams){

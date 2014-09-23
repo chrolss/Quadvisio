@@ -16,16 +16,24 @@
 #include <unistd.h>
 #include <sys/types.h>
 #include <sys/socket.h>
+#include <sys/ioctl.h>
 #include <netinet/in.h>
 #include <thread>
 #include <sstream>
 #include <string>
+#include <linux/wireless.h>
 #include <opencv2/highgui/highgui.hpp>
 #include <opencv2/imgproc/imgproc.hpp>
 
 #define PORT "3490"  // the port users will be connecting to
 #define BACKLOG 10
-#define radToDeg 57.29577
+
+struct signalInfo {
+    char mac[18];
+    char ssid[33];
+    int bitrate;
+    int level;
+};
 
 class Com{
 
@@ -33,12 +41,15 @@ public:
     Com();
     void Listen();
     void sendImg();
-    void checkClient();
     void closeClient();
     void startListenThread();
+    int getSignalInfo();
+    void setPidParams(double *params);
+    void getPidParams(double * params);
     
     void getNewInputData(int value);
-    void setOutputData(double *out, double *pwm, double *refs, double &freq);
+    void setOutputData(double *out, double *pwm, double *ref, double &freq);
+    void getDataFromQvis();
     
     bool connected;
     bool listening;
@@ -49,12 +60,12 @@ public:
     bool msgStarted;
     bool motorOn;
     bool colorVideo;
+    bool savePid;
     
-    double output[14];
     int vidCount;
     int vidLimit;
     
-    double stateBuf[4];
+    double inputData[6];  // Roll:Pitch:Yaw:Throttle:rollOffset:pitchOffset
     
     std::string errMsg;
 
@@ -69,6 +80,11 @@ private:
     void qvisLightLoop();
     void sendQvisDevMsg();
     void sendQvisLightMsg();
+    void sendPidParams();
+
+    //angles:refangles:pwm:speed:sidespeed:altitude:Hz:bitrate:dbm:errorMessage:imgWidth:imgHeight:imgSize:imgChannels - Image
+    double output[16];
+    double pidParams[12];
 
     int sockfd, newsockfd, portno;
     int sizeOfOutput;
@@ -88,7 +104,7 @@ private:
     
     cv::VideoCapture cap;
     
-    std::string numberInStrings[9];
+    std::string numberInStrings[24];
     
     // Message parsing
     size_t posStart;

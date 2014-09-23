@@ -46,6 +46,9 @@ void initailize(){
     for (int i =0 ; i<4; i++) {
         sOutput[i] = 0.0;
     }
+    for (int i =0 ; i<6; i++) {
+            outParams[i] = 0.0;
+        }
     sensorManager = new SensorManager;
     controller = new Controller;
     C = new Com;
@@ -70,9 +73,8 @@ void initailize(){
     sOutput[2] = 0.0;
     sOutput[3] = 0.0;
 
-    controller->get_Parameters();	//läser parameters från textfil och sätter i controller
     controller->send_Parameters(inParams);	//lägger parametrarna i inParams
-    //tonis funktion som skickar till Com
+    C->setPidParams(inParams);				//tonis funktion som skickar till Com
 
     runAtlas = true;
 }
@@ -86,6 +88,13 @@ void loop(){
         // Start clock
         auto start = std::chrono::high_resolution_clock::now();
         
+        if (C->savePid){
+        	C->getPidParams(inParams);
+        	controller->setInnerParameters(inParams);
+        	controller->write_Parameters(inParams, outParams);
+        	C->savePid = false;
+        }
+
         // Read sensor data
         sensorManager->readDMP(sInput);
         
@@ -124,7 +133,7 @@ void loop(){
         //controller->calcRef(sInput, ref);	//outer controller
         //controller->setReference(ref);		//set new references based on outer controller
 
-        controller->setJoyCom(C->stateBuf, sInput, ref);
+        controller->setJoyCom(C->output, sInput, ref);
 
 
         //controller->setInnerParameters(communicate->pidParam);
