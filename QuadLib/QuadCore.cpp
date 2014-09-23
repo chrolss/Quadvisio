@@ -21,7 +21,7 @@ QuadCore::QuadCore() {
 }
 
 int QuadCore::loadDeviceTree(const char *name) {
-    printf("Inside loadDeviceTree\n");
+    //printf("Inside loadDeviceTree\n");
     
     //const char *name = pwmName.c_str();
     
@@ -30,7 +30,7 @@ int QuadCore::loadDeviceTree(const char *name) {
     
     const char *slots = slotsPath.c_str();
     
-    printf("Path to slots file: %s\n", slots);
+    //printf("Path to slots file: %s\n", slots);
     
     file = fopen(slots, "r+");
     if (!file) {
@@ -58,7 +58,7 @@ int QuadCore::unloadDeviceTree(std::string pwmName) {
 }
 
 bool QuadCore::deviceTreeLoaded(std::string pwmName) {
-    printf("Inside deviceTreeLoaded\n");
+    //printf("Inside deviceTreeLoaded\n");
     const char *name = pwmName.c_str();
     
     FILE *file = NULL;

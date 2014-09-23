@@ -88,7 +88,8 @@ void loop(){
         // Start clock
         auto start = std::chrono::high_resolution_clock::now();
         
-        if (C->savePid){
+        if (C->savePid == true){
+        	printf("Hej");
         	C->getPidParams(inParams);
         	controller->setInnerParameters(inParams);
         	controller->write_Parameters(inParams, outParams);
@@ -133,7 +134,7 @@ void loop(){
         //controller->calcRef(sInput, ref);	//outer controller
         //controller->setReference(ref);		//set new references based on outer controller
 
-        controller->setJoyCom(C->output, sInput, ref);
+        controller->setJoyCom(C->inputData, sInput, ref);
 
 
         //controller->setInnerParameters(communicate->pidParam);

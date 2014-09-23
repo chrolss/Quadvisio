@@ -158,8 +158,8 @@ void Com::qvisLightLoop() {
 
 void Com::sendQvisLightMsg() {
     
-    printf("Sending message\n");
-    printf("Video count: %i\n", vidCount);
+    //printf("Sending message\n");
+    //printf("Video count: %i\n", vidCount);
 
     this->getSignalInfo();
     
@@ -237,7 +237,7 @@ void Com::sendQvisLightMsg() {
     
     s = ostr.str();
     
-    printf("Sending message: %s\n", s.c_str());
+    //printf("Sending message: %s\n", s.c_str());
     if (send(newsockfd, s.c_str(), s.length(),0) == -1) {
         closeClient();
         perror("send");
@@ -247,7 +247,7 @@ void Com::sendQvisLightMsg() {
         sendImg();
         imgSend = false;
     }
-    printf("Message sent\n");
+    //printf("Message sent\n");
 
 }
 
@@ -337,7 +337,7 @@ void Com::sendQvisDevMsg() {
 
     s = ostr.str();
 
-    printf("Sending message: %s\n", s.c_str());
+    //printf("Sending message: %s\n", s.c_str());
     if (send(newsockfd, s.c_str(), s.length(),0) == -1) {
         closeClient();
         perror("send");
@@ -347,7 +347,7 @@ void Com::sendQvisDevMsg() {
         sendImg();
         imgSend = false;
     }
-    printf("Message sent\n");
+    //printf("Message sent\n");
 }
 
 void Com::sendImg() {
@@ -372,8 +372,8 @@ void Com::readMsg() {
     
     reciveMessage();
     
-    printf("Final message:\n");
-    std::cout << msg << std::endl;
+    //printf("Final message:\n");
+    //std::cout << msg << std::endl;
     
     size_t pos = 0;
     std::string token;
@@ -427,18 +427,18 @@ void Com::readMsg() {
 
 void Com::reciveMessage() {
 
-    printf("Waitning for message\n");
+    //printf("Waitning for message\n");
 
     msgBuffer = "";
     msg = "";
     msgSize = 0;
-    printf("Setting Buffer to zero\n");
+    //printf("Setting Buffer to zero\n");
     bzero(recvBuf, 1024);
 
     while (1) {
-        printf("Going into recv\n");
+        //printf("Going into recv\n");
         numBytes = recv(newsockfd, recvBuf, sizeof(recvBuf), 0);
-        printf("Done with recv\n");
+        //printf("Done with recv\n");
         if (numBytes < 0) {
             connected = false;
             perror("read");
@@ -452,9 +452,9 @@ void Com::reciveMessage() {
         }
 
         else {
-            printf("convert buffer to string\n");
+            //printf("convert buffer to string\n");
             msgBuffer = std::string(recvBuf);
-            std::cout << "Raw message: " << msgBuffer << std::endl;
+            //std::cout << "Raw message: " << msgBuffer << std::endl;
         }
 
         if (msgSize == 0 && msgBuffer.size()>=3) {
@@ -476,8 +476,8 @@ void Com::reciveClientIdentity() {
 
     reciveMessage();
 
-    printf("Final message:\n");
-    std::cout << msg << std::endl;
+    //printf("Final message:\n");
+    //std::cout << msg << std::endl;
 
     size_t pos = 0;
     std::string token;
@@ -485,14 +485,14 @@ void Com::reciveClientIdentity() {
     int i = 0;
     while ((pos = this->msg.find(subDelimiter)) != std::string::npos) {
         token = msg.substr(0, pos);
-        std::cout << token << std::endl;
+        //std::cout << token << std::endl;
         numberInStrings[i] = token;
         msg.erase(0, pos + subDelimiter.length());
         i++;
     }
 
     numberInStrings[i] = msg;
-    std::cout << msg << std::endl;
+    //std::cout << msg << std::endl;
     clientIdentity = atoi(numberInStrings[1].c_str());
     clientName = numberInStrings[2];
 }
@@ -620,9 +620,9 @@ void Com::setOutputData(double *out, double *pwm, double *ref, double &freq) {
     output[0] = out[3]*radToDeg;
     output[1] = out[4]*radToDeg;
     output[2] = out[5]*radToDeg;
-    output[3] = refs[0]*radToDeg;
-    output[4] = refs[1]*radToDeg;
-    output[5] = refs[2]*radToDeg;
+    output[3] = ref[0]*radToDeg;
+    output[4] = ref[1]*radToDeg;
+    output[5] = ref[2]*radToDeg;
     output[6] = pwm[0];
     output[7] = pwm[1];
     output[8] = pwm[2];

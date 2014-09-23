@@ -27,6 +27,7 @@
 
 #define PORT "3490"  // the port users will be connecting to
 #define BACKLOG 10
+#define radToDeg 57.296
 
 struct signalInfo {
     char mac[18];
@@ -66,7 +67,7 @@ public:
     int vidLimit;
     
     double inputData[6];  // Roll:Pitch:Yaw:Throttle:rollOffset:pitchOffset
-    
+
     std::string errMsg;
 
     cv::Mat sendFrame;
@@ -82,9 +83,10 @@ private:
     void sendQvisLightMsg();
     void sendPidParams();
 
+
+    double pidParams[12];
     //angles:refangles:pwm:speed:sidespeed:altitude:Hz:bitrate:dbm:errorMessage:imgWidth:imgHeight:imgSize:imgChannels - Image
     double output[16];
-    double pidParams[12];
 
     int sockfd, newsockfd, portno;
     int sizeOfOutput;

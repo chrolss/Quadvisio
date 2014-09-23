@@ -60,8 +60,9 @@ void Controller::write_Parameters(double *inner, double *outer){
 }
 
 void Controller::send_Parameters(double *params){
-	for (int i = 0; i<12; i++)
-		params[i] = this->innerParameters[i];
+	for (int i = 0; i < 12; i++){
+		params[i] = innerParameters[i];
+	}
 }
 
 void Controller::calcPWM(double *input, double *output, double *ref) {
@@ -155,9 +156,9 @@ void Controller::setJoyCom(double *joy, double *sensorInput, double *ref){
 	this->joyCom[0] = 0.25*joy[0];
 	this->joyCom[1] = -0.25*joy[1];
 	this->joyCom[2] = 0.25*joy[2];
-	this->trim[0] = 0.0;	//add from *joy
-	this->trim[1] = 0.0;	//add from *joy
-	//printf("Thrust: %f, F: %f \n", joy[3], F);
+	this->trim[0] = joy[4];	//add from *joy
+	this->trim[1] = joy[5];	//add from *joy
+	printf("Trim r and p: %f, %f \n", joy[4], joy[5]);
 }
 
 void Controller::setYawRef(double *ref, double _yaw){

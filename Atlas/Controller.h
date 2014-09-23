@@ -13,6 +13,7 @@
 #include <cstdio>
 #include <fstream>
 #include <math.h>
+#include <cstring>
 
 #define THRUST_CONSTANT 0.0003
 #define ARM_RADIUS 0.176

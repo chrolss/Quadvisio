@@ -27,7 +27,7 @@ void QuadPWM::initialize(std::string pwmName) {
     // Get to dtbo filename
     snprintf(dtboFile, sizeof(dtboFile), "bone_pwm_%s\n", pwmName.c_str());
     
-    printf("dtbo file name: %s", dtboFile);
+    //printf("dtbo file name: %s", dtboFile);
     
     // Load the device tree for the pin
     loadDeviceTree(dtboFile);
@@ -38,7 +38,7 @@ void QuadPWM::initialize(std::string pwmName) {
     //finds and builds the pwm_test_path, as it can be variable...
     buildPath(getOcpPath().c_str(), pwmTestFragment, pwmTestPath, sizeof(pwmTestPath));
     
-    printf("Path to ocp: %s\n", pwmTestPath);
+    //printf("Path to ocp: %s\n", pwmTestPath);
     
     // Set the paths to period, duty and polarity
     snprintf(periodPath, sizeof(periodPath), "%s/period", pwmTestPath);
@@ -56,26 +56,26 @@ void QuadPWM::initialize(std::string pwmName) {
     ss >> newPwm.polarityPath;
     pwmDatas.push_back(newPwm);
     
-    printf("period path %s\n", newPwm.periodPath.c_str());
-    printf("duty path %s\n", newPwm.dutyPath.c_str());
-    printf("polarity path %s\n", newPwm.polarityPath.c_str());
+    //printf("period path %s\n", newPwm.periodPath.c_str());
+    //printf("duty path %s\n", newPwm.dutyPath.c_str());
+    //printf("polarity path %s\n", newPwm.polarityPath.c_str());
     
-    sleep(1);
+    usleep(600000);
     
     // Getting the new port ready for run
     printf("Starting %s\n", newPwm.name.c_str());
     setPolarity(newPwm.name, 0);
     
-    sleep(1);
+    usleep(600000);
     
     //printf("Setting period to 2000000\n");
     setPeriod(newPwm.name, 2000000);
     
-    sleep(1);
+    usleep(600000);
     //printf("Setting duty to 1000000\n");
     setDuty(newPwm.name, 1000000);
     
-    sleep(1);
+    usleep(600000);
     /////////////////////////////////////////
     //          FORTSÄTT HÄR IDAG          //
     /////////////////////////////////////////
@@ -83,7 +83,7 @@ void QuadPWM::initialize(std::string pwmName) {
 }
 
 void QuadPWM::checkLoaded(std::string pwmName) {
-    printf("Inside checkLoades");
+    //printf("Inside checkLoades");
     deviceTreeLoaded(pwmName);
 }
 
@@ -94,7 +94,6 @@ void QuadPWM::cleanUp() {
 void QuadPWM::setPolarity(std::string pwmName, int polarity) {
     for (int pwm = 0; pwm<pwmDatas.size(); pwm++) {
         if (pwmName.compare(pwmDatas.at(pwm).name)==0) {
-            std::cout << "hej" << std::endl;
             int fd;
             int len;
             char buffer[7]; /* allow room for trailing NUL byte */
