@@ -43,9 +43,9 @@ public:
     double windUp(double *err);
     void write_Parameters(double *inner, double *outer);
     void send_Parameters(double *params);
+    void write_trim();
 private:
     void get_Parameters();
-    void write_trim();
     double innerParameters[9];
     double outerParameters[9];
     double refs[7];		//roll, pitch, yaw, ax, ay, az, altitude
