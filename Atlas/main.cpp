@@ -93,6 +93,7 @@ void loop(){
         	C->getPidParams(inParams);
         	controller->setInnerParameters(inParams);
         	controller->write_Parameters(inParams, outParams);
+        	controller->write_trim();
         	C->savePid = false;
         }
 

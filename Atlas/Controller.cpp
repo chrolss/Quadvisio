@@ -59,6 +59,13 @@ void Controller::write_Parameters(double *inner, double *outer){
 
 }
 
+void Controller::write_trim(){
+	std::ofstream params5;	//for output
+	params5.open("trim.txt");
+	params5 << trim[0] << "\t" << trim[1];
+	params5.close();
+}
+
 void Controller::send_Parameters(double *params){
 	for (int i = 0; i < 12; i++){
 		params[i] = innerParameters[i];
