@@ -2,4 +2,4 @@
 
 echo "Building sensor estimation program"
 
-g++ -W -I /home/ubuntu/Quadvisio /home/ubuntu/Quadvisio/Sensors/adxl345.cpp main.cpp -o test
+g++ -W -I /home/ubuntu/Quadvisio /home/ubuntu/Quadvisio/Kalman/kalman.cpp /home/ubuntu/Quadvisio/Sensors/adxl345.cpp main.cpp -o test
