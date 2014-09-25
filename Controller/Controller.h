@@ -11,12 +11,14 @@
 
 #include <iostream>
 #include <cstdio>
+#include <fstream>
 #include <math.h>
+#include <cstring>
 
 #define THRUST_CONSTANT 0.0003
 #define ARM_RADIUS 0.176
 #define DRAG_CONSTANT 9.9768e-8
-#define dt 0.02	//påhittad
+#define dt 0.017	//påhittad
 #define WINDUP_LIMIT_UP 1
 #define WINDUP_LIMIT_DOWN -1
 #define MAX_PERCENTAGE 80
@@ -32,23 +34,31 @@ class Controller{
     
 public:
     Controller();
-    void calcPWM(double *input, double *output);
-    void calcRef(double *accInput, double *refs);
+    void calcPWM(double *input, double *output, double *ref);
+    void calcRef(double *sensorInput, double *ref);
     void setInnerParameters(double *inParams);
     void setOuterParameters(double *outParams);
-    void setReference(double *ref);
-    void setThrust(int _thrust);
+    void setYawRef(double *ref, double _yaw);
+    void setJoyCom(double *joy, double *sensorInput, double *ref);
     double windUp(double *err);
+    void write_Parameters(double *inner, double *outer);
+    void send_Parameters(double *params);
+    void write_trim();
+    void setSensitivity(double _sens);
 private:
     void get_Parameters();
+    void reset_PID();
     double innerParameters[9];
     double outerParameters[9];
     double refs[7];		//roll, pitch, yaw, ax, ay, az, altitude
     double ea[3], eb[3], eg[3];	//angle errors
+    double joyCom[3];
+    double trim[2];		//trim for roll and pitch
     double ex[3], ey[3];	//acceleration errors
     double F, Ma, Mb, Mg;
     double dA, dB;			//Desired changes in angles
-    double MaT, MbT;
+    double MaT, MbT, MgT;
+    double sens;		//joystick sensitivity, range 0.25 - 0.4
     
 };
 

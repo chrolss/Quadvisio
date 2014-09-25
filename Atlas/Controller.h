@@ -47,6 +47,7 @@ public:
     void setSensitivity(double _sens);
 private:
     void get_Parameters();
+    void reset_PID();
     double innerParameters[9];
     double outerParameters[9];
     double refs[7];		//roll, pitch, yaw, ax, ay, az, altitude
