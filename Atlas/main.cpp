@@ -23,6 +23,31 @@
 #include "Com.h"
 #include "Motor.h"
 
+bool check_connection(){
+	FILE *output;
+
+	if(!(output = popen("/sbin/route -n | grep -c '^0\\.0\\.0\\.0'","r"))){
+	    std::cout << "gick ej" << std::endl;
+	    return false;
+	}
+	unsigned int i;
+	fscanf(output,"%u",&i);
+	if(i==0){
+	    std::cout<<"There is no internet connection" << std::endl;
+		return false;
+	}
+
+	else if(i==1){
+	    std::cout<<"There is internet connection" << std::endl;
+		return true;
+	}
+	else{
+		return false;
+	}
+
+	pclose(output);
+	return false;
+}
 
 SensorManager *sensorManager;
 Controller *controller;
@@ -152,7 +177,7 @@ void loop(){
         // Send PWM values to motors
 
 
-        if (C->motorOn==true && C->connected) {
+        if (C->motorOn==true && C->connected && check_connection()) {
             motor->setPWM(sOutput);
         }
         else {
