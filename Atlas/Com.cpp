@@ -25,6 +25,9 @@ Com::Com(){
     msgSize = 0;
     errMsg = "Nothing wrong here!!";
     
+    tv.tv_sec = 3;
+    tv.tv_sec = 0;
+    
     output[0]=0.0;
     output[1]=0.0;
     output[2]=0.0;
@@ -97,7 +100,7 @@ void Com::Listen()
     
     std::cout << "Listening for life..." << std::endl;
     newsockfd = accept(sockfd,(struct sockaddr *) &cli_addr, &clilen);
-    
+    setsockopt(newsockfd, SOL_SOCKET, SO_RCVTIMEO, (char *)&tv,sizeof(struct timeval));
     if (newsockfd < 0)
         error("ERROR on accept");
     
@@ -237,7 +240,7 @@ void Com::sendQvisLightMsg() {
     
     s = ostr.str();
     
-    //printf("Sending message: %s\n", s.c_str());
+    printf("Sending message: %s\n", s.c_str());
     if (send(newsockfd, s.c_str(), s.length(),0) == -1) {
         closeClient();
         perror("send");
@@ -247,7 +250,7 @@ void Com::sendQvisLightMsg() {
         sendImg();
         imgSend = false;
     }
-    //printf("Message sent\n");
+    printf("Message sent\n");
 
 }
 
@@ -337,7 +340,7 @@ void Com::sendQvisDevMsg() {
 
     s = ostr.str();
 
-    //printf("Sending message: %s\n", s.c_str());
+    printf("Sending message: %s\n", s.c_str());
     if (send(newsockfd, s.c_str(), s.length(),0) == -1) {
         closeClient();
         perror("send");
@@ -347,7 +350,7 @@ void Com::sendQvisDevMsg() {
         sendImg();
         imgSend = false;
     }
-    //printf("Message sent\n");
+    printf("Message sent\n");
 }
 
 void Com::sendImg() {
@@ -427,7 +430,7 @@ void Com::readMsg() {
 
 void Com::reciveMessage() {
 
-    //printf("Waitning for message\n");
+    printf("Waitning for message\n");
 
     msgBuffer = "";
     msg = "";
@@ -454,7 +457,7 @@ void Com::reciveMessage() {
         else {
             //printf("convert buffer to string\n");
             msgBuffer = std::string(recvBuf);
-            //std::cout << "Raw message: " << msgBuffer << std::endl;
+            std::cout << "Raw message: " << msgBuffer << std::endl;
         }
 
         if (msgSize == 0 && msgBuffer.size()>=3) {
@@ -663,5 +666,3 @@ void Com::getPidParams(double *params){
 	params[10] = pidParams[10];
 	params[11] = pidParams[11];
 }
-
-

@@ -13,6 +13,11 @@
 #include <opencv2/core/core.hpp>
 #include <opencv2/highgui/highgui.hpp>
 
+#include <unistd.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <sys/types.h>
+
 #include "SensorManager.h"
 #include "Controller.h"
 #include "Com.h"
@@ -145,6 +150,8 @@ void loop(){
         
         //std::cout << "Setting PWM values" << std::endl;
         // Send PWM values to motors
+
+
         if (C->motorOn==true && C->connected) {
             motor->setPWM(sOutput);
         }

@@ -83,7 +83,7 @@ private:
     void sendQvisLightMsg();
     void sendPidParams();
 
-
+    struct timeval tv;
     double pidParams[12];
     //angles:refangles:pwm:speed:sidespeed:altitude:Hz:bitrate:dbm:errorMessage:imgWidth:imgHeight:imgSize:imgChannels - Image
     double output[16];
