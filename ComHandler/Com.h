@@ -21,12 +21,13 @@
 #include <thread>
 #include <sstream>
 #include <string>
-#include <linux/wireless.h>
+//#include <linux/wireless.h>
 #include <opencv2/highgui/highgui.hpp>
 #include <opencv2/imgproc/imgproc.hpp>
 
 #define PORT "3490"  // the port users will be connecting to
 #define BACKLOG 10
+#define radToDeg 57.296
 
 struct signalInfo {
     char mac[18];
@@ -45,9 +46,10 @@ public:
     void startListenThread();
     int getSignalInfo();
     void setPidParams(double *params);
+    void getPidParams(double * params);
     
     void getNewInputData(int value);
-    void setOutputData(double *output);
+    void setOutputData(double *out, double *pwm, double *ref, double &freq);
     void getDataFromQvis();
     
     bool connected;
@@ -64,10 +66,10 @@ public:
     int vidCount;
     int vidLimit;
     
-    double inputData[6];  // Roll:Pitch:Yaw:Throttle:rollOffset:pitchOffset
-    
+    double inputData[7];  // Roll:Pitch:Yaw:Throttle:rollOffset:pitchOffset:JoySen
+
     std::string errMsg;
-    
+
     cv::Mat sendFrame;
     
 private:
@@ -80,12 +82,14 @@ private:
     void sendQvisDevMsg();
     void sendQvisLightMsg();
     void sendPidParams();
-    
+
+    struct timeval tv;
+    fd_set readfds;
+    double pidParams[12];
     //angles:refangles:pwm:speed:sidespeed:altitude:Hz:bitrate:dbm:errorMessage:imgWidth:imgHeight:imgSize:imgChannels - Image
     double output[16];
-    double pidParams[12];
-    
-    int sockfd, newsockfd, portno;
+
+    int sockfd, newsockfd, portno, n;
     int sizeOfOutput;
     int clientIdentity;
     std::string clientName;
@@ -103,7 +107,7 @@ private:
     
     cv::VideoCapture cap;
     
-    std::string numberInStrings[24];
+    std::string numberInStrings[25];
     
     // Message parsing
     size_t posStart;
@@ -112,7 +116,7 @@ private:
     std::string msgBuffer;
     std::string subDelimiter = ":";
     std::string token;
-    
+
     int msgSize;
 };
 
