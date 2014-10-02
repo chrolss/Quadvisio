@@ -66,7 +66,7 @@ public:
     int vidCount;
     int vidLimit;
     
-    double inputData[6];  // Roll:Pitch:Yaw:Throttle:rollOffset:pitchOffset
+    double inputData[7];  // Roll:Pitch:Yaw:Throttle:rollOffset:pitchOffset:JoySen
 
     std::string errMsg;
 
@@ -84,11 +84,12 @@ private:
     void sendPidParams();
 
     struct timeval tv;
+    fd_set readfds;
     double pidParams[12];
     //angles:refangles:pwm:speed:sidespeed:altitude:Hz:bitrate:dbm:errorMessage:imgWidth:imgHeight:imgSize:imgChannels - Image
     double output[16];
 
-    int sockfd, newsockfd, portno;
+    int sockfd, newsockfd, portno, n;
     int sizeOfOutput;
     int clientIdentity;
     std::string clientName;
@@ -106,7 +107,7 @@ private:
     
     cv::VideoCapture cap;
     
-    std::string numberInStrings[24];
+    std::string numberInStrings[25];
     
     // Message parsing
     size_t posStart;

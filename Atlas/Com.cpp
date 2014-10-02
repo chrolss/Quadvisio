@@ -25,9 +25,6 @@ Com::Com(){
     msgSize = 0;
     errMsg = "Nothing wrong here!!";
     
-    tv.tv_sec = 3;
-    tv.tv_sec = 0;
-    
     output[0]=0.0;
     output[1]=0.0;
     output[2]=0.0;
@@ -100,9 +97,22 @@ void Com::Listen()
     
     std::cout << "Listening for life..." << std::endl;
     newsockfd = accept(sockfd,(struct sockaddr *) &cli_addr, &clilen);
-    setsockopt(newsockfd, SOL_SOCKET, SO_RCVTIMEO, (char *)&tv,sizeof(struct timeval));
-    if (newsockfd < 0)
+    if (newsockfd < 0) {
         error("ERROR on accept");
+        closeClient();
+    }
+
+    // Prepare select
+    // Clear set
+    FD_ZERO(&readfds);
+
+    //
+    FD_SET(newsockfd, &readfds);
+
+    n = newsockfd + 1;
+
+    tv.tv_sec = 3;
+    tv.tv_usec = 0;
     
     connected = true;
     reciveMsg=true;
@@ -341,10 +351,12 @@ void Com::sendQvisDevMsg() {
     s = ostr.str();
 
     printf("Sending message: %s\n", s.c_str());
+
     if (send(newsockfd, s.c_str(), s.length(),0) == -1) {
         closeClient();
         perror("send");
     }
+
 
     if (imgSend && videoStream) {
         sendImg();
@@ -355,6 +367,7 @@ void Com::sendQvisDevMsg() {
 
 void Com::sendImg() {
     sendFrame = (sendFrame.reshape(0,1));
+
     if(colorVideo) {
         if (send(newsockfd, sendFrame.data, sendFrame.total()*3, 0) == -1) {
             closeClient();
@@ -391,14 +404,14 @@ void Com::readMsg() {
     numberInStrings[i] = msg;
     
     if (atoi(numberInStrings[7].c_str())==1) {
-        for (int i=8; i<20; i++) {
+        for (int i=9; i<21; i++) {
             pidParams[i-8] = atof(numberInStrings[i].c_str());
         }
         savePid = true;
         printf("PID parameters read and saved");
     }
 
-    if (atoi(numberInStrings[20].c_str())==1) {
+    if (atoi(numberInStrings[21].c_str())==1) {
         videoStream = true;
     }
     else {
@@ -406,23 +419,23 @@ void Com::readMsg() {
         vidCount = 0;
     }
     
-    if (atoi(numberInStrings[21].c_str())==1) {
+    if (atoi(numberInStrings[22].c_str())==1) {
         colorVideo = true;
     }
     else {
         colorVideo = false;
     }
     
-    vidResNew = atoi(numberInStrings[22].c_str());
+    vidResNew = atoi(numberInStrings[23].c_str());
     
-    if (atoi(numberInStrings[23].c_str())==1) {
+    if (atoi(numberInStrings[24].c_str())==1) {
         motorOn = true;
     }
     else{
         motorOn = false;
     }
     
-    for (int i = 1 ; i<7; i++) {
+    for (int i = 1 ; i<8; i++) {
         inputData[i-1] = atof(numberInStrings[i].c_str());
     }
 
@@ -440,37 +453,50 @@ void Com::reciveMessage() {
 
     while (1) {
         //printf("Going into recv\n");
-        numBytes = recv(newsockfd, recvBuf, sizeof(recvBuf), 0);
-        //printf("Done with recv\n");
-        if (numBytes < 0) {
-            connected = false;
-            perror("read");
-            return;
-        }
 
-        else if (numBytes == 0) {
-            printf("Maybe lost connection to client, closing socket and starting to listing\n");
-            connected = false;
-            return;
-        }
+        int rv = select(n, &readfds, NULL, NULL, &tv);
 
-        else {
-            //printf("convert buffer to string\n");
-            msgBuffer = std::string(recvBuf);
-            std::cout << "Raw message: " << msgBuffer << std::endl;
-        }
+        if (rv == -1) {
+            perror("select"); // error occurred in select()
+            printf("Select error\n");
+            closeClient();
+        } else if (rv == 0) {
+            printf("Timeout occurred!  No data after 5 seconds.\n");
+            closeClient();
+        } else {
+            if (FD_ISSET(newsockfd, &readfds)) {
+                numBytes = recv(newsockfd, recvBuf, sizeof(recvBuf), 0);
+                //printf("Done with recv\n");
+                if (numBytes < 0) {
+                    connected = false;
+                    perror("read");
+                    return;
+                }
 
-        if (msgSize == 0 && msgBuffer.size()>=3) {
-            msgSize = atoi(msgBuffer.substr(0,3).c_str());
-            //printf("Message size: %i\n", msgSize);
-        }
+                else if (numBytes == 0) {
+                    printf("Maybe lost connection to client, closing socket and starting to listing\n");
+                    connected = false;
+                    return;
+                }
 
-        if (msgSize>0 && msgBuffer.size() == (msgSize+3)) {
-            //printf("Message recived!\n");
-            msg = msgBuffer;
-            break;
-        }
+                else {
+                    //printf("convert buffer to string\n");
+                    msgBuffer = std::string(recvBuf);
+                    std::cout << "Raw message: " << msgBuffer << std::endl;
+                }
 
+                if (msgSize == 0 && msgBuffer.size()>=3) {
+                    msgSize = atoi(msgBuffer.substr(0,3).c_str());
+                    //printf("Message size: %i\n", msgSize);
+                }
+
+                if (msgSize>0 && msgBuffer.size() == (msgSize+3)) {
+                    //printf("Message recived!\n");
+                    msg = msgBuffer;
+                    break;
+                }
+            }
+        }
     }
 
 }
@@ -479,8 +505,8 @@ void Com::reciveClientIdentity() {
 
     reciveMessage();
 
-    //printf("Final message:\n");
-    //std::cout << msg << std::endl;
+    printf("Final message:\n");
+    std::cout << msg << std::endl;
 
     size_t pos = 0;
     std::string token;
@@ -534,6 +560,7 @@ void Com::sendPidParams() {
 }
 
 int Com::getSignalInfo() {
+
     iwreq req;
 
     signalInfo *sigInfo;
@@ -608,6 +635,7 @@ int Com::getSignalInfo() {
     //printf("Level: %i\n", quality);
     this->output[14] = sigInfo->bitrate;
     this->output[15] = (double)sigInfo->level;
+
     return 0;
 }
 

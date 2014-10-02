@@ -163,11 +163,13 @@ void Controller::setJoyCom(double *joy, double *sensorInput, double *ref){
 		reset_PID();			//if the throttle is lower than 0.1 the I parameters in the
 	}							//PID will be set to zero
 	this->F = 4*THRUST_CONSTANT*joy[3]*joy[3]*10000.0;
+	setSensitivity(joy[6]);
 	this->joyCom[0] = sens*joy[0];
 	this->joyCom[1] = -sens*joy[1];
 	this->joyCom[2] = sens*joy[2];
 	this->trim[0] = joy[4];	//add from *joy
 	this->trim[1] = -joy[5];	//add from *joy
+	printf("Sens: %f\n", sens);
 
 }
 
