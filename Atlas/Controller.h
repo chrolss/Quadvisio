@@ -33,7 +33,7 @@
 class Controller{
     
 public:
-    Controller();
+    Controller(bool bird);
     void calcPWM(double *input, double *output, double *ref);
     void calcRef(double *sensorInput, double *ref);
     void setInnerParameters(double *inParams);
@@ -48,6 +48,7 @@ public:
 private:
     void get_Parameters();
     void reset_PID();
+    bool pigeon;
     double innerParameters[9];
     double outerParameters[9];
     double refs[7];		//roll, pitch, yaw, ax, ay, az, altitude

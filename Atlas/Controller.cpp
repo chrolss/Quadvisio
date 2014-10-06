@@ -9,7 +9,7 @@
 #include "Controller.h"
 
 
-Controller::Controller(){
+Controller::Controller(bool bird){
     this->ea[1] = 0.0;
     this->eb[1] = 0.0;
     this->eg[1]	= 0.0;
@@ -25,6 +25,16 @@ Controller::Controller(){
     this->joyCom[2] = 0.0;
     this->dB = 0.0;
     this->dA = 0.0;
+    if (bird){
+    	this->pigeon = true;
+    }
+    else if (!bird){
+    	this->pigeon = false;
+    }
+    else{
+    	printf("No bird selected, exiting\n");
+    	exit(1);
+    }
     get_Parameters();
 }
 
@@ -113,11 +123,17 @@ void Controller::calcPWM(double *input, double *output, double *ref) {
     Ma = (MaT*COS45 - MbT*SIN45);
     Mb = (MaT*COS45 + MbT*COS45);
     Mg = -MgT;		//change stuff
-    //printf("Ma = %f, Mb = %f, Mg = %f, F = %f \n", Ma, Mb, Mg, F);
-    output[0] = 0.25*(F*CONST1 + Mb*CONST2 + Mg*CONST3);
-    output[1] = 0.25*(F*CONST1 - Ma*CONST2 - Mg*CONST3);
-    output[2] = 0.25*(F*CONST1 - Mb*CONST2 + Mg*CONST3);
-    output[3] = 0.25*(F*CONST1 + Ma*CONST2 - Mg*CONST3);
+
+    if (pigeon){
+    	//printf("Ma = %f, Mb = %f, Mg = %f, F = %f \n", Ma, Mb, Mg, F);
+    	output[0] = 0.25*(F*CONST1 + Mb*CONST2 + Mg*CONST3);
+    	output[1] = 0.25*(F*CONST1 - Ma*CONST2 - Mg*CONST3);
+    	output[2] = 0.25*(F*CONST1 - Mb*CONST2 + Mg*CONST3);
+    	output[3] = 0.25*(F*CONST1 + Ma*CONST2 - Mg*CONST3);
+    }
+    else{
+    	printf("Wrong bird selected \n");
+    }
     
     //printf("Before saturation \n");
     //printf("LF = %f, RF = %f, RR = %f, RL = %f \n", output[0], output[1],output[2], output[3]);

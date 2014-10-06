@@ -22,6 +22,7 @@ SensorManager *sensorManager;
 Controller *controller;
 Com *C;
 Motor *motor;
+bool pigeon;
 double sInput[6];
 double sOutput[4];
 double idleMotorValues[] = {0.0, 0.0, 0.0, 0.0};
@@ -49,7 +50,7 @@ void initailize(){
             outParams[i] = 0.0;
         }
     sensorManager = new SensorManager;
-    controller = new Controller;
+    controller = new Controller(pigeon);
     C = new Com;
     motor = new Motor;
     
@@ -178,9 +179,20 @@ void loop(){
     std::cout << "Test klart" << std::endl;
 }
 
-int main(int argc, const char * argv[])
+int main(int argc, const char* argv[])
 {
-    initailize();
+    int bird = atoi(argv[1]);
+    if (bird == 1){
+    	pigeon = true;
+    }
+    else if(bird == 2){
+    	pigeon = false;
+    }
+    else{
+    	printf("Incorrect input argument, 1 = Pigeon, 2 = Phoenix\n");
+    	exit(1);
+    }
+	initailize();
     loop();
 
     return 0;
