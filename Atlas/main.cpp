@@ -89,7 +89,6 @@ void loop(){
         auto start = std::chrono::high_resolution_clock::now();
         
         if (C->savePid == true){
-        	printf("Hej");
         	C->getPidParams(inParams);
         	controller->setInnerParameters(inParams);
         	controller->write_Parameters(inParams, outParams);

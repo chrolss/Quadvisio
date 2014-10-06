@@ -169,7 +169,7 @@ void Controller::setJoyCom(double *joy, double *sensorInput, double *ref){
 	this->joyCom[2] = sens*joy[2];
 	this->trim[0] = joy[4];	//add from *joy
 	this->trim[1] = -joy[5];	//add from *joy
-	printf("Sens: %f\n", sens);
+
 
 }
 

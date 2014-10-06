@@ -15,29 +15,41 @@
 using namespace std;
 
 short est;
+double min1 = 110.0;
+double max1 = -100.0;
+
+int find_min_max(double &input){
+	if (input > max1){
+		max1 = input;
+		printf("New max at %f\n", max1);
+		return 0;
+	}
+	else if(input < min1){
+		min1 = input;
+		printf("New min at %f\n", min1);
+		return 0;
+	}
+	else
+		printf("Max: %f, min: %f, current: %f \n", max1, min1, input);
+}
 
 int main(int argc, char *argv[]){
-/*
+
 	double deg = 180/M_PI;
 	kalman filter(0.1, 0.1, 0, 10);
 	kalman filter2(0.1, 0.1, 0, 10);
 	kalman headF(0.1,0.1,180,10);
 	adxl345 adxl;
-	hmc5883l hmc;
 	while (true){
 		adxl.readSensorData();
-		hmc.readSensorData();
 		double roll = adxl.getRoll();
 		double pitch = adxl.getPitch();
-		double roll2 = filter.estimate(roll);
-		double pitch2 = filter2.estimate(pitch);
-		hmc.getData(roll2,pitch2);
-		double heading = headF.estimate(hmc.getX());
-		//printf("-Roll: %f, -Pitch: %f \nRoll2: %f, Pitch2: %f \n", roll*deg, pitch*deg, roll2*deg, pitch2*deg);
-		//printf("head: %f\n", heading);
+		double roll2 = filter.estimate(roll);	//error of 0.3 degrees
+		double pitch2 = filter2.estimate(pitch); //error of 1.35 degrees
+		find_min_max(pitch);
 		usleep(10000);
 	}
-	*/
+
 /*
 
 	hmc5883l hmc;
@@ -60,7 +72,7 @@ int main(int argc, char *argv[]){
 << est << std::endl;
 	}
 */
-
+/*
 	bmp085 bmp;
 	bmp.readSensorData();
 	bmp.readTemperature();
@@ -71,7 +83,7 @@ int main(int argc, char *argv[]){
 	std::cout << "Temperature: " << temperature << std::endl;
 	usleep(100000);
 
-
+*/
 	/*
 	int a;
 	while(true){
