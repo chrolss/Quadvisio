@@ -124,17 +124,14 @@ void Controller::calcPWM(double *input, double *output, double *ref) {
     Mb = (MaT*COS45 + MbT*COS45);
     Mg = -MgT;		//change stuff
 
-    if (pigeon){
-    	//printf("Ma = %f, Mb = %f, Mg = %f, F = %f \n", Ma, Mb, Mg, F);
-    	output[0] = 0.25*(F*CONST1 + Mb*CONST2 + Mg*CONST3);
-    	output[1] = 0.25*(F*CONST1 - Ma*CONST2 - Mg*CONST3);
-    	output[2] = 0.25*(F*CONST1 - Mb*CONST2 + Mg*CONST3);
-    	output[3] = 0.25*(F*CONST1 + Ma*CONST2 - Mg*CONST3);
-    }
-    else{
-    	printf("Wrong bird selected \n");
-    }
     
+    //printf("Ma = %f, Mb = %f, Mg = %f, F = %f \n", Ma, Mb, Mg, F);
+    output[0] = 0.25*(F*CONST1 + Mb*CONST2 + Mg*CONST3);
+    output[1] = 0.25*(F*CONST1 - Ma*CONST2 - Mg*CONST3);
+    output[2] = 0.25*(F*CONST1 - Mb*CONST2 + Mg*CONST3);
+    output[3] = 0.25*(F*CONST1 + Ma*CONST2 - Mg*CONST3);
+
+
     //printf("Before saturation \n");
     //printf("LF = %f, RF = %f, RR = %f, RL = %f \n", output[0], output[1],output[2], output[3]);
 
