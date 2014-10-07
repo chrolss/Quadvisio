@@ -55,10 +55,10 @@ void ComHandler::Listen()
     
     // Prepare select
     // Clear set
-    FD_ZERO(&readfds);
+    //FD_ZERO(&readfds);
     
     //
-    FD_SET(newsockfd, &readfds);
+    //FD_SET(newsockfd, &readfds);
     
     n = newsockfd + 1;
     
@@ -147,6 +147,12 @@ void ComHandler::qvisLightLoop() {
 
 void ComHandler::sendQvisProMsg() {
     
+    std::string s = "0002:0";
+    
+    if (send(newsockfd, s.c_str(), s.length(),0) == -1) {
+        closeClient();
+        perror("send");
+    }
 }
 
 void ComHandler::sendQvisDevMsg() {
@@ -158,6 +164,26 @@ void ComHandler::sendQvisLightMsg() {
 }
 
 void ComHandler::readQvisProMsg() {
+    
+    std::string msg = this->reciveMessage();
+    
+    printf("Final message:\n");
+    std::cout << msg << std::endl;
+    
+    size_t pos = 0;
+    std::string token;
+    
+    // length:orderID
+    
+    int i = 0;
+    while ((pos = msg.find(subDelimiter)) != std::string::npos) {
+        token = msg.substr(0, pos);
+        numberInStrings[i] = token;
+        msg.erase(0, pos + subDelimiter.length());
+        i++;
+    }
+    
+    numberInStrings[i] = msg;
     
 }
 
@@ -204,7 +230,7 @@ Client ComHandler::reciveOrder() {
 }
 
 std::string ComHandler::reciveMessage() {
-    printf("Waitning for message\n");
+    //printf("Waitning for message\n");
     
     std::string msgBuffer = "";
     std::string msg = "";
@@ -229,16 +255,16 @@ std::string ComHandler::reciveMessage() {
         
         else {
             msgBuffer = std::string(recvBuf);
-            std::cout << "Raw message: " << msgBuffer << std::endl;
+            //std::cout << "Raw message: " << msgBuffer << std::endl;
         }
         
         if (msgSize == 0 && msgBuffer.size()>=3) {
             msgSize = atoi(msgBuffer.substr(0,3).c_str());
-            printf("Message size: %i\n", msgSize);
+            //printf("Message size: %i\n", msgSize);
         }
         
         if (msgSize>0 && msgBuffer.size() == (msgSize+3)) {
-            printf("Message recived!\n");
+            //printf("Message recived!\n");
             msg = msgBuffer;
             return msg;
         }

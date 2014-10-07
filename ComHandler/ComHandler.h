@@ -41,6 +41,8 @@ public:
     
     bool connected, reciveMsg, sendMsg, listening;
     
+    double inputData[7];  // Roll:Pitch:Yaw:Throttle:rollOffset:pitchOffset:JoySen
+    
 private:
     void Listen();
     void error(const char *msg);
@@ -61,7 +63,10 @@ private:
     void sendQvisLightMsg();
     
     int getSigStrength();
-        
+    
+    // length:
+    double output[16];
+    
     int sockfd, newsockfd, portno, n;
     char recvBuf[1024];
     struct sockaddr_in serv_addr, cli_addr;
