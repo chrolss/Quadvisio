@@ -19,8 +19,8 @@
 #define ARM_RADIUS 0.176
 #define DRAG_CONSTANT 9.9768e-8
 #define dt 0.017	//påhittad
-#define WINDUP_LIMIT_UP 1
-#define WINDUP_LIMIT_DOWN -1
+#define WINDUP_LIMIT_UP 0.0014
+#define WINDUP_LIMIT_DOWN -0.0014
 #define MAX_PERCENTAGE 80
 
 #define CONST1 3333.33	//pigeon
