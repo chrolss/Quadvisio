@@ -30,6 +30,7 @@ bool runAtlas=false;
 bool motorIdle=false;
 int counter = 0;
 int vidCount = 0;
+double errors[3];	//for reading integral errors
 
 // Loop time measurement
 double loopTime = 0.0;
@@ -141,7 +142,8 @@ void loop(){
         //controller->setInnerParameters(communicate->pidParam);
 
         controller->calcPWM(sInput, sOutput, ref);
-        
+        controller->get_Errors(errors);
+        printf("Pitch: %f, Roll: %f, Yaw: %f \n", errors[0], errors[1], errors[2]);
         //std::cout << "Setting PWM values" << std::endl;
         // Send PWM values to motors
 

@@ -23,9 +23,12 @@
 #define WINDUP_LIMIT_DOWN -1
 #define MAX_PERCENTAGE 80
 
-#define CONST1 3333.33
-#define CONST2 37878.7
-#define CONST3 1e7
+#define CONST1 3333.33	//pigeon
+#define CONST2 37878.7	//pigeon
+#define CONST3 1e7		//pigeon
+#define CONST4 1		//Phoenix
+#define CONST5 1		//Phoenix
+#define CONST6 1		//Phoenix
 
 #define COS45 0.7071067812
 #define SIN45 0.7071067812
@@ -45,7 +48,10 @@ public:
     void send_Parameters(double *params);
     void write_trim();
     void setSensitivity(double _sens);
+    void reset_I();
+    void get_Errors(double *_err);
 private:
+    void birdSetup(bool _bird);
     void get_Parameters();
     void reset_PID();
     bool pigeon;
@@ -59,6 +65,7 @@ private:
     double F, Ma, Mb, Mg;
     double dA, dB;			//Desired changes in angles
     double MaT, MbT, MgT;
+    double k1, k2, k3;
     double sens;		//joystick sensitivity, range 0.25 - 0.4
     
 };

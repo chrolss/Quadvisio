@@ -25,17 +25,26 @@ Controller::Controller(bool bird){
     this->joyCom[2] = 0.0;
     this->dB = 0.0;
     this->dA = 0.0;
-    if (bird){
-    	this->pigeon = true;
-    }
-    else if (!bird){
-    	this->pigeon = false;
-    }
-    else{
-    	printf("No bird selected, exiting\n");
-    	exit(1);
-    }
+
+    birdSetup(bird);
     get_Parameters();
+}
+
+void Controller::birdSetup(bool _bird){
+	if (_bird){
+		this->k1 = CONST1;
+		this->k2 = CONST2;
+		this->k3 = CONST3;
+		this->pigeon = true;
+		printf("Pigeon selected, initilizing system\n");
+	}
+	else{
+		this->k1 = CONST4;
+		this->k2 = CONST5;
+		this->k3 = CONST6;
+		this->pigeon = false;
+		printf("Phoenix selected, initilizing system\n");
+	}
 }
 
 //reads PID parameters from two txt-files and sets them
@@ -82,6 +91,18 @@ void Controller::send_Parameters(double *params){
 	}
 }
 
+void Controller::reset_I(){
+	this->ea[1] = 0.0;
+	this->eb[2] = 0.0;
+	this->eg[2] = 0.0;
+}
+
+void Controller::get_Errors(double *_err){
+	_err[0] = ea[2];
+	_err[1] = eb[2];
+	_err[2] = eg[2];
+}
+
 void Controller::calcPWM(double *input, double *output, double *ref) {
 
 	//alphadelen - roll
@@ -126,10 +147,10 @@ void Controller::calcPWM(double *input, double *output, double *ref) {
 
     
     //printf("Ma = %f, Mb = %f, Mg = %f, F = %f \n", Ma, Mb, Mg, F);
-    output[0] = 0.25*(F*CONST1 + Mb*CONST2 + Mg*CONST3);
-    output[1] = 0.25*(F*CONST1 - Ma*CONST2 - Mg*CONST3);
-    output[2] = 0.25*(F*CONST1 - Mb*CONST2 + Mg*CONST3);
-    output[3] = 0.25*(F*CONST1 + Ma*CONST2 - Mg*CONST3);
+    output[0] = 0.25*(F*k1 + Mb*k2 + Mg*k3);
+    output[1] = 0.25*(F*k1 - Ma*k2 - Mg*k3);
+    output[2] = 0.25*(F*k1 - Mb*k2 + Mg*k3);
+    output[3] = 0.25*(F*k1 + Ma*k2 - Mg*k3);
 
 
     //printf("Before saturation \n");
