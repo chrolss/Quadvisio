@@ -1,5 +1,0 @@
-#!/bin/bash
-
-echo "Building gy80 test program from the internet"
-
-g++ -W Accelerometer.cpp Gyroscope.cpp Sensors.cpp main.cpp -o gy80
