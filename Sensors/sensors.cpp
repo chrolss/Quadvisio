@@ -74,7 +74,7 @@ int main(int argc, char *argv[]){
 		short z = l3g.getAngleZ();
 		est = filter2.estimate(x);
 		//printf("X: %d, Y: %d, Z: %d\n", x, y ,z);
-		printf("rX: %d, rY: %f. rZ: %d\n", xr, yr, zr);
+		printf("rX: %d, rY: %d. rZ: %d\n", xr, yr, zr);
 	}
 
 /*

@@ -49,7 +49,7 @@ void l3g4200d::initialize(){
 	}
    	// If you'd like to adjust/use the HPF, you can edit the line below to configure CTRL_REG2:
    	
-	
+
 	buf[0] = CTRL_REG2;                                       // Commands for performing a ranging
    	buf[1] = 0x00;
    
@@ -78,7 +78,7 @@ void l3g4200d::initialize(){
        		printf("Failed to write\n");
 		exit(1);
    	}
-
+/*
    	buf[0] = CTRL_REG5;                                       // Commands for performing a ranging
    	buf[1] = 0x00;
    
@@ -87,7 +87,7 @@ void l3g4200d::initialize(){
        		printf("Failed to write\n");
    		exit(1);
 	}
-	
+	*/
 }
 
 int l3g4200d::readSensorData(){
@@ -103,15 +103,32 @@ int l3g4200d::readSensorData(){
 		return 0;
 	}
    
-   	if (read(fd, buf, 6) != 6) {                        // Read back data into buf[]
+   	if (read(fd, buf, 2) != 2) {                        // Read back data into buf[]
       		printf("Unable to read from slave\n");
       		return 0;
    	}
    	else {
+      	rawX = (short)(buf[1]<<8) |  (short)buf[0];
+      	printf("a: %d \t b: %d\n", buf[1], buf[0]);
+   	}
 
-      	rawX = (buf[1]<<8) |  buf[0];
-       	rawY = (buf[3]<<8) |  buf[2];
-       	rawZ = (buf[5]<<8) |  buf[4];
+   	buf[0] = 0x2A;
+   	if ((write(fd, buf, 1)) != 1) {
+		printf("Error writing to i2c slave\n");
+		exit(1);
+		return 0;
+	}
+
+   	if (read(fd, buf, 4) != 4) {                        // Read back data into buf[]
+      		printf("Unable to read from slave\n");
+      		return 0;
+   	}
+   	else{
+       	rawY = (short)(buf[1]<<8) |  (short)buf[0];
+       	rawZ = (short)(buf[3]<<8) |  (short)buf[2];
+   	}
+
+
 
 	
    	short gx,gy,gz;
@@ -127,9 +144,10 @@ int l3g4200d::readSensorData(){
    	usleep(100000);
    
    	   //Convert Gyro raw to degrees per second
-      	rate_gyr_x = (float)x * G_GAIN;
-      	rate_gyr_y = (float)y * G_GAIN;
-      	rate_gyr_z = (float)z * G_GAIN;
+      	rate_gyr_x = (float)rawX * G_GAIN;
+      	rate_gyr_y = (float)rawY * G_GAIN;
+      	rate_gyr_z = (float)rawZ * G_GAIN;
+      	printf("Gx: %d \t Gy: %d \t Gz: %d \n", rate_gyr_x, rate_gyr_y, rate_gyr_z);
       	//Calculate the angles from the gyro
       	this->gyroAngleX =rate_gyr_x*DT;
         this->gyroAngleY =rate_gyr_y*DT;
@@ -152,7 +170,7 @@ int l3g4200d::readSensorData(){
        */
 
         return 0;
-	}
+
 
 }
 
