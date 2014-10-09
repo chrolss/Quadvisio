@@ -136,14 +136,14 @@ void loop(){
         //controller->calcRef(sInput, ref);	//outer controller
         //controller->setReference(ref);		//set new references based on outer controller
 
+        controller->get_Errors(errors);
         controller->setJoyCom(C->inputData, sInput, ref);
 
 
         //controller->setInnerParameters(communicate->pidParam);
 
         controller->calcPWM(sInput, sOutput, ref);
-        controller->get_Errors(errors);
-        printf("Pitch: %f, Roll: %f, Yaw: %f \n", errors[0], errors[1], errors[2]);
+        //printf("Pitch: %f, Roll: %f, Yaw: %f \n", errors[0], errors[1], errors[2]);
         //std::cout << "Setting PWM values" << std::endl;
         // Send PWM values to motors
 
