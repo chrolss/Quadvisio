@@ -31,10 +31,11 @@ int find_min_max(double &input){
 	}
 	else
 		printf("Max: %f, min: %f, current: %f \n", max1, min1, input);
+		return 0;
 }
 
 int main(int argc, char *argv[]){
-
+/*
 	double deg = 180/M_PI;
 	kalman filter(0.1, 0.1, 0, 10);
 	kalman filter2(0.1, 0.1, 0, 10);
@@ -50,7 +51,7 @@ int main(int argc, char *argv[]){
 		usleep(10000);
 	}
 
-/*
+
 
 	hmc5883l hmc;
 	for (int i = 0; i<1000; i++){
@@ -60,18 +61,22 @@ int main(int argc, char *argv[]){
 		printf("X: %d\n", X);
 		usleep(200000);
 	}
+*/
 	l3g4200d l3g;
 	kalman filter2(0.1,0.1,10,10);
 	while (true){
 		l3g.readSensorData();
+		short xr = l3g.getRawX();
+		short yr = l3g.getRawY();
+		short zr = l3g.getRawZ();
 		short x = l3g.getAngleX();
-		//short y = l3g.getAngleY();
-		//short z = l3g.getAngleZ();
+		short y = l3g.getAngleY();
+		short z = l3g.getAngleZ();
 		est = filter2.estimate(x);
-		std::cout<< "measured x: " << x << ", and estimated: " 
-<< est << std::endl;
+		//printf("X: %d, Y: %d, Z: %d\n", x, y ,z);
+		printf("rX: %d, rY: %f. rZ: %d\n", xr, yr, zr);
 	}
-*/
+
 /*
 	bmp085 bmp;
 	bmp.readSensorData();

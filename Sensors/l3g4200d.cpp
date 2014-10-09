@@ -100,17 +100,18 @@ int l3g4200d::readSensorData(){
    	if ((write(fd, buf, 1)) != 1) {
 		printf("Error writing to i2c slave\n");
 		exit(1);
+		return 0;
 	}
    
    	if (read(fd, buf, 6) != 6) {                        // Read back data into buf[]
       		printf("Unable to read from slave\n");
-      		return false;
+      		return 0;
    	}
    	else {
 
-      	x = (buf[1]<<8) |  buf[0]; 
-       	y = (buf[3]<<8) |  buf[2];
-       	z = (buf[5]<<8) |  buf[4];
+      	rawX = (buf[1]<<8) |  buf[0];
+       	rawY = (buf[3]<<8) |  buf[2];
+       	rawZ = (buf[5]<<8) |  buf[4];
 
 	
    	short gx,gy,gz;
@@ -150,7 +151,7 @@ int l3g4200d::readSensorData(){
 
        */
 
-
+        return 0;
 	}
 
 }

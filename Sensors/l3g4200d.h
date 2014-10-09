@@ -16,6 +16,9 @@ public:
 	short getAngleX() {return gyroAngleX;}
 	short getAngleY() {return gyroAngleY;}
 	short getAngleZ() {return gyroAngleZ;}
+	short getRawX() {return rawX;}
+	short getRawY() {return rawY;}
+	short getRawZ() {return rawZ;}
 	~l3g4200d();
 
 private:
@@ -25,6 +28,7 @@ private:
 	int fd;
 	char *fileName;
 
+	short rawX, rawY, rawZ;
 	float gyroAngleX, gyroAngleY, gyroAngleZ;
 	
 	void initialize();
