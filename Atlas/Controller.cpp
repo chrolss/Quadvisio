@@ -131,6 +131,15 @@ void Controller::calcPWM(double *input, double *output, double *ref) {
 	//gammadelen
 	eg[0] = ref[2] - input[5] + joyCom[2];  	// set new error
 
+	if (fabs(eg[0])>3.84){						//220 degrees
+		if (eg[0]>0){
+			eg[0] = eg[0] - 2*M_PI;
+		}
+		else{
+			eg[0] = eg[0] + 2*M_PI;
+		}
+	}
+
 	this->eg[2] += eg[0]*dt;
 	if (fabs(eg[2])>WINDUP_LIMIT_UP){
 		this->eg[2] = windUp(eg);
