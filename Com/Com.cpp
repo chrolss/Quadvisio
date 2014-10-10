@@ -34,7 +34,7 @@ Com::Com(){
     errMsg = "Nothing wrong here!!";
     
     for (int i = 0; i<(sizeof(output)/sizeof(*output)); i++) {
-        output[i] = 0.0;
+        output[i] = 0.5;
     }
 
     for (int i = 0; i<(sizeof(pidParams)/sizeof(*pidParams)); i++) {
@@ -351,7 +351,7 @@ void Com::sendQvisDevMsg() {
 
     s = ostr.str();
 
-    printf("Sending message: %s\n", s.c_str());
+    //printf("Sending message: %s\n", s.c_str());
     
     if (send(newsockfd, s.c_str(), s.length(),0) == -1) {
         closeClient();
@@ -363,7 +363,7 @@ void Com::sendQvisDevMsg() {
         sendImg();
         imgSend = false;
     }
-    printf("Message sent\n");
+    //printf("Message sent\n");
 }
 
 void Com::sendImg() {
@@ -413,6 +413,7 @@ void Com::readMsg() {
     
     if (atoi(numberInStrings[7].c_str())==1) {
         resetIntegral = true;
+        printf("Reset integral\n");
     }
     else {
         resetIntegral = false;
@@ -456,7 +457,7 @@ void Com::readMsg() {
 
 void Com::reciveMessage() {
 
-    printf("Waitning for message\n");
+    //printf("Waitning for message\n");
 
     msgBuffer = "";
     msg = "";
@@ -494,7 +495,7 @@ void Com::reciveMessage() {
                 else {
                     //printf("convert buffer to string\n");
                     msgBuffer = std::string(recvBuf);
-                    std::cout << "Raw message: " << msgBuffer << std::endl;
+                    //std::cout << "Raw message: " << msgBuffer << std::endl;
                 }
                 
                 if (msgSize == 0 && msgBuffer.size()>=3) {
