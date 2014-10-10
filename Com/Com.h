@@ -90,7 +90,7 @@ private:
     fd_set readfds;
     double pidParams[12];
     //angles:refangles:pwm:speed:sidespeed:altitude:Hz:bitrate:dbm:errorMessage:imgWidth:imgHeight:imgSize:imgChannels - Image
-    double output[16];
+    double output[19];
 
     int sockfd, newsockfd, portno, n;
     int sizeOfOutput;

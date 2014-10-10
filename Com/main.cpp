@@ -26,14 +26,11 @@ int main(int argc, const char * argv[])
     
     // angles:refangles:pwm:speed:sidespeed:altitude:Hz:errorMessage:imgWidth:imgHeight:imgSize:imgChannels - Image
     
-    double output[14] = {1.45345, 2.34545, 1.0, 0.0, 0.0, 0.0, 15.0, 16.0, 17.0, 18.0, 0.0, 0.0, 0.0, 100.0};
+    double output[16] = {1.45345, 2.34545, 1.0, 0.0, 0.0, 0.0, 15.0, 16.0, 17.0, 18.0, 0.0, 0.0, 0.0, 0.0, 0.0, 100.0};
     
     std::cout << "Starting communication thread" << std::endl;
     Com C;
     C.startListenThread();
-    
-    C.getSignalInfo();
-    
     sleep(1);
     
     std::cout << "Starting main loop" << std::endl;
@@ -74,7 +71,7 @@ int main(int argc, const char * argv[])
         if (C.connected) {
             if (!C.reciveMsg && !C.msgSend) {
                 //printf("Setting output and send to true\n");
-                C.setOutputData(output);
+                //C.setOutputData(output);
                 if (C.vidCount>=2) {
                     C.imgSend = true;
                 }

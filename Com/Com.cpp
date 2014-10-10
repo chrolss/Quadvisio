@@ -10,6 +10,10 @@
 // Incomning message structure:
 // Yaw : Throttle : Roll : Pitch : RollOffset : PitchOffset : Reset Integral : Video : Color : Resolution : Motor on : Data ind : All PIDs : Joystick Sensitivity
 
+// Outgoing message structure:
+// angles : refangles : pwm : speed : sidespeed : altitude : integral roll : integral pitch : integral yaw : Hz : bitrate : dbm : errorMessage : imgWidth : imgHeight : imgSize : imgChannels - Image
+
+
 #include "Com.h"
 
 Com::Com(){
@@ -29,25 +33,12 @@ Com::Com(){
     msgSize = 0;
     errMsg = "Nothing wrong here!!";
     
-    output[0]=0.0;
-    output[1]=0.0;
-    output[2]=0.0;
-    output[3]=0.0;
-    output[4]=0.0;
-    output[5]=0.0;
-    output[6]=0.0;
-    output[7]=0.0;
-    output[8]=0.0;
-    output[9]=0.0;
-    output[10]=0.0;
-    output[11]=0.0;
-    output[12]=0.0;
-    output[13]=0.0;
-    output[14]=0.0;
-    output[15]=0.0;
+    for (int i = 0; i<(sizeof(output)/sizeof(*output)); i++) {
+        output[i] = 0.0;
+    }
 
     for (int i = 0; i<(sizeof(pidParams)/sizeof(*pidParams)); i++) {
-        pidParams[i] = 1.1;
+        pidParams[i] = 0.0;
     }
     
     for (int i = 0; i<(sizeof(numberInStrings)/sizeof(*numberInStrings)); i++) {
