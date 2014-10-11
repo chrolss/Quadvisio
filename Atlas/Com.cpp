@@ -102,18 +102,6 @@ void Com::Listen()
         closeClient();
     }
 
-    // Prepare select
-    // Clear set
-    FD_ZERO(&readfds);
-
-    //
-    FD_SET(newsockfd, &readfds);
-
-    n = newsockfd + 1;
-
-    tv.tv_sec = 3;
-    tv.tv_usec = 0;
-    
     connected = true;
     reciveMsg=true;
     listening=false;
@@ -467,49 +455,36 @@ void Com::reciveMessage() {
     bzero(recvBuf, 1024);
 
     while (1) {
-        //printf("Going into recv\n");
-        int rv = select(n, &readfds, NULL, NULL, &tv);
 
-        if (rv == -1) {
-            perror("select"); // error occurred in select()
-            printf("Select error\n");
-            closeClient();
-        } else if (rv == 0) {
-            printf("Timeout occurred!  No data after 5 seconds.\n");
-            closeClient();
-        } else {
-            if (FD_ISSET(newsockfd, &readfds)) {
-                numBytes = recv(newsockfd, recvBuf, sizeof(recvBuf), 0);
-                //printf("Done with recv\n");
-                if (numBytes < 0) {
-                    connected = false;
-                    perror("read");
-                    return;
-                }
+        numBytes = recv(newsockfd, recvBuf, sizeof(recvBuf), 0);
+        //printf("Done with recv\n");
+        if (numBytes < 0) {
+            connected = false;
+            perror("read");
+            return;
+        }
 
-                else if (numBytes == 0) {
-                    printf("Maybe lost connection to client, closing socket and starting to listing\n");
-                    connected = false;
-                    return;
-                }
+        else if (numBytes == 0) {
+            printf("Maybe lost connection to client, closing socket and starting to listing\n");
+            connected = false;
+            return;
+        }
 
-                else {
-                    //printf("convert buffer to string\n");
-                    msgBuffer = std::string(recvBuf);
-                    //std::cout << "Raw message: " << msgBuffer << std::endl;
-                }
+        else {
+            //printf("convert buffer to string\n");
+            msgBuffer = std::string(recvBuf);
+            //std::cout << "Raw message: " << msgBuffer << std::endl;
+        }
 
-                if (msgSize == 0 && msgBuffer.size()>=3) {
-                    msgSize = atoi(msgBuffer.substr(0,3).c_str());
-                    //printf("Message size: %i\n", msgSize);
-                }
+        if (msgSize == 0 && msgBuffer.size()>=3) {
+            msgSize = atoi(msgBuffer.substr(0,3).c_str());
+            //printf("Message size: %i\n", msgSize);
+        }
 
-                if (msgSize>0 && msgBuffer.size() == (msgSize+3)) {
-                    //printf("Message recived!\n");
-                    msg = msgBuffer;
-                    break;
-                }
-            }
+        if (msgSize>0 && msgBuffer.size() == (msgSize+3)) {
+            //printf("Message recived!\n");
+            msg = msgBuffer;
+            break;
         }
     }
 }
