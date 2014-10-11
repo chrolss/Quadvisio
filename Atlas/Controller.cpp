@@ -92,7 +92,7 @@ void Controller::send_Parameters(double *params){
 }
 
 void Controller::reset_I(){
-	this->ea[1] = 0.0;
+	this->ea[2] = 0.0;
 	this->eb[2] = 0.0;
 	this->eg[2] = 0.0;
 }
@@ -260,8 +260,3 @@ void Controller::setOuterParameters(double *outParams){
 	this->outerParameters[5] = outParams[5];
 }
 
-void Controller::reset_PID(){
-	this->ea[2] = 0.0;
-	this->eb[2] = 0.0;
-	this->eg[2] = 0.0;
-}

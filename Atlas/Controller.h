@@ -53,7 +53,6 @@ public:
 private:
     void birdSetup(bool _bird);
     void get_Parameters();
-    void reset_PID();
     bool pigeon;
     double innerParameters[9];
     double outerParameters[9];

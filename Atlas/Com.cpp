@@ -6,6 +6,14 @@
 //  Copyright (c) 2014 Quadvisio. All rights reserved.
 //
 
+
+// Incomning message structure:
+// Yaw : Throttle : Roll : Pitch : RollOffset : PitchOffset : Reset Integral : Video : Color : Resolution : Motor on : Data ind : All PIDs : Joystick Sensitivity
+
+// Outgoing message structure:
+// angles : refangles : pwm : speed : sidespeed : altitude : integral roll : integral pitch : integral yaw : Hz : bitrate : dbm : errorMessage : imgWidth : imgHeight : imgSize : imgChannels - Image
+
+
 #include "Com.h"
 
 Com::Com(){
@@ -18,6 +26,7 @@ Com::Com(){
     motorOn=false;
     colorVideo=true;
     savePid = false;
+    resetIntegral = false;
     vidCount = 0;
     vidLimit = 0;
     vidRes = 2; // Default 2 = 320x240
@@ -25,25 +34,16 @@ Com::Com(){
     msgSize = 0;
     errMsg = "Nothing wrong here!!";
     
-    output[0]=0.0;
-    output[1]=0.0;
-    output[2]=0.0;
-    output[3]=0.0;
-    output[4]=0.0;
-    output[5]=0.0;
-    output[6]=0.0;
-    output[7]=0.0;
-    output[8]=0.0;
-    output[9]=0.0;
-    output[10]=0.0;
-    output[11]=0.0;
-    output[12]=0.0;
-    output[13]=0.0;
-    output[14]=0.0;
-    output[15]=0.0;
+    for (int i = 0; i<(sizeof(output)/sizeof(*output)); i++) {
+        output[i] = 0.5;
+    }
 
     for (int i = 0; i<(sizeof(pidParams)/sizeof(*pidParams)); i++) {
-        pidParams[i] = 1.1;
+        pidParams[i] = 0.0;
+    }
+
+    for (int i = 0; i<(sizeof(numberInStrings)/sizeof(*numberInStrings)); i++) {
+        numberInStrings[i] = "";
     }
     
     sizeOfOutput = (sizeof(output)/sizeof(*output));
@@ -63,7 +63,6 @@ Com::Com(){
 
 void Com::error(const char *msg)
 {
-	printf("ComError\n");
     closeClient();
     perror(msg);
     //exit(1);
@@ -105,6 +104,10 @@ void Com::Listen()
 
     // Prepare select
     // Clear set
+    FD_ZERO(&readfds);
+
+    //
+    FD_SET(newsockfd, &readfds);
 
     n = newsockfd + 1;
 
@@ -121,6 +124,8 @@ void Com::Listen()
 
     printf("%s connected with %i\n", clientName.c_str(), clientIdentity);
 
+    start = time(0);
+
     if (clientIdentity==1) {
 
     }
@@ -131,7 +136,6 @@ void Com::Listen()
         sendPidParams();
         qvisDevLoop();
     }
-    printf("Listen Error\n");
     closeClient();
 }
 
@@ -248,9 +252,8 @@ void Com::sendQvisLightMsg() {
     
     s = ostr.str();
     
-    //printf("Sending message: %s\n", s.c_str());
+    printf("Sending message: %s\n", s.c_str());
     if (send(newsockfd, s.c_str(), s.length(),0) == -1) {
-    	printf("sned msg err\n");
         closeClient();
         perror("send");
     }
@@ -259,7 +262,7 @@ void Com::sendQvisLightMsg() {
         sendImg();
         imgSend = false;
     }
-    //printf("Message sent\n");
+    printf("Message sent\n");
 
 }
 
@@ -352,7 +355,6 @@ void Com::sendQvisDevMsg() {
     //printf("Sending message: %s\n", s.c_str());
 
     if (send(newsockfd, s.c_str(), s.length(),0) == -1) {
-    	printf("sned msg 2 err\n");
         closeClient();
         perror("send");
     }
@@ -370,14 +372,12 @@ void Com::sendImg() {
 
     if(colorVideo) {
         if (send(newsockfd, sendFrame.data, sendFrame.total()*3, 0) == -1) {
-            printf("img Error send\n");
             closeClient();
             perror("send");
         }
     }
     else {
         if (send(newsockfd, sendFrame.data, sendFrame.total(), 0) == -1) {
-            printf("img error send 2\n");
             closeClient();
             perror("send");
         }
@@ -403,17 +403,24 @@ void Com::readMsg() {
         msg.erase(0, pos + subDelimiter.length());
         i++;
     }
+
     numberInStrings[i] = msg;
     
-    if (atoi(numberInStrings[8].c_str())==1) {
-        for (int i=9; i<21; i++) {
-            pidParams[i-9] = atof(numberInStrings[i].c_str());
-        }
-        savePid = true;
-        printf("PID parameters read and saved\n");
+    // Yaw : Throttle : Roll : Pitch : RollOffset : PitchOffset : Reset Integral : Video : Color : Resolution : Motor on : Data ind : All PIDs : Joystick Sensitivity
+
+    for (int i = 1 ; i<7; i++) {
+        inputData[i-1] = atof(numberInStrings[i].c_str());
     }
 
-    if (atoi(numberInStrings[21].c_str())==1) {
+    if (atoi(numberInStrings[7].c_str())==1) {
+        resetIntegral = true;
+        printf("Reset integral\n");
+    }
+    else {
+        resetIntegral = false;
+    }
+
+    if (atoi(numberInStrings[8].c_str())==1) {
         videoStream = true;
     }
     else {
@@ -421,26 +428,32 @@ void Com::readMsg() {
         vidCount = 0;
     }
     
-    if (atoi(numberInStrings[22].c_str())==1) {
+    if (atoi(numberInStrings[9].c_str())==1) {
         colorVideo = true;
     }
     else {
         colorVideo = false;
     }
     
-    vidResNew = atoi(numberInStrings[23].c_str());
+    vidResNew = atoi(numberInStrings[10].c_str());
     
-    if (atoi(numberInStrings[24].c_str())==1) {
+    if (atoi(numberInStrings[11].c_str())==1) {
         motorOn = true;
     }
     else{
         motorOn = false;
     }
     
-    for (int i = 1 ; i<8; i++) {
-        inputData[i-1] = atof(numberInStrings[i].c_str());
-    }
+    if (atoi(numberInStrings[12].c_str())==1) {
+        for (int i=13; i<25; i++) {
+            pidParams[i-13] = atof(numberInStrings[i].c_str());
+        }
 
+        inputData[6] = atof(numberInStrings[25].c_str());
+
+        savePid = true;
+        printf("PID parameters and joystick sensetivity read and saved");
+    }
 }
 
 void Com::reciveMessage() {
@@ -454,42 +467,7 @@ void Com::reciveMessage() {
     bzero(recvBuf, 1024);
 
     while (1) {
-        numBytes = recv(newsockfd, recvBuf, sizeof(recvBuf), 0);
-         //printf("Done with recv\n");
-         if (numBytes < 0) {
-             connected = false;
-             perror("read");
-             return;
-         }
-
-         else if (numBytes == 0) {
-             printf("Maybe lost connection to client, closing socket and starting to listing\n");
-             connected = false;
-             return;
-         }
-
-         else {
-             //printf("convert buffer to string\n");
-             msgBuffer = std::string(recvBuf);
-             //std::cout << "Raw message: " << msgBuffer << std::endl;
-         }
-
-         if (msgSize == 0 && msgBuffer.size()>=3) {
-             msgSize = atoi(msgBuffer.substr(0,3).c_str());
-             //printf("Message size: %i\n", msgSize);
-         }
-
-         if (msgSize>0 && msgBuffer.size() == (msgSize+3)) {
-             //printf("Message recived!\n");
-             msg = msgBuffer;
-             break;
-         }
-         /*
         //printf("Going into recv\n");
-
-    	FD_ZERO(&readfds);
-        //
-        FD_SET(newsockfd, &readfds);
         int rv = select(n, &readfds, NULL, NULL, &tv);
 
         if (rv == -1) {
@@ -501,20 +479,47 @@ void Com::reciveMessage() {
             closeClient();
         } else {
             if (FD_ISSET(newsockfd, &readfds)) {
+                numBytes = recv(newsockfd, recvBuf, sizeof(recvBuf), 0);
+                //printf("Done with recv\n");
+                if (numBytes < 0) {
+                    connected = false;
+                    perror("read");
+                    return;
+                }
 
+                else if (numBytes == 0) {
+                    printf("Maybe lost connection to client, closing socket and starting to listing\n");
+                    connected = false;
+                    return;
+                }
+
+                else {
+                    //printf("convert buffer to string\n");
+                    msgBuffer = std::string(recvBuf);
+                    //std::cout << "Raw message: " << msgBuffer << std::endl;
+                }
+
+                if (msgSize == 0 && msgBuffer.size()>=3) {
+                    msgSize = atoi(msgBuffer.substr(0,3).c_str());
+                    //printf("Message size: %i\n", msgSize);
+                }
+
+                if (msgSize>0 && msgBuffer.size() == (msgSize+3)) {
+                    //printf("Message recived!\n");
+                    msg = msgBuffer;
+                    break;
+                }
             }
-            */
         }
     }
-
-
+}
 
 void Com::reciveClientIdentity() {
 
     reciveMessage();
 
-    //printf("Final message:\n");
-    //std::cout << msg << std::endl;
+    printf("Final message:\n");
+    std::cout << msg << std::endl;
 
     size_t pos = 0;
     std::string token;
@@ -561,8 +566,7 @@ void Com::sendPidParams() {
     s = ostr.str();
 
     if (send(newsockfd, s.c_str(), s.length(),0) == -1) {
-        printf("send socket err\n");
-    	closeClient();
+        closeClient();
         perror("send");
     }
 
@@ -642,8 +646,8 @@ int Com::getSignalInfo() {
 
     //printf("Bitrate: %f\n", mb);
     //printf("Level: %i\n", quality);
-    this->output[14] = sigInfo->bitrate;
-    this->output[15] = (double)sigInfo->level;
+    this->output[17] = sigInfo->bitrate;
+    this->output[18] = (double)sigInfo->level;
 
     return 0;
 }
@@ -656,7 +660,7 @@ void Com::closeClient() {
     connected = false;
 }
 
-void Com::setOutputData(double *out, double *pwm, double *ref, double &freq) {
+void Com::setOutputData(double *out, double *pwm, double *ref, double &freq, double *err) {
     output[0] = out[3]*radToDeg;
     output[1] = out[4]*radToDeg;
     output[2] = out[5]*radToDeg;
@@ -670,7 +674,10 @@ void Com::setOutputData(double *out, double *pwm, double *ref, double &freq) {
     output[10] = cos(out[4])*out[0]-sin(out[4]);
     output[11] = cos(out[3])*out[1]-sin(out[3]);
     output[12] = out[2];
-    output[13] = freq;
+    output[13] = err[0];
+    output[14] = err[1];
+    output[15] = err[2];
+    output[16] = freq;
 }
 
 void Com::setPidParams(double *params) {

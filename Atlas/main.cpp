@@ -39,6 +39,7 @@ int loopSleep=0;
 double ref[7];
 double inParams[12];	//inte värdelös längre
 double outParams[6];
+double iErrors[3];
 
 void initailize(){
     for (int i =0 ; i<6; i++) {
@@ -116,7 +117,8 @@ void loop(){
         if (C->connected) {
              if (!C->reciveMsg && !C->msgSend) {
                  //printf("Setting output and send to true\n");
-                 C->setOutputData(sInput, sOutput, ref, loopTime);
+            	 controller->get_Errors(iErrors);
+                 C->setOutputData(sInput, sOutput, ref, loopTime, iErrors);
                  if (C->vidCount>=2) {
                      C->imgSend = true;
                  }
@@ -138,7 +140,10 @@ void loop(){
 
         controller->get_Errors(errors);
         controller->setJoyCom(C->inputData, sInput, ref);
-
+        if (C->resetIntegral){
+        	controller->reset_I();
+        	C->resetIntegral = false;
+        }
 
         //controller->setInnerParameters(communicate->pidParam);
 
