@@ -1,12 +1,4 @@
-//
-//  Com.h
-//  Atlas Software
-//
-//  Created by Quadvisio on 2014-06-06 as part of the Atlas Project.
-//  Copyright (c) 2014 Quadvisio. All rights reserved.
-//
 
-#ifndef __Atlas__Com__//
 //  Com.h
 //  Atlas Software
 //
