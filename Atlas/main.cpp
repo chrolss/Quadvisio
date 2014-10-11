@@ -86,7 +86,7 @@ void loop(){
     std::cout << "Starting Loop" << std::endl;
     std::chrono::time_point<std::chrono::high_resolution_clock> start;
 
-    while (runAtlas && counter<60000) {
+    while (runAtlas && counter<600000) {
         
         // Start clock
         auto start = std::chrono::high_resolution_clock::now();
@@ -138,7 +138,6 @@ void loop(){
         //controller->calcRef(sInput, ref);	//outer controller
         //controller->setReference(ref);		//set new references based on outer controller
 
-        controller->get_Errors(errors);
         controller->setJoyCom(C->inputData, sInput, ref);
         if (C->resetIntegral){
         	controller->reset_I();
