@@ -1,0 +1,5 @@
+#!/bin/bash
+
+echo "Building Atlas program"
+
+g++ -O2 -W -I /home/debian/Quadvisio/ /home/debian/Quadvisio/Kalman/kalman.cpp /home/debian/Quadvisio/Sensors/adxl345.cpp /home/debian/Quadvisio/QuadLib/QuadCore.cpp /home/debian/Quadvisio/QuadLib/QuadPWM.cpp main.cpp Com.cpp SensorManager.cpp MPU6050.cpp Motor.cpp Controller.cpp I2Cdev.cpp -o Atlas `pkg-config --cflags --libs opencv` -pthread -std=c++11 -lm
