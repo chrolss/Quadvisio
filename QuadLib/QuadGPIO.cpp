@@ -6,22 +6,62 @@
 #include <stdlib.h>
 #include <fcntl.h>
 
-#define path2 "/sys/class/gpio/"
 
-QuadGPIO::QuadGPIO() {}
+QuadGPIO::QuadGPIO(unsigned int gpio) {
+	initialize(gpio);
+}
 
-void initializeGPIO(unsigned int gpio){
-	int fd, len;
+void QuadGPIO::initialize(unsigned int gpio){
 	char buf[MAX_BUF];
-	std::string path = getGPIOPath();
-	fd = open(path2 "/export", O_WRONLY);
+	fd = open(path "/export", O_WRONLY);
+
+	if (fd < 0){
+		printf("Error exporting GPIO port\n");
+	}
+	len = snprintf(buf, sizeof(buf), "%d", gpio);
+	write(fd, buf, len);
+	close(fd);
 }
 
-void setValue(std::string GPIOName, int value){
-
+void QuadGPIO::setValue(int value){
+	char buf[MAX_BUF];
+	snprintf(buf, sizeof(buf), path "gpio%d/value", gpio);
+	fd = open(buf, O_WRONLY);
+	if (fd < 0){
+		printf("Error setting GPIO value\n");
+	}
+	if (value == 1){
+		write(fd,"1",2);
+	}
+	else{
+		write(fd,"0",2);
+	}
 }
-void setDirection(std::string GPIOName, int value){
+void QuadGPIO::setDirection(int direction){
+	char buf[MAX_BUF];
+	snprintf(buf, sizeof(buf), path "gpio%d/direction", gpio);
+	fd = open(buf, O_WRONLY);
+	if (fd < 0){
+		printf("Error setting GPIO direction\n");
+	}
+	if (direction == 1){
+		write(fd, "in",2);
+	}
+	else{
+		write(fd, "out", 2);
+	}
+}
 
+void QuadGPIO::release(){
+	char buf[MAX_BUF];
+
+	fd = open(path "/unexport", O_WRONLY);
+	if (fd < 0){
+		printf("Unable to unexport\n");
+	}
+	len = snprintf(buf, sizeof(buf), "%d", gpio);
+	write(fd, buf ,len);
+	close(fd);
 }
 void setEgde(std::string GPIOName, int value){
 
