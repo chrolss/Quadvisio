@@ -9,7 +9,7 @@
 #include "Controller.h"
 
 
-Controller::Controller(){
+Controller::Controller(bool bird){
     this->ea[1] = 0.0;
     this->eb[1] = 0.0;
     this->eg[1]	= 0.0;
@@ -25,7 +25,26 @@ Controller::Controller(){
     this->joyCom[2] = 0.0;
     this->dB = 0.0;
     this->dA = 0.0;
+
+    birdSetup(bird);
     get_Parameters();
+}
+
+void Controller::birdSetup(bool _bird){
+	if (_bird){
+		this->k1 = CONST1;
+		this->k2 = CONST2;
+		this->k3 = CONST3;
+		this->pigeon = true;
+		printf("Pigeon selected, initilizing system\n");
+	}
+	else{
+		this->k1 = CONST4;
+		this->k2 = CONST5;
+		this->k3 = CONST6;
+		this->pigeon = false;
+		printf("Phoenix selected, initilizing system\n");
+	}
 }
 
 //reads PID parameters from two txt-files and sets them
@@ -72,10 +91,22 @@ void Controller::send_Parameters(double *params){
 	}
 }
 
+void Controller::reset_I(){
+	this->ea[2] = 0.0;
+	this->eb[2] = 0.0;
+	this->eg[2] = 0.0;
+}
+
+void Controller::get_Errors(double *_err){
+	_err[0] = ea[2];
+	_err[1] = eb[2];
+	_err[2] = eg[2];
+}
+
 void Controller::calcPWM(double *input, double *output, double *ref) {
 
 	//alphadelen - roll
-	ea[0] = ref[0] - input[3] + trim[0] + joyCom[0];  	// set new error
+	ea[0] = ref[0] - input[3] + trim[0];  	// set new error
 	this->ea[2] += (ea[0])*dt;
 	if (fabs(ea[2])>WINDUP_LIMIT_UP){
 		this->ea[2] = windUp(ea);
@@ -86,7 +117,7 @@ void Controller::calcPWM(double *input, double *output, double *ref) {
 
 	//printf("P: %f, I: %f, D: %f, e0: %f, e2: %f\n",innerParameters[0]*ea[0], innerParameters[1]*(ea[2]), innerParameters[2]*(ea[0]-ea[1])/dt,ea[0],ea[2]);
 	//betadelen - pitch
-	eb[0] = ref[1] - input[4] + trim[1] + joyCom[1];  	// set new error
+	eb[0] = ref[1] - input[4] + trim[1];  	// set new error
 	this->eb[2] += eb[0]*dt;
 	if (fabs(eb[2])>WINDUP_LIMIT_UP){
 		this->eb[2] = windUp(eb);
@@ -99,6 +130,15 @@ void Controller::calcPWM(double *input, double *output, double *ref) {
 
 	//gammadelen
 	eg[0] = ref[2] - input[5] + joyCom[2];  	// set new error
+
+	if (fabs(eg[0])>3.84){						//220 degrees
+		if (eg[0]>0){
+			eg[0] = eg[0] - 2*M_PI;
+		}
+		else{
+			eg[0] = eg[0] + 2*M_PI;
+		}
+	}
 
 	this->eg[2] += eg[0]*dt;
 	if (fabs(eg[2])>WINDUP_LIMIT_UP){
@@ -113,12 +153,15 @@ void Controller::calcPWM(double *input, double *output, double *ref) {
     Ma = (MaT*COS45 - MbT*SIN45);
     Mb = (MaT*COS45 + MbT*COS45);
     Mg = -MgT;		//change stuff
-    //printf("Ma = %f, Mb = %f, Mg = %f, F = %f \n", Ma, Mb, Mg, F);
-    output[0] = 0.25*(F*CONST1 + Mb*CONST2 + Mg*CONST3);
-    output[1] = 0.25*(F*CONST1 - Ma*CONST2 - Mg*CONST3);
-    output[2] = 0.25*(F*CONST1 - Mb*CONST2 + Mg*CONST3);
-    output[3] = 0.25*(F*CONST1 + Ma*CONST2 - Mg*CONST3);
+
     
+    //printf("Ma = %f, Mb = %f, Mg = %f, F = %f \n", Ma, Mb, Mg, F);
+    output[0] = 0.25*(F*k1 + Mb*k2 + Mg*k3);
+    output[1] = 0.25*(F*k1 - Ma*k2 - Mg*k3);
+    output[2] = 0.25*(F*k1 - Mb*k2 + Mg*k3);
+    output[3] = 0.25*(F*k1 + Ma*k2 - Mg*k3);
+
+
     //printf("Before saturation \n");
     //printf("LF = %f, RF = %f, RR = %f, RL = %f \n", output[0], output[1],output[2], output[3]);
 
@@ -160,14 +203,16 @@ void Controller::setJoyCom(double *joy, double *sensorInput, double *ref){
 		setYawRef(ref, sensorInput[5]);	//to the current yaw input from the sensor
 	}									//so the reference won't interfere with the controller
 	if (fabs(joy[3])<0.1){
-		reset_PID();			//if the throttle is lower than 0.1 the I parameters in the
+		//reset_PID();			//if the throttle is lower than 0.1 the I parameters in the
 	}							//PID will be set to zero
 	this->F = 4*THRUST_CONSTANT*joy[3]*joy[3]*10000.0;
-	this->joyCom[0] = sens*joy[0];
-	this->joyCom[1] = -sens*joy[1];
+	setSensitivity(joy[6]);
+	ref[0] = sens*joy[0];
+	ref[1] = -sens*joy[1];
 	this->joyCom[2] = sens*joy[2];
 	this->trim[0] = joy[4];	//add from *joy
 	this->trim[1] = -joy[5];	//add from *joy
+
 
 }
 
@@ -215,8 +260,3 @@ void Controller::setOuterParameters(double *outParams){
 	this->outerParameters[5] = outParams[5];
 }
 
-void Controller::reset_PID(){
-	this->ea[2] = 0.0;
-	this->eb[2] = 0.0;
-	this->eg[2] = 0.0;
-}
