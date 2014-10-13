@@ -86,7 +86,7 @@ void loop(){
     std::cout << "Starting Loop" << std::endl;
     std::chrono::time_point<std::chrono::high_resolution_clock> start;
 
-    while (runAtlas && counter<600000) {
+    while (runAtlas && counter<6000000) {
         
         // Start clock
         auto start = std::chrono::high_resolution_clock::now();
