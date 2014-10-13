@@ -20,16 +20,19 @@
 
 
 int main(int argc, const char * argv[]){
-	QuadGPIO GPIO;
-	GPIO.initialize(68);
+	QuadGPIO GPIO(68);
 	printf("GPIO 68 initialized\n");
 	GPIO.setDirection(0);
-	printf("Direction set to out\n");
 	sleep(1);
-	GPIO.setValue(1);
-	sleep(1);
-	GPIO.setValue(0);
+	for (int i = 0; i < 20; i++){
+		GPIO.setValue(1);
+		usleep(100000);
+		GPIO.setValue(0);
+		usleep(100000);
+	}
+
 	printf("Test avslutat\n");
+	GPIO.release();
 }
 
 /*

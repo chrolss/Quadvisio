@@ -1,5 +1,6 @@
 #ifndef QUADCORE_H_
 #define QUADCORE_H_
+#include <string>
 
 class QuadCore {
 

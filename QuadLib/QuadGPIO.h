@@ -7,7 +7,7 @@
 
 #define KEYLEN 7
 #define MAX_BUF 64
-#define path "sys/class/gpio"
+#define path "/sys/class/gpio"
 
 // Struct for holding data about a GPIO port
 struct GPIOData
@@ -27,7 +27,6 @@ public:
     QuadGPIO(unsigned int gpio);
 
     void initialize(unsigned int GPIOName);
-    void checkLoaded(std::string GPIOName);
     void release();
 
     void setValue(int value);
