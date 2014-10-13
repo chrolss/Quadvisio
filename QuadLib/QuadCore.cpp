@@ -115,6 +115,14 @@ void QuadCore::setOcpPath() {
     this->ocpPath = "/sys/devices/ocp.3";
 }
 
+void QuadCore::setGPIOPath() {
+	this->gpioPath = "/sys/class/gpio/";
+}
+
+std::string QuadCore::getGPIOPath() {
+	return this->gpioPath;
+}
+
 std::string QuadCore::getOcpPath() {
     return this->ocpPath;
 }

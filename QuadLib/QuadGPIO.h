@@ -6,8 +6,9 @@
 #include <vector>
 
 #define KEYLEN 7
+#define MAX_BUF 64
 
-// Struct for holding data about a pwm port
+// Struct for holding data about a GPIO port
 struct GPIOData
 {
     std::string name;

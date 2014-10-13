@@ -25,6 +25,9 @@ protected:
     // Returns the ocp file path
     std::string getOcpPath();
     
+    // Returns the gpio file path
+    std::string getGPIOPath();
+
 private:
     
     // Holds the path to slots
@@ -36,12 +39,17 @@ private:
     // Holds the path to ocp.3 directory
     std::string ocpPath;
     
+    // Hold the path to GPIO directory
+    std::string gpioPath;
+
     // Generates the slot file path and sets variable slotsPath
     void setSlotsPath();
     
     // Generates the ocp file path and sets variable ocpPath
     void setOcpPath();
     
+    void setGPIOPath();
+
 };
 
 #endif /* QUADCORE_H_ */
