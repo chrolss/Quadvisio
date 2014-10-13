@@ -11,12 +11,28 @@
 #include <unistd.h>
 
 #include "QuadPWM.h"
+#include "QuadGPIO.h"
 
 #define MOTOR_FL "P8_13"
 #define MOTOR_FR "P9_14"
 #define MOTOR_BL "P9_21"
 #define MOTOR_BR "P9_42"
 
+
+int main(int argc, const char * argv[]){
+	QuadGPIO GPIO;
+	GPIO.initialize(68);
+	printf("GPIO 68 initialized\n");
+	GPIO.setDirection(0);
+	printf("Direction set to out\n");
+	sleep(1);
+	GPIO.setValue(1);
+	sleep(1);
+	GPIO.setValue(0);
+	printf("Test avslutat\n");
+}
+
+/*
 int main(int argc, const char * argv[]) {
     std::string s = "";
     
@@ -51,6 +67,7 @@ int main(int argc, const char * argv[]) {
     pwm.setDuty("P9_21", 1200000);
     pwm.setDuty("P9_42", 1200000);
     */
+/*
     sleep(1);
     std::cout << "Setting duty to 1000000" << std::endl;
     pwm.setDuty("P8_13", 1000000);
@@ -60,3 +77,4 @@ int main(int argc, const char * argv[]) {
 
     return 0;
 }
+*/
