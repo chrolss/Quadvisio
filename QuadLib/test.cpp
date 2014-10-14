@@ -12,6 +12,7 @@
 
 #include "QuadPWM.h"
 #include "QuadGPIO.h"
+#include "QuadAIN.h"
 
 #define MOTOR_FL "P8_13"
 #define MOTOR_FR "P9_14"
@@ -22,8 +23,19 @@
 int main(int argc, const char * argv[]){
 	QuadAIN AIN;	//initialize all AIN ports, 0 - 7
 	printf("Analog ports initialized\n");
-	AIN.readAnalog(0);
-	printf("Test finished\n");
+	int temp;
+	int max;
+	while (true){
+			AIN.readAnalog(0);
+			temp = AIN.getValue();
+			if (temp > max){
+				max = temp;
+			}
+			printf("Current %d \t Max: %d \n", temp, max);
+			sleep(1);
+
+	}
+	return 0;
 }
 
 

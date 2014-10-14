@@ -1,5 +1,5 @@
-#ifndef QUADGPIO_H_
-#define QUADGPIO_H_
+#ifndef QUADAIN_H_
+#define QUADAIN_H_
 
 #include "QuadCore.h"
 #include <string>
@@ -16,7 +16,7 @@
 
 #define KEYLEN 7
 #define MAX_BUF 64
-#define path "/sys/devices/ocp.3/helper.15"
+#define AINpath "/sys/devices/ocp.3/helper.15"
 
 class QuadAIN : protected QuadCore {
 
@@ -24,14 +24,15 @@ public:
     QuadAIN();
 
     void readAnalog(int _port);
+    int getValue(){return value;}
 
 private:
     bool initialized;
     int fd;
+    int value;
     char buf[MAX_BUF];
-    char ch;
-    unsigned int gpio;
+    char ch[4];
 };
 
 
-#endif /* QUADPWM_H_ */
+#endif /* QUADAIN_H_ */
