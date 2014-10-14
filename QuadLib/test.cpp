@@ -20,6 +20,15 @@
 
 
 int main(int argc, const char * argv[]){
+	QuadAIN AIN;	//initialize all AIN ports, 0 - 7
+	printf("Analog ports initialized\n");
+	AIN.readAnalog(0);
+	printf("Test finished\n");
+}
+
+
+/*
+int main(int argc, const char * argv[]){
 	QuadGPIO GPIO(68);
 	printf("GPIO 68 initialized\n");
 	GPIO.setDirection(0);
@@ -34,7 +43,7 @@ int main(int argc, const char * argv[]){
 	printf("Test avslutat\n");
 	GPIO.release();
 }
-
+*/
 /*
 int main(int argc, const char * argv[]) {
     std::string s = "";

@@ -18,6 +18,7 @@ QuadCore::QuadCore() {
     this->setSlotsPath();
     this->setOcpPath();
     loadDeviceTree("am33xx_pwm");
+    loadDeviceTree("bone-cape-iio");
 }
 
 int QuadCore::loadDeviceTree(const char *name) {
