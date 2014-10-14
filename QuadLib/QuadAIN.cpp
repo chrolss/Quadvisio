@@ -1,6 +1,4 @@
 #include "QuadAIN.h"
-#include <string>
-#include <sstream>
 
 QuadAIN::QuadAIN(){}
 

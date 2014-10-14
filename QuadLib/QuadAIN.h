@@ -27,7 +27,6 @@ public:
     int getValue(){return value;}
 
 private:
-    bool initialized;
     int fd;
     int value;
     char buf[MAX_BUF];
