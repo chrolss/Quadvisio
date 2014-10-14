@@ -1,0 +1,13 @@
+1) Ladda ner dtbo-filer från en hemsida 
+2) cd /lib/firmware, där ska man lägga alla dtbo-filer
+3) echo ttyO#_armhf.com > /sys/devices/bone_capemgr.9/slots , där # är portnumret man vill öppna
+4) Öppna två portar, sedan två ssh fönster och skriv:
+
+Första fönstret--
+minicom -b 9600 -D /dev/ttyO1
+
+Andra fönstret--
+minicom -b 9600 -D /dev/ttyO2
+
+5) Chatta på!
+
