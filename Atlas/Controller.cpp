@@ -98,9 +98,9 @@ void Controller::reset_I(){
 }
 
 void Controller::get_Errors(double *_err){
-	_err[0] = ea[2];
-	_err[1] = eb[2];
-	_err[2] = eg[2];
+	_err[0] = ea[2]/WINDUP_LIMIT_UP*100.0;
+	_err[1] = eb[2]/WINDUP_LIMIT_UP*100.0;
+	_err[2] = eg[2]/WINDUP_LIMIT_UP*100.0;
 }
 
 void Controller::calcPWM(double *input, double *output, double *ref) {

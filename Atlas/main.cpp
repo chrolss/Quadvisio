@@ -86,7 +86,7 @@ void loop(){
     std::cout << "Starting Loop" << std::endl;
     std::chrono::time_point<std::chrono::high_resolution_clock> start;
 
-    while (runAtlas && counter<6000000) {
+    while (runAtlas) {
         
         // Start clock
         auto start = std::chrono::high_resolution_clock::now();
@@ -159,8 +159,7 @@ void loop(){
             motor->setPWM(idleMotorValues);
         }
 
-        //vidCount++;
-        counter++;
+        
         //std::cout << counter << std::endl;
         
         // Measure duration
