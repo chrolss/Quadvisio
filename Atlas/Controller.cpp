@@ -202,9 +202,11 @@ void Controller::setJoyCom(double *joy, double *sensorInput, double *ref){
 	if (fabs(joy[2])>0){					//this will hopefully reset the yaw reference
 		setYawRef(ref, sensorInput[5]);	//to the current yaw input from the sensor
 	}									//so the reference won't interfere with the controller
+	/*
 	if (fabs(joy[3])<0.1){
 		//reset_PID();			//if the throttle is lower than 0.1 the I parameters in the
 	}							//PID will be set to zero
+	*/
 	this->F = 4*THRUST_CONSTANT*joy[3]*joy[3]*10000.0;
 	setSensitivity(joy[6]);
 	ref[0] = sens*joy[0];

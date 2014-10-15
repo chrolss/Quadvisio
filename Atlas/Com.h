@@ -22,8 +22,9 @@
 #include <sstream>
 #include <string>
 #include <linux/wireless.h>
-#include <opencv2/highgui/highgui.hpp>
-#include <opencv2/imgproc/imgproc.hpp>
+#include <math.h>
+//#include <opencv2/highgui/highgui.hpp>
+//#include <opencv2/imgproc/imgproc.hpp>
 #include <time.h>
 
 #define PORT "3490"  // the port users will be connecting to
@@ -72,7 +73,7 @@ public:
 
     std::string errMsg;
 
-    cv::Mat sendFrame;
+   // cv::Mat sendFrame;
 
 private:
     void error(const char *msg);
@@ -108,7 +109,7 @@ private:
     struct sockaddr_in serv_addr, cli_addr;
     std::ostringstream ostr;
 
-    cv::VideoCapture cap;
+    //cv::VideoCapture cap;
 
     std::string numberInStrings[26];
 

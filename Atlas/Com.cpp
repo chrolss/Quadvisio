@@ -49,7 +49,7 @@ Com::Com(){
     sizeOfOutput = (sizeof(output)/sizeof(*output));
     
     std::cout << "Setting up camera" << std::endl;
-    
+    /*
     cap.open(0);
     cap.set(CV_CAP_PROP_FRAME_HEIGHT, 240);
     cap.set(CV_CAP_PROP_FRAME_WIDTH, 320);
@@ -57,7 +57,7 @@ Com::Com(){
     if (cap.isOpened()) {
         printf("Camera opened!\n");
     }
-    
+    */
     usleep(1000);
 }
 
@@ -167,11 +167,11 @@ void Com::sendQvisLightMsg() {
     this->getSignalInfo();
     
     ostr.str("");
-    
+
     for (int i=0; i<3; i++) {
         ostr << output[i] << ":";
     }
-    
+    /*
     if (imgSend && videoStream) {
         if (vidResNew != vidRes) {
             switch (vidResNew) {
@@ -220,7 +220,8 @@ void Com::sendQvisLightMsg() {
     else {
         ostr << "0:0:0:0";
     }
-    
+    */
+    ostr << "0:0:0:0";
     std::string s;
     s = ostr.str();
     ostr.str("");
@@ -245,11 +246,12 @@ void Com::sendQvisLightMsg() {
         closeClient();
         perror("send");
     }
-    
+    /*
     if (imgSend && videoStream) {
         sendImg();
         imgSend = false;
     }
+    */
     printf("Message sent\n");
 
 }
@@ -271,7 +273,7 @@ void Com::sendQvisDevMsg() {
     else {
         ostr << "none:";
     }
-
+    /*
     if (imgSend && videoStream) {
         if (vidResNew != vidRes) {
             switch (vidResNew) {
@@ -320,7 +322,8 @@ void Com::sendQvisDevMsg() {
     else {
         ostr << "0:0:0:0";
     }
-
+    */
+    ostr << "0:0:0:0";
     std::string s;
     s = ostr.str();
     ostr.str("");
@@ -347,15 +350,17 @@ void Com::sendQvisDevMsg() {
         perror("send");
     }
 
-
+    /*
     if (imgSend && videoStream) {
         sendImg();
         imgSend = false;
     }
+    */
     //printf("Message sent\n");
 }
 
 void Com::sendImg() {
+	/*
     sendFrame = (sendFrame.reshape(0,1));
 
     if(colorVideo) {
@@ -372,6 +377,7 @@ void Com::sendImg() {
     }
 
     vidCount=0;
+    */
 }
 
 void Com::readMsg() {
@@ -554,7 +560,7 @@ int Com::getSignalInfo() {
     signalInfo *sigInfo;
     sigInfo = new signalInfo;
 
-    strcpy(req.ifr_name, "ra0");
+    strcpy(req.ifr_name, "wlan0");
 
     iw_statistics *stats;
 
@@ -605,7 +611,7 @@ int Com::getSignalInfo() {
 
     //SIOCGIFHWADDR for mac addr
     ifreq req2;
-    strcpy(req2.ifr_name, "ra0");
+    strcpy(req2.ifr_name, "wlan0");
     //this will get the mac address of the interface
     if(ioctl(sockfd, SIOCGIFHWADDR, &req2) == -1){
         fprintf(stderr, "mac error");
