@@ -479,7 +479,7 @@ void Com::reciveMessage() {
 
         numBytes = recv(newsockfd, recvBuf, sizeof(recvBuf), 0);
         //printf("Done with recv\n");
-        if (numBytes == -1) {
+        if (static_cast<unsigned int>(numBytes) == -1) {
             connected = false;
             printf("Time-out\n");
             perror("read");
@@ -503,7 +503,7 @@ void Com::reciveMessage() {
             //printf("Message size: %i\n", msgSize);
         }
 
-        if (msgSize>0 && msgBuffer.size() == (msgSize+3)) {
+        if (msgSize>0 && msgBuffer.size() == static_cast<unsigned int>((msgSize+3))) {
             //printf("Message recived!\n");
             msg = msgBuffer;
             break;
