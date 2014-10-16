@@ -18,6 +18,8 @@
 #include <opencv2/core/core.hpp>
 #include <opencv2/highgui/highgui.hpp>
 
+#define CLEAR(x) memset(&(x), 0, sizeof(x))
+
 class CameraManager{
     
 public:
