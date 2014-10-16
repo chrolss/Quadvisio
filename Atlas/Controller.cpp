@@ -49,7 +49,12 @@ void Controller::birdSetup(bool _bird){
 
 //reads PID parameters from two txt-files and sets them
 void Controller::get_Parameters(){
-	std::fstream params1("innerParameters.txt");
+	if (pigeon){
+		std::fstream params1("innerParameters_pigeon.txt");
+	}
+	else{
+		std::fstream params1("innerParameters_phoenix.txt");
+	}
 	params1 >> this->innerParameters[0] >>  this->innerParameters[1] >>  this->innerParameters[2]
 	>>  this->innerParameters[3] >>  this->innerParameters[4] >>  this->innerParameters[5]
 	>> this->innerParameters[6] >> this->innerParameters[7] >> this->innerParameters[8]
@@ -66,7 +71,12 @@ void Controller::get_Parameters(){
 //writes PID parameters back to txt-files
 void Controller::write_Parameters(double *inner, double *outer){
 	std::ofstream params3;	//for output
-	params3.open("innerParameters.txt");
+	if (pigeon){
+		params3.open("innerParameters_pigeon.txt");
+	}
+	else{
+		params3.open("innerParameters_phoenix.txt");
+	}
 	params3 << inner[0] << "\t" << inner[1] << "\t" << inner[2] << "\t"
 	 << inner[3] << "\t" << inner[4] << "\t" << inner[5] << "\t"
 	 << inner[6] << "\t" << inner[7] << "\t" << inner[8] << "\t"
