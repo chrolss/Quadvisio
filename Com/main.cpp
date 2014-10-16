@@ -10,8 +10,6 @@
 #include <string>
 #include <sstream>
 #include <unistd.h>
-#include <opencv2/core/core.hpp>
-#include <opencv2/highgui/highgui.hpp>
 #include "Com.h"
 
 int main(int argc, const char * argv[])
@@ -70,8 +68,6 @@ int main(int argc, const char * argv[])
         
         if (C.connected) {
             if (!C.reciveMsg && !C.msgSend) {
-                //printf("Setting output and send to true\n");
-                //C.setOutputData(output);
                 if (C.vidCount>=2) {
                     C.imgSend = true;
                 }
@@ -82,7 +78,6 @@ int main(int argc, const char * argv[])
         if (!C.connected && !C.listening) {
             C.startListenThread();
         }
-        C.vidCount++;
         
         // Measure duration
         auto duration = std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::high_resolution_clock::now() - start).count();
