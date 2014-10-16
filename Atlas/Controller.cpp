@@ -27,7 +27,7 @@ Controller::Controller(bool bird){
     this->dA = 0.0;
 
     birdSetup(bird);
-    get_Parameters();
+    get_Parameters(birdParams);
 }
 
 void Controller::birdSetup(bool _bird){
@@ -69,12 +69,8 @@ void Controller::get_Parameters(std::string _birdParams){
 //writes PID parameters back to txt-files
 void Controller::write_Parameters(double *inner, double *outer){
 	std::ofstream params3;	//for output
-	if (pigeon){
-		params3.open("innerParameters_pigeon.txt");
-	}
-	else{
-		params3.open("innerParameters_phoenix.txt");
-	}
+	params3.open(birdParams);
+
 	params3 << inner[0] << "\t" << inner[1] << "\t" << inner[2] << "\t"
 	 << inner[3] << "\t" << inner[4] << "\t" << inner[5] << "\t"
 	 << inner[6] << "\t" << inner[7] << "\t" << inner[8] << "\t"
