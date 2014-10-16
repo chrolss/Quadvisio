@@ -32,6 +32,6 @@ private:
     
     int fd;
 
-    uint8_t *buffer;
+    void *buffer;
     
 };
