@@ -39,19 +39,19 @@ Com::Com(){
     msgSize = 0;
     errMsg = "Nothing wrong here!!";
     
-    for (int i = 0; i<(sizeof(output)/sizeof(*output)); i++) {
+    for (unsigned int i = 0; i<(sizeof(output)/sizeof(*output)); i++) {
         output[i] = 0.5;
     }
 
-    for (int i = 0; i<(sizeof(settingsData)/sizeof(*settingsData)); i++) {
+    for (unsigned int i = 0; i<(sizeof(settingsData)/sizeof(*settingsData)); i++) {
         settingsData[i] = 0.5;
     }
 
-    for (int i = 0; i<(sizeof(numberInStrings)/sizeof(*numberInStrings)); i++) {
+    for (unsigned int i = 0; i<(sizeof(numberInStrings)/sizeof(*numberInStrings)); i++) {
         numberInStrings[i] = "";
     }
     
-    for (int i = 0; i<(sizeof(inputData)/sizeof(*inputData)); i++) {
+    for (unsigned int i = 0; i<(sizeof(inputData)/sizeof(*inputData)); i++) {
         inputData[i] = 0.5;
     }
     
