@@ -53,7 +53,8 @@ void Controller::get_Parameters(){
 	params1 >> this->innerParameters[0] >>  this->innerParameters[1] >>  this->innerParameters[2]
 	>>  this->innerParameters[3] >>  this->innerParameters[4] >>  this->innerParameters[5]
 	>> this->innerParameters[6] >> this->innerParameters[7] >> this->innerParameters[8]
-	>> this->innerParameters[9] >> this->innerParameters[10] >> this->innerParameters[11];
+	>> this->innerParameters[9] >> this->innerParameters[10] >> this->innerParameters[11]
+	>> this->trim[0] >> this->trim[1];
 	params1.close();
 	std::fstream params2("outerParameters.txt");
 	params2 >> 	this->outerParameters[0] >> this->outerParameters[1]
@@ -69,20 +70,14 @@ void Controller::write_Parameters(double *inner, double *outer){
 	params3 << inner[0] << "\t" << inner[1] << "\t" << inner[2] << "\t"
 	 << inner[3] << "\t" << inner[4] << "\t" << inner[5] << "\t"
 	 << inner[6] << "\t" << inner[7] << "\t" << inner[8] << "\t"
-	 << inner[9] << "\t" << inner[10] << "\t" << inner[11];
+	 << inner[9] << "\t" << inner[10] << "\t" << inner[11] << "\t"
+	 << trim[0] << "\t" << trim[1];
 	params3.close();
 	std::ofstream params4;	//for output
 	params4 << outer[0] << "\t"  << outer[1] << "\t" << outer[2] << "\t"
 	 << outer[3] << "\t" << outer[4] << "\t" << outer[5] << "\t";
 	params4.close();
 
-}
-
-void Controller::write_trim(){
-	std::ofstream params5;	//for output
-	params5.open("trim.txt");
-	params5 << trim[0] << "\t" << trim[1];
-	params5.close();
 }
 
 void Controller::send_Parameters(double *params){

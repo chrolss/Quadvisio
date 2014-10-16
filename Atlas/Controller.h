@@ -46,7 +46,6 @@ public:
     double windUp(double *err);
     void write_Parameters(double *inner, double *outer);
     void send_Parameters(double *params);
-    void write_trim();
     void setSensitivity(double _sens);
     void reset_I();
     void get_Errors(double *_err);
