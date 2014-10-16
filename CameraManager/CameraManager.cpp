@@ -51,7 +51,8 @@ int CameraManager::initializeCamera() {
            caps.capabilities);
     
     
-    struct v4l2_cropcap cropcap = {0};
+    struct v4l2_cropcap cropcap;
+    CLEAR(cropcap);
     cropcap.type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
     if (-1 == xioctl (fd, VIDIOC_CROPCAP, &cropcap))
     {
@@ -84,7 +85,8 @@ int CameraManager::initializeCamera() {
         fmtdesc.index++;
     }
     
-    struct v4l2_format fmt = {0};
+    struct v4l2_format fmt;
+    CLEAR(fmt);
     
     fmt.type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
     fmt.fmt.pix.width = 1920;
@@ -134,6 +136,7 @@ int CameraManager::initializeCamera() {
 }
 
 void CameraManager::getImageBuffer() {
+    
     struct v4l2_buffer buf = {0};
     buf.type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
     buf.memory = V4L2_MEMORY_MMAP;
@@ -141,13 +144,11 @@ void CameraManager::getImageBuffer() {
     if(-1 == xioctl(fd, VIDIOC_QBUF, &buf))
     {
         perror("Query Buffer");
-        return 1;
     }
     
     if(-1 == xioctl(fd, VIDIOC_STREAMON, &buf.type))
     {
         perror("Start Capture");
-        return 1;
     }
     
     fd_set fds;
@@ -159,13 +160,11 @@ void CameraManager::getImageBuffer() {
     if(-1 == r)
     {
         perror("Waiting for Frame");
-        return 1;
     }
     
     if(-1 == xioctl(fd, VIDIOC_DQBUF, &buf))
     {
         perror("Retrieving Frame");
-        return 1;
     }
     printf ("saving image\n");
     
