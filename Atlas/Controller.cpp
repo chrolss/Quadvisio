@@ -36,6 +36,7 @@ void Controller::birdSetup(bool _bird){
 		this->k2 = CONST2;
 		this->k3 = CONST3;
 		this->pigeon = true;
+		this->birdParams = "innerParameters_pigeon.txt";
 		printf("Pigeon selected, initilizing system\n");
 	}
 	else{
@@ -43,18 +44,15 @@ void Controller::birdSetup(bool _bird){
 		this->k2 = CONST5;
 		this->k3 = CONST6;
 		this->pigeon = false;
+		this->birdParams = "innerParameters_phoenix.txt";
 		printf("Phoenix selected, initilizing system\n");
 	}
 }
 
 //reads PID parameters from two txt-files and sets them
-void Controller::get_Parameters(){
-	if (pigeon){
-		std::fstream params1("innerParameters_pigeon.txt");
-	}
-	else{
-		std::fstream params1("innerParameters_phoenix.txt");
-	}
+void Controller::get_Parameters(std::string _birdParams){
+	std::fstream params1(_birdParams);
+
 	params1 >> this->innerParameters[0] >>  this->innerParameters[1] >>  this->innerParameters[2]
 	>>  this->innerParameters[3] >>  this->innerParameters[4] >>  this->innerParameters[5]
 	>> this->innerParameters[6] >> this->innerParameters[7] >> this->innerParameters[8]

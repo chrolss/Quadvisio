@@ -51,8 +51,9 @@ public:
     void get_Errors(double *_err);
 private:
     void birdSetup(bool _bird);
-    void get_Parameters();
+    void get_Parameters(std::string _birdParams);
     bool pigeon;
+    std::string birdParams;
     double innerParameters[9];
     double outerParameters[9];
     double refs[7];		//roll, pitch, yaw, ax, ay, az, altitude
