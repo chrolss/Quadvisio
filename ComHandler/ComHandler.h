@@ -22,9 +22,18 @@
 #include <sstream>
 #include <string>
 //#include <linux/wireless.h>
+#include <math.h>
 #include <time.h>
 
 #define PORT "3490"  // the port users will be connecting to
+#define radToDeg 57.296
+
+struct signalInfo {
+    char mac[18];
+    char ssid[33];
+    int bitrate;
+    int level;
+};
 
 struct Client {
     std::string name;
@@ -39,9 +48,20 @@ public:
     void startListenThread();
     void closeClient();
     
-    bool connected, reciveMsg, sendMsg, listening;
+    void setOutputData(double *out, double *pwm, double *ref, double &freq, double *err);
+    void setSettingsData(double *params);
+    void getSettingsData(double *params);
     
-    double inputData[7];  // Roll:Pitch:Yaw:Throttle:rollOffset:pitchOffset:JoySen
+    bool connected, reciveMsg, sendMsg, listening;
+    bool resetIntegral, videoStream, colorVideo, saveSettnings, motorOn;
+    
+    double controllerInputData[9];  // Roll:Pitch:Yaw:Throttle:rollOffset:pitchOffset:JoySen
+    
+    int vidCount;
+    int vidLimit;
+    
+    // Error message to be sent to Qvis
+    std::string errMsg;
     
 private:
     void Listen();
@@ -63,22 +83,30 @@ private:
     void sendQvisLightMsg();
     
     int getSigStrength();
+    int getSignalInfo();
     
-    // length:
-    double output[16];
+    int vidRes;
+    int vidResNew;
     
+    // PID Params : Joy Sen : RollTrim : PitchTrim
+    double settingsData[15];
+    
+    double output[19];
+    int sizeOfOutput;
+
     int sockfd, newsockfd, portno, n;
     char recvBuf[1024];
     struct sockaddr_in serv_addr, cli_addr;
     socklen_t clilen;
     
     time_t start;
-    struct timeval tv;
-    fd_set readfds;
+    
+    // Stringstream used for composing messages
+    std::ostringstream ostr;
     
     std::string subDelimiter = ":";
     std::string token;
-    std::string numberInStrings[25];
+    std::string numberInStrings[28];
 
 };
 
