@@ -6,9 +6,14 @@
 //  Copyright (c) 2014 Quadvisio. All rights reserved.
 //
 
+///////////////////// INFORMATION ///////////////////////////////////
+
+// SettningsData - Holds the PID parameters, Joy. Sen and Trim values
+// The first message to Qvis should be the Settnings values
+// SaveSettnings is true if new values exist
 
 // Incomning message structure:
-// Yaw : Throttle : Roll : Pitch : RollOffset : PitchOffset : Reset Integral : Video : Color : Resolution : Motor on : Data ind : All PIDs : Joystick Sensitivity
+// Yaw : Throttle : Roll : Pitch : RollOffset : PitchOffset : Reset Integral : Video : Color : Resolution : Motor on : Data ind : All PIDs : Joystick Sensitivity : RollOffset : PitchOffset
 
 // Outgoing message structure:
 // angles : refangles : pwm : speed : sidespeed : altitude : integral roll : integral pitch : integral yaw : Hz : bitrate : dbm : errorMessage : imgWidth : imgHeight : imgSize : imgChannels - Image
@@ -25,7 +30,8 @@ Com::Com(){
     videoStream=false;
     motorOn=false;
     colorVideo=true;
-    savePid = false;
+    saveSettnings = false;
+    resetIntegral = false;
     vidCount = 0;
     vidLimit = 0;
     vidRes = 2; // Default 2 = 320x240
@@ -37,26 +43,19 @@ Com::Com(){
         output[i] = 0.5;
     }
 
-    for (int i = 0; i<(sizeof(pidParams)/sizeof(*pidParams)); i++) {
-        pidParams[i] = 0.0;
+    for (int i = 0; i<(sizeof(settingsData)/sizeof(*settingsData)); i++) {
+        settingsData[i] = 0.5;
     }
-    
+
     for (int i = 0; i<(sizeof(numberInStrings)/sizeof(*numberInStrings)); i++) {
         numberInStrings[i] = "";
     }
     
-    sizeOfOutput = (sizeof(output)/sizeof(*output));
-    
-    std::cout << "Setting up camera" << std::endl;
-    
-    cap.open(0);
-    cap.set(CV_CAP_PROP_FRAME_HEIGHT, 240);
-    cap.set(CV_CAP_PROP_FRAME_WIDTH, 320);
-    
-    if (cap.isOpened()) {
-        printf("Camera opened!\n");
+    for (int i = 0; i<(sizeof(inputData)/sizeof(*inputData)); i++) {
+        inputData[i] = 0.5;
     }
     
+    sizeOfOutput = (sizeof(output)/sizeof(*output));
     usleep(1000);
 }
 
@@ -101,18 +100,13 @@ void Com::Listen()
         closeClient();
     }
     
-    // Prepare select
-    // Clear set
-    FD_ZERO(&readfds);
+    struct timeval tv;
     
-    //
-    FD_SET(newsockfd, &readfds);
+    tv.tv_sec = 2;  /* 30 Secs Timeout */
+    tv.tv_usec = 0;  // Not init'ing this can cause strange errors
     
-    n = newsockfd + 1;
-    
-    tv.tv_sec = 3;
-    tv.tv_usec = 0;
-    
+    setsockopt(newsockfd, SOL_SOCKET, SO_RCVTIMEO, (char *)&tv,sizeof(struct timeval));
+
     connected = true;
     reciveMsg=true;
     listening=false;
@@ -122,7 +116,7 @@ void Com::Listen()
     reciveClientIdentity();
 
     printf("%s connected with %i\n", clientName.c_str(), clientIdentity);
-    
+
     start = time(0);
 
     if (clientIdentity==1) {
@@ -132,7 +126,7 @@ void Com::Listen()
         qvisLightLoop();
     }
     else if (clientIdentity==3) {
-        sendPidParams();
+        sendSettingsData();
         qvisDevLoop();
     }
     closeClient();
@@ -178,11 +172,11 @@ void Com::sendQvisLightMsg() {
     this->getSignalInfo();
     
     ostr.str("");
-    
+
     for (int i=0; i<3; i++) {
         ostr << output[i] << ":";
     }
-    
+    /*
     if (imgSend && videoStream) {
         if (vidResNew != vidRes) {
             switch (vidResNew) {
@@ -231,7 +225,8 @@ void Com::sendQvisLightMsg() {
     else {
         ostr << "0:0:0:0";
     }
-    
+    */
+    ostr << "0:0:0:0";
     std::string s;
     s = ostr.str();
     ostr.str("");
@@ -256,11 +251,12 @@ void Com::sendQvisLightMsg() {
         closeClient();
         perror("send");
     }
-    
+    /*
     if (imgSend && videoStream) {
         sendImg();
         imgSend = false;
     }
+    */
     printf("Message sent\n");
 
 }
@@ -282,7 +278,7 @@ void Com::sendQvisDevMsg() {
     else {
         ostr << "none:";
     }
-
+    /*
     if (imgSend && videoStream) {
         if (vidResNew != vidRes) {
             switch (vidResNew) {
@@ -331,7 +327,8 @@ void Com::sendQvisDevMsg() {
     else {
         ostr << "0:0:0:0";
     }
-
+    */
+    ostr << "0:0:0:0";
     std::string s;
     s = ostr.str();
     ostr.str("");
@@ -352,23 +349,25 @@ void Com::sendQvisDevMsg() {
     s = ostr.str();
 
     //printf("Sending message: %s\n", s.c_str());
-    
+
     if (send(newsockfd, s.c_str(), s.length(),0) == -1) {
         closeClient();
         perror("send");
     }
 
-
+    /*
     if (imgSend && videoStream) {
         sendImg();
         imgSend = false;
     }
+    */
     //printf("Message sent\n");
 }
 
 void Com::sendImg() {
+	/*
     sendFrame = (sendFrame.reshape(0,1));
-    
+
     if(colorVideo) {
         if (send(newsockfd, sendFrame.data, sendFrame.total()*3, 0) == -1) {
             closeClient();
@@ -381,8 +380,9 @@ void Com::sendImg() {
             perror("send");
         }
     }
-    
+
     vidCount=0;
+    */
 }
 
 void Com::readMsg() {
@@ -406,11 +406,11 @@ void Com::readMsg() {
     numberInStrings[i] = msg;
     
     // Yaw : Throttle : Roll : Pitch : RollOffset : PitchOffset : Reset Integral : Video : Color : Resolution : Motor on : Data ind : All PIDs : Joystick Sensitivity
-    
+
     for (int i = 1 ; i<7; i++) {
         inputData[i-1] = atof(numberInStrings[i].c_str());
     }
-    
+
     if (atoi(numberInStrings[7].c_str())==1) {
         resetIntegral = true;
         printf("Reset integral\n");
@@ -418,7 +418,7 @@ void Com::readMsg() {
     else {
         resetIntegral = false;
     }
-    
+
     if (atoi(numberInStrings[8].c_str())==1) {
         videoStream = true;
     }
@@ -444,14 +444,24 @@ void Com::readMsg() {
     }
     
     if (atoi(numberInStrings[12].c_str())==1) {
-        for (int i=13; i<25; i++) {
-            pidParams[i-13] = atof(numberInStrings[i].c_str());
-        }
         
+        for (int i=13; i<25; i++) {
+            settingsData[i-13] = atof(numberInStrings[i].c_str());
+        }
+
         inputData[6] = atof(numberInStrings[25].c_str());
         
-        savePid = true;
-        printf("PID parameters and joystick sensetivity read and saved");
+        inputData[7] = atof(numberInStrings[26].c_str());
+        
+        inputData[8] = atof(numberInStrings[27].c_str());
+
+        saveSettnings = true;
+        
+        printf("Joy sen: %f\n", inputData[6]);
+        printf("Joy sen: %f\n", inputData[7]);
+        printf("Joy sen: %f\n", inputData[8]);
+
+        printf("PID parameters and joystick sensetivity read and saved\n");
     }
 }
 
@@ -466,49 +476,37 @@ void Com::reciveMessage() {
     bzero(recvBuf, 1024);
 
     while (1) {
-        //printf("Going into recv\n");
-        int rv = select(n, &readfds, NULL, NULL, &tv);
-        
-        if (rv == -1) {
-            perror("select"); // error occurred in select()
-            printf("Select error\n");
-            closeClient();
-        } else if (rv == 0) {
-            printf("Timeout occurred!  No data after 5 seconds.\n");
-            closeClient();
-        } else {
-            if (FD_ISSET(newsockfd, &readfds)) {
-                numBytes = recv(newsockfd, recvBuf, sizeof(recvBuf), 0);
-                //printf("Done with recv\n");
-                if (numBytes < 0) {
-                    connected = false;
-                    perror("read");
-                    return;
-                }
-                
-                else if (numBytes == 0) {
-                    printf("Maybe lost connection to client, closing socket and starting to listing\n");
-                    connected = false;
-                    return;
-                }
-                
-                else {
-                    //printf("convert buffer to string\n");
-                    msgBuffer = std::string(recvBuf);
-                    //std::cout << "Raw message: " << msgBuffer << std::endl;
-                }
-                
-                if (msgSize == 0 && msgBuffer.size()>=3) {
-                    msgSize = atoi(msgBuffer.substr(0,3).c_str());
-                    //printf("Message size: %i\n", msgSize);
-                }
-                
-                if (msgSize>0 && msgBuffer.size() == (msgSize+3)) {
-                    //printf("Message recived!\n");
-                    msg = msgBuffer;
-                    break;
-                }
-            }
+
+        numBytes = recv(newsockfd, recvBuf, sizeof(recvBuf), 0);
+        //printf("Done with recv\n");
+        if (numBytes == -1) {
+            connected = false;
+            printf("Time-out\n");
+            perror("read");
+            return;
+        }
+
+        else if (numBytes == 0) {
+            printf("Maybe lost connection to client, closing socket and starting to listing\n");
+            connected = false;
+            return;
+        }
+
+        else {
+            //printf("convert buffer to string\n");
+            msgBuffer = std::string(recvBuf);
+            //std::cout << "Raw message: " << msgBuffer << std::endl;
+        }
+
+        if (msgSize == 0 && msgBuffer.size()>=3) {
+            msgSize = atoi(msgBuffer.substr(0,3).c_str());
+            //printf("Message size: %i\n", msgSize);
+        }
+
+        if (msgSize>0 && msgBuffer.size() == (msgSize+3)) {
+            //printf("Message recived!\n");
+            msg = msgBuffer;
+            break;
         }
     }
 }
@@ -538,13 +536,16 @@ void Com::reciveClientIdentity() {
     clientName = numberInStrings[2];
 }
 
-void Com::sendPidParams() {
+void Com::sendSettingsData() {
     ostr.str("");
 
-    for (int i=0; i<11; i++) {
-        ostr << pidParams[i] << ":";
+    for (int i=0; i<14; i++) {
+        ostr << settingsData[i] << ":";
     }
-    ostr << pidParams[11];
+    ostr << settingsData[14];
+    
+    
+    
     std::string s;
     s = ostr.str();
     ostr.str("");
@@ -572,13 +573,13 @@ void Com::sendPidParams() {
 }
 
 int Com::getSignalInfo() {
-    /*
+    
     iwreq req;
 
     signalInfo *sigInfo;
     sigInfo = new signalInfo;
 
-    strcpy(req.ifr_name, "ra0");
+    strcpy(req.ifr_name, "wlan1");
 
     iw_statistics *stats;
 
@@ -629,7 +630,7 @@ int Com::getSignalInfo() {
 
     //SIOCGIFHWADDR for mac addr
     ifreq req2;
-    strcpy(req2.ifr_name, "ra0");
+    strcpy(req2.ifr_name, "wlan1");
     //this will get the mac address of the interface
     if(ioctl(sockfd, SIOCGIFHWADDR, &req2) == -1){
         fprintf(stderr, "mac error");
@@ -643,11 +644,9 @@ int Com::getSignalInfo() {
     }
     close(sockfd);
 
-    //printf("Bitrate: %f\n", mb);
-    //printf("Level: %i\n", quality);
-    this->output[14] = sigInfo->bitrate;
-    this->output[15] = (double)sigInfo->level;
-    */
+    this->output[17] = sigInfo->bitrate;
+    this->output[18] = (double)sigInfo->level;
+    
     return 0;
 }
 
@@ -659,7 +658,7 @@ void Com::closeClient() {
     connected = false;
 }
 
-void Com::setOutputData(double *out, double *pwm, double *ref, double &freq) {
+void Com::setOutputData(double *out, double *pwm, double *ref, double &freq, double *err) {
     output[0] = out[3]*radToDeg;
     output[1] = out[4]*radToDeg;
     output[2] = out[5]*radToDeg;
@@ -673,36 +672,39 @@ void Com::setOutputData(double *out, double *pwm, double *ref, double &freq) {
     output[10] = cos(out[4])*out[0]-sin(out[4]);
     output[11] = cos(out[3])*out[1]-sin(out[3]);
     output[12] = out[2];
-    output[13] = freq;
+    output[13] = err[0];
+    output[14] = err[1];
+    output[15] = err[2];
+    output[16] = freq;
 }
 
-void Com::setPidParams(double *params) {
-    pidParams[0] = params[0];
-    pidParams[1] = params[1];
-    pidParams[2] = params[2];
-    pidParams[3] = params[3];
-    pidParams[4] = params[4];
-    pidParams[5] = params[5];
-    pidParams[6] = params[6];
-    pidParams[7] = params[7];
-    pidParams[8] = params[8];
-    pidParams[9] = params[9];
-    pidParams[10] = params[10];
-    pidParams[11] = params[11];
+void Com::setSettingsData(double *params) {
+    settingsData[0] = params[0];
+    settingsData[1] = params[1];
+    settingsData[2] = params[2];
+    settingsData[3] = params[3];
+    settingsData[4] = params[4];
+    settingsData[5] = params[5];
+    settingsData[6] = params[6];
+    settingsData[7] = params[7];
+    settingsData[8] = params[8];
+    settingsData[9] = params[9];
+    settingsData[10] = params[10];
+    settingsData[11] = params[11];
 
 }
 
-void Com::getPidParams(double *params){
-	params[0] = pidParams[0];
-	params[1] = pidParams[1];
-	params[2] = pidParams[2];
-	params[3] = pidParams[3];
-	params[4] = pidParams[4];
-	params[5] = pidParams[5];
-	params[6] = pidParams[6];
-	params[7] = pidParams[7];
-	params[8] = pidParams[8];
-	params[9] = pidParams[9];
-	params[10] = pidParams[10];
-	params[11] = pidParams[11];
+void Com::getSettingsData(double *params){
+	params[0] = settingsData[0];
+	params[1] = settingsData[1];
+	params[2] = settingsData[2];
+	params[3] = settingsData[3];
+	params[4] = settingsData[4];
+	params[5] = settingsData[5];
+	params[6] = settingsData[6];
+	params[7] = settingsData[7];
+	params[8] = settingsData[8];
+	params[9] = settingsData[9];
+	params[10] = settingsData[10];
+	params[11] = settingsData[11];
 }
