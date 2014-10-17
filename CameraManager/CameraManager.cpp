@@ -204,6 +204,7 @@ void CameraManager::getImageBuffer() {
     IplImage* frame;
     printf("Converting to Mat\n");
     CvMat cvmat = cvMat(480, 640, CV_8UC3, (void*)buffers[buf.index].start);
+    std::cout << "Length of buffer: " << buffers[buf.index].length << std::endl;
     printf("Decoding\n");
     frame = cvDecodeImage(&cvmat, 1);
     printf("Waitkey\n");
