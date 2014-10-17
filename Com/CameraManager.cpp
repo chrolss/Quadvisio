@@ -202,6 +202,8 @@ void * CameraManager::getImageBuffer() {
     jpg_buffer = (void*)buffers[buf.index].start;
     jpg_buffer_size =(size_t)buffers[buf.index].length;
     
+    std::cout << "Buffer size: " << jpg_buffer_size << std::cout;
+    
     /*
     printf ("saving image\n");
     
