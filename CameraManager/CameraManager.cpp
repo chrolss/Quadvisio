@@ -91,7 +91,7 @@ void CameraManager::init_device() {
                     dev_name);
             exit(EXIT_FAILURE);
         } else {
-            errno_exit("VIDIOC_QUERYCAP");
+            perror("VIDIOC_QUERYCAP");
         }
     }
     
@@ -187,20 +187,8 @@ void CameraManager::init_device() {
     min = fmt.fmt.pix.bytesperline * fmt.fmt.pix.height;
     if (fmt.fmt.pix.sizeimage < min)
         fmt.fmt.pix.sizeimage = min;
-    
-    switch (io) {
-        case IO_METHOD_READ:
-            init_read(fmt.fmt.pix.sizeimage);
-            break;
-            
-        case IO_METHOD_MMAP:
-            init_mmap();
-            break;
-            
-        case IO_METHOD_USERPTR:
-            init_userp(fmt.fmt.pix.sizeimage);
-            break;
-    }
+
+    init_mmap();
 
 }
 
