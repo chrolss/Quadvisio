@@ -157,7 +157,7 @@ void CameraManager::init_device() {
         fmt.fmt.pix.field = V4L2_FIELD_INTERLACED;
         
         if (-1 == xioctl(fd, VIDIOC_S_FMT, &fmt))
-            errno_exit("VIDIOC_S_FMT");
+            perror("VIDIOC_S_FMT");
         
         if (fmt.fmt.pix.pixelformat != pixel_format) {
             fprintf(stderr,"Libv4l didn't accept pixel format. Can't proceed.\n");
@@ -168,7 +168,7 @@ void CameraManager::init_device() {
     } else {
         /* Preserve original settings as set by v4l2-ctl for example */
         if (-1 == xioctl(fd, VIDIOC_G_FMT, &fmt))
-            errno_exit("VIDIOC_G_FMT");
+            perror("VIDIOC_G_FMT");
     }
     
     CLEAR(frameint);
@@ -207,7 +207,7 @@ void CameraManager::init_mmap() {
                     "memory mapping\n", dev_name);
             exit(EXIT_FAILURE);
         } else {
-            errno_exit("VIDIOC_REQBUFS");
+            perror("VIDIOC_REQBUFS");
         }
     }
     
@@ -234,7 +234,7 @@ void CameraManager::init_mmap() {
         buf.index = n_buffers;
         
         if (-1 == xioctl(fd, VIDIOC_QUERYBUF, &buf))
-            errno_exit("VIDIOC_QUERYBUF");
+            perror("VIDIOC_QUERYBUF");
         
         buffers[n_buffers].length = buf.length;
         buffers[n_buffers].start =
@@ -245,7 +245,7 @@ void CameraManager::init_mmap() {
              fd, buf.m.offset);
         
         if (MAP_FAILED == buffers[n_buffers].start)
-            errno_exit("mmap");
+            perror("mmap");
     }
 
 }
@@ -269,11 +269,11 @@ void CameraManager::start_capturing() {
                 buf.index = i;
                 
                 if (-1 == xioctl(fd, VIDIOC_QBUF, &buf))
-                    errno_exit("VIDIOC_QBUF");
+                    perror("VIDIOC_QBUF");
             }
             type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
             if (-1 == xioctl(fd, VIDIOC_STREAMON, &type))
-                errno_exit("VIDIOC_STREAMON");
+                perror("VIDIOC_STREAMON");
             break;
             
         case IO_METHOD_USERPTR:
@@ -288,11 +288,11 @@ void CameraManager::start_capturing() {
                 buf.length = buffers[i].length;
                 
                 if (-1 == xioctl(fd, VIDIOC_QBUF, &buf))
-                    errno_exit("VIDIOC_QBUF");
+                    perror("VIDIOC_QBUF");
             }
             type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
             if (-1 == xioctl(fd, VIDIOC_STREAMON, &type))
-                errno_exit("VIDIOC_STREAMON");
+                perror("VIDIOC_STREAMON");
             break;
     }
 }
@@ -319,7 +319,7 @@ void CameraManager::grab_frame() {
     if (-1 == r) {
         if (EINTR == errno)
             continue;
-        errno_exit("select");
+        perror("select");
     }
     
     if (0 == r) {
@@ -354,7 +354,7 @@ void CameraManager::read_frame() {
                         /* fall through */
                         
                     default:
-                        errno_exit("read");
+                        perror("read");
                 }
             }
             
@@ -378,7 +378,7 @@ void CameraManager::read_frame() {
                         /* fall through */
                         
                     default:
-                        errno_exit("VIDIOC_DQBUF");
+                        perror("VIDIOC_DQBUF");
                 }
             }
             
@@ -387,7 +387,7 @@ void CameraManager::read_frame() {
             process_image(buffers[buf.index].start, buf.bytesused);
             
             if (-1 == xioctl(fd, VIDIOC_QBUF, &buf))
-                errno_exit("VIDIOC_QBUF");
+                perror("VIDIOC_QBUF");
             break;
             
         case IO_METHOD_USERPTR:
@@ -407,7 +407,7 @@ void CameraManager::read_frame() {
                         /* fall through */
                         
                     default:
-                        errno_exit("VIDIOC_DQBUF");
+                        perror("VIDIOC_DQBUF");
                 }
             }
             
@@ -421,7 +421,7 @@ void CameraManager::read_frame() {
             process_image((void *) buf.m.userptr, buf.bytesused);
             
             if (-1 == xioctl(fd, VIDIOC_QBUF, &buf))
-                errno_exit("VIDIOC_QBUF");
+                perror("VIDIOC_QBUF");
             break;
     }
     
@@ -441,7 +441,7 @@ void CameraManager::stop_capturing() {
         case IO_METHOD_USERPTR:
             type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
             if (-1 == xioctl(fd, VIDIOC_STREAMOFF, &type))
-                errno_exit("VIDIOC_STREAMOFF");
+                perror("VIDIOC_STREAMOFF");
             break;
     }
 }
@@ -457,7 +457,7 @@ void CameraManager::uninit_device() {
         case IO_METHOD_MMAP:
             for (i = 0; i < n_buffers; ++i)
                 if (-1 == munmap(buffers[i].start, buffers[i].length))
-                    errno_exit("munmap");
+                    perror("munmap");
             break;
             
         case IO_METHOD_USERPTR:
@@ -472,7 +472,7 @@ void CameraManager::uninit_device() {
 
 void CameraManager::close_device() {
     if (-1 == close(fd))
-        errno_exit("close");
+        perror("close");
     
     fd = -1;
 }
