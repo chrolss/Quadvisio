@@ -72,7 +72,7 @@ private:
     unsigned int fps;
     unsigned int timeout;
     unsigned int timeouts_max;
-    char *out_name;
+    char out_name[256];
     
     unsigned int pixel_format;
 
