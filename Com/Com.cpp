@@ -318,15 +318,16 @@ void Com::sendQvisDevMsg() {
         */
         
         jpg_buffer = camManager->getImageBuffer();
-        
+        size_t size = camManager->getImageBufferSize();
+
         if (colorVideo) {
             ostr << 1280 << ":" << 720 << ":";
-            ostr << 921600*3 << ":3";
+            ostr << size << ":3";
         }
         
         else {
             ostr << 1280 << ":" << 720 << ":";
-            ostr << 921600*3 << ":3";
+            ostr << size << ":3";
         }
     }
     else {
@@ -369,8 +370,9 @@ void Com::sendQvisDevMsg() {
 }
 
 void Com::sendImg() {
-    printf("Sending image\n");
+    printf("Sending image of\n");
     size_t size = camManager->getImageBufferSize();
+    std::cout << "Size: " << size << std::endl;
 
     if(colorVideo) {
         if (send(newsockfd, jpg_buffer, size, 0) == -1) {
