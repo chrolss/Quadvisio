@@ -21,6 +21,7 @@ static int xioctl(int fd, int request, void *arg)
 CameraManager::CameraManager() {
     
     image_number = 0;
+    fd = -1;
     
     //this->initializeCamera();
 }

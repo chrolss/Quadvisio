@@ -15,6 +15,9 @@
 #include <sys/ioctl.h>
 #include <sys/mman.h>
 #include <unistd.h>
+#include <libv4l2.h>
+#include <sys/time.h>
+#include <sys/types.h>
 #include <opencv2/core/core.hpp>
 #include <opencv2/highgui/highgui.hpp>
 
@@ -44,5 +47,7 @@ private:
     void *buffer;
     struct buffer *buffers;
     struct v4l2_buffer buf;
-    
+    unsigned int i, n_buffers;
+    enum v4l2_buf_type type;
+    int r, fd;
 };
