@@ -22,8 +22,8 @@ int main(int argc, const char * argv[]) {
     printf("Grabbing and saving frame\n");
     camManager.getImageBuffer();
     
-    printf("Setting resolution to 640x480\n");
-    camManager.setResolution(640, 480);
+    //printf("Setting resolution to 640x480\n");
+    //camManager.setResolution(640, 480);
     
     printf("Grabbing and saving frame\n");
     camManager.getImageBuffer();

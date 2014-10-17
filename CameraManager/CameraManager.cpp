@@ -223,7 +223,7 @@ void CameraManager::setResolution(int width, int height) {
     
     if(-1 == xioctl(fd, VIDIOC_STREAMOFF, &type))
     {
-        perror("Turning off stream");
+        perror("Error turning off stream");
     }
 
     
@@ -239,12 +239,12 @@ void CameraManager::setResolution(int width, int height) {
     printf("Setting new resolution\n");
     if (-1 == xioctl(fd, VIDIOC_S_FMT, &fmt))
     {
-        perror("Setting resolution");
+        perror("Error setting resolution");
     }
     
     if(-1 == xioctl(fd, VIDIOC_STREAMON, &type))
     {
-        perror("Turning on stream");
+        perror("Error turning on stream");
     }
 }
 
