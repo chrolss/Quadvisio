@@ -272,6 +272,8 @@ int CameraManager::read_frame() {
     }
     
     assert(buf.index < n_buffers);
+
+    std::cout << "Bytes used: " << buf.bytesused << std::endl;
     
     process_image(buffers[buf.index].start, buf.bytesused);
     
