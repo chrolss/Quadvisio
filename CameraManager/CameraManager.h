@@ -67,11 +67,11 @@ private:
     int out_buf;
     int frame_count = 1;
     int set_format;
-    unsigned int width;
-    unsigned int height;
-    unsigned int fps;
-    unsigned int timeout;
-    unsigned int timeouts_max;
+    int width;
+    int height;
+    int fps;
+    int timeout;
+    int timeouts_max;
     char out_name[256];
     
     unsigned int pixel_format;
