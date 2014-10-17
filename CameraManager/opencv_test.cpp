@@ -21,8 +21,8 @@ int main(int argc, const char * argv[]) {
     
 
     Mat frame;
-    cap >> frame; // get a new frame from camera
+    frame = cap.grab();
+    std::cout << frame.total() << std::endl;
 
-    // the camera will be deinitialized automatically in VideoCapture destructor
     return 0;
 }
