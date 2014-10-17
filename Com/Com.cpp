@@ -37,6 +37,7 @@ Com::Com(){
     vidRes = 2; // Default 2 = 320x240
     vidResNew = 2;
     msgSize = 0;
+    frameCount = 0;
     errMsg = "Nothing wrong here!!";
     
     for (unsigned int i = 0; i<(sizeof(output)/sizeof(*output)); i++) {
@@ -369,8 +370,8 @@ void Com::sendQvisDevMsg() {
 void Com::sendImg() {
     printf("Sending image of\n");
     size_t size = camManager->getImageBufferSize();
-    std::cout << "Size: " << size << std::endl;
-
+    std::cout << "Size: " << size << "Frame: " << frameCount << std::endl;
+    frameCount++;
     if(colorVideo) {
         if (send(newsockfd, jpg_buffer, size, 0) == -1) {
             closeClient();

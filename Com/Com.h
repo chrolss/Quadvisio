@@ -99,6 +99,7 @@ private:
 
     int vidRes;
     int vidResNew;
+    int frameCount;
 
     size_t numBytes;
 
