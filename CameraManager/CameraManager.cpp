@@ -45,39 +45,41 @@ CameraManager::CameraManager() {
 }
 
 int CameraManager::initializeCamera(int _width, int _height) {
-    std::cout << "Hej4" << std::endl;
 
     width = _width;
     height = _height;
+    std::cout << "Hej4" << std::endl;
+
 
     open_device();
-    std::cout << "Hej5" << std::endl;
 
     init_device();
-    std::cout << "Hej6" << std::endl;
 
     start_capturing();
-    std::cout << "Hej7" << std::endl;
 
     return 0;
 }
 
 void CameraManager::open_device() {
-    struct stat st;
     
+    struct stat st;
+    std::cout << "Hej5" << std::endl;
+
     if (-1 == stat(dev_name, &st)) {
         fprintf(stderr, "Cannot identify '%s': %d, %s\n",
                 dev_name, errno, strerror(errno));
         exit(EXIT_FAILURE);
     }
-    
+    std::cout << "Hej6" << std::endl;
+
     if (!S_ISCHR(st.st_mode)) {
         fprintf(stderr, "%s is no device\n", dev_name);
         exit(EXIT_FAILURE);
     }
     
     fd = open(dev_name, O_RDWR /* required */ | O_NONBLOCK, 0);
-    
+    std::cout << "Hej7" << std::endl;
+
     if (-1 == fd) {
         fprintf(stderr, "Cannot open '%s': %d, %s\n",
                 dev_name, errno, strerror(errno));

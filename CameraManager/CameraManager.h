@@ -59,7 +59,7 @@ private:
     void s_signal_handler (int signal_value);
     
     int s_interrupted;
-    char *dev_name;
+    char dev_name[256];
     enum io_method io;
     int fd;
     buffer buffers[4];
