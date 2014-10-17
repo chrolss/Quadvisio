@@ -305,6 +305,9 @@ void CameraManager::process_image(const void *p, int size) {
 
 void CameraManager::stop_capturing() {
     enum v4l2_buf_type type;
+    
+    std::cout << "Stream off" << std::endl;
+
     type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
     if (-1 == xioctl(fd, VIDIOC_STREAMOFF, &type))
         perror("VIDIOC_STREAMOFF");
@@ -319,7 +322,7 @@ void CameraManager::uninit_device() {
         }
     }
     
-    free(buffers);
+    //free(buffers);
 
 }
 
