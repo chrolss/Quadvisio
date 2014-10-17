@@ -38,9 +38,10 @@ CameraManager::CameraManager() {
     fps = 30;
     timeout = 1;
     timeouts_max = 1;
-    std::cout << "Hej3" << std::endl;
 
     sprintf(out_name, "capture.jpg");
+    std::cout << "Hej3" << std::endl;
+
 }
 
 int CameraManager::initializeCamera(int _width, int _height) {
