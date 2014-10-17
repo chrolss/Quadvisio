@@ -25,6 +25,8 @@
 #include <math.h>
 #include <time.h>
 
+#include "CameraManager.h"
+
 #define PORT "3490"  // the port users will be connecting to
 #define BACKLOG 10
 #define radToDeg 57.296
@@ -105,7 +107,12 @@ private:
     struct sockaddr_in serv_addr, cli_addr;
     std::ostringstream ostr;
 
-    //cv::VideoCapture cap;
+    // Video
+    
+    CameraManager *camManager;
+    void *jpg_buffer;
+    
+    ////
 
     std::string numberInStrings[28];
 

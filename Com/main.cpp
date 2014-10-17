@@ -24,11 +24,10 @@ int main(int argc, const char * argv[])
     
     // angles:refangles:pwm:speed:sidespeed:altitude:Hz:errorMessage:imgWidth:imgHeight:imgSize:imgChannels - Image
     
-    double output[16] = {1.45345, 2.34545, 1.0, 0.0, 0.0, 0.0, 15.0, 16.0, 17.0, 18.0, 0.0, 0.0, 0.0, 0.0, 0.0, 100.0};
     
     std::cout << "Starting communication thread" << std::endl;
-    Com C;
-    C.startListenThread();
+    Com com;
+    com.startListenThread();
     sleep(1);
     
     std::cout << "Starting main loop" << std::endl;
@@ -38,45 +37,17 @@ int main(int argc, const char * argv[])
         // Start clock
         auto start = std::chrono::high_resolution_clock::now();
         
-        if (HzCount==20) {
-            HzCount = 0;
-        }
-        
-        if (output[2]>360.0) {
-            output[2] = 0.0;
-            output[0] = 0.0;
-        }
-        
-        if (output[5]>360.0) {
-            output[5] = 0.0;
-            output[3] = 0.0;
-        }
-        
-        avgHz[HzCount] = loopTime;
-        
-        for(int i=0;i<20;i++)
-            sumHz+=avgHz[i];
-        
-        output[13] = sumHz/20.0;
-        sumHz = 0.0;
-        HzCount++;
-        output[2] = output[2] + 2.0;
-        output[5] = output[5] + 0.2;
-        output[0] = output[2] + 2.0;
-        output[3] = output[5] + 0.2;
-
-        
-        if (C.connected) {
-            if (!C.reciveMsg && !C.msgSend) {
-                if (C.vidCount>=2) {
-                    C.imgSend = true;
+        if (com.connected) {
+            if (!com.reciveMsg && !com.msgSend) {
+                if (com.vidCount>=2) {
+                    com.imgSend = true;
                 }
-                C.msgSend=true;
+                com.msgSend=true;
             }
         }
         
-        if (!C.connected && !C.listening) {
-            C.startListenThread();
+        if (!com.connected && !com.listening) {
+            com.startListenThread();
         }
         
         // Measure duration
@@ -96,7 +67,7 @@ int main(int argc, const char * argv[])
         //std::cout << "Running at: " << loopTime << "Hz" << std::endl;
     }
     
-    C.closeClient();
+    com.closeClient();
     return 0;
 }
 

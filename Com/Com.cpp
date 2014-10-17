@@ -23,7 +23,7 @@
 
 Com::Com(){
     msgSend=false;
-    imgSend=false;
+    imgSend=true;
     listening=false;
     connected=false;
     msgStarted=false;
@@ -56,6 +56,11 @@ Com::Com(){
     }
     
     sizeOfOutput = (sizeof(output)/sizeof(*output));
+    
+    camManager = new CameraManager;
+    
+    camManager->initializeCamera(1280, 720);
+    
     usleep(1000);
 }
 
@@ -176,8 +181,9 @@ void Com::sendQvisLightMsg() {
     for (int i=0; i<3; i++) {
         ostr << output[i] << ":";
     }
-    /*
+    
     if (imgSend && videoStream) {
+        /*
         if (vidResNew != vidRes) {
             switch (vidResNew) {
                 case 0:
@@ -207,26 +213,25 @@ void Com::sendQvisLightMsg() {
             printf("New resolution was set\n");
             vidRes = vidResNew;
         }
+        */
         
-        cap >> sendFrame;
+        jpg_buffer = camManager->getImageBuffer();
+        
         
         if (colorVideo) {
-            cvtColor(sendFrame, sendFrame, CV_BGR2RGB);
-            ostr << sendFrame.cols << ":" << sendFrame.rows << ":";
-            ostr << sendFrame.total()*3 << ":3";
+            ostr << 1280 << ":" << 720 << ":";
+            ostr << 921600*3 << ":3";
         }
         
         else {
-            cvtColor(sendFrame, sendFrame, CV_BGR2GRAY);
-            ostr << sendFrame.cols << ":" << sendFrame.rows << ":";
-            ostr << sendFrame.total() << ":1";
+            ostr << 1280 << ":" << 720 << ":";
+            ostr << 921600*3 << ":3";
         }
     }
     else {
         ostr << "0:0:0:0";
     }
-    */
-    ostr << "0:0:0:0";
+    
     std::string s;
     s = ostr.str();
     ostr.str("");
@@ -251,12 +256,12 @@ void Com::sendQvisLightMsg() {
         closeClient();
         perror("send");
     }
-    /*
+    
     if (imgSend && videoStream) {
         sendImg();
         imgSend = false;
     }
-    */
+    
     printf("Message sent\n");
 
 }
@@ -278,8 +283,9 @@ void Com::sendQvisDevMsg() {
     else {
         ostr << "none:";
     }
-    /*
+    
     if (imgSend && videoStream) {
+        /*
         if (vidResNew != vidRes) {
             switch (vidResNew) {
                 case 0:
@@ -309,25 +315,24 @@ void Com::sendQvisDevMsg() {
             //printf("New resolution was set\n");
             vidRes = vidResNew;
         }
-
-        cap >> sendFrame;
-
+        */
+        
+        jpg_buffer = camManager->getImageBuffer();
+        
         if (colorVideo) {
-            cvtColor(sendFrame, sendFrame, CV_BGR2RGB);
-            ostr << sendFrame.cols << ":" << sendFrame.rows << ":";
-            ostr << sendFrame.total()*3 << ":3";
+            ostr << 1280 << ":" << 720 << ":";
+            ostr << 921600*3 << ":3";
         }
-
+        
         else {
-            cvtColor(sendFrame, sendFrame, CV_BGR2GRAY);
-            ostr << sendFrame.cols << ":" << sendFrame.rows << ":";
-            ostr << sendFrame.total() << ":1";
+            ostr << 1280 << ":" << 720 << ":";
+            ostr << 921600*3 << ":3";
         }
     }
     else {
         ostr << "0:0:0:0";
     }
-    */
+    
     ostr << "0:0:0:0";
     std::string s;
     s = ostr.str();
@@ -355,34 +360,35 @@ void Com::sendQvisDevMsg() {
         perror("send");
     }
 
-    /*
+    
     if (imgSend && videoStream) {
         sendImg();
         imgSend = false;
     }
-    */
+    
     //printf("Message sent\n");
 }
 
 void Com::sendImg() {
-	/*
-    sendFrame = (sendFrame.reshape(0,1));
+    printf("Sending image\n");
+    size_t size = camManager->getImageBufferSize();
 
     if(colorVideo) {
-        if (send(newsockfd, sendFrame.data, sendFrame.total()*3, 0) == -1) {
+        if (send(newsockfd, jpg_buffer, size, 0) == -1) {
             closeClient();
             perror("send");
         }
     }
     else {
-        if (send(newsockfd, sendFrame.data, sendFrame.total(), 0) == -1) {
+        if (send(newsockfd, jpg_buffer, size, 0) == -1) {
             closeClient();
             perror("send");
         }
     }
+    
+    printf("Image sent\n");
 
     vidCount=0;
-    */
 }
 
 void Com::readMsg() {
@@ -532,8 +538,8 @@ void Com::reciveClientIdentity() {
 
     numberInStrings[i] = msg;
     //std::cout << msg << std::endl;
-    clientIdentity = atoi(numberInStrings[1].c_str());
-    clientName = numberInStrings[2];
+    clientName = numberInStrings[1];
+    clientIdentity = atoi(numberInStrings[2].c_str());
 }
 
 void Com::sendSettingsData() {
