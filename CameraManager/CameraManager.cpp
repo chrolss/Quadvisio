@@ -67,7 +67,7 @@ int CameraManager::initializeCamera() {
            cropcap.defrect.width, cropcap.defrect.height, cropcap.defrect.left, cropcap.defrect.top,
            cropcap.pixelaspect.numerator, cropcap.pixelaspect.denominator);
     
-    //int support_grbg10 = 0;
+    int support_grbg10 = 0;
     
     struct v4l2_fmtdesc fmtdesc = {0};
     fmtdesc.type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
