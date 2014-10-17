@@ -189,23 +189,19 @@ void Com::sendQvisLightMsg() {
         if (vidResNew != vidRes) {
             switch (vidResNew) {
                 case 0:
-                    cap.set(CV_CAP_PROP_FRAME_WIDTH, 80);
-                    cap.set(CV_CAP_PROP_FRAME_HEIGHT, 60);
+         
                     break;
                     
                 case 1:
-                    cap.set(CV_CAP_PROP_FRAME_WIDTH, 160);
-                    cap.set(CV_CAP_PROP_FRAME_HEIGHT, 120);
+         
                     break;
                     
                 case 2:
-                    cap.set(CV_CAP_PROP_FRAME_WIDTH, 320);
-                    cap.set(CV_CAP_PROP_FRAME_HEIGHT, 240);
+         
                     break;
                 
                 case 3:
-                    cap.set(CV_CAP_PROP_FRAME_WIDTH, 640);
-                    cap.set(CV_CAP_PROP_FRAME_HEIGHT, 480);
+         
                     break;
                     
                 default:
@@ -367,7 +363,7 @@ void Com::sendQvisDevMsg() {
         sendImg();
         imgSend = false;
     }
-    
+    vidCount=0;
     //printf("Message sent\n");
 }
 
