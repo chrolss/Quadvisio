@@ -39,7 +39,10 @@ public:
     
 private:
     
-    int fd;
+    int r, fd;
+    
+    fd_set fds;
+    struct timeval tv;
     
     int image_number;
     char out_name[256];
@@ -49,5 +52,4 @@ private:
     struct v4l2_buffer buf;
     unsigned int i, n_buffers;
     enum v4l2_buf_type type;
-    int r, fd;
 };
