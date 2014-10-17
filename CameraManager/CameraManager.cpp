@@ -40,7 +40,7 @@ int CameraManager::initializeCamera() {
     {
         perror("Querying Capabilities");
     }
-    /*
+    
     printf( "Driver Caps:\n"
            "  Driver: \"%s\"\n"
            "  Card: \"%s\"\n"
@@ -88,7 +88,7 @@ int CameraManager::initializeCamera() {
         printf("  %s: %c%c %s\n", fourcc, c, e, fmtdesc.description);
         fmtdesc.index++;
     }
-    */
+    
     
     struct v4l2_format fmt;
     CLEAR(fmt);
