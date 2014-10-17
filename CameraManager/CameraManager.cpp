@@ -32,13 +32,14 @@ CameraManager::CameraManager() {
     sprintf(dev_name, "/dev/video0");
     io = IO_METHOD_MMAP;
     fd = -1;
-    std::cout << "Hej3" << std::endl;
     frame_count = 1;
     width = 640;
     height = 480;
     fps = 30;
     timeout = 1;
     timeouts_max = 1;
+    std::cout << "Hej3" << std::endl;
+
     sprintf(out_name, "capture.jpg");
 }
 
