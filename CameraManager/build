@@ -1,0 +1,5 @@
+#!/bin/bash
+
+echo "Building Camera test software…"
+
+g++ -O2 -Wall test.cpp CameraManager.cpp -o test -std=c++11
