@@ -10,6 +10,8 @@
 #include "CameraManager.h"
 
 int main(int argc, const char * argv[]) {
+    
+    printf("Hej");
 
     CameraManager camManager;
     

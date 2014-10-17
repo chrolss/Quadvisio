@@ -27,6 +27,8 @@ static int xioctl(int fh, int request, void *arg) {
 
 CameraManager::CameraManager() {
     
+    printf("Hej");
+    
     s_interrupted = 0;
     sprintf(dev_name, "/dev/video0");
     io = IO_METHOD_MMAP;
@@ -39,8 +41,6 @@ CameraManager::CameraManager() {
     timeout = 1;
     timeouts_max = 1;
     sprintf(out_name, "capture.jpg");
-    
-    
 }
 
 int CameraManager::initializeCamera(int _width, int _height) {
