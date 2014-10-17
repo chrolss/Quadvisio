@@ -11,7 +11,7 @@
 
 int main(int argc, const char * argv[]) {
     
-    printf("Hej");
+    std::cout << "Hej" << std::endl;
 
     CameraManager camManager;
     
