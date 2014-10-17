@@ -6,6 +6,7 @@
 //  Copyright (c) 2014 Quadvisio. All rights reserved.
 //
 
+#include <iostream>
 #include <errno.h>
 #include <fcntl.h>
 #include <linux/videodev2.h>
