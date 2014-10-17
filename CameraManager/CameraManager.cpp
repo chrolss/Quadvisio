@@ -25,7 +25,7 @@ static int xioctl(int fh, int request, void *arg) {
 
 CameraManager::CameraManager() {
     
-    std::cout << "Hej" << std::endl;
+    std::cout << "Hej2" << std::endl;
     
     pixel_format = V4L2_PIX_FMT_MJPEG;
     s_interrupted = 0;
@@ -40,16 +40,26 @@ CameraManager::CameraManager() {
     timeout = 1;
     timeouts_max = 1;
     sprintf(out_name, "capture.jpg");
+
+    std::cout << "Hej3" << std::endl;
+
 }
 
 int CameraManager::initializeCamera(int _width, int _height) {
     
     width = _width;
     height = _height;
-    
+    std::cout << "Hej4" << std::endl;
+
     open_device();
+    std::cout << "Hej5" << std::endl;
+
     init_device();
+    std::cout << "Hej6" << std::endl;
+
     start_capturing();
+    std::cout << "Hej7" << std::endl;
+
     return 0;
 }
 
