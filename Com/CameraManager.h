@@ -19,8 +19,6 @@
 #include <libv4l2.h>
 #include <sys/time.h>
 #include <sys/types.h>
-#include <opencv2/core/core.hpp>
-#include <opencv2/highgui/highgui.hpp>
 
 #define CLEAR(x) memset(&(x), 0, sizeof(x))
 
