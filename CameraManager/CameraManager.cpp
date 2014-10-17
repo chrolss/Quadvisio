@@ -216,9 +216,7 @@ void CameraManager::init_mmap() {
                 dev_name);
         exit(EXIT_FAILURE);
     }
-    
-    buffers = calloc(req.count, sizeof (*buffers));
-    
+        
     if (!buffers) {
         fprintf(stderr, "Out of memory\n");
         exit(EXIT_FAILURE);
@@ -298,6 +296,18 @@ void CameraManager::start_capturing() {
 }
 
 void CameraManager::grab_frame() {
+    
+    clock_t begin, end;
+    double time_spent;
+    
+    unsigned int count;
+    unsigned int timeout_count;
+    
+    count = frame_count;
+    timeout_count = timeouts_max;
+    
+    begin = clock();
+    
     if (s_interrupted) {
         fprintf(stderr, "\nInterrupt received - aborting capture\n");
         return;
