@@ -27,18 +27,19 @@ CameraManager::CameraManager() {
 
 int CameraManager::initializeCamera() {
     
-    fd = open("/dev/video0", O_RDWR);
+    fd = open("/dev/video0", O_RDWR|O_NONBLOCK, 0);
     if (fd == -1)
     {
         perror("Opening video device");
     }
     
-    struct v4l2_capability caps = {};
+    struct v4l2_capability caps = {0};
+    
     if (-1 == xioctl(fd, VIDIOC_QUERYCAP, &caps))
     {
         perror("Querying Capabilities");
     }
-    
+    /*
     printf( "Driver Caps:\n"
            "  Driver: \"%s\"\n"
            "  Card: \"%s\"\n"
@@ -86,6 +87,7 @@ int CameraManager::initializeCamera() {
         printf("  %s: %c%c %s\n", fourcc, c, e, fmtdesc.description);
         fmtdesc.index++;
     }
+    */
     
     struct v4l2_format fmt;
     CLEAR(fmt);
@@ -112,8 +114,9 @@ int CameraManager::initializeCamera() {
            fourcc,
            fmt.fmt.pix.field);
     
-    struct v4l2_requestbuffers req = {0};
-    req.count = 1;
+    struct v4l2_requestbuffers req;
+    CLEAR(req);
+    req.count = 2;
     req.type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
     req.memory = V4L2_MEMORY_MMAP;
     
@@ -122,47 +125,75 @@ int CameraManager::initializeCamera() {
         perror("Requesting Buffer");
     }
     
-    struct v4l2_buffer buf = {0};
-    buf.type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
-    buf.memory = V4L2_MEMORY_MMAP;
-    buf.index = 0;
-    if(-1 == xioctl(fd, VIDIOC_QUERYBUF, &buf))
-    {
-        perror("Querying Buffer");
+    buffers = calloc(req.count, sizeof(*buffers));
+    
+    for (n_buffers = 0; n_buffers < req.count; ++n_buffers) {
+        CLEAR(buf);
+        
+        buf.type        = V4L2_BUF_TYPE_VIDEO_CAPTURE;
+        buf.memory      = V4L2_MEMORY_MMAP;
+        buf.index       = n_buffers;
+        
+        if(-1 == xioctl(fd, VIDIOC_QUERYBUF, &buf))
+        {
+            perror("Querying Buffer");
+        }
+        
+        buffers[n_buffers].length = buf.length;
+        buffers[n_buffers].start = v4l2_mmap(NULL, buf.length,
+                                             PROT_READ | PROT_WRITE, MAP_SHARED,
+                                             fd, buf.m.offset);
+        printf("Length: %d\nAddress: %p\n", buf.length, buffer);
+        printf("Image Length: %d\n", buf.bytesused);
+        
+        if (MAP_FAILED == buffers[n_buffers].start) {
+            perror("mmap");
+            return -1;
+        }
     }
     
-    buffer = mmap (NULL, buf.length, PROT_READ | PROT_WRITE, MAP_SHARED, fd, buf.m.offset);
-    printf("Length: %d\nAddress: %p\n", buf.length, buffer);
-    printf("Image Length: %d\n", buf.bytesused);
+    for (i = 0; i < n_buffers; ++i) {
+        CLEAR(buf);
+        buf.type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
+        buf.memory = V4L2_MEMORY_MMAP;
+        buf.index = i;
+        if(-1 == xioctl(fd, VIDIOC_QBUF, &buf))
+        {
+            perror("Query Buffer");
+        }
+    }
+    
     return 0;
 }
 
 void CameraManager::getImageBuffer() {
     
-    struct v4l2_buffer buf = {0};
-    buf.type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
-    buf.memory = V4L2_MEMORY_MMAP;
-    buf.index = 0;
-    if(-1 == xioctl(fd, VIDIOC_QBUF, &buf))
-    {
-        perror("Query Buffer");
-    }
+    type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
     
-    if(-1 == xioctl(fd, VIDIOC_STREAMON, &buf.type))
+    if(-1 == xioctl(fd, VIDIOC_STREAMON, &type))
     {
         perror("Start Capture");
     }
     
-    fd_set fds;
-    FD_ZERO(&fds);
-    FD_SET(fd, &fds);
-    struct timeval tv = {0};
-    tv.tv_sec = 2;
-    int r = select(fd+1, &fds, NULL, NULL, &tv);
+    do {
+        FD_ZERO(&fds);
+        FD_SET(fd, &fds);
+        
+        /* Timeout. */
+        tv.tv_sec = 2;
+        tv.tv_usec = 0;
+        
+        r = select(fd + 1, &fds, NULL, NULL, &tv);
+    } while ((r == -1 && (errno = EINTR)));
+    
     if(-1 == r)
     {
         perror("Waiting for Frame");
     }
+    
+    CLEAR(buf);
+    buf.type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
+    buf.memory = V4L2_MEMORY_MMAP;
     
     if(-1 == xioctl(fd, VIDIOC_DQBUF, &buf))
     {
@@ -181,6 +212,7 @@ void CameraManager::getImageBuffer() {
     sprintf(out_name, "frame%03d.jpg", image_number);
     image_number++;
     cvSaveImage(out_name, frame, 0);
+    xioctl(fd, VIDIOC_QBUF, &buf);
 
 }
 
@@ -201,6 +233,10 @@ void CameraManager::setResolution(int width, int height) {
 }
 
 void CameraManager::closeCamera() {
-    close(fd);
+    type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
+    xioctl(fd, VIDIOC_STREAMOFF, &type);
+    for (i = 0; i < n_buffers; ++i)
+        v4l2_munmap(buffers[i].start, buffers[i].length);
+    v4l2_close(fd);
 }
 

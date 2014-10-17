@@ -20,6 +20,11 @@
 
 #define CLEAR(x) memset(&(x), 0, sizeof(x))
 
+struct buffer {
+    void   *start;
+    size_t length;
+};
+
 class CameraManager{
     
 public:
@@ -37,5 +42,7 @@ private:
     char out_name[256];
 
     void *buffer;
+    struct buffer *buffers;
+    struct v4l2_buffer buf;
     
 };
