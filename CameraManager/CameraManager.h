@@ -27,10 +27,14 @@ public:
     int initializeCamera();
     void getImageBuffer();
     void closeCamera();
+    void setResolution(int width, int height);
     
 private:
     
     int fd;
+    
+    int imageNumber;
+    char out_name[256];
 
     void *buffer;
     

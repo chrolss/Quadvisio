@@ -20,6 +20,8 @@ static int xioctl(int fd, int request, void *arg)
 
 CameraManager::CameraManager() {
     
+    imageNumber = 0;
+    
     //this->initializeCamera();
 }
 
@@ -176,8 +178,25 @@ void CameraManager::getImageBuffer() {
     printf("Waitkey\n");
     cvWaitKey(0);
     printf("Saving\n");
-    cvSaveImage("image.jpg", frame, 0);
+    sprintf(out_name, "grabber%03d.jpg", image_number);
+    cvSaveImage(out_name, frame, 0);
 
+}
+
+void CameraManager::setResolution(int width, int height) {
+    struct v4l2_format fmt;
+    CLEAR(fmt);
+    
+    fmt.type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
+    fmt.fmt.pix.width = width;
+    fmt.fmt.pix.height = height;
+    fmt.fmt.pix.pixelformat = V4L2_PIX_FMT_MJPEG;
+    fmt.fmt.pix.field = V4L2_FIELD_NONE;
+    
+    if (-1 == xioctl(fd, VIDIOC_S_FMT, &fmt))
+    {
+        perror("Setting Pixel Format");
+    }
 }
 
 void CameraManager::closeCamera() {
