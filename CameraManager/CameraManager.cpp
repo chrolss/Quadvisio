@@ -445,7 +445,7 @@ void CameraManager::process_image(const void *p, int size) {
         
         // try to open file for saving
         if (!outfile) {
-            errno_exit("jpeg");
+            perror("jpeg");
         }
         // write the image and flush
         fwrite(p, size, 1, outfile);
