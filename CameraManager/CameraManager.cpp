@@ -203,7 +203,7 @@ void CameraManager::getImageBuffer() {
     
     IplImage* frame;
     printf("Converting to Mat\n");
-    CvMat cvmat = cvMat(480, 640, CV_8UC3, (void*)buffer);
+    CvMat cvmat = cvMat(480, 640, CV_8UC3, (void*)buffers[buf.index].start);
     printf("Decoding\n");
     frame = cvDecodeImage(&cvmat, 1);
     printf("Waitkey\n");
