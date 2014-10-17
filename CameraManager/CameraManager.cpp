@@ -217,7 +217,7 @@ void CameraManager::getImageBuffer() {
 }
 
 void CameraManager::setResolution(int width, int height) {
-    printf("Turning off stream\n"):
+    printf("Turning off stream\n");
     
     type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
     
@@ -236,7 +236,7 @@ void CameraManager::setResolution(int width, int height) {
     fmt.fmt.pix.pixelformat = V4L2_PIX_FMT_MJPEG;
     fmt.fmt.pix.field = V4L2_FIELD_NONE;
     
-    printf("Setting new resolution\n"):
+    printf("Setting new resolution\n");
     if (-1 == xioctl(fd, VIDIOC_S_FMT, &fmt))
     {
         perror("Setting resolution");
