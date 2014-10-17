@@ -13,16 +13,16 @@ int main(int argc, const char * argv[]) {
 
     CameraManager camManager;
     
-    printf("Starting camera");
+    printf("Starting camera\n");
     if(camManager.initializeCamera()<0) {
         printf("Error");
     }
     
     
-    printf("Grabbing and saving frame");
+    printf("Grabbing and saving frame\n");
     camManager.getImageBuffer();
     
-    printf("Closing camera");
+    printf("Closing camera\n");
     camManager.closeCamera();
     
     return 0;
