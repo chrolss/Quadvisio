@@ -8,8 +8,6 @@
 
 #include "CameraManager.h"
 
-static unsigned int pixel_format = V4L2_PIX_FMT_MJPEG;
-
 void CameraManager::s_signal_handler (int signal_value)
 {
     s_interrupted = 1;
@@ -27,8 +25,9 @@ static int xioctl(int fh, int request, void *arg) {
 
 CameraManager::CameraManager() {
     
-    printf("Hej");
+    std::cout << "Hej" << std::endl;
     
+    pixel_format = V4L2_PIX_FMT_MJPEG;
     s_interrupted = 0;
     sprintf(dev_name, "/dev/video0");
     io = IO_METHOD_MMAP;
@@ -345,6 +344,10 @@ void CameraManager::grab_frame() {
             break;
         /* EAGAIN - continue select loop. */
     }
+    
+    end = clock();
+    time_spent = (double)(end - begin) / CLOCKS_PER_SEC;
+    fprintf(stderr, "Captured %i frames in %f seconds\n", frame_count, time_spent);
 }
 
 int CameraManager::read_frame() {

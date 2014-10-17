@@ -6,6 +6,7 @@
 //  Copyright (c) 2014 Quadvisio. All rights reserved.
 //
 
+#include <iostream>
 #include <stdio.h>
 #include <stdlib.h>
 #include <signal.h>
@@ -72,5 +73,7 @@ private:
     unsigned int timeout;
     unsigned int timeouts_max;
     char *out_name;
+    
+    unsigned int pixel_format;
 
 };
