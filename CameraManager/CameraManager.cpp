@@ -45,10 +45,10 @@ CameraManager::CameraManager() {
 }
 
 int CameraManager::initializeCamera(int _width, int _height) {
-    
+    std::cout << "Hej4" << std::endl;
+
     width = _width;
     height = _height;
-    std::cout << "Hej4" << std::endl;
 
     open_device();
     std::cout << "Hej5" << std::endl;
