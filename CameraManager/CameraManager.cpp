@@ -178,7 +178,7 @@ void CameraManager::getImageBuffer() {
     printf("Waitkey\n");
     cvWaitKey(0);
     printf("Saving\n");
-    sprintf(out_name, "grabber%03d.jpg", image_number);
+    sprintf(out_name, "frame%03d.jpg", image_number);
     image_number++;
     cvSaveImage(out_name, frame, 0);
 
