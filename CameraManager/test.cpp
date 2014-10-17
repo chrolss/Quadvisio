@@ -23,7 +23,7 @@ int main(int argc, const char * argv[]) {
     
     
     printf("Grabbing and saving frame\n");
-    camManager.grab_frame();
+    //camManager.grab_frame();
     
     /*
     printf("Setting resolution to 640x480\n");
@@ -35,7 +35,7 @@ int main(int argc, const char * argv[]) {
     */
     
     printf("Closing camera\n");
-    camManager.closeCamera();
+    //camManager.closeCamera();
     
     return 0;
 }

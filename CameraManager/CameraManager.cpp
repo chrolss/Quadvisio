@@ -89,36 +89,21 @@ void CameraManager::open_device() {
 
 void CameraManager::init_device() {
     struct v4l2_capability cap;
-    struct v4l2_cropcap cropcap;
-    struct v4l2_crop crop;
     struct v4l2_format fmt;
-    struct v4l2_streamparm frameint;
     int min;
 
     
     
     CLEAR(fmt);
-    
     fmt.type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
-    if (set_format) {
-        fmt.fmt.pix.width = width;
-        fmt.fmt.pix.height = height;
-        fmt.fmt.pix.pixelformat = pixel_format;
-        fmt.fmt.pix.field = V4L2_FIELD_INTERLACED;
-        
-        if (-1 == xioctl(fd, VIDIOC_S_FMT, &fmt))
-            perror("VIDIOC_S_FMT");
-        
-        if (fmt.fmt.pix.pixelformat != pixel_format) {
-            fprintf(stderr,"Libv4l didn't accept pixel format. Can't proceed.\n");
-            exit(EXIT_FAILURE);
-        }
-        
-        /* Note VIDIOC_S_FMT may change width and height. */
-    } else {
-        /* Preserve original settings as set by v4l2-ctl for example */
-        if (-1 == xioctl(fd, VIDIOC_G_FMT, &fmt))
-            perror("VIDIOC_G_FMT");
+    fmt.fmt.pix.width       = width;
+    fmt.fmt.pix.height      = height;
+    fmt.fmt.pix.pixelformat = V4L2_PIX_FMT_MJPEG;
+    fmt.fmt.pix.field       = V4L2_FIELD_INTERLACED;
+    xioctl(fd, VIDIOC_S_FMT, &fmt);
+    if (fmt.fmt.pix.pixelformat != V4L2_PIX_FMT_RGB24) {
+        printf("Libv4l didn't accept RGB24 format. Can't proceed.\n");
+        exit(EXIT_FAILURE);
     }
     
     /*
