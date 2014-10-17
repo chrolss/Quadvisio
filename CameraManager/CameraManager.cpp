@@ -190,7 +190,8 @@ void CameraManager::start_capturing() {
 }
 
 void CameraManager::grab_frame() {
-    
+    std::cout << "Grabbing frame" << std::endl;
+
     clock_t begin, end;
     double time_spent;
     
@@ -271,7 +272,8 @@ int CameraManager::read_frame() {
             
         case IO_METHOD_MMAP:
             CLEAR(buf);
-            
+            std::cout << "reading frame" << std::endl;
+
             buf.type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
             buf.memory = V4L2_MEMORY_MMAP;
             
