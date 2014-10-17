@@ -140,9 +140,7 @@ int CameraManager::initializeCamera(int width, int height) {
         }
         
         buffers[n_buffers].length = buf.length;
-        buffers[n_buffers].start = v4l2_mmap(NULL, buf.length,
-                                             PROT_READ | PROT_WRITE, MAP_SHARED,
-                                             fd, buf.m.offset);
+        buffers[n_buffers].start = v4l2_mmap(NULL, buf.length, PROT_READ|PROT_WRITE, MAP_SHARED, fd, buf.m.offset);
         printf("Length: %d\nAddress: %p\n", buf.length, buffer);
         printf("Image Length: %d\n", buf.bytesused);
         
