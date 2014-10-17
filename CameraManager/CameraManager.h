@@ -48,7 +48,7 @@ private:
     char out_name[256];
 
     void *buffer;
-    struct buffer *buffers;
+    struct buffer *buffers[2];
     struct v4l2_buffer buf;
     unsigned int i, n_buffers;
     enum v4l2_buf_type type;

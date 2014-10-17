@@ -126,7 +126,6 @@ int CameraManager::initializeCamera() {
         perror("Requesting Buffer");
     }
     
-    buffers = calloc(req.count, sizeof(*buffers));
     
     for (n_buffers = 0; n_buffers < req.count; ++n_buffers) {
         CLEAR(buf);
