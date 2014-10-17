@@ -60,7 +60,7 @@ private:
     char *dev_name;
     enum io_method io;
     int fd;
-    buffer *buffers[4];
+    buffer buffers[4];
     unsigned int n_buffers;
     int out_buf;
     int frame_count = 1;
