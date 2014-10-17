@@ -333,7 +333,6 @@ void Com::sendQvisDevMsg() {
         ostr << "0:0:0:0";
     }
     
-    ostr << "0:0:0:0";
     std::string s;
     s = ostr.str();
     ostr.str("");
