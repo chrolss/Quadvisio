@@ -54,6 +54,7 @@ private:
     void close_device();
     void init_mmap();
     int read_frame();
+    void process_image(const void *p, int size);
     void s_signal_handler (int signal_value);
     
     int s_interrupted;

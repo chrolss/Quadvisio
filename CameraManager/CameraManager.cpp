@@ -439,6 +439,27 @@ int CameraManager::read_frame() {
 
 }
 
+void CameraManager::process_image(const void *p, int size) {
+    if (out_buf) {
+        FILE *outfile = fopen( out_name, "wb" );
+        
+        // try to open file for saving
+        if (!outfile) {
+            errno_exit("jpeg");
+        }
+        // write the image and flush
+        fwrite(p, size, 1, outfile);
+        fflush(outfile);
+        
+        // close output file
+        fclose(outfile);
+        
+        fflush(stderr);
+        fprintf(stderr, ".");
+    }
+}
+
+
 void CameraManager::stop_capturing() {
     enum v4l2_buf_type type;
     
