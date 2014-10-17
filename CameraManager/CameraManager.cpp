@@ -26,7 +26,7 @@ CameraManager::CameraManager() {
     //this->initializeCamera();
 }
 
-int CameraManager::initializeCamera() {
+int CameraManager::initializeCamera(int width, int height) {
     
     fd = open("/dev/video0", O_RDWR|O_NONBLOCK, 0);
     if (fd == -1)
@@ -94,8 +94,8 @@ int CameraManager::initializeCamera() {
     CLEAR(fmt);
     
     fmt.type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
-    fmt.fmt.pix.width = 1920;
-    fmt.fmt.pix.height = 1080;
+    fmt.fmt.pix.width = width;
+    fmt.fmt.pix.height = height;
     fmt.fmt.pix.pixelformat = V4L2_PIX_FMT_MJPEG;
     fmt.fmt.pix.field = V4L2_FIELD_NONE;
     
@@ -214,38 +214,6 @@ void CameraManager::getImageBuffer() {
     cvSaveImage(out_name, frame, 0);
     xioctl(fd, VIDIOC_QBUF, &buf);
 
-}
-
-void CameraManager::setResolution(int width, int height) {
-    printf("Turning off stream\n");
-    
-    type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
-    
-    if(-1 == xioctl(fd, VIDIOC_STREAMOFF, &type))
-    {
-        perror("Error turning off stream");
-    }
-
-    
-    struct v4l2_format fmt;
-    CLEAR(fmt);
-    
-    fmt.type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
-    fmt.fmt.pix.width = width;
-    fmt.fmt.pix.height = height;
-    fmt.fmt.pix.pixelformat = V4L2_PIX_FMT_MJPEG;
-    fmt.fmt.pix.field = V4L2_FIELD_NONE;
-    
-    printf("Setting new resolution\n");
-    if (-1 == xioctl(fd, VIDIOC_S_FMT, &fmt))
-    {
-        perror("Error setting resolution");
-    }
-    
-    if(-1 == xioctl(fd, VIDIOC_STREAMON, &type))
-    {
-        perror("Error turning on stream");
-    }
 }
 
 void CameraManager::closeCamera() {

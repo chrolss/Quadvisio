@@ -32,10 +32,9 @@ class CameraManager{
     
 public:
     CameraManager();
-    int initializeCamera();
+    int initializeCamera(int width, int heigth);
     void getImageBuffer();
     void closeCamera();
-    void setResolution(int width, int height);
     
 private:
     

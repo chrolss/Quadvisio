@@ -14,7 +14,7 @@ int main(int argc, const char * argv[]) {
     CameraManager camManager;
     
     printf("Starting camera\n");
-    if(camManager.initializeCamera()<0) {
+    if(camManager.initializeCamera(1920,1080)<0) {
         printf("Error");
     }
     
@@ -23,7 +23,8 @@ int main(int argc, const char * argv[]) {
     camManager.getImageBuffer();
     
     printf("Setting resolution to 640x480\n");
-    camManager.setResolution(640, 480);
+    camManager.closeCamera();
+    camManager.initializeCamera(640, 480);
     
     printf("Grabbing and saving frame\n");
     camManager.getImageBuffer();
