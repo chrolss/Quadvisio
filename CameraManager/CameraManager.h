@@ -53,7 +53,7 @@ private:
     void uninit_device();
     void close_device();
     void init_mmap();
-    void read_frame();
+    int read_frame();
     void s_signal_handler (int signal_value);
     
     int s_interrupted;

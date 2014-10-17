@@ -307,47 +307,47 @@ void CameraManager::grab_frame() {
     timeout_count = timeouts_max;
     
     begin = clock();
-    
-    if (s_interrupted) {
-        fprintf(stderr, "\nInterrupt received - aborting capture\n");
-        return;
-    }
-    
-    fd_set fds;
-    struct timeval tv;
-    int r;
-    
-    FD_ZERO(&fds);
-    FD_SET(fd, &fds);
-    
-    /* Timeout. */
-    tv.tv_sec = timeout;
-    tv.tv_usec = 0;
-    
-    r = select(fd + 1, &fds, NULL, NULL, &tv);
-    
-    if (-1 == r) {
-        if (EINTR == errno)
-            continue;
-        perror("select");
-    }
-    
-    if (0 == r) {
-        if (timeout_count > 0) {
-            timeout_count--;
-        } else {
-            fprintf(stderr, "select timeout\n");
-            exit(EXIT_FAILURE);
+    for (;;) {
+        if (s_interrupted) {
+            fprintf(stderr, "\nInterrupt received - aborting capture\n");
+            return;
         }
+        
+        fd_set fds;
+        struct timeval tv;
+        int r;
+        
+        FD_ZERO(&fds);
+        FD_SET(fd, &fds);
+        
+        /* Timeout. */
+        tv.tv_sec = timeout;
+        tv.tv_usec = 0;
+        
+        r = select(fd + 1, &fds, NULL, NULL, &tv);
+        
+        if (-1 == r) {
+            if (EINTR == errno)
+                continue;
+            perror("select");
+        }
+        
+        if (0 == r) {
+            if (timeout_count > 0) {
+                timeout_count--;
+            } else {
+                fprintf(stderr, "select timeout\n");
+                exit(EXIT_FAILURE);
+            }
+        }
+        
+        if (read_frame())
+            break;
+        /* EAGAIN - continue select loop. */
     }
-    
-    if (read_frame())
-        break;
-    /* EAGAIN - continue select loop. */
-
 }
 
-void CameraManager::read_frame() {
+int CameraManager::read_frame() {
     struct v4l2_buffer buf;
     unsigned int i;
     
