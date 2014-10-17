@@ -8,220 +8,490 @@
 
 #include "CameraManager.h"
 
-static int xioctl(int fd, int request, void *arg)
+static unsigned int pixel_format = V4L2_PIX_FMT_MJPEG;
+
+void CameraManager::s_signal_handler (int signal_value)
 {
+    s_interrupted = 1;
+}
+
+static int xioctl(int fh, int request, void *arg) {
     int r;
     
-    do r = ioctl (fd, request, arg);
-    while (-1 == r && EINTR == errno);
+    do {
+        r = ioctl(fh, request, arg);
+    } while (-1 == r && EINTR == errno);
     
     return r;
 }
 
 CameraManager::CameraManager() {
     
-    image_number = 0;
+    s_interrupted = 0;
+    sprintf(dev_name, "/dev/video0");
+    io = IO_METHOD_MMAP;
     fd = -1;
+
+    frame_count = 1;
+    width = 640;
+    height = 480;
+    fps = 30;
+    timeout = 1;
+    timeouts_max = 1;
+    sprintf(out_name, "capture.jpg");
     
-    //this->initializeCamera();
+    
 }
 
-int CameraManager::initializeCamera(int width, int height) {
+int CameraManager::initializeCamera(int _width, int _height) {
     
-    fd = open("/dev/video0", O_RDWR|O_NONBLOCK, 0);
-    if (fd == -1)
-    {
-        perror("Opening video device");
-    }
-    /*
-    struct v4l2_capability caps = {0};
+    width = _width;
+    height = _height;
     
-    if (-1 == xioctl(fd, VIDIOC_QUERYCAP, &caps))
-    {
-        perror("Querying Capabilities");
-    }
-    
-    printf( "Driver Caps:\n"
-           "  Driver: \"%s\"\n"
-           "  Card: \"%s\"\n"
-           "  Bus: \"%s\"\n"
-           "  Version: %d.%d\n"
-           "  Capabilities: %08x\n",
-           caps.driver,
-           caps.card,
-           caps.bus_info,
-           (caps.version>>16)&&0xff,
-           (caps.version>>24)&&0xff,
-           caps.capabilities);
-    
-    
-    struct v4l2_cropcap cropcap;
-    CLEAR(cropcap);
-    cropcap.type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
-    if (-1 == xioctl (fd, VIDIOC_CROPCAP, &cropcap))
-    {
-        perror("Querying Cropping Capabilities");
-    }
-    
-    printf( "Camera Cropping:\n"
-           "  Bounds: %dx%d+%d+%d\n"
-           "  Default: %dx%d+%d+%d\n"
-           "  Aspect: %d/%d\n",
-           cropcap.bounds.width, cropcap.bounds.height, cropcap.bounds.left, cropcap.bounds.top,
-           cropcap.defrect.width, cropcap.defrect.height, cropcap.defrect.left, cropcap.defrect.top,
-           cropcap.pixelaspect.numerator, cropcap.pixelaspect.denominator);
-    
-    int support_grbg10 = 0;
-    
-    struct v4l2_fmtdesc fmtdesc = {0};
-    fmtdesc.type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
-    char fourcc[5] = {0};
-    char c, e;
-    printf("  FMT : CE Desc\n--------------------\n");
-    while (0 == xioctl(fd, VIDIOC_ENUM_FMT, &fmtdesc))
-    {
-        strncpy(fourcc, (char *)&fmtdesc.pixelformat, 4);
-        if (fmtdesc.pixelformat == V4L2_PIX_FMT_SGRBG10)
-            support_grbg10 = 1;
-        c = fmtdesc.flags & 1? 'C' : ' ';
-        e = fmtdesc.flags & 2? 'E' : ' ';
-        printf("  %s: %c%c %s\n", fourcc, c, e, fmtdesc.description);
-        fmtdesc.index++;
-    }
-    */
-    
-    struct v4l2_format fmt;
-    CLEAR(fmt);
-    
-    fmt.type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
-    fmt.fmt.pix.width = width;
-    fmt.fmt.pix.height = height;
-    fmt.fmt.pix.pixelformat = V4L2_PIX_FMT_MJPEG;
-    fmt.fmt.pix.field = V4L2_FIELD_NONE;
-    
-    if (-1 == xioctl(fd, VIDIOC_S_FMT, &fmt))
-    {
-        perror("Setting Pixel Format");
-    }
-    /*
-    strncpy(fourcc, (char *)&fmt.fmt.pix.pixelformat, 4);
-    printf( "Selected Camera Mode:\n"
-           "  Width: %d\n"
-           "  Height: %d\n"
-           "  PixFmt: %s\n"
-           "  Field: %d\n",
-           fmt.fmt.pix.width,
-           fmt.fmt.pix.height,
-           fourcc,
-           fmt.fmt.pix.field);
-    */
-    struct v4l2_requestbuffers req;
-    CLEAR(req);
-    req.count = 2;
-    req.type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
-    req.memory = V4L2_MEMORY_MMAP;
-    
-    if (-1 == xioctl(fd, VIDIOC_REQBUFS, &req))
-    {
-        perror("Requesting Buffer");
-    }
-    
-    
-    for (n_buffers = 0; n_buffers < req.count; ++n_buffers) {
-        CLEAR(buf);
-        
-        buf.type        = V4L2_BUF_TYPE_VIDEO_CAPTURE;
-        buf.memory      = V4L2_MEMORY_MMAP;
-        buf.index       = n_buffers;
-        
-        if(-1 == xioctl(fd, VIDIOC_QUERYBUF, &buf))
-        {
-            perror("Querying Buffer");
-        }
-        
-        buffers[n_buffers].length = buf.length;
-        buffers[n_buffers].start = v4l2_mmap(NULL, buf.length,
-                                             PROT_READ | PROT_WRITE, MAP_SHARED,
-                                             fd, buf.m.offset);
-        printf("Length: %d\nAddress: %p\n", buf.length, buffer);
-        printf("Image Length: %d\n", buf.bytesused);
-        
-        if (MAP_FAILED == buffers[n_buffers].start) {
-            perror("mmap");
-            return -1;
-        }
-    }
-    
-    for (i = 0; i < n_buffers; ++i) {
-        CLEAR(buf);
-        buf.type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
-        buf.memory = V4L2_MEMORY_MMAP;
-        buf.index = i;
-        if(-1 == xioctl(fd, VIDIOC_QBUF, &buf))
-        {
-            perror("Query Buffer");
-        }
-    }
-    
-    type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
-    
-    if(-1 == xioctl(fd, VIDIOC_STREAMON, &type))
-    {
-        perror("Start Capture");
-    }
-    
+    open_device();
+    init_device();
+    start_capturing();
     return 0;
 }
 
-void CameraManager::getImageBuffer() {
+void CameraManager::open_device() {
+    struct stat st;
     
-    do {
-        FD_ZERO(&fds);
-        FD_SET(fd, &fds);
-        
-        /* Timeout. */
-        tv.tv_sec = 2;
-        tv.tv_usec = 0;
-        
-        r = select(fd + 1, &fds, NULL, NULL, &tv);
-    } while ((r == -1 && (errno = EINTR)));
-    
-    if(-1 == r)
-    {
-        perror("Waiting for Frame");
+    if (-1 == stat(dev_name, &st)) {
+        fprintf(stderr, "Cannot identify '%s': %d, %s\n",
+                dev_name, errno, strerror(errno));
+        exit(EXIT_FAILURE);
     }
     
-    CLEAR(buf);
-    buf.type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
-    buf.memory = V4L2_MEMORY_MMAP;
-    
-    if(-1 == xioctl(fd, VIDIOC_DQBUF, &buf))
-    {
-        perror("Retrieving Frame");
+    if (!S_ISCHR(st.st_mode)) {
+        fprintf(stderr, "%s is no device\n", dev_name);
+        exit(EXIT_FAILURE);
     }
-    printf ("saving image\n");
     
-    IplImage* frame;
-    printf("Converting to Mat\n");
-    CvMat cvmat = cvMat(480, 640, CV_8UC3, (void*)buffers[buf.index].start);
-    std::cout << "Length of buffer: " << buffers[buf.index].length << std::endl;
-    printf("Decoding\n");
-    frame = cvDecodeImage(&cvmat, 1);
-    printf("Waitkey\n");
-    cvWaitKey(0);
-    printf("Saving\n");
-    sprintf(out_name, "frame%03d.jpg", image_number);
-    image_number++;
-    cvSaveImage(out_name, frame, 0);
-    xioctl(fd, VIDIOC_QBUF, &buf);
+    fd = open(dev_name, O_RDWR /* required */ | O_NONBLOCK, 0);
+    
+    if (-1 == fd) {
+        fprintf(stderr, "Cannot open '%s': %d, %s\n",
+                dev_name, errno, strerror(errno));
+        exit(EXIT_FAILURE);
+    }
+}
+
+void CameraManager::init_device() {
+    struct v4l2_capability cap;
+    struct v4l2_cropcap cropcap;
+    struct v4l2_crop crop;
+    struct v4l2_format fmt;
+    struct v4l2_streamparm frameint;
+    unsigned int min;
+    
+    if (-1 == xioctl(fd, VIDIOC_QUERYCAP, &cap)) {
+        if (EINVAL == errno) {
+            fprintf(stderr, "%s is no V4L2 device\n",
+                    dev_name);
+            exit(EXIT_FAILURE);
+        } else {
+            errno_exit("VIDIOC_QUERYCAP");
+        }
+    }
+    
+    if (!(cap.capabilities & V4L2_CAP_VIDEO_CAPTURE)) {
+        fprintf(stderr, "%s is no video capture device\n",
+                dev_name);
+        exit(EXIT_FAILURE);
+    }
+    
+    switch (io) {
+        case IO_METHOD_READ:
+            if (!(cap.capabilities & V4L2_CAP_READWRITE)) {
+                fprintf(stderr, "%s does not support read i/o\n",
+                        dev_name);
+                exit(EXIT_FAILURE);
+            }
+            break;
+            
+        case IO_METHOD_MMAP:
+        case IO_METHOD_USERPTR:
+            if (!(cap.capabilities & V4L2_CAP_STREAMING)) {
+                fprintf(stderr, "%s does not support streaming i/o\n",
+                        dev_name);
+                exit(EXIT_FAILURE);
+            }
+            break;
+    }
+    
+    
+    /* Select video input, video standard and tune here. */
+    
+    
+    CLEAR(cropcap);
+    
+    cropcap.type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
+    
+    if (0 == xioctl(fd, VIDIOC_CROPCAP, &cropcap)) {
+        crop.type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
+        crop.c = cropcap.defrect; /* reset to default */
+        
+        if (-1 == xioctl(fd, VIDIOC_S_CROP, &crop)) {
+            switch (errno) {
+                case EINVAL:
+                    /* Cropping not supported. */
+                    break;
+                default:
+                    /* Errors ignored. */
+                    break;
+            }
+        }
+    } else {
+        /* Errors ignored. */
+    }
+    
+    
+    CLEAR(fmt);
+    
+    fmt.type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
+    if (set_format) {
+        fmt.fmt.pix.width = width;
+        fmt.fmt.pix.height = height;
+        fmt.fmt.pix.pixelformat = pixel_format;
+        fmt.fmt.pix.field = V4L2_FIELD_INTERLACED;
+        
+        if (-1 == xioctl(fd, VIDIOC_S_FMT, &fmt))
+            errno_exit("VIDIOC_S_FMT");
+        
+        if (fmt.fmt.pix.pixelformat != pixel_format) {
+            fprintf(stderr,"Libv4l didn't accept pixel format. Can't proceed.\n");
+            exit(EXIT_FAILURE);
+        }
+        
+        /* Note VIDIOC_S_FMT may change width and height. */
+    } else {
+        /* Preserve original settings as set by v4l2-ctl for example */
+        if (-1 == xioctl(fd, VIDIOC_G_FMT, &fmt))
+            errno_exit("VIDIOC_G_FMT");
+    }
+    
+    CLEAR(frameint);
+    
+    /* Attempt to set the frame interval. */
+    frameint.type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
+    frameint.parm.capture.timeperframe.numerator = 1;
+    frameint.parm.capture.timeperframe.denominator = fps;
+    if (-1 == xioctl(fd, VIDIOC_S_PARM, &frameint))
+        fprintf(stderr, "Unable to set frame interval.\n");
+    
+    /* Buggy driver paranoia. */
+    min = fmt.fmt.pix.width * 2;
+    if (fmt.fmt.pix.bytesperline < min)
+        fmt.fmt.pix.bytesperline = min;
+    min = fmt.fmt.pix.bytesperline * fmt.fmt.pix.height;
+    if (fmt.fmt.pix.sizeimage < min)
+        fmt.fmt.pix.sizeimage = min;
+    
+    switch (io) {
+        case IO_METHOD_READ:
+            init_read(fmt.fmt.pix.sizeimage);
+            break;
+            
+        case IO_METHOD_MMAP:
+            init_mmap();
+            break;
+            
+        case IO_METHOD_USERPTR:
+            init_userp(fmt.fmt.pix.sizeimage);
+            break;
+    }
 
 }
 
+void CameraManager::init_mmap() {
+    struct v4l2_requestbuffers req;
+    
+    CLEAR(req);
+    
+    req.count = 4;
+    req.type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
+    req.memory = V4L2_MEMORY_MMAP;
+    
+    if (-1 == xioctl(fd, VIDIOC_REQBUFS, &req)) {
+        if (EINVAL == errno) {
+            fprintf(stderr, "%s does not support "
+                    "memory mapping\n", dev_name);
+            exit(EXIT_FAILURE);
+        } else {
+            errno_exit("VIDIOC_REQBUFS");
+        }
+    }
+    
+    if (req.count < 2) {
+        fprintf(stderr, "Insufficient buffer memory on %s\n",
+                dev_name);
+        exit(EXIT_FAILURE);
+    }
+    
+    buffers = calloc(req.count, sizeof (*buffers));
+    
+    if (!buffers) {
+        fprintf(stderr, "Out of memory\n");
+        exit(EXIT_FAILURE);
+    }
+    
+    for (n_buffers = 0; n_buffers < req.count; ++n_buffers) {
+        struct v4l2_buffer buf;
+        
+        CLEAR(buf);
+        
+        buf.type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
+        buf.memory = V4L2_MEMORY_MMAP;
+        buf.index = n_buffers;
+        
+        if (-1 == xioctl(fd, VIDIOC_QUERYBUF, &buf))
+            errno_exit("VIDIOC_QUERYBUF");
+        
+        buffers[n_buffers].length = buf.length;
+        buffers[n_buffers].start =
+        mmap(NULL /* start anywhere */,
+             buf.length,
+             PROT_READ | PROT_WRITE /* required */,
+             MAP_SHARED /* recommended */,
+             fd, buf.m.offset);
+        
+        if (MAP_FAILED == buffers[n_buffers].start)
+            errno_exit("mmap");
+    }
+
+}
+
+void CameraManager::start_capturing() {
+    unsigned int i;
+    enum v4l2_buf_type type;
+    
+    switch (io) {
+        case IO_METHOD_READ:
+            /* Nothing to do. */
+            break;
+            
+        case IO_METHOD_MMAP:
+            for (i = 0; i < n_buffers; ++i) {
+                struct v4l2_buffer buf;
+                
+                CLEAR(buf);
+                buf.type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
+                buf.memory = V4L2_MEMORY_MMAP;
+                buf.index = i;
+                
+                if (-1 == xioctl(fd, VIDIOC_QBUF, &buf))
+                    errno_exit("VIDIOC_QBUF");
+            }
+            type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
+            if (-1 == xioctl(fd, VIDIOC_STREAMON, &type))
+                errno_exit("VIDIOC_STREAMON");
+            break;
+            
+        case IO_METHOD_USERPTR:
+            for (i = 0; i < n_buffers; ++i) {
+                struct v4l2_buffer buf;
+                
+                CLEAR(buf);
+                buf.type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
+                buf.memory = V4L2_MEMORY_USERPTR;
+                buf.index = i;
+                buf.m.userptr = (unsigned long) buffers[i].start;
+                buf.length = buffers[i].length;
+                
+                if (-1 == xioctl(fd, VIDIOC_QBUF, &buf))
+                    errno_exit("VIDIOC_QBUF");
+            }
+            type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
+            if (-1 == xioctl(fd, VIDIOC_STREAMON, &type))
+                errno_exit("VIDIOC_STREAMON");
+            break;
+    }
+}
+
+void CameraManager::grab_frame() {
+    if (s_interrupted) {
+        fprintf(stderr, "\nInterrupt received - aborting capture\n");
+        return;
+    }
+    
+    fd_set fds;
+    struct timeval tv;
+    int r;
+    
+    FD_ZERO(&fds);
+    FD_SET(fd, &fds);
+    
+    /* Timeout. */
+    tv.tv_sec = timeout;
+    tv.tv_usec = 0;
+    
+    r = select(fd + 1, &fds, NULL, NULL, &tv);
+    
+    if (-1 == r) {
+        if (EINTR == errno)
+            continue;
+        errno_exit("select");
+    }
+    
+    if (0 == r) {
+        if (timeout_count > 0) {
+            timeout_count--;
+        } else {
+            fprintf(stderr, "select timeout\n");
+            exit(EXIT_FAILURE);
+        }
+    }
+    
+    if (read_frame())
+        break;
+    /* EAGAIN - continue select loop. */
+
+}
+
+void CameraManager::read_frame() {
+    struct v4l2_buffer buf;
+    unsigned int i;
+    
+    switch (io) {
+        case IO_METHOD_READ:
+            if (-1 == read(fd, buffers[0].start, buffers[0].length)) {
+                switch (errno) {
+                    case EAGAIN:
+                        return 0;
+                        
+                    case EIO:
+                        /* Could ignore EIO, see spec. */
+                        
+                        /* fall through */
+                        
+                    default:
+                        errno_exit("read");
+                }
+            }
+            
+            process_image(buffers[0].start, buffers[0].length);
+            break;
+            
+        case IO_METHOD_MMAP:
+            CLEAR(buf);
+            
+            buf.type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
+            buf.memory = V4L2_MEMORY_MMAP;
+            
+            if (-1 == xioctl(fd, VIDIOC_DQBUF, &buf)) {
+                switch (errno) {
+                    case EAGAIN:
+                        return 0;
+                        
+                    case EIO:
+                        /* Could ignore EIO, see spec. */
+                        
+                        /* fall through */
+                        
+                    default:
+                        errno_exit("VIDIOC_DQBUF");
+                }
+            }
+            
+            assert(buf.index < n_buffers);
+            
+            process_image(buffers[buf.index].start, buf.bytesused);
+            
+            if (-1 == xioctl(fd, VIDIOC_QBUF, &buf))
+                errno_exit("VIDIOC_QBUF");
+            break;
+            
+        case IO_METHOD_USERPTR:
+            CLEAR(buf);
+            
+            buf.type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
+            buf.memory = V4L2_MEMORY_USERPTR;
+            
+            if (-1 == xioctl(fd, VIDIOC_DQBUF, &buf)) {
+                switch (errno) {
+                    case EAGAIN:
+                        return 0;
+                        
+                    case EIO:
+                        /* Could ignore EIO, see spec. */
+                        
+                        /* fall through */
+                        
+                    default:
+                        errno_exit("VIDIOC_DQBUF");
+                }
+            }
+            
+            for (i = 0; i < n_buffers; ++i)
+                if (buf.m.userptr == (unsigned long) buffers[i].start
+                    && buf.length == buffers[i].length)
+                    break;
+            
+            assert(i < n_buffers);
+            
+            process_image((void *) buf.m.userptr, buf.bytesused);
+            
+            if (-1 == xioctl(fd, VIDIOC_QBUF, &buf))
+                errno_exit("VIDIOC_QBUF");
+            break;
+    }
+    
+    return 1;
+
+}
+
+void CameraManager::stop_capturing() {
+    enum v4l2_buf_type type;
+    
+    switch (io) {
+        case IO_METHOD_READ:
+            /* Nothing to do. */
+            break;
+            
+        case IO_METHOD_MMAP:
+        case IO_METHOD_USERPTR:
+            type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
+            if (-1 == xioctl(fd, VIDIOC_STREAMOFF, &type))
+                errno_exit("VIDIOC_STREAMOFF");
+            break;
+    }
+}
+
+void CameraManager::uninit_device() {
+    unsigned int i;
+    
+    switch (io) {
+        case IO_METHOD_READ:
+            free(buffers[0].start);
+            break;
+            
+        case IO_METHOD_MMAP:
+            for (i = 0; i < n_buffers; ++i)
+                if (-1 == munmap(buffers[i].start, buffers[i].length))
+                    errno_exit("munmap");
+            break;
+            
+        case IO_METHOD_USERPTR:
+            for (i = 0; i < n_buffers; ++i)
+                free(buffers[i].start);
+            break;
+    }
+    
+    free(buffers);
+
+}
+
+void CameraManager::close_device() {
+    if (-1 == close(fd))
+        errno_exit("close");
+    
+    fd = -1;
+}
+
 void CameraManager::closeCamera() {
-    type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
-    xioctl(fd, VIDIOC_STREAMOFF, &type);
-    for (i = 0; i < n_buffers; ++i)
-        v4l2_munmap(buffers[i].start, buffers[i].length);
-    v4l2_close(fd);
+    stop_capturing();
+    uninit_device();
+    close_device();
 }
 
