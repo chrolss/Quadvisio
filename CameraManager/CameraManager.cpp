@@ -250,90 +250,33 @@ int CameraManager::read_frame() {
     struct v4l2_buffer buf;
     unsigned int i;
     
-    switch (io) {
-        case IO_METHOD_READ:
-            if (-1 == read(fd, buffers[0].start, buffers[0].length)) {
-                switch (errno) {
-                    case EAGAIN:
-                        return 0;
-                        
-                    case EIO:
-                        /* Could ignore EIO, see spec. */
-                        
-                        /* fall through */
-                        
-                    default:
-                        perror("read");
-                }
-            }
-            
-            process_image(buffers[0].start, buffers[0].length);
-            break;
-            
-        case IO_METHOD_MMAP:
-            CLEAR(buf);
-            std::cout << "reading frame" << std::endl;
+    CLEAR(buf);
+    std::cout << "reading frame" << std::endl;
 
-            buf.type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
-            buf.memory = V4L2_MEMORY_MMAP;
-            
-            if (-1 == xioctl(fd, VIDIOC_DQBUF, &buf)) {
-                switch (errno) {
-                    case EAGAIN:
-                        return 0;
-                        
-                    case EIO:
-                        /* Could ignore EIO, see spec. */
-                        
-                        /* fall through */
-                        
-                    default:
-                        perror("VIDIOC_DQBUF");
-                }
-            }
-            
-            assert(buf.index < n_buffers);
-            
-            process_image(buffers[buf.index].start, buf.bytesused);
-            
-            if (-1 == xioctl(fd, VIDIOC_QBUF, &buf))
-                perror("VIDIOC_QBUF");
-            break;
-            
-        case IO_METHOD_USERPTR:
-            CLEAR(buf);
-            
-            buf.type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
-            buf.memory = V4L2_MEMORY_USERPTR;
-            
-            if (-1 == xioctl(fd, VIDIOC_DQBUF, &buf)) {
-                switch (errno) {
-                    case EAGAIN:
-                        return 0;
-                        
-                    case EIO:
-                        /* Could ignore EIO, see spec. */
-                        
-                        /* fall through */
-                        
-                    default:
-                        perror("VIDIOC_DQBUF");
-                }
-            }
-            
-            for (i = 0; i < n_buffers; ++i)
-                if (buf.m.userptr == (unsigned long) buffers[i].start
-                    && buf.length == buffers[i].length)
-                    break;
-            
-            assert(i < n_buffers);
-            
-            process_image((void *) buf.m.userptr, buf.bytesused);
-            
-            if (-1 == xioctl(fd, VIDIOC_QBUF, &buf))
-                perror("VIDIOC_QBUF");
-            break;
+    buf.type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
+    buf.memory = V4L2_MEMORY_MMAP;
+    
+    if (-1 == xioctl(fd, VIDIOC_DQBUF, &buf)) {
+        switch (errno) {
+            case EAGAIN:
+                return 0;
+                
+            case EIO:
+                /* Could ignore EIO, see spec. */
+                
+                /* fall through */
+                
+            default:
+                perror("VIDIOC_DQBUF");
+        }
     }
+    
+    assert(buf.index < n_buffers);
+    
+    process_image(buffers[buf.index].start, buf.bytesused);
+    
+    if (-1 == xioctl(fd, VIDIOC_QBUF, &buf))
+        perror("VIDIOC_QBUF");
     
     return 1;
 
@@ -362,39 +305,18 @@ void CameraManager::process_image(const void *p, int size) {
 
 void CameraManager::stop_capturing() {
     enum v4l2_buf_type type;
-    
-    switch (io) {
-        case IO_METHOD_READ:
-            /* Nothing to do. */
-            break;
-            
-        case IO_METHOD_MMAP:
-        case IO_METHOD_USERPTR:
-            type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
-            if (-1 == xioctl(fd, VIDIOC_STREAMOFF, &type))
-                perror("VIDIOC_STREAMOFF");
-            break;
-    }
+    type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
+    if (-1 == xioctl(fd, VIDIOC_STREAMOFF, &type))
+        perror("VIDIOC_STREAMOFF");
 }
 
 void CameraManager::uninit_device() {
-    unsigned int i;
-    
-    switch (io) {
-        case IO_METHOD_READ:
-            free(buffers[0].start);
-            break;
-            
-        case IO_METHOD_MMAP:
-            for (i = 0; i < n_buffers; ++i)
-                if (-1 == munmap(buffers[i].start, buffers[i].length))
-                    perror("munmap");
-            break;
-            
-        case IO_METHOD_USERPTR:
-            for (i = 0; i < n_buffers; ++i)
-                free(buffers[i].start);
-            break;
+    int i;
+
+    for (i = 0; i < n_buffers; ++i) {
+        if (-1 == munmap(buffers[i].start, buffers[i].length)) {
+            perror("munmap");
+        }
     }
     
     free(buffers);

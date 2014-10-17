@@ -35,7 +35,7 @@ int main(int argc, const char * argv[]) {
     */
     
     printf("Closing camera\n");
-    //camManager.closeCamera();
+    camManager.closeCamera();
     
     return 0;
 }
