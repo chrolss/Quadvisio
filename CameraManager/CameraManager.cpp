@@ -103,7 +103,7 @@ int CameraManager::initializeCamera(int width, int height) {
     {
         perror("Setting Pixel Format");
     }
-    
+    /*
     strncpy(fourcc, (char *)&fmt.fmt.pix.pixelformat, 4);
     printf( "Selected Camera Mode:\n"
            "  Width: %d\n"
@@ -114,7 +114,7 @@ int CameraManager::initializeCamera(int width, int height) {
            fmt.fmt.pix.height,
            fourcc,
            fmt.fmt.pix.field);
-    
+    */
     struct v4l2_requestbuffers req;
     CLEAR(req);
     req.count = 2;
