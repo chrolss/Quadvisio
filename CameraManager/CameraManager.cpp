@@ -163,17 +163,17 @@ int CameraManager::initializeCamera() {
         }
     }
     
-    return 0;
-}
-
-void CameraManager::getImageBuffer() {
-    
     type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
     
     if(-1 == xioctl(fd, VIDIOC_STREAMON, &type))
     {
         perror("Start Capture");
     }
+    
+    return 0;
+}
+
+void CameraManager::getImageBuffer() {
     
     do {
         FD_ZERO(&fds);
