@@ -220,7 +220,7 @@ void * CameraManager::getImageBuffer() {
      */
     
     xioctl(fd, VIDIOC_QBUF, &buf);
-    return jpgBuf;
+    return jpg_buffer;
 }
 
 size_t CameraManager::getImageBufferSize() {
