@@ -150,8 +150,7 @@ void Com::qvisDevLoop() {
             reciveMsg=true;
             msgSend=false;
         }
-        vidCount++;
-        printf("Vid count: %i\n", vidCount);
+        //printf("Vid count: %i\n", vidCount);
     }
 }
 

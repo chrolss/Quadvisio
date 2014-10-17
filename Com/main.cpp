@@ -50,6 +50,8 @@ int main(int argc, const char * argv[])
             com.startListenThread();
         }
         
+        com.vidCount++;
+        
         // Measure duration
         auto duration = std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::high_resolution_clock::now() - start).count();
         
