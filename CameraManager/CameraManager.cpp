@@ -33,7 +33,7 @@ int CameraManager::initializeCamera(int width, int height) {
     {
         perror("Opening video device");
     }
-    
+    /*
     struct v4l2_capability caps = {0};
     
     if (-1 == xioctl(fd, VIDIOC_QUERYCAP, &caps))
@@ -88,7 +88,7 @@ int CameraManager::initializeCamera(int width, int height) {
         printf("  %s: %c%c %s\n", fourcc, c, e, fmtdesc.description);
         fmtdesc.index++;
     }
-    
+    */
     
     struct v4l2_format fmt;
     CLEAR(fmt);
