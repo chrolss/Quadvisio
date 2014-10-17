@@ -33,7 +33,7 @@ private:
     
     int fd;
     
-    int imageNumber;
+    int image_number;
     char out_name[256];
 
     void *buffer;

@@ -20,7 +20,7 @@ static int xioctl(int fd, int request, void *arg)
 
 CameraManager::CameraManager() {
     
-    imageNumber = 0;
+    image_number = 0;
     
     //this->initializeCamera();
 }
@@ -179,6 +179,7 @@ void CameraManager::getImageBuffer() {
     cvWaitKey(0);
     printf("Saving\n");
     sprintf(out_name, "grabber%03d.jpg", image_number);
+    image_number++;
     cvSaveImage(out_name, frame, 0);
 
 }
