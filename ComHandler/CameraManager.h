@@ -47,7 +47,7 @@ public:
     void closeCamera();
     void *get_jpg_buffer();
     int get_jpg_buffer_size();
-    void change_res(int _width, _ int height);
+    void change_res(int _width, int _height);
     
 private:
     void open_device();
