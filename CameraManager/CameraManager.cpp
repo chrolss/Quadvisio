@@ -88,9 +88,7 @@ void CameraManager::open_device() {
 }
 
 void CameraManager::init_device() {
-    struct v4l2_capability cap;
     struct v4l2_format fmt;
-    int min;
     
     CLEAR(fmt);
     fmt.type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
@@ -244,11 +242,12 @@ void CameraManager::grab_frame() {
     end = clock();
     time_spent = (double)(end - begin) / CLOCKS_PER_SEC;
     fprintf(stderr, "Captured %i frames in %f seconds\n", frame_count, time_spent);
+    
+    
 }
 
 int CameraManager::read_frame() {
     struct v4l2_buffer buf;
-    unsigned int i;
     
     CLEAR(buf);
     std::cout << "reading frame" << std::endl;

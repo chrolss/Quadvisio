@@ -74,6 +74,8 @@ private:
     int timeouts_max;
     char out_name[256];
     
+    void *jpg_buffer;
+    
     unsigned int pixel_format;
 
 };
