@@ -276,13 +276,12 @@ void ComHandler::sendQvisDevMsg() {
                 default:
                     break;
             }
-            usleep(1000);
+            usleep(300000);
             printf("New resolution was set\n");
             vidRes = vidResNew;
         }
         
         //std::cout << "Trying to grab a frame" << std::endl;
-        usleep(1000);
         camManager->grab_frame();
         
         jpg_buffer = camManager->get_jpg_buffer();
