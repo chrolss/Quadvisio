@@ -90,7 +90,7 @@ ComHandler::ComHandler() {
     
     camManager->initializeCamera(1280, 720);
     
-    usleep(1000);
+    usleep(100000);
     
 }
 
