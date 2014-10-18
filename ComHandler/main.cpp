@@ -17,7 +17,7 @@ int main(int argc, const char * argv[]) {
     
     // Loop time measurement
     double loopTime = 0.0;
-    int Hz = 90;
+    int Hz = 80;
     int loopSleep=0;
     
     std::cout << "Starting communication thread" << std::endl;
@@ -33,7 +33,7 @@ int main(int argc, const char * argv[]) {
         
         if (comHandler.connected) {
             if (!comHandler.reciveMsg && !comHandler.sendMsg) {
-                if (comHandler.vidCount>=3) {
+                if (comHandler.vidCount>=4) {
                     comHandler.sendImage = true;
                 }
                 comHandler.sendMsg=true;
