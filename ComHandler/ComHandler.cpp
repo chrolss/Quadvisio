@@ -290,7 +290,7 @@ void ComHandler::sendQvisDevMsg() {
     }
     
     else {
-        ostr << "0:0:0:0";
+        ostr << "0";
     }
     
     std::string s;
