@@ -289,7 +289,10 @@ void ComHandler::sendQvisDevMsg() {
         ostr << jpg_size;
     }
     
-    ostr << "0:0:0:0";
+    else {
+        ostr << "0:0:0:0";
+    }
+    
     std::string s;
     s = ostr.str();
     ostr.str("");
