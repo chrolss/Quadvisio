@@ -240,7 +240,7 @@ int CameraManager::read_frame() {
     int i;
     
     CLEAR(buf);
-    std::cout << "reading frame" << std::endl;
+    //std::cout << "reading frame" << std::endl;
 
     buf.type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
     buf.memory = V4L2_MEMORY_MMAP;
