@@ -324,8 +324,12 @@ void CameraManager::uninit_device() {
 }
 
 void CameraManager::change_res(int _width, int _height) {
+    usleep(200000);
     closeCamera();
+    usleep(200000);
     initializeCamera(_width, _height);
+    usleep(200000);
+
 }
 
 void CameraManager::close_device() {

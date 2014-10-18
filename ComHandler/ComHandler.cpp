@@ -276,7 +276,6 @@ void ComHandler::sendQvisDevMsg() {
                 default:
                     break;
             }
-            usleep(300000);
             printf("New resolution was set\n");
             vidRes = vidResNew;
         }
