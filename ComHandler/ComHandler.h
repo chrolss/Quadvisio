@@ -70,6 +70,7 @@ private:
     void error(const char *msg);
     Client reciveOrder();
     void sendIdentity();
+    void send_img();
     std::string reciveMessage();
     
     void qvisDevLoop();
@@ -93,6 +94,7 @@ private:
     void *jpg_buffer;
     int vidRes;
     int vidResNew;
+    int frame_count;
     
     // PID Params : Joy Sen : RollTrim : PitchTrim
     double settingsData[15];

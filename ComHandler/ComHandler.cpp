@@ -63,6 +63,7 @@ ComHandler::ComHandler() {
     
     vidCount = 0;
     vidLimit = 0;
+    frame_count = 0;
     vidRes = 2; // Default 2 = 640x480
     vidResNew = 2;
     errMsg = "Nothing wrong here!!";
@@ -318,6 +319,11 @@ void ComHandler::sendQvisDevMsg() {
         closeClient();
         perror("send");
     }
+    
+    if (sendImage && videoStream) {
+        send_img();
+        sendImage = false;
+    }
 
     //printf("Message sent\n");
 }
@@ -325,6 +331,21 @@ void ComHandler::sendQvisDevMsg() {
 
 void ComHandler::sendQvisLightMsg() {
     
+}
+
+void ComHandler::send_img() {
+    printf("Sending image of\n");
+    size_t jpg_size = camManager->get_jpg_buffer_size();
+    std::cout << "Size: " << jpg_size << "Frame: " << frame_count << std::endl;
+    frame_count++;
+    if (send(newsockfd, jpg_buffer, jpg_size, 0) == -1) {
+        closeClient();
+        perror("send");
+    }
+    
+    printf("Image sent\n");
+    
+    vidCount=0;
 }
 
 void ComHandler::readQvisProMsg() {
