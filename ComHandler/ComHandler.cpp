@@ -227,12 +227,40 @@ void ComHandler::qvisLightLoop() {
 
 void ComHandler::sendQvisProMsg() {
     
-    std::string s = "0002:0";
+    ostr.str("");
+    
+    if (sendImage && videoStream) {
+        camManager->grab_frame();
+        jpg_buffer = camManager->get_jpg_buffer();
+        int jpg_size = camManager->get_jpg_buffer_size();
+        ostr << jpg_size;
+    }
+    
+    else {
+        ostr << "0";
+    }
+
+    std::string s;
+    s = ostr.str();
+    ostr.str("");
+    
+    if ((s.length()+1)<10) {ostr << "000" << (s.length()+1) << ":" << s;}
+    else if((s.length()+1)>=10 && (s.length()+1)<100) {ostr << "00" << (s.length()+1) << ":" << s;}
+    else if((s.length()+1)>=100 && (s.length()+1)<1000) {ostr << "0" << (s.length()+1) << ":" << s;}
+    else {ostr << (s.length()+1) << ":" << s;}
+    
+    s = ostr.str();
     
     if (send(newsockfd, s.c_str(), s.length(),0) == -1) {
         closeClient();
         perror("send");
     }
+    
+    if (sendImage && videoStream) {
+        send_img();
+        sendImage = false;
+    }
+
 }
 
 void ComHandler::sendQvisDevMsg() {
@@ -368,6 +396,22 @@ void ComHandler::readQvisProMsg() {
     }
     
     numberInStrings[i] = msg;
+    
+    if (atoi(numberInStrings[5].c_str())==1) {
+        videoStream = true;
+    }
+    else {
+        videoStream = false;
+        vidCount = 0;
+    }
+    
+    if (atoi(numberInStrings[6].c_str())==1) {
+        motorOn = true;
+    }
+    else{
+        motorOn = false;
+    }
+
     
 }
 
