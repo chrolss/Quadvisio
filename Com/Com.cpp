@@ -316,7 +316,7 @@ void Com::sendQvisDevMsg() {
             vidRes = vidResNew;
         }
         */
-        
+        std::cout << "Trying to grab a frame" << std::endl;
         camManager->grab_frame();
         
         jpg_buffer = camManager->get_jpg_buffer();
