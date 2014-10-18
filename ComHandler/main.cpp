@@ -33,9 +33,14 @@ int main(int argc, const char * argv[]) {
         
         if (comHandler.connected) {
             if (!comHandler.reciveMsg && !comHandler.sendMsg) {
+                if (comHandler.vidCount>=2) {
+                    comHandler.sendImage = true;
+                }
                 comHandler.sendMsg=true;
             }
         }
+        
+        comHandler.vidCount++;
         
         if (!comHandler.connected && !comHandler.listening) {
             comHandler.startListenThread();
