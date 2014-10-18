@@ -64,7 +64,7 @@ ComHandler::ComHandler() {
     vidCount = 0;
     vidLimit = 0;
     frame_count = 0;
-    vidRes = 2; // Default 2 = 640x480
+    vidRes = 2; // Default 2 = 1280x720
     vidResNew = 2;
     errMsg = "Nothing wrong here!!";
     
@@ -254,23 +254,23 @@ void ComHandler::sendQvisDevMsg() {
     }
     
     if (sendImage && videoStream) {
-        /*
+        
         if (vidResNew != vidRes) {
             switch (vidResNew) {
                 case 0:
-                    
+                    camManager->change_res(320, 240);
                     break;
                     
                 case 1:
-                    
+                    camManager->change_res(640, 480);
                     break;
                     
                 case 2:
-                    
+                    camManager->change_res(1280, 720);
                     break;
                     
                 case 3:
-                    
+                    camManager->change_res(1920, 1080);
                     break;
                     
                 default:
@@ -280,7 +280,7 @@ void ComHandler::sendQvisDevMsg() {
             printf("New resolution was set\n");
             vidRes = vidResNew;
         }
-         */
+        
         std::cout << "Trying to grab a frame" << std::endl;
         camManager->grab_frame();
         
