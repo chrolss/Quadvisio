@@ -104,7 +104,7 @@ void CameraManager::init_mmap() {
     
     CLEAR(req);
     
-    req.count = 4;
+    req.count = 6;
     req.type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
     req.memory = V4L2_MEMORY_MMAP;
     
