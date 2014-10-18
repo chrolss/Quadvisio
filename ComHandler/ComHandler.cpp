@@ -23,7 +23,7 @@
 // Outgoing Message Structure ///////////
 //
 // angles : refangles : pwm : speed : sidespeed : altitude : integral roll : integral pitch : integral yaw :
-// Hz : bitrate : dbm : errorMessage : imgWidth : imgHeight : imgSize : imgChannels - Image
+// Hz : bitrate : dbm : errorMessage : imgSize - Image
 //
 // QvisPro
 //
@@ -38,7 +38,7 @@
 
 /////////////// COMMUNICATION PROTOCOL ///////////////////////////
 //
-// Orders: 1 = Connect, 2 = give me your identity
+// Orders: 1 = Connect, 2 = Give me your identity
 //
 // App IDs: 1 = QvisLight, 2 = QvisPro, 3 = QvisDev
 //
@@ -54,14 +54,16 @@ ComHandler::ComHandler() {
     sendMsg = false;
     listening = false;
     videoStream=false;
+    sendImage=false;
     motorOn=false;
     colorVideo=true;
     saveSettnings = false;
     resetIntegral = false;
     
+    
     vidCount = 0;
     vidLimit = 0;
-    vidRes = 2; // Default 2 = 320x240
+    vidRes = 2; // Default 2 = 640x480
     vidResNew = 2;
     errMsg = "Nothing wrong here!!";
     
@@ -83,7 +85,12 @@ ComHandler::ComHandler() {
         controllerInputData[i] = 0.5;
     }
 
-
+    camManager = new CameraManager;
+    
+    camManager->initializeCamera(1280, 720);
+    
+    usleep(1000);
+    
 }
 
 void ComHandler::error(const char *msg)
@@ -244,7 +251,45 @@ void ComHandler::sendQvisDevMsg() {
     else {
         ostr << "none:";
     }
-        ostr << "0:0:0:0";
+    
+    if (sendImage && videoStream) {
+        /*
+        if (vidResNew != vidRes) {
+            switch (vidResNew) {
+                case 0:
+                    
+                    break;
+                    
+                case 1:
+                    
+                    break;
+                    
+                case 2:
+                    
+                    break;
+                    
+                case 3:
+                    
+                    break;
+                    
+                default:
+                    break;
+            }
+            usleep(1000);
+            printf("New resolution was set\n");
+            vidRes = vidResNew;
+        }
+         */
+        std::cout << "Trying to grab a frame" << std::endl;
+        camManager->grab_frame();
+        
+        jpg_buffer = camManager->get_jpg_buffer();
+        int jpg_size = camManager->get_jpg_buffer_size();
+        
+        ostr << jpg_size;
+    }
+    
+    ostr << "0:0:0:0";
     std::string s;
     s = ostr.str();
     ostr.str("");

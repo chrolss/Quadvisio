@@ -25,6 +25,8 @@
 #include <math.h>
 #include <time.h>
 
+#include "CameraManager.h"
+
 #define PORT "3490"  // the port users will be connecting to
 #define radToDeg 57.296
 
@@ -52,7 +54,7 @@ public:
     void setSettingsData(double *params);
     void getSettingsData(double *params);
     
-    bool connected, reciveMsg, sendMsg, listening;
+    bool connected, reciveMsg, sendMsg, listening, sendImage;
     bool resetIntegral, videoStream, colorVideo, saveSettnings, motorOn;
     
     double controllerInputData[9];  // Roll:Pitch:Yaw:Throttle:rollOffset:pitchOffset:JoySen
@@ -85,6 +87,10 @@ private:
     int getSigStrength();
     int getSignalInfo();
     
+    
+    // Video
+    CameraManager *camManager;
+    void *jpg_buffer;
     int vidRes;
     int vidResNew;
     
