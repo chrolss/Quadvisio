@@ -33,7 +33,7 @@ int main(int argc, const char * argv[]) {
         
         if (comHandler.connected) {
             if (!comHandler.reciveMsg && !comHandler.sendMsg) {
-                if (comHandler.vidCount>=5) {
+                if (comHandler.vidCount>=6) {
                     comHandler.sendImage = true;
                 }
                 comHandler.sendMsg=true;
