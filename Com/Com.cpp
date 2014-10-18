@@ -367,7 +367,7 @@ void Com::sendQvisDevMsg() {
         sendImg();
         imgSend = false;
     }
-    vidCount=0;
+
     //printf("Message sent\n");
 }
 
