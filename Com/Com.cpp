@@ -315,17 +315,17 @@ void Com::sendQvisDevMsg() {
         }
         */
         
-        jpg_buffer = camManager->getImageBuffer();
-        size_t size = camManager->getImageBufferSize();
+        jpg_buffer = camManager->get_jpg_buffer();
+        int jpg_size = camManager->get_jpg_buffer_size();
 
         if (colorVideo) {
             ostr << 1280 << ":" << 720 << ":";
-            ostr << size << ":3";
+            ostr << jpg_size << ":3";
         }
         
         else {
             ostr << 1280 << ":" << 720 << ":";
-            ostr << size << ":3";
+            ostr << jpg_size << ":3";
         }
     }
     else {
@@ -369,17 +369,17 @@ void Com::sendQvisDevMsg() {
 
 void Com::sendImg() {
     printf("Sending image of\n");
-    size_t size = camManager->getImageBufferSize();
-    std::cout << "Size: " << size << "Frame: " << frameCount << std::endl;
+    size_t jpg_size = camManager->get_jpg_buffer_size();
+    std::cout << "Size: " << jpg_size << "Frame: " << frameCount << std::endl;
     frameCount++;
     if(colorVideo) {
-        if (send(newsockfd, jpg_buffer, size, 0) == -1) {
+        if (send(newsockfd, jpg_buffer, jpg_size, 0) == -1) {
             closeClient();
             perror("send");
         }
     }
     else {
-        if (send(newsockfd, jpg_buffer, size, 0) == -1) {
+        if (send(newsockfd, jpg_buffer, jpg_size, 0) == -1) {
             closeClient();
             perror("send");
         }
