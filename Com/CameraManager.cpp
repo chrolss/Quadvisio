@@ -323,9 +323,6 @@ void CameraManager::uninit_device() {
             perror("munmap");
         }
     }
-    
-    //free(buffers);
-
 }
 
 void CameraManager::close_device() {

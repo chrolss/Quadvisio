@@ -213,8 +213,10 @@ void Com::sendQvisLightMsg() {
         }
         */
         
-        jpg_buffer = camManager->getImageBuffer();
+        camManager->grab_frame();
         
+        jpg_buffer = camManager->get_jpg_buffer();
+        int jpg_size = camManager->get_jpg_buffer_size();
         
         if (colorVideo) {
             ostr << 1280 << ":" << 720 << ":";
