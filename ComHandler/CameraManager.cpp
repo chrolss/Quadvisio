@@ -104,7 +104,7 @@ void CameraManager::init_mmap() {
     
     CLEAR(req);
     
-    req.count = 6;
+    req.count = 2;
     req.type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
     req.memory = V4L2_MEMORY_MMAP;
     
@@ -143,11 +143,7 @@ void CameraManager::init_mmap() {
         
         buffers[n_buffers].length = buf.length;
         buffers[n_buffers].start =
-        mmap(NULL /* start anywhere */,
-             buf.length,
-             PROT_READ | PROT_WRITE /* required */,
-             MAP_SHARED /* recommended */,
-             fd, buf.m.offset);
+        mmap(NULL /* start anywhere */, buf.length, PROT_READ|PROT_WRITE /* required */, MAP_SHARED /* recommended */, fd, buf.m.offset);
         
         if (MAP_FAILED == buffers[n_buffers].start)
             perror("mmap");
