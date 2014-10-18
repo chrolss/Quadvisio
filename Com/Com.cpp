@@ -60,7 +60,7 @@ Com::Com(){
     
     camManager = new CameraManager;
     
-    camManager->initializeCamera(1280, 720);
+    camManager->initializeCamera(1920, 1080);
     
     usleep(1000);
 }

@@ -39,7 +39,7 @@ int main(int argc, const char * argv[])
         
         if (com.connected) {
             if (!com.reciveMsg && !com.msgSend) {
-                if (com.vidCount>=2) {
+                if (com.vidCount>=4) {
                     com.imgSend = true;
                 }
                 com.msgSend=true;
