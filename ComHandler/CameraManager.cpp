@@ -186,7 +186,9 @@ void CameraManager::grab_frame() {
     int timeout_count;
     
     //count = frame_count;
-    //timeout_count = timeouts_max;
+    timeout_count = timeouts_max;
+    
+    int counter = 0
     
     //begin = clock();
     for (;;) {
@@ -225,6 +227,8 @@ void CameraManager::grab_frame() {
 
         if (read_frame()) {break;}
         /* EAGAIN - continue select loop. */
+        printf("counter: %i", counter);
+        counter++;
     }
     //end = clock();
     //time_spent = (double)(end - begin) / CLOCKS_PER_SEC;
