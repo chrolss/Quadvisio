@@ -530,7 +530,7 @@ Client ComHandler::reciveOrder() {
 
 std::string ComHandler::reciveMessage() {
     
-    //printf("Waitning for message\n");
+    printf("Waitning for message\n");
     
     std::string msgBuffer = "";
     std::string msg = "";
