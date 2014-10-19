@@ -13,6 +13,7 @@
 #include "QuadPWM.h"
 #include "QuadGPIO.h"
 #include "QuadAIN.h"
+#include "QuadGPS.h"
 
 #define MOTOR_FL "P8_13"
 #define MOTOR_FR "P9_14"
@@ -20,6 +21,11 @@
 #define MOTOR_BR "P9_42"
 
 
+int main(int argc, const char * argv[]){
+	QuadGPS GPS;
+	printf("UART2 initialized?\n");
+}
+/*
 int main(int argc, const char * argv[]){
 	QuadAIN AIN;	//initialize all AIN ports, 0 - 7
 	printf("Analog ports initialized\n");
@@ -37,7 +43,7 @@ int main(int argc, const char * argv[]){
 	}
 	return 0;
 }
-
+*/
 
 /*
 int main(int argc, const char * argv[]){

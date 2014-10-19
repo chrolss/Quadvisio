@@ -19,6 +19,7 @@ QuadCore::QuadCore() {
     this->setOcpPath();
     loadDeviceTree("am33xx_pwm");
     loadDeviceTree("bone-cape-iio");
+    loadDeviceTree("ADAFRUIT-UART2");
 }
 
 int QuadCore::loadDeviceTree(const char *name) {

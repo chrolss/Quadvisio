@@ -2,4 +2,4 @@
 
 echo "Building quad pwm program"
 
-g++ -std=c++11 -W test.cpp QuadCore.cpp QuadPWM.cpp QuadGPIO.cpp QuadAIN.cpp -o pwm_test
+g++ -std=c++11 -W test.cpp QuadCore.cpp QuadPWM.cpp QuadGPIO.cpp QuadAIN.cpp QuadGPS.cpp -o pwm_test
