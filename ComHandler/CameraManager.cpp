@@ -209,7 +209,6 @@ void CameraManager::grab_frame() {
     int counter = 0;
     
     begin = clock();
-    usleep(1000);
     for (;;) {
         if (s_interrupted < 0) {
             fprintf(stderr, "\nInterrupt received - aborting capture\n");
@@ -263,7 +262,7 @@ int CameraManager::read_frame() {
 
     buf.type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
     buf.memory = V4L2_MEMORY_MMAP;
-    
+    usleep(100000);
     if (-1 == xioctl(fd, VIDIOC_DQBUF, &buf)) {
         switch (errno) {
             case EAGAIN:
