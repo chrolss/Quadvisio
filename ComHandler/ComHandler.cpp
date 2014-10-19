@@ -66,9 +66,8 @@ ComHandler::ComHandler() {
     frame_count = 0;
     vidRes = 2; // Default 2 = 1280x720
     vidResNew = 2;
-    jpg_size = 0;
     errMsg = "Nothing wrong here!!";
-    
+        
     for (unsigned int i = 0; i<(sizeof(output)/sizeof(*output)); i++) {
         output[i] = 0.5;
     }
