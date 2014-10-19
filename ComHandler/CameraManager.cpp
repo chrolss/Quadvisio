@@ -365,13 +365,11 @@ void CameraManager::change_res(int _width, int _height) {
 }
 
 void CameraManager::set_res() {
-    usleep(200000);
+    usleep(500000);
     closeCamera();
-    usleep(200000);
+    usleep(500000);
     initializeCamera(this->width, this->height);
-    usleep(200000);
-    start_grabing();
-    usleep(200000);
+    usleep(500000);
     this->change_resolution = false;
 }
 
