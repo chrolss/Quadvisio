@@ -262,7 +262,7 @@ int CameraManager::read_frame() {
 
     buf.type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
     buf.memory = V4L2_MEMORY_MMAP;
-    usleep(1000000);
+    usleep(500000);
     if (-1 == xioctl(fd, VIDIOC_DQBUF, &buf)) {
         switch (errno) {
             case EAGAIN:
