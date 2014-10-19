@@ -363,7 +363,7 @@ void CameraManager::set_res() {
     usleep(200000);
     closeCamera();
     usleep(200000);
-    initializeCamera(_width, _height);
+    initializeCamera(this->width, this->height);
     usleep(200000);
     this->change_resolution = false;
 }
