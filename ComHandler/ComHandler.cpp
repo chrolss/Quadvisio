@@ -309,6 +309,7 @@ void ComHandler::sendQvisDevMsg() {
         }
         
         jpg_buffer = camManager->get_jpg_buffer();
+        std::cout << sizeof(jpg_buffer);
         int jpg_size = camManager->get_jpg_buffer_size();
         
         ostr << jpg_size;

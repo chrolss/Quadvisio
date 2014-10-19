@@ -36,11 +36,10 @@ CameraManager::CameraManager() {
     fps = 30;
     timeout = 1;
     timeouts_max = 1;
+    
+    saving_buffer = false;
 
     sprintf(out_name, "capture.jpg");
-
-
-    
 }
 
 int CameraManager::initializeCamera(int _width, int _height) {
@@ -217,8 +216,6 @@ void CameraManager::grab_frame() {
     //count = frame_count;
     timeout_count = timeouts_max;
     
-    int counter = 0;
-    
     begin = clock();
     for (;;) {
         if (s_interrupted < 0) {
@@ -253,15 +250,13 @@ void CameraManager::grab_frame() {
                 exit(EXIT_FAILURE);
             }
         }
-        std::cout << "counter: " << counter << std::endl;
-        counter++;
         if (read_frame()) {break;}
         /* EAGAIN - continue select loop. */
         
     }
     end = clock();
     time_spent = (double)(end - begin) / CLOCKS_PER_SEC;
-    fprintf(stderr, "Captured %i frames in %f seconds\n", frame_count, time_spent);
+    //fprintf(stderr, "Captured %i frames in %f seconds\n", frame_count, time_spent);
 }
 
 int CameraManager::read_frame() {
@@ -290,9 +285,10 @@ int CameraManager::read_frame() {
     }
     
     assert(buf.index < n_buffers);
-    std::cout << buf.index << std::endl;
+    this->saving_buffer = true;
     jpg_buffer = buffers[buf.index].start;
     jpg_buffer_size = buf.bytesused;
+    this->saving_buffer = false;
     
     if (-1 == xioctl(fd, VIDIOC_QBUF, &buf))
         perror("VIDIOC_QBUF");
@@ -302,10 +298,12 @@ int CameraManager::read_frame() {
 }
 
 void *CameraManager::get_jpg_buffer() {
+    while (this->saving_buffer) {}
     return jpg_buffer;
 }
 
 int CameraManager::get_jpg_buffer_size() {
+    while (this->saving_buffer) {}
     return jpg_buffer_size;
 }
 

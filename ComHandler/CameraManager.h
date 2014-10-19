@@ -82,6 +82,7 @@ private:
     void *jpg_buffer;
     int jpg_buffer_size;
     bool frame_read;
+    bool saving_buffer;
     
     unsigned int pixel_format;
 
