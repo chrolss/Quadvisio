@@ -34,6 +34,7 @@ int main(int argc, const char * argv[]) {
         if (comHandler.connected) {
             if (!comHandler.reciveMsg && !comHandler.sendMsg) {
                 if (comHandler.vidCount>=2) {
+                    std::cout << "Hej" << std::endl;
                     comHandler.sendImage = true;
                 }
                 comHandler.sendMsg=true;
