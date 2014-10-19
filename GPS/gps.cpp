@@ -1,20 +1,17 @@
 #include "gps.h"
 
 
-gps::gps(int _device){
-	this->device = _device;
+gps::gps(std::string _devNum){
+	this->devNum = _devNum;
+	this->deviceName = deviceName.append(devNum);
 	initialize();
 }
 
 void gps::initialize(){
-	deviceName = std::string query(deviceName + std::to_string(device));
+	loadGPSDeviceTree(deviceName);
 }
 
-void gps::loadGPSDeviceTree(){
-	//printf("Inside loadDeviceTree\n");
-
-	//const char *name = pwmName.c_str();
-
+int gps::loadGPSDeviceTree(std::string _name){
 	FILE *file = NULL;
 	char line[256];
 
@@ -29,19 +26,19 @@ void gps::loadGPSDeviceTree(){
 	}
 
 	while (fgets(line, sizeof(line), file)) {
-		if (strstr(line, name)) {
-	       printf("%s is already loaded\n", name);
+		if (strstr(line, _name)) {
+	       printf("%s is already loaded\n", _name);
 	       fclose(file);
 	       return 1;
 	    }
 	}
 
-	    fprintf(file, name);
+	    fprintf(file, _name);
 	    fclose(file);
 
 	    return 0;
 	}
-}
+
 
 void gps::checkFix(){}
 

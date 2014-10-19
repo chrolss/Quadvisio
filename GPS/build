@@ -1,0 +1,5 @@
+#!/bin/bash
+
+echo "Building GPS test program"
+
+g++ -W gps.cpp main.cpp -o test.cpp
