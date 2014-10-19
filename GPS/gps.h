@@ -1,6 +1,7 @@
 #ifndef GPS_H
 #define GPS_H
 
+#include <string>
 
 class gps
 {
@@ -19,6 +20,8 @@ private:
 	double altitude;			//meters
 	bool fix;					//does it have a fix or not, changed by checkFix()
 	int device;					//UART device number
+	std::string slotsPath;		//path to the slots
+	std::string deviceName;		//name of dtbo file
 };
 
 

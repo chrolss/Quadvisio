@@ -6,9 +6,42 @@ gps::gps(int _device){
 	initialize();
 }
 
-void gps::initialize(){}
+void gps::initialize(){
+	deviceName = std::string query(deviceName + std::to_string(device));
+}
 
-void gps::loadGPSDeviceTree(){}
+void gps::loadGPSDeviceTree(){
+	//printf("Inside loadDeviceTree\n");
+
+	//const char *name = pwmName.c_str();
+
+	FILE *file = NULL;
+	char line[256];
+
+	const char *slots = slotsPath.c_str();
+
+	//printf("Path to slots file: %s\n", slots);
+
+	file = fopen(slots, "r+");
+	if (!file) {
+	    printf("Error trying to open slots\n");
+	    return -1;
+	}
+
+	while (fgets(line, sizeof(line), file)) {
+		if (strstr(line, name)) {
+	       printf("%s is already loaded\n", name);
+	       fclose(file);
+	       return 1;
+	    }
+	}
+
+	    fprintf(file, name);
+	    fclose(file);
+
+	    return 0;
+	}
+}
 
 void gps::checkFix(){}
 
