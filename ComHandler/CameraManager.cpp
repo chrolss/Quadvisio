@@ -68,6 +68,7 @@ void CameraManager::startCameraThread() {
     while (1) {
         if (this->change_resolution) {
             this->set_res();
+            std::cout << "Continuing grabbing" << std::endl;
         }
         else {
             grab_frame();
@@ -310,7 +311,7 @@ int CameraManager::read_frame() {
 
 jpg_data CameraManager::get_jpg_data() {
     jpg_data jpg_dat;
-    while (this->saving_buffer) {}
+    while (this->saving_buffer==true) {}
     
     jpg_dat.buffer = jpg_buffer;
     jpg_dat.size = jpg_buffer_size;
