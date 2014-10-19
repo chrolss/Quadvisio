@@ -177,10 +177,9 @@ void CameraManager::start_capturing() {
 }
 
 void CameraManager::grab_frame() {
-    //std::cout << "Grabbing frame" << std::endl;
 
-    //clock_t begin, end;
-    //double time_spent;
+    clock_t begin, end;
+    double time_spent;
     
     //int count;
     int timeout_count;
@@ -190,7 +189,7 @@ void CameraManager::grab_frame() {
     
     int counter = 0;
     
-    //begin = clock();
+    begin = clock();
     for (;;) {
         if (s_interrupted < 0) {
             fprintf(stderr, "\nInterrupt received - aborting capture\n");
@@ -224,15 +223,15 @@ void CameraManager::grab_frame() {
                 exit(EXIT_FAILURE);
             }
         }
-
+        std::cout << "counter: " << counter << std::endl;
+        counter++;
         if (read_frame()) {break;}
         /* EAGAIN - continue select loop. */
-        printf("counter: %i", counter);
-        counter++;
+        
     }
-    //end = clock();
-    //time_spent = (double)(end - begin) / CLOCKS_PER_SEC;
-    //fprintf(stderr, "Captured %i frames in %f seconds\n", frame_count, time_spent);
+    end = clock();
+    time_spent = (double)(end - begin) / CLOCKS_PER_SEC;
+    fprintf(stderr, "Captured %i frames in %f seconds\n", frame_count, time_spent);
 }
 
 int CameraManager::read_frame() {
