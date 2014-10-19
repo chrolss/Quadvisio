@@ -39,6 +39,8 @@ CameraManager::CameraManager() {
 
     sprintf(out_name, "capture.jpg");
 
+
+    
 }
 
 int CameraManager::initializeCamera(int _width, int _height) {
@@ -50,8 +52,17 @@ int CameraManager::initializeCamera(int _width, int _height) {
     open_device();
     init_device();
     start_capturing();
+    
+    std::thread t1(&CameraManager::startCameraThread, this);
+    t1.detach();
 
     return 0;
+}
+
+void CameraManager::startCameraThread() {
+    while (1) {
+        grab_frame();
+    }
 }
 
 void CameraManager::open_device() {

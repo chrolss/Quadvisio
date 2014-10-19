@@ -22,6 +22,7 @@
 #include <sys/mman.h>
 #include <sys/ioctl.h>
 #include <time.h>
+#include <thread>
 
 #include <linux/videodev2.h>
 
@@ -60,6 +61,7 @@ private:
     int read_frame();
     void process_image(const void *p, int size);
     void s_signal_handler (int signal_value);
+    void startCameraThread();
     
     int s_interrupted;
     char dev_name[256];
