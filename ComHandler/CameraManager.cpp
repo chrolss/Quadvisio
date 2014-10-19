@@ -81,6 +81,7 @@ void CameraManager::open_device() {
 void CameraManager::init_device() {
     struct v4l2_capability cap;
     struct v4l2_format fmt;
+    struct v4l2_streamparm frameint;
     int min;
     
     CLEAR(fmt);
@@ -94,6 +95,24 @@ void CameraManager::init_device() {
         printf("Libv4l didn't accept RGB24 format. Can't proceed.\n");
         exit(EXIT_FAILURE);
     }
+    
+    CLEAR(frameint);
+    
+    /* Attempt to set the frame interval. */
+    frameint.type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
+    frameint.parm.capture.timeperframe.numerator = 1;
+    frameint.parm.capture.timeperframe.denominator = fps;
+    if (-1 == xioctl(fd, VIDIOC_S_PARM, &frameint))
+        fprintf(stderr, "Unable to set frame interval.\n");
+    
+    /* Buggy driver paranoia. */
+    min = fmt.fmt.pix.width * 2;
+    if (fmt.fmt.pix.bytesperline < min)
+        fmt.fmt.pix.bytesperline = min;
+    min = fmt.fmt.pix.bytesperline * fmt.fmt.pix.height;
+    if (fmt.fmt.pix.sizeimage < min)
+        fmt.fmt.pix.sizeimage = min;
+
     
     init_mmap();
 
