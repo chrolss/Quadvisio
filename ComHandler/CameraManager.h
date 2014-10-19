@@ -34,6 +34,11 @@ enum io_method {
     IO_METHOD_USERPTR,
 };
 
+struct jpg_data {
+    void *jpg_buffer;
+    int jpg_size;
+};
+
 struct buffer {
     void   *start;
     size_t length;
@@ -46,7 +51,7 @@ public:
     int initializeCamera(int _width, int _heigth);
     void grab_frame();
     void closeCamera();
-    void *get_jpg_buffer();
+    jpg_data get_jpg_data();
     int get_jpg_buffer_size();
     void change_res(int _width, int _height);
     

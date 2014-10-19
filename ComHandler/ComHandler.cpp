@@ -66,6 +66,7 @@ ComHandler::ComHandler() {
     frame_count = 0;
     vidRes = 2; // Default 2 = 1280x720
     vidResNew = 2;
+    jpg_size = 0;
     errMsg = "Nothing wrong here!!";
     
     for (unsigned int i = 0; i<(sizeof(output)/sizeof(*output)); i++) {
@@ -230,10 +231,8 @@ void ComHandler::sendQvisProMsg() {
     ostr.str("");
     
     if (sendImage && videoStream) {
-        camManager->grab_frame();
-        jpg_buffer = camManager->get_jpg_buffer();
-        int jpg_size = camManager->get_jpg_buffer_size();
-        ostr << jpg_size;
+        jpg_dat = camManager->get_jpg_data();
+        ostr << jpg_dat.jpg_size;
     }
     
     else {
@@ -307,12 +306,8 @@ void ComHandler::sendQvisDevMsg() {
             printf("New resolution was set\n");
             vidRes = vidResNew;
         }
-        
-        jpg_buffer = camManager->get_jpg_buffer();
-        std::cout << sizeof(jpg_buffer);
-        int jpg_size = camManager->get_jpg_buffer_size();
-        
-        ostr << jpg_size;
+        jpg_dat = camManager->get_jpg_data();
+        ostr << jpg_dat.jpg_size;
     }
     
     else {
@@ -360,10 +355,9 @@ void ComHandler::sendQvisLightMsg() {
 
 void ComHandler::send_img() {
     printf("Sending image of\n");
-    size_t jpg_size = camManager->get_jpg_buffer_size();
-    std::cout << "Size: " << jpg_size << "Frame: " << frame_count << std::endl;
+    std::cout << "Size: " << jpg_dat.jpg_size << "Frame: " << frame_count << std::endl;
     frame_count++;
-    if (send(newsockfd, jpg_buffer, jpg_size, 0) == -1) {
+    if (send(newsockfd, jpg_dat.jpg_buffer, jpg_dat.jpg_size, 0) == -1) {
         closeClient();
         perror("send");
     }
