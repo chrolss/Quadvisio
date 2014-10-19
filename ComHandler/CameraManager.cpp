@@ -361,7 +361,7 @@ void CameraManager::uninit_device() {
 void CameraManager::change_res(int _width, int _height) {
     this->width = _width;
     this->height = _height;
-    this->change_resolution = true
+    this->change_resolution = true;
 }
 
 void CameraManager::set_res() {
