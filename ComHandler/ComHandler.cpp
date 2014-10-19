@@ -254,7 +254,7 @@ void ComHandler::sendQvisProMsg() {
         perror("send");
     }
     
-    printf("Message sent\n");
+    printf("Message sent: %s \n", s);
 
     
     if (sendImage && videoStream) {
