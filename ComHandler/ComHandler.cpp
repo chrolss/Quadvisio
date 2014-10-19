@@ -138,7 +138,7 @@ void ComHandler::Listen()
     // Set up socket time out time
     struct timeval tv;
     
-    tv.tv_sec = 2;  /* 30 Secs Timeout */
+    tv.tv_sec = 4;  /* 30 Secs Timeout */
     tv.tv_usec = 0;  // Not init'ing this can cause strange errors
     
     setsockopt(newsockfd, SOL_SOCKET, SO_RCVTIMEO, (char *)&tv,sizeof(struct timeval));
