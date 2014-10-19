@@ -301,9 +301,9 @@ jpg_data CameraManager::get_jpg_data() {
     jpg_data jpg_dat;
     while (this->saving_buffer) {}
     
-    jpg_data.buffer = jpg_buffer;
-    jpg_data.buffer_size = jpg_buffer_size;
-    return jpg_data;
+    jpg_dat.buffer = jpg_buffer;
+    jpg_dat.size = jpg_buffer_size;
+    return jpg_dat;
 }
 
 void CameraManager::process_image(const void *p, int size) {
