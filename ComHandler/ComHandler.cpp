@@ -143,9 +143,9 @@ void ComHandler::Listen()
     
     setsockopt(newsockfd, SOL_SOCKET, SO_RCVTIMEO, (char *)&tv,sizeof(struct timeval));
     
-    connected = true;
     reciveMsg=true;
     listening=false;
+    connected = true;
     
     std::cout << "Connection estabilished" << std::endl;
     
