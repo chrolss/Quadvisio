@@ -17,7 +17,7 @@ int main(int argc, const char * argv[]) {
     
     // Loop time measurement
     double loopTime = 0.0;
-    int Hz = 7500;
+    int Hz = 75;
     int loopSleep=0;
     
     std::cout << "Starting communication thread" << std::endl;
