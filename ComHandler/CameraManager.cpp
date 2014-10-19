@@ -38,6 +38,7 @@ CameraManager::CameraManager() {
     timeouts_max = 1;
     
     saving_buffer = false;
+    change_resolution = false;
 
     sprintf(out_name, "capture.jpg");
 }
@@ -60,7 +61,12 @@ int CameraManager::initializeCamera(int _width, int _height) {
 
 void CameraManager::startCameraThread() {
     while (1) {
-        grab_frame();
+        if (this->change_resolution) {
+            this->set_res();
+        }
+        else {
+            grab_frame();
+        }
     }
 }
 
@@ -348,12 +354,18 @@ void CameraManager::uninit_device() {
 }
 
 void CameraManager::change_res(int _width, int _height) {
+    this->width = width;
+    this->height = height
+    this->change_resolution = true
+}
+
+void CameraManager::set_res() {
     usleep(200000);
     closeCamera();
     usleep(200000);
     initializeCamera(_width, _height);
     usleep(200000);
-
+    this->change_resolution = false;
 }
 
 void CameraManager::close_device() {

@@ -67,6 +67,7 @@ private:
     void process_image(const void *p, int size);
     void s_signal_handler (int signal_value);
     void startCameraThread();
+    void set_res();
     
     int s_interrupted;
     char dev_name[256];
@@ -88,6 +89,7 @@ private:
     int jpg_buffer_size;
     bool frame_read;
     bool saving_buffer;
+    bool change_resolution;
     
     unsigned int pixel_format;
 
