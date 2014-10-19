@@ -49,11 +49,11 @@ class CameraManager{
 public:
     CameraManager();
     int initializeCamera(int _width, int _heigth);
-    void grab_frame();
     void closeCamera();
     jpg_data get_jpg_data();
     int get_jpg_buffer_size();
     void change_res(int _width, int _height);
+    void start_grabing();
     
 private:
     void open_device();
@@ -68,6 +68,7 @@ private:
     void s_signal_handler (int signal_value);
     void startCameraThread();
     void set_res();
+    void grab_frame();
     
     int s_interrupted;
     char dev_name[256];
