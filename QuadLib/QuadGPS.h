@@ -14,6 +14,11 @@
 #include <unistd.h>
 #include <inttypes.h>
 #include <string>
+#include <fcntl.h>
+#include <errno.h>
+#include <unistd.h>
+#include <termios.h>
+
 #include "QuadCore.h"
 
 class QuadGPS : protected QuadCore
@@ -31,7 +36,7 @@ private:
 	double latitude[3];			//degrees, minutes, seconds
 	double altitude;			//meters
 	bool fix;					//does it have a fix or not, changed by checkFix()
-
+	int fd;
 };
 
 

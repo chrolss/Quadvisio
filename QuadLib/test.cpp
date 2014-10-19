@@ -24,6 +24,7 @@
 int main(int argc, const char * argv[]){
 	QuadGPS GPS;
 	printf("UART2 initialized?\n");
+	GPS.readGPSData();
 }
 /*
 int main(int argc, const char * argv[]){
