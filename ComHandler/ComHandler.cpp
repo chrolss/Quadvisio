@@ -255,7 +255,7 @@ void ComHandler::sendQvisProMsg() {
         perror("send");
     }
     
-    printf("Message sent: %s \n", s.c_str());
+    //printf("Message sent: %s \n", s.c_str());
 
     
     if (sendImage && videoStream) {
@@ -357,15 +357,15 @@ void ComHandler::sendQvisLightMsg() {
 }
 
 void ComHandler::send_img() {
-    printf("Sending image of\n");
-    std::cout << "Size: " << jpg_dat.size << "Frame: " << frame_count << std::endl;
+    //printf("Sending image of\n");
+    //std::cout << "Size: " << jpg_dat.size << "Frame: " << frame_count << std::endl;
     frame_count++;
     if (send(newsockfd, jpg_dat.buffer, jpg_dat.size, 0) == -1) {
         closeClient();
         perror("send");
     }
     
-    printf("Image sent\n");
+    //printf("Image sent\n");
     
     vidCount=0;
 }
@@ -374,7 +374,7 @@ void ComHandler::readQvisProMsg() {
     
     std::string msg = this->reciveMessage();
     
-    printf("Final message:\n");
+    //printf("Final message:\n");
     std::cout << msg << std::endl;
     
     size_t pos = 0;
@@ -497,7 +497,7 @@ Client ComHandler::reciveOrder() {
     
     std::string msg = this->reciveMessage();
     
-    printf("Final message:\n");
+    //printf("Final message:\n");
     std::cout << msg << std::endl;
     
     size_t pos = 0;
@@ -527,7 +527,7 @@ Client ComHandler::reciveOrder() {
 
 std::string ComHandler::reciveMessage() {
     
-    printf("Waitning for message\n");
+    //printf("Waitning for message\n");
     
     std::string msgBuffer = "";
     std::string msg = "";
