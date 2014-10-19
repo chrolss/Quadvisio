@@ -188,7 +188,7 @@ void CameraManager::grab_frame() {
     //count = frame_count;
     timeout_count = timeouts_max;
     
-    int counter = 0
+    int counter = 0;
     
     //begin = clock();
     for (;;) {
