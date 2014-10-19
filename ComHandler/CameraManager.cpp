@@ -190,6 +190,7 @@ void CameraManager::grab_frame() {
     int counter = 0;
     
     begin = clock();
+    usleep(1000)
     for (;;) {
         if (s_interrupted < 0) {
             fprintf(stderr, "\nInterrupt received - aborting capture\n");
