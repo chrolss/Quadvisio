@@ -53,10 +53,15 @@ int CameraManager::initializeCamera(int _width, int _height) {
     init_device();
     start_capturing();
     
-    std::thread t1(&CameraManager::startCameraThread, this);
-    t1.detach();
+    usleep(1000);
 
     return 0;
+}
+
+void CameraManager::start_grabing() {
+    std::cout << "Starting to grab frames" << std::endl;
+    std::thread t1(&CameraManager::startCameraThread, this);
+    t1.detach();
 }
 
 void CameraManager::startCameraThread() {
