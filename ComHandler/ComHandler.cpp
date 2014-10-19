@@ -309,11 +309,8 @@ void ComHandler::sendQvisDevMsg() {
             printf("New resolution was set\n");
             vidRes = vidResNew;
         }
-        printf("grabbing frame\n");
         jpg_dat = camManager->get_jpg_data();
         ostr << jpg_dat.size;
-        printf("frame grabbed\n");
-
     }
     
     else {
