@@ -365,12 +365,16 @@ void CameraManager::change_res(int _width, int _height) {
 }
 
 void CameraManager::set_res() {
+    this->saving_buffer = true;
     usleep(500000);
+    std::cout << "Closing camera" << std::endl;
     closeCamera();
     usleep(500000);
+    std::cout << "Starting camera" << std::endl;
     initializeCamera(this->width, this->height);
     usleep(500000);
     this->change_resolution = false;
+    this->saving_buffer = false;
 }
 
 void CameraManager::close_device() {
