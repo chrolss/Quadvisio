@@ -268,7 +268,8 @@ int CameraManager::read_frame() {
 
     buf.type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
     buf.memory = V4L2_MEMORY_MMAP;
-    
+    this->saving_buffer = true;
+
     if (-1 == xioctl(fd, VIDIOC_DQBUF, &buf)) {
         switch (errno) {
             case EAGAIN:
@@ -285,14 +286,14 @@ int CameraManager::read_frame() {
     }
     
     assert(buf.index < n_buffers);
-    this->saving_buffer = true;
     jpg_buffer = buffers[buf.index].start;
     jpg_buffer_size = buf.bytesused;
-    this->saving_buffer = false;
+
     
     if (-1 == xioctl(fd, VIDIOC_QBUF, &buf))
         perror("VIDIOC_QBUF");
     
+    this->saving_buffer = false;
     return 1;
 
 }
