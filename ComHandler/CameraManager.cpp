@@ -171,7 +171,7 @@ void CameraManager::init_mmap() {
 }
 
 void CameraManager::start_capturing() {
-    unsigned int i;
+    int i;
     enum v4l2_buf_type type;
     
 
@@ -262,7 +262,7 @@ int CameraManager::read_frame() {
 
     buf.type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
     buf.memory = V4L2_MEMORY_MMAP;
-    usleep(500000);
+    
     if (-1 == xioctl(fd, VIDIOC_DQBUF, &buf)) {
         switch (errno) {
             case EAGAIN:
