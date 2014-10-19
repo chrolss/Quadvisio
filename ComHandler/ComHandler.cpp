@@ -232,7 +232,7 @@ void ComHandler::sendQvisProMsg() {
     
     if (sendImage && videoStream) {
         jpg_dat = camManager->get_jpg_data();
-        ostr << jpg_dat.jpg_size;
+        ostr << jpg_dat.size;
     }
     
     else {
@@ -307,7 +307,7 @@ void ComHandler::sendQvisDevMsg() {
             vidRes = vidResNew;
         }
         jpg_dat = camManager->get_jpg_data();
-        ostr << jpg_dat.jpg_size;
+        ostr << jpg_dat.size;
     }
     
     else {
@@ -355,9 +355,9 @@ void ComHandler::sendQvisLightMsg() {
 
 void ComHandler::send_img() {
     printf("Sending image of\n");
-    std::cout << "Size: " << jpg_dat.jpg_size << "Frame: " << frame_count << std::endl;
+    std::cout << "Size: " << jpg_dat.size << "Frame: " << frame_count << std::endl;
     frame_count++;
-    if (send(newsockfd, jpg_dat.jpg_buffer, jpg_dat.jpg_size, 0) == -1) {
+    if (send(newsockfd, jpg_dat.buffer, jpg_dat.size, 0) == -1) {
         closeClient();
         perror("send");
     }

@@ -298,11 +298,11 @@ int CameraManager::read_frame() {
 }
 
 jpg_data CameraManager::get_jpg_data() {
-    struct jpg_data;
+    jpg_data jpg_dat;
     while (this->saving_buffer) {}
     
-    jpg_data.jpg_buffer = jpg_buffer;
-    jpg_data.jpg_buffer_size = jpg_buffer_size;
+    jpg_data.buffer = jpg_buffer;
+    jpg_data.buffer_size = jpg_buffer_size;
     return jpg_data;
 }
 

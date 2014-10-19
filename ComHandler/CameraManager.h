@@ -35,8 +35,8 @@ enum io_method {
 };
 
 struct jpg_data {
-    void *jpg_buffer;
-    int jpg_size;
+    void *buffer;
+    int size;
 };
 
 struct buffer {
