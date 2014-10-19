@@ -370,6 +370,8 @@ void CameraManager::set_res() {
     usleep(200000);
     initializeCamera(this->width, this->height);
     usleep(200000);
+    start_grabing();
+    usleep(200000);
     this->change_resolution = false;
 }
 
