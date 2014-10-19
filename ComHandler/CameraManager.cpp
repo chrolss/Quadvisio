@@ -280,9 +280,7 @@ int CameraManager::read_frame() {
     }
     
     assert(buf.index < n_buffers);
-    
-    //process_image(buffers[buf.index].start, buf.bytesused);
-    
+    std::cout << buf.index << std::endl;
     jpg_buffer = buffers[buf.index].start;
     jpg_buffer_size = buf.bytesused;
     
