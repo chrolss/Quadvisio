@@ -143,8 +143,8 @@ void ComHandler::Listen()
     
     setsockopt(newsockfd, SOL_SOCKET, SO_RCVTIMEO, (char *)&tv,sizeof(struct timeval));
     
-    reciveMsg=true;
-    listening=false;
+    this->reciveMsg=true;
+    this->listening=false;
     connected = true;
     
     std::cout << "Connection estabilished" << std::endl;
@@ -177,6 +177,7 @@ void ComHandler::Listen()
 
 void ComHandler::qvisProLoop() {
     std::cout << "In Pro Loop" << std::endl;
+    std::cout << this->sendMsg << std::endl;
     while (connected) {
         if (reciveMsg) {
             readQvisProMsg();
