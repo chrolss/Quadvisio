@@ -411,7 +411,6 @@ void ComHandler::readQvisProMsg() {
     // length:orderID
     
     int i = 0;
-    memset(numberInStrings, 0, sizeof(numberInStrings));
 
     while ((pos = msg.find(subDelimiter)) != std::string::npos) {
         token = msg.substr(0, pos);
@@ -421,7 +420,6 @@ void ComHandler::readQvisProMsg() {
     }
     
     numberInStrings[i] = msg;
-    printf("Final message:\n");
 
     if (atoi(numberInStrings[5].c_str())==1) {
         motorOn = true;
@@ -453,7 +451,6 @@ void ComHandler::readQvisDevMsg() {
     std::string token;
     
     int i = 0;
-    memset(numberInStrings, 0, sizeof(numberInStrings));
     
     while ((pos = msg.find(subDelimiter)) != std::string::npos) {
         token = msg.substr(0, pos);
