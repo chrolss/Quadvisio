@@ -402,8 +402,8 @@ void ComHandler::readQvisProMsg() {
     
     std::string msg = this->reciveMessage();
     
-    printf("Final message:\n");
-    std::cout << msg << std::endl;
+    //printf("Final message:\n");
+    //std::cout << msg << std::endl;
     
     size_t pos = 0;
     std::string token;
