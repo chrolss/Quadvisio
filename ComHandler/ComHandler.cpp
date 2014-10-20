@@ -412,7 +412,6 @@ void ComHandler::readQvisProMsg() {
     
     int i = 0;
     memset(numberInStrings, 0, sizeof(numberInStrings));
-    printf("Final message:\n");
 
     while ((pos = msg.find(subDelimiter)) != std::string::npos) {
         token = msg.substr(0, pos);
@@ -422,7 +421,8 @@ void ComHandler::readQvisProMsg() {
     }
     
     numberInStrings[i] = msg;
-    
+    printf("Final message:\n");
+
     if (atoi(numberInStrings[5].c_str())==1) {
         motorOn = true;
     }
