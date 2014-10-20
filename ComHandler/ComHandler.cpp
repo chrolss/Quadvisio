@@ -438,7 +438,7 @@ void ComHandler::readQvisProMsg() {
         else {videoStream = false;}
         vidResNew = atoi(numberInStrings[8].c_str());
     }
-    
+    printf("Message read:\n");
 }
 
 void ComHandler::readQvisDevMsg() {
