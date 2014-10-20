@@ -312,7 +312,6 @@ int CameraManager::read_frame() {
 jpg_data CameraManager::get_jpg_data() {
     jpg_data jpg_dat;
     while (this->saving_buffer==true) {
-        printf("waiting\n");
     }
     
     jpg_dat.buffer = jpg_buffer;
