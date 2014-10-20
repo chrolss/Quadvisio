@@ -176,7 +176,6 @@ void ComHandler::Listen()
 
 void ComHandler::qvisProLoop() {
     std::cout << "In Pro Loop" << std::endl;
-    std::cout << this->sendMsg << std::endl;
     while (connected) {
         if (reciveMsg) {
             readQvisProMsg();
@@ -431,7 +430,6 @@ void ComHandler::readQvisProMsg() {
         else {videoStream = false;}
         vidResNew = atoi(numberInStrings[8].c_str());
     }
-    printf("Message read:\n");
 }
 
 void ComHandler::readQvisDevMsg() {
