@@ -21,6 +21,10 @@
 
 #include "QuadCore.h"
 
+#define BAUDRATE B9600
+#define MODEMDEVICE "/dev/ttyO2"
+#define _POSIX_SOURCE 1 /* POSIX compliant source */
+
 class QuadGPS : protected QuadCore
 {
 public:
