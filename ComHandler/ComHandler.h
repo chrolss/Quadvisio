@@ -93,7 +93,6 @@ private:
     CameraManager *camManager;
     int vidRes;
     int vidResNew;
-    int frame_count;
     struct jpg_data jpg_dat;
     
     // PID Params : Joy Sen : RollTrim : PitchTrim

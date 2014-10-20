@@ -63,7 +63,6 @@ ComHandler::ComHandler() {
     
     vidCount = 0;
     vidLimit = 0;
-    frame_count = 0;
     vidRes = 2; // Default 2 = 1280x720
     vidResNew = 2;
     errMsg = "Nothing wrong here!!";
@@ -177,7 +176,6 @@ void ComHandler::Listen()
 
 void ComHandler::qvisProLoop() {
     std::cout << "In Pro Loop" << std::endl;
-    std::cout << this->sendMsg << std::endl;
     while (connected) {
         if (reciveMsg) {
             readQvisProMsg();
@@ -230,6 +228,32 @@ void ComHandler::sendQvisProMsg() {
     
     ostr.str("");
     
+    if (vidResNew != vidRes) {
+        switch (vidResNew) {
+            case 0:
+                camManager->change_res(320, 240);
+                break;
+                
+            case 1:
+                camManager->change_res(640, 480);
+                break;
+                
+            case 2:
+                camManager->change_res(1280, 720);
+                break;
+                
+            case 3:
+                camManager->change_res(1920, 1080);
+                break;
+                
+            default:
+                break;
+        }
+        printf("New resolution was set\n");
+        vidRes = vidResNew;
+    }
+
+    
     if (sendImage && videoStream) {
         jpg_dat = camManager->get_jpg_data();
         ostr << jpg_dat.size;
@@ -242,6 +266,8 @@ void ComHandler::sendQvisProMsg() {
     std::string s;
     s = ostr.str();
     ostr.str("");
+    
+    // Add the length of the message
     
     if ((s.length()+1)<10) {ostr << "000" << (s.length()+1) << ":" << s;}
     else if((s.length()+1)>=10 && (s.length()+1)<100) {ostr << "00" << (s.length()+1) << ":" << s;}
@@ -283,32 +309,32 @@ void ComHandler::sendQvisDevMsg() {
         ostr << "none:";
     }
     
-    if (sendImage && videoStream) {
-        
-        if (vidResNew != vidRes) {
-            switch (vidResNew) {
-                case 0:
-                    camManager->change_res(320, 240);
-                    break;
-                    
-                case 1:
-                    camManager->change_res(640, 480);
-                    break;
-                    
-                case 2:
-                    camManager->change_res(1280, 720);
-                    break;
-                    
-                case 3:
-                    camManager->change_res(1920, 1080);
-                    break;
-                    
-                default:
-                    break;
-            }
-            printf("New resolution was set\n");
-            vidRes = vidResNew;
+    if (vidResNew != vidRes) {
+        switch (vidResNew) {
+            case 0:
+                camManager->change_res(320, 240);
+                break;
+                
+            case 1:
+                camManager->change_res(640, 480);
+                break;
+                
+            case 2:
+                camManager->change_res(1280, 720);
+                break;
+                
+            case 3:
+                camManager->change_res(1920, 1080);
+                break;
+                
+            default:
+                break;
         }
+        printf("New resolution was set\n");
+        vidRes = vidResNew;
+    }
+    
+    if (sendImage && videoStream) {
         jpg_dat = camManager->get_jpg_data();
         ostr << jpg_dat.size;
     }
@@ -357,16 +383,10 @@ void ComHandler::sendQvisLightMsg() {
 }
 
 void ComHandler::send_img() {
-    //printf("Sending image of\n");
-    //std::cout << "Size: " << jpg_dat.size << "Frame: " << frame_count << std::endl;
-    frame_count++;
     if (send(newsockfd, jpg_dat.buffer, jpg_dat.size, 0) == -1) {
         closeClient();
         perror("send");
     }
-    
-    //printf("Image sent\n");
-    
     vidCount=0;
 }
 
@@ -383,6 +403,7 @@ void ComHandler::readQvisProMsg() {
     // length:orderID
     
     int i = 0;
+
     while ((pos = msg.find(subDelimiter)) != std::string::npos) {
         token = msg.substr(0, pos);
         numberInStrings[i] = token;
@@ -391,23 +412,24 @@ void ComHandler::readQvisProMsg() {
     }
     
     numberInStrings[i] = msg;
-    
+
     if (atoi(numberInStrings[5].c_str())==1) {
-        videoStream = true;
-    }
-    else {
-        videoStream = false;
-        vidCount = 0;
-    }
-    
-    if (atoi(numberInStrings[6].c_str())==1) {
         motorOn = true;
     }
     else{
         motorOn = false;
     }
-
     
+    if (atoi(numberInStrings[6].c_str())==0) {
+        return;
+    }
+    
+    else if(atoi(numberInStrings[6].c_str())==3){
+        printf("Applying camara settings\n");
+        if(atoi(numberInStrings[7].c_str())==1) {videoStream = true;}
+        else {videoStream = false;}
+        vidResNew = atoi(numberInStrings[8].c_str());
+    }
 }
 
 void ComHandler::readQvisDevMsg() {
@@ -421,6 +443,7 @@ void ComHandler::readQvisDevMsg() {
     std::string token;
     
     int i = 0;
+    
     while ((pos = msg.find(subDelimiter)) != std::string::npos) {
         token = msg.substr(0, pos);
         numberInStrings[i] = token;
