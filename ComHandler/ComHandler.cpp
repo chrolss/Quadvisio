@@ -412,7 +412,8 @@ void ComHandler::readQvisProMsg() {
     
     int i = 0;
     memset(numberInStrings, 0, sizeof(numberInStrings));
-    
+    printf("Final message:\n");
+
     while ((pos = msg.find(subDelimiter)) != std::string::npos) {
         token = msg.substr(0, pos);
         numberInStrings[i] = token;
