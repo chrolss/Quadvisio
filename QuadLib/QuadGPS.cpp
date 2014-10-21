@@ -8,83 +8,59 @@ QuadGPS::QuadGPS(){
 }
 
 void QuadGPS::initialize(){
-	this->fd = open("/dev/ttyO2", O_RDONLY);
-	struct termios tty;
-	struct termios tty_old;
-	memset (&tty, 0, sizeof tty);
+	int c;
+	struct termios oldtio,newtio;
 
-	/* Error Handling */
-	if ( tcgetattr ( fd, &tty ) != 0 )
-	{
-	std::cout << "Error " << errno << " from tcgetattr: " << strerror(errno) << std::endl;
-	}
+	this->fd = open(MODEMDEVICE, O_RDWR | O_NOCTTY );
+	if (fd <0) {perror(MODEMDEVICE); exit(-1); }
 
-	/* Save old tty parameters */
-	tty_old = tty;
+	tcgetattr(fd,&oldtio); /* save current port settings */
 
-	/* Set Baud Rate */
-	cfsetospeed (&tty, (speed_t)B9600);
-	cfsetispeed (&tty, (speed_t)B9600);
+	bzero(&newtio, sizeof(newtio));
+	newtio.c_cflag = BAUDRATE | CRTSCTS | CS8 | CLOCAL | CREAD;
+	newtio.c_iflag = IGNPAR;
+	newtio.c_oflag = 0;
 
-	/* Setting other Port Stuff */
-	tty.c_cflag     &=  ~PARENB;        // Make 8n1
-	tty.c_cflag     &=  ~CSTOPB;
-	tty.c_cflag     &=  ~CSIZE;
-	tty.c_cflag     |=  CS8;
+	/* set input mode (non-canonical, no echo,...) */
+	newtio.c_lflag = 0;
 
-	tty.c_cflag     &=  ~CRTSCTS;       // no flow control
-	tty.c_cc[VMIN]      =   1;                  // read doesn't block
-	tty.c_cc[VTIME]     =   5;                  // 0.5 seconds read timeout
-	tty.c_cflag     |=  CREAD | CLOCAL;     // turn on READ & ignore ctrl lines
+	newtio.c_cc[VTIME]    = 0;   /* inter-character timer unused */
+	newtio.c_cc[VMIN]     = 0;   /* blocking read until 5 chars received */
 
-	/* Make raw */
-	cfmakeraw(&tty);
-
-	/* Flush Port, then applies attributes */
-	tcflush( fd, TCIFLUSH );
-	if ( tcsetattr ( fd, TCSANOW, &tty ) != 0)
-	{
-	std::cout << "Error " << errno << " from tcsetattr" << std::endl;
-	}
+	tcflush(fd, TCIFLUSH);
+	tcsetattr(fd,TCSANOW,&newtio);
 }
 
 void QuadGPS::checkFix(){}
 
 void QuadGPS::readGPSData(){
-	int n = 0;
-	char buf = '\0';
+	int res, pes;
+	char buf[255];
+	char pre[255];
+	while(true){
+		pes = read(fd, pre, 6);
+		pre[pes] = 0;
+		printf("%s %d\n",pre,pes);
+		if (pes == '$GPGGA'){
+			res = read(fd, buf, 255);
+			buf[res] = 0;
+			printf(":%s:%d\n", buf, res);
 
-	/* Whole response*/
-	std::string response;
-
-	do
-	{
-	   n = read( fd, &buf, 1 );
-	   response.append( &buf );
-	   printf("%c", buf);
-	}
-	while( buf != '\r' && n > 0);
-	printf("\n");
-	do
-		{
-		   n = read( fd, &buf, 1 );
-		   response.append(&buf);
-		   printf("%c", buf);
+			if (res < 0)
+			{
+				std::cout << "Error reading: " << strerror(errno) << std::endl;
+			}
+			else if (res == 0)
+			{
+				std::cout << "Read nothing!" << std::endl;
+			}
+			else
+			{
+				std::cout << "Message read!" << std::endl;
+			}
+			exit(1);
 		}
-		while( buf != '\r' && n > 0);
-	if (n < 0)
-	{
-	   std::cout << "Error reading: " << strerror(errno) << std::endl;
 	}
-	   else if (n == 0)
-	{
-	    std::cout << "Read nothing!" << std::endl;
-	}
-	else
-	{
-	    std::cout << "Response: " << response << std::endl;
-	}
-
 }
 
 void QuadGPS::getGPSPosition(double *position){

@@ -20,11 +20,17 @@
 #define MOTOR_BL "P9_21"
 #define MOTOR_BR "P9_42"
 
+std::string tmp;
+
 
 int main(int argc, const char * argv[]){
 	QuadGPS GPS;
 	printf("UART2 initialized?\n");
-	GPS.readGPSData();
+	while (true){
+		printf("Press any key for read\n");
+		std::cin >> tmp;
+		GPS.readGPSData();
+	}
 }
 /*
 int main(int argc, const char * argv[]){
