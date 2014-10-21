@@ -71,8 +71,8 @@ ComHandler::ComHandler() {
     
     vidCount = 0;
     vidLimit = 0;
-    vidRes = 2; // Default 2 = 1280x720
-    vidResNew = 2;
+    vidRes = 0; // Default 0 = 320x240
+    vidResNew = 0;
     errMsg = "Nothing wrong here!!";
         
     for (unsigned int i = 0; i<(sizeof(output)/sizeof(*output)); i++) {
@@ -95,7 +95,7 @@ ComHandler::ComHandler() {
 
     camManager = new CameraManager;
     
-    camManager->initializeCamera(1280, 720);
+    camManager->initializeCamera(320, 240);
     camManager->start_grabing();
     usleep(100000);
     
