@@ -90,7 +90,7 @@ ComHandler::ComHandler() {
     }
     
     for (unsigned int i = 0; i<(sizeof(controllerInputData)/sizeof(*controllerInputData)); i++) {
-        controllerInputData[i] = 0.5;
+        controllerInputData[i] = -1000.0;
     }
 
     camManager = new CameraManager;
@@ -141,18 +141,19 @@ void ComHandler::Listen()
         closeClient();
     }
     
-    
+
     // Set up socket time out time
     struct timeval tv;
     
-    tv.tv_sec = 4;  /* 30 Secs Timeout */
+    tv.tv_sec = 4;  // 30 Secs Timeout
     tv.tv_usec = 0;  // Not init'ing this can cause strange errors
     
     setsockopt(newsockfd, SOL_SOCKET, SO_RCVTIMEO, (char *)&tv,sizeof(struct timeval));
-    
+
     this->reciveMsg=true;
     this->listening=false;
-    connected = true;
+    this->connected = true;
+    this->sendMsg = false;
     
     std::cout << "Connection estabilished" << std::endl;
     
@@ -163,8 +164,6 @@ void ComHandler::Listen()
     
     // connect
     if(clientData.order==1) {
-        reciveMsg = false;
-        sendMsg = true;
         if (clientData.type==1) {
             qvisLightLoop();
         }
@@ -200,10 +199,11 @@ void ComHandler::qvisProLoop() {
 }
 
 void ComHandler::qvisDevLoop() {
-    printf("Inside QvisDev Loop\n");
-    printf("Sending settings data");
+    
+    std::cout << "Inside QvisDev Loop\n" << std::endl;
+    std::cout << "Sending settings data" << std::endl;
     sendSettingsData();
-    printf("Settings data sent");
+    std::cout << "Settings data sent" << std::endl;
     
     while (connected) {
         
@@ -263,8 +263,9 @@ void ComHandler::sendQvisProMsg() {
         printf("New resolution was set\n");
         vidRes = vidResNew;
     }
-
     
+    ostr << "0:";
+
     if (sendImage && videoStream) {
         jpg_dat = camManager->get_jpg_data();
         ostr << jpg_dat.size;
@@ -285,6 +286,8 @@ void ComHandler::sendQvisProMsg() {
     
     s = ostr.str();
     
+    //std::cout << s << std::endl;
+
     if (send(newsockfd, s.c_str(), s.length(),0) == -1) {
         closeClient();
         perror("send");
@@ -379,7 +382,6 @@ void ComHandler::sendQvisDevMsg() {
         sendImage = false;
     }
 
-    //printf("Message sent\n");
 }
 
 
@@ -418,6 +420,10 @@ void ComHandler::readQvisProMsg() {
     
     numberInStrings[i] = msg;
 
+    for (int i = 1 ; i<5; i++) {
+           controllerInputData[i-1] = atof(numberInStrings[i].c_str());
+       }
+
     if (atoi(numberInStrings[5].c_str())==1) {
         motorOn = true;
     }
@@ -440,7 +446,6 @@ void ComHandler::readQvisProMsg() {
 void ComHandler::readQvisDevMsg() {
     
     std::string msg = this->reciveMessage();
-    
     //printf("Final message:\n");
     //std::cout << msg << std::endl;
     
@@ -522,7 +527,7 @@ Client ComHandler::reciveOrder() {
     std::string msg = this->reciveMessage();
     
     //printf("Final message:\n");
-    std::cout << msg << std::endl;
+    //std::cout << msg << std::endl;
     
     size_t pos = 0;
     std::string token;
@@ -543,8 +548,9 @@ Client ComHandler::reciveOrder() {
     clientData.type = atoi(numberInStrings[2].c_str());
     clientData.order = atoi(numberInStrings[3].c_str());
     
-    sendMsg = true;
-    reciveMsg = false;
+    //uncomment for QvisDev, comment for Pro
+    //sendMsg = true;
+    //reciveMsg = false;
 
     return clientData;
 }
@@ -651,11 +657,12 @@ void ComHandler::sendSettingsData() {
     }
     
     s = ostr.str();
-    
     if (send(newsockfd, s.c_str(), s.length(),0) == -1) {
         closeClient();
         perror("send");
     }
+    reciveMsg = true;
+    sendMsg = false;
 }
 
 
@@ -664,7 +671,7 @@ int ComHandler::getSigStrength() {
 }
 
 int ComHandler::getSignalInfo() {
-    
+    /*
     iwreq req;
     
     signalInfo *sigInfo;
@@ -738,7 +745,7 @@ int ComHandler::getSignalInfo() {
     this->output[17] = sigInfo->bitrate;
     this->output[18] = (double)sigInfo->level;
     
-    
+    */
     return 0;
 }
 
