@@ -627,7 +627,7 @@ int ComHandler::getSigStrength() {
 }
 
 int ComHandler::getSignalInfo() {
-    /*
+    
     iwreq req;
     
     signalInfo *sigInfo;
@@ -700,7 +700,8 @@ int ComHandler::getSignalInfo() {
     
     this->output[17] = sigInfo->bitrate;
     this->output[18] = (double)sigInfo->level;
-    */
+    
+    
     return 0;
 }
 
