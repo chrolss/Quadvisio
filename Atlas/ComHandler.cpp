@@ -163,8 +163,8 @@ void ComHandler::Listen()
     
     // connect
     if(clientData.order==1) {
-        reciveMsg = false;
-        sendMsg = true;
+    	reciveMsg = false;
+    	sendMsg = true;
         if (clientData.type==1) {
             qvisLightLoop();
         }
@@ -172,6 +172,7 @@ void ComHandler::Listen()
             qvisProLoop();
         }
         else if (clientData.type==3) {
+            //sendSettingsParams();
             qvisDevLoop();
         }
     }
@@ -656,6 +657,7 @@ void ComHandler::sendSettingsData() {
         closeClient();
         perror("send");
     }
+    
 }
 
 
@@ -684,7 +686,7 @@ int ComHandler::getSignalInfo() {
     //this will gather the signal strength
     if(ioctl(sockfd, SIOCGIWSTATS, &req) == -1){
         //die with error, invalid interface
-        fprintf(stderr, "Invalid interface.\n");
+        //fprintf(stderr, "Invalid interface.\n");
         return(-1);
     }
     else if(((iw_statistics *)req.u.data.pointer)->qual.updated & IW_QUAL_DBM){

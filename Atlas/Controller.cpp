@@ -105,7 +105,7 @@ void Controller::get_Errors(double *_err){
 void Controller::calcPWM(double *input, double *output, double *ref) {
 
 	//alphadelen - roll
-	ea[0] = ref[0] - input[3] + innerParameters[12];  	// set new error
+	ea[0] = ref[0] - input[3] + innerParameters[13];  	// set new error
 	this->ea[2] += (ea[0])*dt;
 	if (fabs(ea[2])>WINDUP_LIMIT_UP){
 		this->ea[2] = windUp(ea);
@@ -116,7 +116,7 @@ void Controller::calcPWM(double *input, double *output, double *ref) {
 
 	//printf("P: %f, I: %f, D: %f, e0: %f, e2: %f\n",innerParameters[0]*ea[0], innerParameters[1]*(ea[2]), innerParameters[2]*(ea[0]-ea[1])/dt,ea[0],ea[2]);
 	//betadelen - pitch
-	eb[0] = ref[1] - input[4] + innerParameters[13];  	// set new error
+	eb[0] = ref[1] - input[4] + innerParameters[14];  	// set new error
 	this->eb[2] += eb[0]*dt;
 	if (fabs(eb[2])>WINDUP_LIMIT_UP){
 		this->eb[2] = windUp(eb);
@@ -208,11 +208,11 @@ void Controller::setJoyCom(double *joy, double *sensorInput, double *ref){
 	*/
 	this->F = 4*THRUST_CONSTANT*joy[3]*joy[3]*10000.0;
 	setSensitivity(joy[6]);
-	ref[0] = innerParameters[14]*joy[0];
-	ref[1] = -innerParameters[14]*joy[1];
-	this->joyCom[2] = innerParameters[14]*joy[2];
-	this->innerParameters[12] = joy[4];	//add from *joy
-	this->innerParameters[13] = -joy[5];	//add from *joy
+	ref[0] = innerParameters[12]*joy[0];
+	ref[1] = -innerParameters[12]*joy[1];
+	this->joyCom[2] = innerParameters[12]*joy[2];
+	this->innerParameters[13] = joy[4];	//add from *joy
+	this->innerParameters[14] = -joy[5];	//add from *joy
 
 
 }
