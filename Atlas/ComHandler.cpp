@@ -163,6 +163,8 @@ void ComHandler::Listen()
     
     // connect
     if(clientData.order==1) {
+        reciveMsg = false;
+        sendMsg = true;
         if (clientData.type==1) {
             qvisLightLoop();
         }
@@ -170,7 +172,6 @@ void ComHandler::Listen()
             qvisProLoop();
         }
         else if (clientData.type==3) {
-            //sendSettingsParams();
             qvisDevLoop();
         }
     }
@@ -655,7 +656,6 @@ void ComHandler::sendSettingsData() {
         closeClient();
         perror("send");
     }
-    
 }
 
 
