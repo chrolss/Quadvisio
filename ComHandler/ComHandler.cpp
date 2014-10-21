@@ -499,12 +499,14 @@ void ComHandler::readQvisDevMsg() {
             settingsData[i-13] = atof(numberInStrings[i].c_str());
         }
         
+        settingsData[13] = controllerInputData[4];
+        settingsData[14] = controllerInputData[5];
+        
         controllerInputData[6] = atof(numberInStrings[25].c_str());
         
         saveSettings = true;
         
         printf("Joy sen: %f\n", controllerInputData[6]);
-        
         printf("PID parameters and joystick sensetivity read and saved\n");
     }
 
