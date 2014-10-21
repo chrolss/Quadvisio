@@ -9,18 +9,14 @@
 #include <iostream>
 #include <string>
 #include <chrono>
-
-//#include <opencv2/core/core.hpp>
-//#include <opencv2/highgui/highgui.hpp>
-
 #include "SensorManager.h"
 #include "Controller.h"
-#include "Com.h"
+#include "ComHandler.h"
 #include "Motor.h"
 
 SensorManager *sensorManager;
 Controller *controller;
-Com *C;
+ComHandler *comHandler;
 Motor *motor;
 bool pigeon;
 double sInput[6];
@@ -37,7 +33,7 @@ double loopTime = 0.0;
 int Hz = 100;
 int loopSleep=0;
 double ref[7];
-double inParams[12];	//inte värdelös längre
+double inParams[15];
 double outParams[6];
 double iErrors[3];
 
@@ -53,7 +49,7 @@ void initailize(){
         }
     sensorManager = new SensorManager;
     controller = new Controller(pigeon);
-    C = new Com;
+    comHandler = new ComHandler;
     motor = new Motor;
     
     if(sensorManager->getMode()){
@@ -76,7 +72,7 @@ void initailize(){
     sOutput[3] = 0.0;
 
     controller->send_Parameters(inParams);	//lägger parametrarna i inParams
-    C->setPidParams(inParams);				//tonis funktion som skickar till Com
+    comHandler->setSettingsData(inParams);				//tonis funktion som skickar till Com
     controller->setSensitivity(0.4);		//sätt sens, 0.25 - 0.4
 
     runAtlas = true;
@@ -91,75 +87,47 @@ void loop(){
         // Start clock
         auto start = std::chrono::high_resolution_clock::now();
         
-        if (C->savePid == true){
-        	C->getPidParams(inParams);
+        if (comHandler->saveSettings == true){
+        	comHandler->getSettingsData(inParams);
         	controller->setInnerParameters(inParams);
         	controller->write_Parameters(inParams, outParams);
-        	C->savePid = false;
+        	comHandler->saveSettings = false;
         }
 
         // Read sensor data
         sensorManager->readDMP(sInput);
-        
-        // If connected to Qvis send data
-        /*
-        if (communicate->connected==true && communicate->reciveMsg==false && communicate->msgSend==false) {
-            communicate->setOutputData(sInput);
-            if (vidCount>=int(((double(5.0/communicate->imgSendRate))-1)*10) && communicate->videoStream==true) {
-                communicate->imgSend=true;
-                vidCount=0;
-            }
-            communicate->msgSend=true;
-        }
-        */
 
-        if (C->connected) {
-             if (!C->reciveMsg && !C->msgSend) {
+        if (comHandler->connected) {
+             if (!comHandler->reciveMsg && !comHandler->sendMsg) {
                  //printf("Setting output and send to true\n");
             	 controller->get_Errors(iErrors);
-                 C->setOutputData(sInput, sOutput, ref, loopTime, iErrors);
-                 if (C->vidCount>=2) {
-                     C->imgSend = true;
+                 comHandler->setOutputData(sInput, sOutput, ref, loopTime, iErrors);
+                 if (comHandler->vidCount>=2) {
+                     comHandler->sendImage = true;
                  }
-                 C->msgSend=true;
+                 comHandler->sendMsg=true;
              }
          }
 
-         if (!C->connected && !C->listening) {
-             C->startListenThread();
+         if (!comHandler->connected && !comHandler->listening) {
+             comHandler->startListenThread();
          }
-         C->vidCount++;
+         comHandler->vidCount++;
 
-        
-        //std::cout << "Calculate control action" << std::endl;
-        // Calculate control action
-        //add controller->setOuterParameters
-        //controller->calcRef(sInput, ref);	//outer controller
-        //controller->setReference(ref);		//set new references based on outer controller
-
-        controller->setJoyCom(C->inputData, sInput, ref);
-        if (C->resetIntegral){
+        controller->setJoyCom(C->controllerInputData, sInput, ref);
+        if (comHandler->resetIntegral){
         	controller->reset_I();
-        	C->resetIntegral = false;
+        	comHandler->resetIntegral = false;
         }
 
-        //controller->setInnerParameters(communicate->pidParam);
-
         controller->calcPWM(sInput, sOutput, ref);
-        //printf("Pitch: %f, Roll: %f, Yaw: %f \n", errors[0], errors[1], errors[2]);
-        //std::cout << "Setting PWM values" << std::endl;
-        // Send PWM values to motors
 
-
-        if (C->motorOn==true && C->connected){
+        if (comHandler->motorOn==true && comHandler->connected){
             motor->setPWM(sOutput);
         }
         else {
             motor->setPWM(idleMotorValues);
         }
-
-        
-        //std::cout << counter << std::endl;
         
         // Measure duration
         auto duration = std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::high_resolution_clock::now() - start).count();

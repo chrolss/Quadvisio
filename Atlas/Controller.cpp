@@ -57,7 +57,7 @@ void Controller::get_Parameters(std::string _birdParams){
 	>>  this->innerParameters[3] >>  this->innerParameters[4] >>  this->innerParameters[5]
 	>> this->innerParameters[6] >> this->innerParameters[7] >> this->innerParameters[8]
 	>> this->innerParameters[9] >> this->innerParameters[10] >> this->innerParameters[11]
-	>> this->trim[0] >> this->trim[1];
+	>> this->innerParameters[12] >> this->innerParameters[13] >> this->innerParameters[14];
 	params1.close();
 	std::fstream params2("outerParameters.txt");
 	params2 >> 	this->outerParameters[0] >> this->outerParameters[1]
@@ -75,7 +75,7 @@ void Controller::write_Parameters(double *inner, double *outer){
 	 << inner[3] << "\t" << inner[4] << "\t" << inner[5] << "\t"
 	 << inner[6] << "\t" << inner[7] << "\t" << inner[8] << "\t"
 	 << inner[9] << "\t" << inner[10] << "\t" << inner[11] << "\t"
-	 << trim[0] << "\t" << trim[1];
+	 << inner[12] << "\t" << inner[13] << "\t" << inner[14];
 	params3.close();
 	std::ofstream params4;	//for output
 	params4 << outer[0] << "\t"  << outer[1] << "\t" << outer[2] << "\t"
@@ -85,7 +85,7 @@ void Controller::write_Parameters(double *inner, double *outer){
 }
 
 void Controller::send_Parameters(double *params){
-	for (int i = 0; i < 12; i++){
+	for (int i = 0; i < 15; i++){
 		params[i] = innerParameters[i];
 	}
 }
@@ -105,7 +105,7 @@ void Controller::get_Errors(double *_err){
 void Controller::calcPWM(double *input, double *output, double *ref) {
 
 	//alphadelen - roll
-	ea[0] = ref[0] - input[3] + trim[0];  	// set new error
+	ea[0] = ref[0] - input[3] + innerParameters[12];  	// set new error
 	this->ea[2] += (ea[0])*dt;
 	if (fabs(ea[2])>WINDUP_LIMIT_UP){
 		this->ea[2] = windUp(ea);
@@ -116,7 +116,7 @@ void Controller::calcPWM(double *input, double *output, double *ref) {
 
 	//printf("P: %f, I: %f, D: %f, e0: %f, e2: %f\n",innerParameters[0]*ea[0], innerParameters[1]*(ea[2]), innerParameters[2]*(ea[0]-ea[1])/dt,ea[0],ea[2]);
 	//betadelen - pitch
-	eb[0] = ref[1] - input[4] + trim[1];  	// set new error
+	eb[0] = ref[1] - input[4] + innerParameters[13];  	// set new error
 	this->eb[2] += eb[0]*dt;
 	if (fabs(eb[2])>WINDUP_LIMIT_UP){
 		this->eb[2] = windUp(eb);
@@ -208,17 +208,17 @@ void Controller::setJoyCom(double *joy, double *sensorInput, double *ref){
 	*/
 	this->F = 4*THRUST_CONSTANT*joy[3]*joy[3]*10000.0;
 	setSensitivity(joy[6]);
-	ref[0] = sens*joy[0];
-	ref[1] = -sens*joy[1];
-	this->joyCom[2] = sens*joy[2];
-	this->trim[0] = joy[4];	//add from *joy
-	this->trim[1] = -joy[5];	//add from *joy
+	ref[0] = innerParameters[14]*joy[0];
+	ref[1] = -innerParameters[14]*joy[1];
+	this->joyCom[2] = innerParameters[14]*joy[2];
+	this->innerParameters[12] = joy[4];	//add from *joy
+	this->innerParameters[13] = -joy[5];	//add from *joy
 
 
 }
 
 void Controller::setSensitivity(double _sens){
-	this->sens = _sens;
+	this->innerParameters[14] = _sens;
 }
 
 void Controller::setYawRef(double *ref, double _yaw){
