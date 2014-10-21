@@ -247,8 +247,11 @@ void Controller::setInnerParameters(double *inParams){
 	this->innerParameters[7] = inParams[7];
 	this->innerParameters[8] = inParams[8];
 	this->innerParameters[9] = inParams[9];
-	this->innerParameters[9] = inParams[10];
-	this->innerParameters[9] = inParams[11];
+	this->innerParameters[10] = inParams[10];
+	this->innerParameters[11] = inParams[11];
+	this->innerParameters[12] = inParams[12];
+	this->innerParameters[13] = inParams[13];
+	this->innerParameters[14] = inParams[14];
 
 }
 
