@@ -53,9 +53,10 @@ public:
     void setOutputData(double *out, double *pwm, double *ref, double &freq, double *err);
     void setSettingsData(double *params);
     void getSettingsData(double *params);
+    void sendSettingsData();
     
     bool connected, reciveMsg, sendMsg, listening, sendImage;
-    bool resetIntegral, videoStream, colorVideo, saveSettnings, motorOn;
+    bool resetIntegral, videoStream, colorVideo, saveSettings, motorOn;
     
     double controllerInputData[9];  // Roll:Pitch:Yaw:Throttle:rollOffset:pitchOffset:JoySen
     

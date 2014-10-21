@@ -14,9 +14,9 @@
 // Incoming Message Structure /////////////
 //
 // Yaw : Throttle : Roll : Pitch : RollOffset : PitchOffset : Reset Integral : Video : Color : Resolution : Motor on :
-// Data ind : All PIDs : Joystick Sensitivity : RollOffset : PitchOffset
+// Data ind : All PIDs : Joystick Sensitivity
 //
-// "controllerInputData" structure: [Yaw | Throttle | Roll | Pitch | RollOffset | PitchOffset]
+// "controllerInputData" structure: [ Roll | Pitch | Yaw | Throttle | RollOffset | PitchOffset]
 //
 // "outputData" structure: [angles | refangles | pwms | speed | sidespeed | altitude | integral roll | integral pitch | integral yaw | Hz | bitrate | dbm]
 //
@@ -24,6 +24,14 @@
 //
 // angles : refangles : pwm : speed : sidespeed : altitude : integral roll : integral pitch : integral yaw :
 // Hz : bitrate : dbm : errorMessage : imgSize - Image
+//
+//
+// SettingsData[] = [pids | trimRoll | trimPitch | JoySen]
+//
+//
+//
+//
+//
 //
 // QvisPro
 //
@@ -33,7 +41,7 @@
 //
 // Outgoing Message Structure ///////////
 //
-// Nothing right now
+// wifi : data ind
 
 
 /////////////// COMMUNICATION PROTOCOL ///////////////////////////
@@ -57,7 +65,7 @@ ComHandler::ComHandler() {
     sendImage=false;
     motorOn=false;
     colorVideo=true;
-    saveSettnings = false;
+    saveSettings = false;
     resetIntegral = false;
     
     
@@ -162,7 +170,7 @@ void ComHandler::Listen()
             qvisProLoop();
         }
         else if (clientData.type==3) {
-            //sendPidParams();
+            //sendSettingsParams();
             qvisDevLoop();
         }
     }
@@ -188,11 +196,14 @@ void ComHandler::qvisProLoop() {
             sendMsg=false;
         }
     }
-
 }
 
 void ComHandler::qvisDevLoop() {
     printf("Inside QvisDev Loop\n");
+    printf("Sending settings data");
+    sendSettingsData();
+    printf("Settings data sent");
+    
     while (connected) {
         
         if (reciveMsg) {
@@ -210,7 +221,6 @@ void ComHandler::qvisDevLoop() {
 
 void ComHandler::qvisLightLoop() {
     while (connected) {
-        
         if (reciveMsg) {
             readQvisLightMsg();
             reciveMsg=false;
@@ -267,8 +277,6 @@ void ComHandler::sendQvisProMsg() {
     s = ostr.str();
     ostr.str("");
     
-    // Add the length of the message
-    
     if ((s.length()+1)<10) {ostr << "000" << (s.length()+1) << ":" << s;}
     else if((s.length()+1)>=10 && (s.length()+1)<100) {ostr << "00" << (s.length()+1) << ":" << s;}
     else if((s.length()+1)>=100 && (s.length()+1)<1000) {ostr << "0" << (s.length()+1) << ":" << s;}
@@ -281,14 +289,10 @@ void ComHandler::sendQvisProMsg() {
         perror("send");
     }
     
-    //printf("Message sent: %s \n", s.c_str());
-
-    
     if (sendImage && videoStream) {
         send_img();
         sendImage = false;
     }
-
 }
 
 void ComHandler::sendQvisDevMsg() {
@@ -491,21 +495,15 @@ void ComHandler::readQvisDevMsg() {
     
     if (atoi(numberInStrings[12].c_str())==1) {
         
-        for (int i=13; i<25; i++) {
+        for (int i=13; i<26; i++) {
             settingsData[i-13] = atof(numberInStrings[i].c_str());
         }
         
         controllerInputData[6] = atof(numberInStrings[25].c_str());
         
-        controllerInputData[7] = atof(numberInStrings[26].c_str());
-        
-        controllerInputData[8] = atof(numberInStrings[27].c_str());
-        
-        saveSettnings = true;
+        saveSettings = true;
         
         printf("Joy sen: %f\n", controllerInputData[6]);
-        printf("Joy sen: %f\n", controllerInputData[7]);
-        printf("Joy sen: %f\n", controllerInputData[8]);
         
         printf("PID parameters and joystick sensetivity read and saved\n");
     }
@@ -621,6 +619,43 @@ void ComHandler::sendIdentity() {
         perror("send");
     }
 }
+
+void ComHandler::sendSettingsData() {
+    ostr.str("");
+    
+    for (int i=0; i<14; i++) {
+        ostr << settingsData[i] << ":";
+    }
+    ostr << settingsData[14];
+    
+    
+    
+    std::string s;
+    s = ostr.str();
+    ostr.str("");
+    
+    if ((s.length()+1)<10) {
+        ostr << "000" << (s.length()+1) << ":" << s;
+    }
+    else if((s.length()+1)>=10 && (s.length()+1)<100) {
+        ostr << "00" << (s.length()+1) << ":" << s;
+    }
+    else if((s.length()+1)>=100 && (s.length()+1)<1000) {
+        ostr << "0" << (s.length()+1) << ":" << s;
+    }
+    else {
+        ostr << (s.length()+1) << ":" << s;
+    }
+    
+    s = ostr.str();
+    
+    if (send(newsockfd, s.c_str(), s.length(),0) == -1) {
+        closeClient();
+        perror("send");
+    }
+    
+}
+
 
 int ComHandler::getSigStrength() {
     return 60;
@@ -747,7 +782,9 @@ void ComHandler::setSettingsData(double *params) {
     settingsData[9] = params[9];
     settingsData[10] = params[10];
     settingsData[11] = params[11];
-    
+    settingsData[12] = params[12];
+    settingsData[13] = params[13];
+    settingsData[14] = params[14];
 }
 
 void ComHandler::getSettingsData(double *params){
@@ -763,4 +800,7 @@ void ComHandler::getSettingsData(double *params){
     params[9] = settingsData[9];
     params[10] = settingsData[10];
     params[11] = settingsData[11];
+    params[12] = settingsData[12];
+    params[13] = settingsData[13];
+    params[14] = settingsData[14];
 }
