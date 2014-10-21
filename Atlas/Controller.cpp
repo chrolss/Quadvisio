@@ -59,6 +59,7 @@ void Controller::get_Parameters(std::string _birdParams){
 	>> this->innerParameters[9] >> this->innerParameters[10] >> this->innerParameters[11]
 	>> this->innerParameters[12] >> this->innerParameters[13] >> this->innerParameters[14];
 	params1.close();
+	printf("Got Parameters\n");
 	std::fstream params2("outerParameters.txt");
 	params2 >> 	this->outerParameters[0] >> this->outerParameters[1]
 	>> this->outerParameters[2] >> this->outerParameters[3]
@@ -77,6 +78,7 @@ void Controller::write_Parameters(double *inner, double *outer){
 	 << inner[9] << "\t" << inner[10] << "\t" << inner[11] << "\t"
 	 << inner[12] << "\t" << inner[13] << "\t" << inner[14];
 	params3.close();
+	printf("Parameters WRitten\n");
 	std::ofstream params4;	//for output
 	params4 << outer[0] << "\t"  << outer[1] << "\t" << outer[2] << "\t"
 	 << outer[3] << "\t" << outer[4] << "\t" << outer[5] << "\t";
@@ -207,18 +209,20 @@ void Controller::setJoyCom(double *joy, double *sensorInput, double *ref){
 	}							//PID will be set to zero
 	*/
 	this->F = 4*THRUST_CONSTANT*joy[3]*joy[3]*10000.0;
-	setSensitivity(joy[6]);
+	if (joy[4]>-900){
+		setSensitivity(joy[6]);
+		this->innerParameters[13] = joy[4];	//add from *joy
+		this->innerParameters[14] = -joy[5];	//add from *joy
+	}
 	ref[0] = innerParameters[12]*joy[0];
 	ref[1] = -innerParameters[12]*joy[1];
 	this->joyCom[2] = innerParameters[12]*joy[2];
-	this->innerParameters[13] = joy[4];	//add from *joy
-	this->innerParameters[14] = -joy[5];	//add from *joy
 
 
 }
 
 void Controller::setSensitivity(double _sens){
-	this->innerParameters[14] = _sens;
+	this->innerParameters[12] = _sens;
 }
 
 void Controller::setYawRef(double *ref, double _yaw){

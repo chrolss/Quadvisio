@@ -62,6 +62,8 @@ public:
     
     int vidCount;
     int vidLimit;
+    int mCount = 0;
+    int msCount = 0;
     
     // Error message to be sent to Qvis
     std::string errMsg;

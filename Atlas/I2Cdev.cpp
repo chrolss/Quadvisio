@@ -41,6 +41,7 @@ THE SOFTWARE.
 ===============================================
 */
 
+#include <iostream>
 #include <stdio.h>
 #include <stdint.h>
 #include <stdlib.h>
@@ -176,6 +177,7 @@ int8_t I2Cdev::readBytes(uint8_t devAddr, uint8_t regAddr, uint8_t length, uint8
     int fd = open("/dev/i2c-1", O_RDWR);
 
     if (fd < 0) {
+    	std::cout << "Tonis fel" << std::endl;
         fprintf(stderr, "Failed to open device: %s\n", strerror(errno));
         return(-1);
     }
