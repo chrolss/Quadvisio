@@ -152,7 +152,7 @@ void ComHandler::Listen()
     
     this->reciveMsg=true;
     this->listening=false;
-    connected = true;
+    this->connected = true;
     
     std::cout << "Connection estabilished" << std::endl;
     
@@ -163,8 +163,8 @@ void ComHandler::Listen()
     
     // connect
     if(clientData.order==1) {
-    	reciveMsg = false;
-    	sendMsg = true;
+        reciveMsg = false;
+        sendMsg = true;
         if (clientData.type==1) {
             qvisLightLoop();
         }
@@ -172,7 +172,6 @@ void ComHandler::Listen()
             qvisProLoop();
         }
         else if (clientData.type==3) {
-            //sendSettingsParams();
             qvisDevLoop();
         }
     }
@@ -201,10 +200,11 @@ void ComHandler::qvisProLoop() {
 }
 
 void ComHandler::qvisDevLoop() {
-    printf("Inside QvisDev Loop\n");
-    printf("Sending settings data");
+    
+    std::cout << "Inside QvisDev Loop\n" << std::endl;
+    std::cout << "Sending settings data" << std::endl;
     sendSettingsData();
-    printf("Settings data sent");
+    std::cout << "Settings data sent" << std::endl;
     
     while (connected) {
         
@@ -657,7 +657,6 @@ void ComHandler::sendSettingsData() {
         closeClient();
         perror("send");
     }
-    
 }
 
 
@@ -686,7 +685,7 @@ int ComHandler::getSignalInfo() {
     //this will gather the signal strength
     if(ioctl(sockfd, SIOCGIWSTATS, &req) == -1){
         //die with error, invalid interface
-        //fprintf(stderr, "Invalid interface.\n");
+        fprintf(stderr, "Invalid interface.\n");
         return(-1);
     }
     else if(((iw_statistics *)req.u.data.pointer)->qual.updated & IW_QUAL_DBM){
