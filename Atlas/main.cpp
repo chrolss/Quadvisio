@@ -114,7 +114,7 @@ void loop(){
          }
          comHandler->vidCount++;
 
-        controller->setJoyCom(C->controllerInputData, sInput, ref);
+        controller->setJoyCom(comHandler->controllerInputData, sInput, ref);
         if (comHandler->resetIntegral){
         	controller->reset_I();
         	comHandler->resetIntegral = false;
