@@ -318,6 +318,7 @@ void ComHandler::sendQvisDevMsg() {
     }
     
     if (vidResNew != vidRes) {
+        printf("New res: %i, old res: %i\n", this->vidResNew, this->vidRes);
         switch (vidResNew) {
             case 0:
                 camManager->change_res(320, 240);
