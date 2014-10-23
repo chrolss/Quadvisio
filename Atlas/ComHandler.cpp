@@ -71,8 +71,8 @@ ComHandler::ComHandler() {
     
     vidCount = 0;
     vidLimit = 0;
-    vidRes = 2; // Default 2 = 1280x720
-    vidResNew = 2;
+    vidRes = 0; // Default 0 = 320x240
+    vidResNew = 0;
     errMsg = "Nothing wrong here!!";
         
     for (unsigned int i = 0; i<(sizeof(output)/sizeof(*output)); i++) {
@@ -95,7 +95,7 @@ ComHandler::ComHandler() {
 
     camManager = new CameraManager;
     
-    camManager->initializeCamera(1280, 720);
+    camManager->initializeCamera(320, 240);
     camManager->start_grabing();
     usleep(100000);
     
@@ -240,6 +240,7 @@ void ComHandler::sendQvisProMsg() {
     ostr.str("");
     
     if (vidResNew != vidRes) {
+        printf("New res: %i, old res: %i\n", this->vidResNew, this->vidRes);
         switch (vidResNew) {
             case 0:
                 camManager->change_res(320, 240);
@@ -318,6 +319,7 @@ void ComHandler::sendQvisDevMsg() {
     }
     
     if (vidResNew != vidRes) {
+        printf("New res: %i, old res: %i\n", this->vidResNew, this->vidRes);
         switch (vidResNew) {
             case 0:
                 camManager->change_res(320, 240);

@@ -65,14 +65,15 @@ void CameraManager::start_grabing() {
 }
 
 void CameraManager::startCameraThread() {
+    this->grabing = true;
     while (1) {
         if (this->change_resolution) {
+            this->grabing = false;
             this->set_res();
+            this->grabing = true;
             std::cout << "Continuing grabbing" << std::endl;
         }
-        else {
-            grab_frame();
-        }
+        else {grab_frame();}
     }
 }
 

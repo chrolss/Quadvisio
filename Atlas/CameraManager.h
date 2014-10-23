@@ -55,6 +55,8 @@ public:
     void change_res(int _width, int _height);
     void start_grabing();
     
+    bool grabing;
+    
 private:
     void open_device();
     void init_device();
