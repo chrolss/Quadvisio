@@ -41,7 +41,7 @@
 //
 // Outgoing Message Structure ///////////
 //
-// wifi : data ind
+// roll : pitch : yaw : refangels : pwm : wifi : data ind
 
 
 /////////////// COMMUNICATION PROTOCOL ///////////////////////////
@@ -239,6 +239,13 @@ void ComHandler::sendQvisProMsg() {
     
     ostr.str("");
     
+    for (int i=0; i<10; i++) {
+        ostr << output[i] << ":";
+    }
+    
+    // Wifi signal
+    ostr << "0:";
+    
     if (vidResNew != vidRes) {
         printf("New res: %i, old res: %i\n", this->vidResNew, this->vidRes);
         switch (vidResNew) {
@@ -264,8 +271,6 @@ void ComHandler::sendQvisProMsg() {
         printf("New resolution was set\n");
         vidRes = vidResNew;
     }
-    
-    ostr << "0:";
 
     if (sendImage && videoStream) {
         jpg_dat = camManager->get_jpg_data();
