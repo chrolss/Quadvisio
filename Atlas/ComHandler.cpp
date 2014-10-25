@@ -56,7 +56,7 @@
 
 #include "ComHandler.h"
 
-ComHandler::ComHandler() {
+ComHandler::ComHandler(bool enableCamera) {
     connected = false;
     reciveMsg = false;
     sendMsg = false;
@@ -92,11 +92,14 @@ ComHandler::ComHandler() {
     for (unsigned int i = 0; i<(sizeof(controllerInputData)/sizeof(*controllerInputData)); i++) {
         controllerInputData[i] = -1000.0;
     }
-
-    camManager = new CameraManager;
     
-    camManager->initializeCamera(320, 240);
-    camManager->start_grabing();
+    if(enableCamera==true) {
+        camManager = new CameraManager;
+        
+        camManager->initializeCamera(320, 240);
+        camManager->start_grabing();
+    }
+    
     usleep(100000);
     
 }

@@ -49,7 +49,7 @@ void initailize(){
         }
     sensorManager = new SensorManager;
     controller = new Controller(pigeon);
-    comHandler = new ComHandler;
+    comHandler = new ComHandler(false);
     motor = new Motor;
     
     if(sensorManager->getMode()){

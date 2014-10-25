@@ -46,7 +46,7 @@ struct Client {
 class ComHandler {
     
 public:
-    ComHandler();
+    ComHandler(bool enableCamera);
     void startListenThread();
     void closeClient();
     
