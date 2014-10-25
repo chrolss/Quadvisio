@@ -73,8 +73,8 @@ void initailize(){
 
     controller->send_Parameters(inParams);	//lägger parametrarna i inParams
     comHandler->setSettingsData(inParams);				//tonis funktion som skickar till Com
-    controller->setSensitivity(0.4);		//sätt sens, 0.25 - 0.4
-
+    controller->setSensitivity(0.6);		//sätt sens, 0.25 - 0.4
+    
     runAtlas = true;
 }
 
