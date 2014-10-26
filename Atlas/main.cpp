@@ -19,6 +19,7 @@ Controller *controller;
 ComHandler *comHandler;
 Motor *motor;
 bool pigeon;
+bool video = false;
 double sInput[6];
 double sOutput[4];
 double idleMotorValues[] = {0.0, 0.0, 0.0, 0.0};
@@ -49,7 +50,7 @@ void initailize(){
         }
     sensorManager = new SensorManager;
     controller = new Controller(pigeon);
-    comHandler = new ComHandler(false);
+    comHandler = new ComHandler(video);
     motor = new Motor;
     
     if(sensorManager->getMode()){
@@ -164,6 +165,20 @@ int main(int argc, const char* argv[])
     	printf("Incorrect input argument, 1 = Pigeon, 2 = Phoenix\n");
     	exit(1);
     }
+    
+    int videoArg = atoi(argv[2]);
+                        
+    if (videoArg == 1) {
+        video = true;
+    }
+    else if (videoArg == 0) {
+        video = false;
+    }
+    else {
+        printf("Incorrect input argument for camera, 1 = Camera On, 0 = Camera Off\n");
+        exit(1);
+    }
+    
 	initailize();
     loop();
 
