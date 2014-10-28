@@ -32,17 +32,13 @@ Controller::Controller(bool bird){
 
 void Controller::birdSetup(bool _bird){
 	if (_bird){
-		this->k1 = CONST1;
-		this->k2 = CONST2;
-		this->k3 = CONST3;
+        this->thrust_const = THRUST_CONSTANT_PIGEON;
 		this->pigeon = true;
 		this->birdParams = "innerParameters_pigeon.txt";
 		printf("Pigeon selected, initilizing system\n");
 	}
 	else{
-		this->k1 = CONST4;
-		this->k2 = CONST5;
-		this->k3 = CONST6;
+        this->thrust_const = THRUST_CONSTANT_PHOENIX;
 		this->pigeon = false;
 		this->birdParams = "innerParameters_phoenix.txt";
 		printf("Phoenix selected, initilizing system\n");
@@ -150,17 +146,27 @@ void Controller::calcPWM(double *input, double *output, double *ref) {
 
 	//printf("P: %f, I: %f, D: %f, e: %f\n",innerParameters[6]*eg[0], innerParameters[7]*(eg[2]), innerParameters[8]*(eg[0]-eg[1])/dt,eg[0]);
 
-    //printf("MaT: %f, MbT: %f\n", MaT, MbT);
-    Ma = (MaT*COS45 - MbT*SIN45);
-    Mb = (MaT*COS45 + MbT*COS45);
-    Mg = -MgT;		//change stuff
-
     
-    //printf("Ma = %f, Mb = %f, Mg = %f, F = %f \n", Ma, Mb, Mg, F);
-    output[0] = 0.25*(F*k1 + Mb*k2 + Mg*k3);
-    output[1] = 0.25*(F*k1 - Ma*k2 - Mg*k3);
-    output[2] = 0.25*(F*k1 - Mb*k2 + Mg*k3);
-    output[3] = 0.25*(F*k1 + Ma*k2 - Mg*k3);
+    if (pigeon) {
+        //printf("MaT: %f, MbT: %f\n", MaT, MbT);
+        Ma = (MaT*COS45 - MbT*SIN45);
+        Mb = (MaT*COS45 + MbT*COS45);
+        Mg = -MgT;		//change stuff
+        
+        
+        //printf("Ma = %f, Mb = %f, Mg = %f, F = %f \n", Ma, Mb, Mg, F);
+        output[0] = 0.25*(F*CONST1 + Mb*CONST2 + Mg*CONST3);
+        output[1] = 0.25*(F*CONST1 - Ma*CONST2 - Mg*CONST3);
+        output[2] = 0.25*(F*CONST1 - Mb*CONST2 + Mg*CONST3);
+        output[3] = 0.25*(F*CONST1 + Ma*CONST2 - Mg*CONST3);
+    }
+    
+    else {
+        output[0] = F*CONST4 + Ma*CONST5 - Mb*CONST6 + Mg*CONST7;
+        output[1] = F*CONST4 - Ma*CONST5 - Mb*CONST6 - Mg*CONST7;
+        output[2] = F*CONST4 - Ma*CONST5 + Mb*CONST6 + Mg*CONST7;
+        output[3] = F*CONST4 + Ma*CONST5 + Mb*CONST6 - Mg*CONST7;
+    }
 
 
     //printf("Before saturation \n");
@@ -208,7 +214,7 @@ void Controller::setJoyCom(double *joy, double *sensorInput, double *ref){
 		//reset_PID();			//if the throttle is lower than 0.1 the I parameters in the
 	}							//PID will be set to zero
 	*/
-	this->F = 4*THRUST_CONSTANT*joy[3]*joy[3]*10000.0;
+	this->F = 4*thrust_const*joy[3]*joy[3]*10000.0;
 	if (joy[4]>-900){
 		setSensitivity(joy[6]);
 		this->innerParameters[13] = joy[4];	//add from *joy
