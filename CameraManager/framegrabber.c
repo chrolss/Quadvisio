@@ -134,7 +134,7 @@ static void process_image(const void *p, int size) {
                     errno_exit("jpeg");
             }
             
-            printf("Saving image")
+            printf("Saving image");
             // write the image and flush
             fwrite(p, size, 1, outfile);
             fflush(outfile);
