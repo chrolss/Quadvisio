@@ -216,7 +216,7 @@ void Controller::setJoyCom(double *joy, double *sensorInput, double *ref){
 	}
 	ref[0] = innerParameters[12]*joy[0];
 	ref[1] = -innerParameters[12]*joy[1];
-	this->joyCom[2] = innerParameters[12]*joy[2];
+	this->joyCom[2] = 2.0*innerParameters[12]*joy[2];
 
 
 }
