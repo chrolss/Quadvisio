@@ -40,7 +40,6 @@ NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ***************************************************************************/
 
-#include <iostream>
 #include <stdio.h>
 #include <stdlib.h>
 #include <signal.h>
@@ -134,7 +133,8 @@ static void process_image(const void *p, int size) {
             if (!outfile) {
                     errno_exit("jpeg");
             }
-            std::cout << "Saving image" << std::endl;
+            
+            printf("Saving image")
             // write the image and flush
             fwrite(p, size, 1, outfile);
             fflush(outfile);
