@@ -74,7 +74,7 @@ void Controller::write_Parameters(double *inner, double *outer){
 	 << inner[9] << "\t" << inner[10] << "\t" << inner[11] << "\t"
 	 << inner[12] << "\t" << inner[13] << "\t" << inner[14];
 	params3.close();
-	printf("Parameters WRitten\n");
+	printf("Parameters Written\n");
 	std::ofstream params4;	//for output
 	params4 << outer[0] << "\t"  << outer[1] << "\t" << outer[2] << "\t"
 	 << outer[3] << "\t" << outer[4] << "\t" << outer[5] << "\t";
@@ -162,10 +162,12 @@ void Controller::calcPWM(double *input, double *output, double *ref) {
     }
     
     else {
-        output[0] = F*CONST4 + Ma*CONST5 - Mb*CONST6 + Mg*CONST7;
-        output[1] = F*CONST4 - Ma*CONST5 - Mb*CONST6 - Mg*CONST7;
-        output[2] = F*CONST4 - Ma*CONST5 + Mb*CONST6 + Mg*CONST7;
-        output[3] = F*CONST4 + Ma*CONST5 + Mb*CONST6 - Mg*CONST7;
+    	Mg = -MgT;
+    	Mb = -MbT;
+        output[0] = F*CONST4 + MaT*CONST5 - Mb*CONST6 + Mg*CONST7;
+        output[1] = F*CONST4 - MaT*CONST5 - Mb*CONST6 - Mg*CONST7;
+        output[2] = F*CONST4 - MaT*CONST5 + Mb*CONST6 + Mg*CONST7;
+        output[3] = F*CONST4 + MaT*CONST5 + Mb*CONST6 - Mg*CONST7;
     }
 
 
