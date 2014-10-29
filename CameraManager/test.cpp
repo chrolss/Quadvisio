@@ -17,7 +17,7 @@ int main(int argc, const char * argv[]) {
     
     std::cout << "Starting camera" << std::endl;
 
-    if(camManager.initializeCamera(1920,1080)<0) {
+    if(camManager.initializeCamera(640,480)<0) {
         printf("Error");
     }
     
