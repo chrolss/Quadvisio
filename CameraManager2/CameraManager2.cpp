@@ -23,7 +23,7 @@ CameraManager2::CameraManager2() {
     
     std::cout << "Hej3" << std::endl;
     
-    if (uvcGrab (videoIn) < 0) {
+    if (uvcGrab(videoIn) < 0) {
         fprintf (stderr, "Error grabbing\n");
         close_v4l2(videoIn);
     }
@@ -219,9 +219,13 @@ int CameraManager2::video_disable(struct vdIn *vd) {
 int CameraManager2::uvcGrab(struct vdIn *vd) {
     int ret;
     
+    std::cout << "Hej4" << std::endl;
+    
     if (!vd->isstreaming)
         if (video_enable (vd))
             goto err;
+    
+    
     memset (&vd->buf, 0, sizeof (struct v4l2_buffer));
     vd->buf.type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
     vd->buf.memory = V4L2_MEMORY_MMAP;
