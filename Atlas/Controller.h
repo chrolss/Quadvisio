@@ -15,9 +15,15 @@
 #include <math.h>
 #include <cstring>
 
-#define THRUST_CONSTANT 0.0003
+#define THRUST_CONSTANT_PHOENIX 0.0009
+#define DRAG_CONSTANT_PHOENIX 30.0e-8
+#define LONGITUDIAL_DISTANCE 0.185
+#define LATERAL_DISTANCE 0.165
+
+#define THRUST_CONSTANT_PIGEON 0.0003
 #define ARM_RADIUS 0.176
-#define DRAG_CONSTANT 9.9768e-8
+#define DRAG_CONSTANT_PIGEON 9.9768e-8
+
 #define dt 0.017	//påhittad
 #define WINDUP_LIMIT_UP 0.028
 #define WINDUP_LIMIT_DOWN -0.028
@@ -26,9 +32,10 @@
 #define CONST1 3333.33	//pigeon
 #define CONST2 37878.7	//pigeon
 #define CONST3 1e7		//pigeon
-#define CONST4 1		//Phoenix
-#define CONST5 1		//Phoenix
-#define CONST6 1		//Phoenix
+#define CONST4 280		//Phoenix
+#define CONST5 1680		//Phoenix
+#define CONST6 1500		//Phoenix
+#define CONST7 830000		//Phoenix
 
 #define COS45 0.7071067812
 #define SIN45 0.7071067812
@@ -49,6 +56,7 @@ public:
     void setSensitivity(double _sens);
     void reset_I();
     void get_Errors(double *_err);
+    
 private:
     void birdSetup(bool _bird);
     void get_Parameters(std::string _birdParams);
@@ -56,16 +64,16 @@ private:
     std::string birdParams;
     double innerParameters[15];
     double outerParameters[9];
-    double refs[7];		//roll, pitch, yaw, ax, ay, az, altitude
+    double refs[7];             //roll, pitch, yaw, ax, ay, az, altitude
     double ea[3], eb[3], eg[3];	//angle errors
     double joyCom[3];
-    double trim[2];		//trim for roll and pitch
-    double ex[3], ey[3];	//acceleration errors
+    double trim[2];             //trim for roll and pitch
+    double ex[3], ey[3];        //acceleration errors
     double F, Ma, Mb, Mg;
-    double dA, dB;			//Desired changes in angles
+    double dA, dB;              //Desired changes in angles
     double MaT, MbT, MgT;
-    double k1, k2, k3;
-    double sens;		//joystick sensitivity, range 0.25 - 0.4
+    double k1, k2, k3, k4, thrust_const;
+    double sens;                //joystick sensitivity, range 0.25 - 0.4
     
 };
 
