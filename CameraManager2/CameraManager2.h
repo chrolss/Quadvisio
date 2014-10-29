@@ -105,11 +105,11 @@ public:
     int save_jpg();
     
 private:
-    int init_videoIn (struct vdIn *vd, char *device, int width, int height, int format, int grabmethod);
-    int init_v4l2 (struct vdIn *vd)
+    int init_videoIn(struct vdIn *vd, char *device, int width, int height, int format, int grabmethod);
+    int init_v4l2(struct vdIn *vd);
     int video_enable(struct vdIn *vd);
     int video_disable(struct vdIn *vd);
-    int uvcGrab (struct vdIn *vd)
-    int close_v4l2 (struct vdIn *vd)
+    int uvcGrab(struct vdIn *vd);
+    int close_v4l2(struct vdIn *vd);
 
 };
