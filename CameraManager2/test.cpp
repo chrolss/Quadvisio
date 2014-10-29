@@ -10,8 +10,6 @@
 #include "CameraManager2.h"
 
 int main(int argc, const char * argv[]) {
-    
-    std::cout << "Hej" << std::endl;
 
     CameraManager2 camManager;
     

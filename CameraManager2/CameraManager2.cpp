@@ -13,14 +13,22 @@ CameraManager2::CameraManager2() {
     struct vdIn *videoIn;
     char outputfile[40];
     
+    std::cout << "Hej" << std::endl;
+    
     sprintf(outputfile, "snap.jpg");
     
+    std::cout << "Hej2" << std::endl;
+    
     init_videoIn(videoIn, "/dev/video0", 640, 480, V4L2_PIX_FMT_MJPEG, 1);
+    
+    std::cout << "Hej3" << std::endl;
     
     if (uvcGrab (videoIn) < 0) {
         fprintf (stderr, "Error grabbing\n");
         close_v4l2(videoIn);
     }
+    
+    std::cout << "Hej4" << std::endl;
     
     FILE *file = fopen(outputfile, "wb");
     fwrite (videoIn->tmpbuffer, videoIn->buf.bytesused + DHT_SIZE, 1, file);
