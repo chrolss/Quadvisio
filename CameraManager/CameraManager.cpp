@@ -273,8 +273,12 @@ void CameraManager::grab_frame() {
             }
         }
         
-        if (read_frame())
+        if (read_frame()) {
             break;
+        }
+        else {
+            std::cout << "Fel" << std::endl;
+        }
         /* EAGAIN - continue select loop. */
     }
     
@@ -310,6 +314,8 @@ int CameraManager::read_frame() {
     }
     
     assert(buf.index < n_buffers);
+    
+    std::cout << "Bytes used: " << buf.bytesused << std::endl;
 
     unsigned char *tmpbuffer;
     
@@ -317,7 +323,6 @@ int CameraManager::read_frame() {
     memcpy (tmpbuffer + HEADERFRAME1, dht_data, DHT_SIZE);
     memcpy (tmpbuffer + HEADERFRAME1 + DHT_SIZE, buffers[buf.index].start + HEADERFRAME1, (buf.bytesused - HEADERFRAME1));
     
-    std::cout << "Bytes used: " << buf.bytesused << std::endl;
     
     process_image(tmpbuffer, buf.bytesused);
     
