@@ -136,7 +136,7 @@ void CameraManager::init_device() {
     fmt.fmt.pix.width       = width;
     fmt.fmt.pix.height      = height;
     fmt.fmt.pix.pixelformat = V4L2_PIX_FMT_MJPEG;
-    fmt.fmt.pix.field       = V4L2_FIELD_ANY;
+    fmt.fmt.pix.field       = V4L2_FIELD_INTERLACED;
     ioctl(fd, VIDIOC_S_FMT, &fmt);
     if (fmt.fmt.pix.pixelformat != V4L2_PIX_FMT_MJPEG) {
         printf("Libv4l didn't accept RGB24 format. Can't proceed.\n");
