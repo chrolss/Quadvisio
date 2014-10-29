@@ -344,7 +344,7 @@ void CameraManager::process_image(const void *p, int size) {
             perror("jpeg");
         }
         // write the image and flush
-        fwrite(p, size, 1, outfile);
+        fwrite(p, size + DHT_SIZE , 1, outfile);
         fflush(outfile);
         
         // close output file
