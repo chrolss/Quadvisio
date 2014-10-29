@@ -311,7 +311,7 @@ int CameraManager::read_frame() {
     
     assert(buf.index < n_buffers);
 
-    void *tmpbuffer;
+    unsigned char *tmpbuffer;
     
     memcpy (tmpbuffer, buffers[buf.index].start, HEADERFRAME1);
     memcpy (tmpbuffer + HEADERFRAME1, dht_data, DHT_SIZE);
