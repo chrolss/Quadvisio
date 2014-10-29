@@ -272,9 +272,15 @@ int CameraManager::read_frame() {
     
     assert(buf.index < n_buffers);
 
+    unsigned char *tmpbuffer;
+    
+    memcpy (tmpbuffer, buffers[buf.index], HEADERFRAME1);
+    memcpy (tmpbuffer + HEADERFRAME1, dht_data, DHT_SIZE);
+    memcpy (tmpbuffer + HEADERFRAME1 + DHT_SIZE, buffers[buf.index] + HEADERFRAME1, (buf.bytesused - HEADERFRAME1));
+    
     std::cout << "Bytes used: " << buf.bytesused << std::endl;
     
-    process_image(buffers[buf.index].start, buf.bytesused);
+    process_image(tmpbuffer, buf.bytesused);
     
     if (-1 == xioctl(fd, VIDIOC_QBUF, &buf))
         perror("VIDIOC_QBUF");
