@@ -10,7 +10,7 @@
 
 CameraManager2::CameraManager2() {
     
-    struct vdIn *videoIn;
+    struct vdIn *videoIn = new vdIn;
     char outputfile[40];
     
     std::cout << "Hej" << std::endl;
@@ -32,8 +32,7 @@ CameraManager2::CameraManager2() {
     fwrite (videoIn->tmpbuffer, videoIn->buf.bytesused + DHT_SIZE, 1, file);
 }
 
-int CameraManager2::init_videoIn (struct vdIn *vd, char *device, int width, int height,
-                  int format, int grabmethod)
+int CameraManager2::init_videoIn(struct vdIn *vd, char *device, int width, int height, int format, int grabmethod)
 {
     
     if (vd == NULL || device == NULL)
