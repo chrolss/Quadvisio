@@ -136,7 +136,8 @@ void CameraManager::init_device() {
     fmt.fmt.pix.width       = width;
     fmt.fmt.pix.height      = height;
     fmt.fmt.pix.pixelformat = V4L2_PIX_FMT_MJPEG;
-    fmt.fmt.pix.field       = V4L2_FIELD_INTERLACED;
+    fmt.fmt.pix.field       = V4L2_FIELD_ANY;
+    
     xioctl(fd, VIDIOC_S_FMT, &fmt);
     if (fmt.fmt.pix.pixelformat != V4L2_PIX_FMT_MJPEG) {
         printf("Libv4l didn't accept RGB24 format. Can't proceed.\n");
@@ -194,15 +195,22 @@ void CameraManager::init_mmap() {
             perror("VIDIOC_QUERYBUF");
         
         buffers[n_buffers].length = buf.length;
-        buffers[n_buffers].start =
-        mmap(NULL /* start anywhere */,
-             buf.length,
-             PROT_READ | PROT_WRITE /* required */,
-             MAP_SHARED /* recommended */,
-             fd, buf.m.offset);
+        buffers[n_buffers].start = mmap(0 /* start anywhere */, buf.length, PROT_READ /*| PROT_WRITE*/ /* required */, MAP_SHARED /* recommended */, fd, buf.m.offset);
         
         if (MAP_FAILED == buffers[n_buffers].start)
             perror("mmap");
+    }
+    
+    for (n_buffers = 0; n_buffers < req.count; ++n_buffers) {
+        struct v4l2_buffer buf;
+        
+        CLEAR(buf);
+        
+        buf.type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
+        buf.memory = V4L2_MEMORY_MMAP;
+        buf.index = n_buffers;
+        if (-1 == xioctl(fd, VIDIOC_QBUF, &buf))
+            perror("VIDIOC_QBUF");
     }
 
 }
