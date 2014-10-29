@@ -318,7 +318,7 @@ int CameraManager::read_frame() {
     
     std::cout << "Bytes used: " << buf.bytesused << std::endl;
 
-    unsigned char *tmpbuffer[width*height];
+    unsigned char *tmpbuffer[(width * height << 1)];
     
     memcpy (tmpbuffer, buffers[buf.index].start, HEADERFRAME1);
     memcpy (tmpbuffer + HEADERFRAME1, dht_data, DHT_SIZE);
