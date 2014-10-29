@@ -28,8 +28,6 @@ CameraManager2::CameraManager2() {
         close_v4l2(videoIn);
     }
     
-    std::cout << "Hej4" << std::endl;
-    
     FILE *file = fopen(outputfile, "wb");
     fwrite (videoIn->tmpbuffer, videoIn->buf.bytesused + DHT_SIZE, 1, file);
 }
@@ -227,11 +225,17 @@ int CameraManager2::uvcGrab(struct vdIn *vd) {
     memset (&vd->buf, 0, sizeof (struct v4l2_buffer));
     vd->buf.type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
     vd->buf.memory = V4L2_MEMORY_MMAP;
+    
+    std::cout << "Hej4" << std::endl;
+    
     ret = ioctl (vd->fd, VIDIOC_DQBUF, &vd->buf);
     if (ret < 0) {
         fprintf (stderr, "Unable to dequeue buffer (%d).\n", errno);
         goto err;
     }
+    
+    std::cout << "Hej5" << std::endl;
+    
     switch (vd->formatIn) {
         case V4L2_PIX_FMT_MJPEG:
             
@@ -255,6 +259,9 @@ int CameraManager2::uvcGrab(struct vdIn *vd) {
             goto err;
             break;
     }
+    
+    std::cout << "Hej6" << std::endl;
+    
     ret = ioctl (vd->fd, VIDIOC_QBUF, &vd->buf);
     if (ret < 0) {
         fprintf (stderr, "Unable to requeue buffer (%d).\n", errno);
