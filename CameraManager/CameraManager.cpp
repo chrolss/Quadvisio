@@ -118,13 +118,24 @@ void CameraManager::open_device() {
         exit(EXIT_FAILURE);
     }
     
-    fd = open(dev_name, O_RDWR /* required */ | O_NONBLOCK, 0);
+    fd = open(dev_name, O_RDWR /* required */ /*| O_NONBLOCK*/, 0);
     std::cout << "Hej7" << std::endl;
 
     if (-1 == fd) {
         fprintf(stderr, "Cannot open '%s': %d, %s\n",
                 dev_name, errno, strerror(errno));
         exit(EXIT_FAILURE);
+    }
+    
+    struct v4l2_capability cap;
+    if (-1 == xioctl(fd, VIDIOC_QUERYCAP, &cap)) {
+        if (EINVAL == errno) {
+            fprintf(stderr, "%s is no V4L2 device\n",
+                    dev_name);
+            exit(EXIT_FAILURE);
+        } else {
+            errno_exit("VIDIOC_QUERYCAP");
+        }
     }
 }
 
