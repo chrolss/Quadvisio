@@ -21,7 +21,7 @@ CameraManager2::CameraManager2() {
     
     init_videoIn(videoIn, "/dev/video0", 640, 480, V4L2_PIX_FMT_MJPEG, 1);
     
-    std::cout << "Hej3" << std::endl;
+    std::cout << videoIn->isstreaming << std::endl;
     
     if (uvcGrab(videoIn) < 0) {
         fprintf (stderr, "Error grabbing\n");
