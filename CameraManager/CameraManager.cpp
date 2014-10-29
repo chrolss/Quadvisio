@@ -52,7 +52,7 @@ void CameraManager::s_signal_handler (int signal_value)
     s_interrupted = 1;
 }
 
-static int ioctl(int fh, int request, void *arg) {
+static int xioctl(int fh, int request, void *arg) {
     int r;
     
     do {
@@ -160,7 +160,7 @@ void CameraManager::init_mmap() {
     req.type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
     req.memory = V4L2_MEMORY_MMAP;
     
-    if (-1 == ioctl(fd, VIDIOC_REQBUFS, &req)) {
+    if (-1 == xioctl(fd, VIDIOC_REQBUFS, &req)) {
         if (EINVAL == errno) {
             fprintf(stderr, "%s does not support "
                     "memory mapping\n", dev_name);
@@ -190,7 +190,7 @@ void CameraManager::init_mmap() {
         buf.memory = V4L2_MEMORY_MMAP;
         buf.index = n_buffers;
         
-        if (-1 == ioctl(fd, VIDIOC_QUERYBUF, &buf))
+        if (-1 == xioctl(fd, VIDIOC_QUERYBUF, &buf))
             perror("VIDIOC_QUERYBUF");
         
         buffers[n_buffers].length = buf.length;
@@ -219,14 +219,14 @@ void CameraManager::start_capturing() {
         buf.memory = V4L2_MEMORY_MMAP;
         buf.index = i;
         
-        if (-1 == ioctl(fd, VIDIOC_QBUF, &buf))
+        if (-1 == xioctl(fd, VIDIOC_QBUF, &buf))
             perror("VIDIOC_QBUF");
     }
     
     std::cout << "Stream on" << std::endl;
 
     type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
-    if (-1 == ioctl(fd, VIDIOC_STREAMON, &type))
+    if (-1 == xioctl(fd, VIDIOC_STREAMON, &type))
         perror("VIDIOC_STREAMON");
 
 }
@@ -303,7 +303,7 @@ int CameraManager::read_frame() {
     buf.type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
     buf.memory = V4L2_MEMORY_MMAP;
     
-    if (-1 == ioctl(fd, VIDIOC_DQBUF, &buf)) {
+    if (-1 == xioctl(fd, VIDIOC_DQBUF, &buf)) {
         switch (errno) {
             case EAGAIN:
                 return 0;
@@ -330,7 +330,7 @@ int CameraManager::read_frame() {
     
     process_image(tmpbuffer, buf.bytesused);
     
-    if (-1 == ioctl(fd, VIDIOC_QBUF, &buf))
+    if (-1 == xioctl(fd, VIDIOC_QBUF, &buf))
         perror("VIDIOC_QBUF");
     
     return 1;
@@ -364,7 +364,7 @@ void CameraManager::stop_capturing() {
     std::cout << "Stream off" << std::endl;
 
     type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
-    if (-1 == ioctl(fd, VIDIOC_STREAMOFF, &type))
+    if (-1 == xioctl(fd, VIDIOC_STREAMOFF, &type))
         perror("VIDIOC_STREAMOFF");
 }
 
