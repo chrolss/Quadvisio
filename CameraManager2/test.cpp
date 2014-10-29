@@ -13,7 +13,7 @@ int main(int argc, const char * argv[]) {
     
     std::cout << "Hej" << std::endl;
 
-    CameraManager camManager;
+    CameraManager2 camManager;
     
     std::cout << "Starting camera" << std::endl;
 
