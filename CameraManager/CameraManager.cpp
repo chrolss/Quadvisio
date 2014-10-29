@@ -134,7 +134,7 @@ void CameraManager::open_device() {
                     dev_name);
             exit(EXIT_FAILURE);
         } else {
-            errno_exit("VIDIOC_QUERYCAP");
+            perror("VIDIOC_QUERYCAP");
         }
     }
 }
