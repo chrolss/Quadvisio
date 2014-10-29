@@ -311,11 +311,11 @@ int CameraManager::read_frame() {
     
     assert(buf.index < n_buffers);
 
-    unsigned char *tmpbuffer;
+    void *tmpbuffer;
     
-    memcpy (tmpbuffer, buffers[buf.index], HEADERFRAME1);
+    memcpy (tmpbuffer, buffers[buf.index].start, HEADERFRAME1);
     memcpy (tmpbuffer + HEADERFRAME1, dht_data, DHT_SIZE);
-    memcpy (tmpbuffer + HEADERFRAME1 + DHT_SIZE, buffers[buf.index] + HEADERFRAME1, (buf.bytesused - HEADERFRAME1));
+    memcpy (tmpbuffer + HEADERFRAME1 + DHT_SIZE, buffers[buf.index].start + HEADERFRAME1, (buf.bytesused - HEADERFRAME1));
     
     std::cout << "Bytes used: " << buf.bytesused << std::endl;
     
