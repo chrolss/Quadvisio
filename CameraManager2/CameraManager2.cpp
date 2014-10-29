@@ -56,6 +56,7 @@ int CameraManager2::init_videoIn (struct vdIn *vd, char *device, int width, int 
     vd->height = height;
     vd->formatIn = format;
     vd->grabmethod = grabmethod;
+    vd->isstreaming = 0;
     if (init_v4l2 (vd) < 0) {
         fprintf (stderr, " Init v4L2 failed !! exit fatal \n");
         goto error;;
