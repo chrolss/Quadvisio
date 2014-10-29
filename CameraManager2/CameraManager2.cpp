@@ -11,12 +11,10 @@
 CameraManager2::CameraManager2() {
     
     struct vdIn *videoIn;
-    char *outputfile[40];
+    char outputfile[40];
     
     sprintf(outputfile, "snap.jpg");
     
-    FILE *file;
-
     init_videoIn(videoIn, "/dev/video0", 640, 480, V4L2_PIX_FMT_MJPEG, 1);
     
     if (uvcGrab (videoIn) < 0) {
@@ -24,7 +22,7 @@ CameraManager2::CameraManager2() {
         close_v4l2(videoIn);
     }
     
-    file = fopen(outputfile, "wb");
+    FILE *file = fopen(outputfile, "wb");
     fwrite (videoIn->tmpbuffer, videoIn->buf.bytesused + DHT_SIZE, 1, file);
 }
 
