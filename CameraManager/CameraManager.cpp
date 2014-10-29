@@ -95,6 +95,8 @@ int CameraManager::initializeCamera(int _width, int _height) {
     init_device();
 
     start_capturing();
+    
+    std::cout << "Hej10" << std::endl;
 
     return 0;
 }
@@ -141,7 +143,11 @@ void CameraManager::init_device() {
         exit(EXIT_FAILURE);
     }
     
+    std::cout << "Hej8" << std::endl;
+    
     init_mmap();
+    
+    std::cout << "Hej9" << std::endl;
 
 }
 
@@ -204,7 +210,6 @@ void CameraManager::init_mmap() {
 void CameraManager::start_capturing() {
     unsigned int i;
     enum v4l2_buf_type type;
-    
 
     for (i = 0; i < n_buffers; ++i) {
         struct v4l2_buffer buf;
@@ -322,7 +327,6 @@ int CameraManager::read_frame() {
     memcpy (tmpbuffer, buffers[buf.index].start, HEADERFRAME1);
     memcpy (tmpbuffer + HEADERFRAME1, dht_data, DHT_SIZE);
     memcpy (tmpbuffer + HEADERFRAME1 + DHT_SIZE, buffers[buf.index].start + HEADERFRAME1, (buf.bytesused - HEADERFRAME1));
-    
     
     process_image(tmpbuffer, buf.bytesused);
     
