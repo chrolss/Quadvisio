@@ -192,12 +192,15 @@ fatal:
 int CameraManager2::video_enable(struct vdIn *vd) {
     int type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
     int ret;
-    
+    std::cout << "Hej5" << std::endl;
+
     ret = ioctl (vd->fd, VIDIOC_STREAMON, &type);
     if (ret < 0) {
         fprintf (stderr, "Unable to %s capture: %d.\n", "start", errno);
         return ret;
     }
+    std::cout << "Hej6" << std::endl;
+
     vd->isstreaming = 1;
     return 0;
 }
@@ -221,16 +224,17 @@ int CameraManager2::uvcGrab(struct vdIn *vd) {
     
     
     if (!vd->isstreaming)
+        std::cout << "Hej4" << std::endl;
         if (video_enable (vd))
             goto err;
     
-    std::cout << "Hej4" << std::endl;
+    std::cout << "Hej7" << std::endl;
 
     memset (&vd->buf, 0, sizeof (struct v4l2_buffer));
     vd->buf.type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
     vd->buf.memory = V4L2_MEMORY_MMAP;
     
-    std::cout << "Hej4" << std::endl;
+    std::cout << "Hej8" << std::endl;
     
     ret = ioctl (vd->fd, VIDIOC_DQBUF, &vd->buf);
     if (ret < 0) {
@@ -238,7 +242,7 @@ int CameraManager2::uvcGrab(struct vdIn *vd) {
         goto err;
     }
     
-    std::cout << "Hej5" << std::endl;
+    std::cout << "Hej9" << std::endl;
     
     switch (vd->formatIn) {
         case V4L2_PIX_FMT_MJPEG:
@@ -264,7 +268,7 @@ int CameraManager2::uvcGrab(struct vdIn *vd) {
             break;
     }
     
-    std::cout << "Hej6" << std::endl;
+    std::cout << "Hej10" << std::endl;
     
     ret = ioctl (vd->fd, VIDIOC_QBUF, &vd->buf);
     if (ret < 0) {
