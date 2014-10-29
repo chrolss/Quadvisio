@@ -157,7 +157,7 @@ void CameraManager::init_mmap() {
     
     CLEAR(req);
     
-    req.count = 4;
+    req.count = 16;
     req.type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
     req.memory = V4L2_MEMORY_MMAP;
     
@@ -200,19 +200,6 @@ void CameraManager::init_mmap() {
         if (MAP_FAILED == buffers[n_buffers].start)
             perror("mmap");
     }
-    
-    for (n_buffers = 0; n_buffers < req.count; ++n_buffers) {
-        struct v4l2_buffer buf;
-        
-        CLEAR(buf);
-        
-        buf.type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
-        buf.memory = V4L2_MEMORY_MMAP;
-        buf.index = n_buffers;
-        if (-1 == xioctl(fd, VIDIOC_QBUF, &buf))
-            perror("VIDIOC_QBUF");
-    }
-
 }
 
 void CameraManager::start_capturing() {
@@ -314,6 +301,7 @@ int CameraManager::read_frame() {
     if (-1 == xioctl(fd, VIDIOC_DQBUF, &buf)) {
         switch (errno) {
             case EAGAIN:
+                perror("No data available")
                 return 0;
                 
             case EIO:
