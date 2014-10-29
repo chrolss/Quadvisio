@@ -301,7 +301,7 @@ int CameraManager::read_frame() {
     if (-1 == xioctl(fd, VIDIOC_DQBUF, &buf)) {
         switch (errno) {
             case EAGAIN:
-                perror("No data available")
+                perror("No data available");
                 return 0;
                 
             case EIO:
