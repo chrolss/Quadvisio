@@ -33,7 +33,7 @@ CameraManager::CameraManager() {
     frame_count = 1;
     width = 640;
     height = 480;
-    fps = 30;
+    fps = 20;
     timeout = 1;
     timeouts_max = 1;
     

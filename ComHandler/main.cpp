@@ -21,7 +21,7 @@ int main(int argc, const char * argv[]) {
     int loopSleep=0;
     
     std::cout << "Starting communication thread" << std::endl;
-    ComHandler comHandler;
+    ComHandler comHandler(true);
     comHandler.startListenThread();
     sleep(1);
     

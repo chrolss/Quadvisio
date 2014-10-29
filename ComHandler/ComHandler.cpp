@@ -41,7 +41,7 @@
 //
 // Outgoing Message Structure ///////////
 //
-// wifi : data ind
+// roll : pitch : yaw : refangels : pwm : wifi : data ind
 
 
 /////////////// COMMUNICATION PROTOCOL ///////////////////////////
@@ -56,7 +56,7 @@
 
 #include "ComHandler.h"
 
-ComHandler::ComHandler() {
+ComHandler::ComHandler(bool enableCamera) {
     connected = false;
     reciveMsg = false;
     sendMsg = false;
@@ -92,11 +92,14 @@ ComHandler::ComHandler() {
     for (unsigned int i = 0; i<(sizeof(controllerInputData)/sizeof(*controllerInputData)); i++) {
         controllerInputData[i] = -1000.0;
     }
-
-    camManager = new CameraManager;
     
-    camManager->initializeCamera(320, 240);
-    camManager->start_grabing();
+    if(enableCamera==true) {
+        camManager = new CameraManager;
+        
+        camManager->initializeCamera(320, 240);
+        camManager->start_grabing();
+    }
+    
     usleep(100000);
     
 }
@@ -239,6 +242,13 @@ void ComHandler::sendQvisProMsg() {
     
     ostr.str("");
     
+    for (int i=0; i<10; i++) {
+        ostr << output[i] << ":";
+    }
+    
+    // Wifi signal
+    ostr << "0:";
+    
     if (vidResNew != vidRes) {
         printf("New res: %i, old res: %i\n", this->vidResNew, this->vidRes);
         switch (vidResNew) {
@@ -264,12 +274,11 @@ void ComHandler::sendQvisProMsg() {
         printf("New resolution was set\n");
         vidRes = vidResNew;
     }
-    
-    ostr << "0:";
 
     if (sendImage && videoStream) {
         jpg_dat = camManager->get_jpg_data();
         ostr << jpg_dat.size;
+        std::cout << "JPG size" << jpg_dat.size << std::endl;
     }
     
     else {

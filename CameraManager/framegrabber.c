@@ -204,7 +204,7 @@ static int read_frame(void) {
 		buf.type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
 		buf.memory = V4L2_MEMORY_USERPTR;
 
-		if (-1 == xioctl(fd, VIDIOC_DQBUF, &buf)) {
+		if (-1 == ioctl(fd, VIDIOC_DQBUF, &buf)) {
 			switch (errno) {
 			case EAGAIN:
 				return 0;
@@ -228,7 +228,7 @@ static int read_frame(void) {
 
 		process_image((void *) buf.m.userptr, buf.bytesused);
 
-		if (-1 == xioctl(fd, VIDIOC_QBUF, &buf))
+		if (-1 == ioctl(fd, VIDIOC_QBUF, &buf))
 			errno_exit("VIDIOC_QBUF");
 		break;
 	}
@@ -237,7 +237,8 @@ static int read_frame(void) {
 }
 
 static void grab_frames(void) {
-        clock_t begin, end;
+        sleep(5);
+	clock_t begin, end;
         double time_spent;
 
 	unsigned int count;
@@ -407,7 +408,7 @@ static void init_mmap(void) {
 
 	CLEAR(req);
 
-	req.count = 4;
+	req.count = 16;
 	req.type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
 	req.memory = V4L2_MEMORY_MMAP;
 
@@ -573,7 +574,7 @@ static void init_device(void) {
 		fmt.fmt.pix.width = width;
 		fmt.fmt.pix.height = height;
 		fmt.fmt.pix.pixelformat = pixel_format;
-		fmt.fmt.pix.field = V4L2_FIELD_INTERLACED;
+		fmt.fmt.pix.field = V4L2_FIELD_ANY;
 
 		if (-1 == xioctl(fd, VIDIOC_S_FMT, &fmt))
 			errno_exit("VIDIOC_S_FMT");

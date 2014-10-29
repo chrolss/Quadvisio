@@ -32,7 +32,7 @@
 #include <unistd.h>
 #include <jpeglib.h>
 #include <time.h>
-#include <linux/videodev.h>
+#include <linux/videodev2.h>
 
 #include "v4l2uvc.h"
 
