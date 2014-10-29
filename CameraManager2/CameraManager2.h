@@ -16,7 +16,6 @@
 #include <linux/videodev2.h>
 #include <sys/mman.h>
 #include <sys/ioctl.h>
-#include "v4l2uvc2.h"
 
 #define CLEAR(x) memset(&(x), 0, sizeof(x))
 
