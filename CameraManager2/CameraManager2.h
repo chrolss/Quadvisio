@@ -121,7 +121,7 @@ private:
     int video_enable();
     int video_disable();
     int uvcGrab();
-    int close_v4l2(;
+    int close_v4l2();
     void start_grabbing();
     
     void *jpg_buffer;

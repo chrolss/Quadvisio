@@ -255,7 +255,7 @@ int CameraManager2::uvcGrab() {
     
     if (vd->isstreaming==0) {
         std::cout << "Hej4" << std::endl;
-        if (video_enable(vd)) {
+        if (video_enable()) {
             goto err;
         }
     }
