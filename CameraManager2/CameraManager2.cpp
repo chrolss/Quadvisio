@@ -227,10 +227,12 @@ int CameraManager2::uvcGrab(struct vdIn *vd) {
     
     std::cout << vd->isstreaming << std::endl;
     
-    if (vd->isstreaming==0)
+    if (vd->isstreaming==0) {
         std::cout << "Hej4" << std::endl;
-        if (video_enable(vd))
+        if (video_enable(vd)) {
             goto err;
+        }
+    }
     
     std::cout << vd->isstreaming << std::endl;
     std::cout << "Hej7" << std::endl;
