@@ -16,6 +16,7 @@
 #include <linux/videodev2.h>
 #include <sys/mman.h>
 #include <sys/ioctl.h>
+#include <thread>
 
 #define CLEAR(x) memset(&(x), 0, sizeof(x))
 
@@ -99,11 +100,18 @@ struct vdIn {
     
 };
 
+struct jpg_data {
+    void *buffer;
+    int size;
+};
+
 class CameraManager2{
     
 public:
     CameraManager2();
-    int save_jpg();
+    jpg_data get_jpg_data();
+    
+    bool grabbing;
     
 private:
     int init_videoIn(struct vdIn *vd, char *device, int width, int height, int format, int grabmethod);
@@ -112,5 +120,10 @@ private:
     int video_disable(struct vdIn *vd);
     int uvcGrab(struct vdIn *vd);
     int close_v4l2(struct vdIn *vd);
+    void start_grabbing(struct vdIn *vd);
+    
+    void *jpg_buffer;
+    int jpg_buffer_size;
+    bool saving_buffer;
 
 };

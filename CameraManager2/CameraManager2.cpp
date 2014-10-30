@@ -11,28 +11,43 @@
 CameraManager2::CameraManager2() {
     
     struct vdIn *videoIn = new vdIn;
-    char outputfile[40];
+    this->saving_buffer = false;
+    this->grabbing = false;
     
     init_videoIn(videoIn, "/dev/video0", 640, 480, V4L2_PIX_FMT_MJPEG, 1);
     
     std::cout << videoIn->isstreaming << std::endl;
     
+    std::thread t1(&CameraManager2::start_grabbing, videoIn, this);
+    t1.join();
+    
+    }
+
+void CameraManager2::start_grabbing(struct vdIn *vd) {
+    /*
+    while (this->grabbing) {
+        if (uvcGrab(vd) < 0) {
+            fprintf (stderr, "Error grabbing\n");
+        }
+    }
+    */
+    
+    char outputfile[40];
+
     for (int i = 0; i<6; i++) {
         sprintf(outputfile, "snap%i.jpg", i);
         std::cout << i << std::endl;
-        if (uvcGrab(videoIn) < 0) {
+        if (uvcGrab(vd) < 0) {
             fprintf (stderr, "Error grabbing\n");
         }
+        
         else {
             FILE *file = fopen(outputfile, "wb");
-            fwrite(videoIn->tmpbuffer, videoIn->buf.bytesused + DHT_SIZE, 1, file);
+            fwrite(vd->tmpbuffer, vd->buf.bytesused + DHT_SIZE, 1, file);
         }
-        
     }
-    
-    close_v4l2(videoIn);
-    
-    
+    close_v4l2(vd);
+
 }
 
 int CameraManager2::init_videoIn(struct vdIn *vd, char *device, int width, int height, int format, int grabmethod)
@@ -234,8 +249,7 @@ int CameraManager2::uvcGrab(struct vdIn *vd) {
         }
     }
     
-    std::cout << vd->isstreaming << std::endl;
-    std::cout << "Hej7" << std::endl;
+    this->saving_buffer = true;
 
     memset (&vd->buf, 0, sizeof (struct v4l2_buffer));
     vd->buf.type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
@@ -250,38 +264,26 @@ int CameraManager2::uvcGrab(struct vdIn *vd) {
     }
     
     std::cout << "Hej9" << std::endl;
+
+    memcpy (vd->tmpbuffer, vd->mem[vd->buf.index], HEADERFRAME1);
+    memcpy (vd->tmpbuffer + HEADERFRAME1, dht_data, DHT_SIZE);
+    memcpy (vd->tmpbuffer + HEADERFRAME1 + DHT_SIZE, vd->mem[vd->buf.index] + HEADERFRAME1, (vd->buf.bytesused - HEADERFRAME1));
     
-    switch (vd->formatIn) {
-        case V4L2_PIX_FMT_MJPEG:
-            
-            memcpy (vd->tmpbuffer, vd->mem[vd->buf.index], HEADERFRAME1);
-            memcpy (vd->tmpbuffer + HEADERFRAME1, dht_data, DHT_SIZE);
-            memcpy (vd->tmpbuffer + HEADERFRAME1 + DHT_SIZE,
-                    vd->mem[vd->buf.index] + HEADERFRAME1,
-                    (vd->buf.bytesused - HEADERFRAME1));
-            if (debug)
-                fprintf (stderr, "bytes in used %d \n", vd->buf.bytesused);
-            break;
-        case V4L2_PIX_FMT_YUYV:
-            if (vd->buf.bytesused > vd->framesizeIn)
-                memcpy (vd->framebuffer, vd->mem[vd->buf.index],
-                        (size_t) vd->framesizeIn);
-            else
-                memcpy (vd->framebuffer, vd->mem[vd->buf.index],
-                        (size_t) vd->buf.bytesused);
-            break;
-        default:
-            goto err;
-            break;
+    if (debug) {
+        fprintf (stderr, "bytes in used %d \n", vd->buf.bytesused);
     }
     
     std::cout << "Hej10" << std::endl;
+    this->jpg_buffer = vd->tmpbuffer;
+    this->jpg_buffer_size = vd->buf.bytesused + DHT_SIZE;
     
     ret = ioctl (vd->fd, VIDIOC_QBUF, &vd->buf);
     if (ret < 0) {
         fprintf (stderr, "Unable to requeue buffer (%d).\n", errno);
         goto err;
     }
+    
+    this->saving_buffer = false;
     
     return 0;
 err:
@@ -290,8 +292,15 @@ err:
 
 }
 
-int CameraManager2::save_jpg() {
+void CameraManager2::get_jpg_data() {
+    jpg_data jpg_dat;
+    while (this->saving_buffer==true) {
+        printf(".");
+    }
     
+    jpg_dat.buffer = jpg_buffer;
+    jpg_dat.size = jpg_buffer_size;
+    return jpg_dat;
 }
 
 int CameraManager2::close_v4l2(struct vdIn *vd) {
