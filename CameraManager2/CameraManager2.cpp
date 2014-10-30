@@ -19,6 +19,7 @@ CameraManager2::CameraManager2() {
     
     for (int i = 0; i<6; i++) {
         sprintf(outputfile, "snap%i.jpg", i);
+        std::cout << i << std::endl;
         if (uvcGrab(videoIn) < 0) {
             fprintf (stderr, "Error grabbing\n");
         }
@@ -224,10 +225,11 @@ int CameraManager2::video_disable(struct vdIn *vd) {
 int CameraManager2::uvcGrab(struct vdIn *vd) {
     int ret;
     
+    std::cout << vd->isstreaming << std::endl;
     
     if (vd->isstreaming==0)
         std::cout << "Hej4" << std::endl;
-        if (video_enable (vd))
+        if (video_enable(vd))
             goto err;
     
     std::cout << vd->isstreaming << std::endl;
