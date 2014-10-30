@@ -116,16 +116,18 @@ public:
     bool grabbing;
     
 private:
-    int init_videoIn(struct vdIn *vd, char *device, int width, int height, int format, int grabmethod);
-    int init_v4l2(struct vdIn *vd);
-    int video_enable(struct vdIn *vd);
-    int video_disable(struct vdIn *vd);
-    int uvcGrab(struct vdIn *vd);
-    int close_v4l2(struct vdIn *vd);
-    void start_grabbing(struct vdIn *vd);
+    int init_videoIn(char *device, int width, int height, int format, int grabmethod);
+    int init_v4l2();
+    int video_enable();
+    int video_disable();
+    int uvcGrab();
+    int close_v4l2(;
+    void start_grabbing();
     
     void *jpg_buffer;
     int jpg_buffer_size;
     bool saving_buffer;
+    
+    struct vdIn *vd;
 
 };

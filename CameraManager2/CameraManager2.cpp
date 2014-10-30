@@ -28,39 +28,27 @@ CameraManager2::CameraManager2() {
     
     s_catch_signals ();
     
-    struct vdIn *videoIn = new vdIn;
+    vd = new vdIn;
     this->saving_buffer = false;
     this->grabbing = false;
     
-    init_videoIn(videoIn, "/dev/video0", 640, 480, V4L2_PIX_FMT_MJPEG, 1);
+    init_videoIn("/dev/video0", 640, 480, V4L2_PIX_FMT_MJPEG, 1);
     
-    std::cout << videoIn->isstreaming << std::endl;
+    std::cout << vd->isstreaming << std::endl;
     
-    std::thread t1(&CameraManager2::start_grabbing, videoIn, this);
+    std::thread t1(&CameraManager2::start_grabbing, this);
     t1.join();
     
     }
 
-void CameraManager2::start_grabbing(struct vdIn *vd) {
-    /*
-    while (this->grabbing) {
-        if (s_interrupted) {
-            fprintf(stderr, "\nInterrupt received - aborting capture\n");
-            return;
-        }
-     
-        if (uvcGrab(vd) < 0) {
-            fprintf (stderr, "Error grabbing\n");
-        }
-    }
-    */
+void CameraManager2::start_grabbing() {
     
     char outputfile[40];
 
     for (int i = 0; i<6; i++) {
         sprintf(outputfile, "snap%i.jpg", i);
         std::cout << i << std::endl;
-        if (uvcGrab(vd) < 0) {
+        if (uvcGrab() < 0) {
             fprintf (stderr, "Error grabbing\n");
         }
         
@@ -69,11 +57,11 @@ void CameraManager2::start_grabbing(struct vdIn *vd) {
             fwrite(vd->tmpbuffer, vd->buf.bytesused + DHT_SIZE, 1, file);
         }
     }
-    close_v4l2(vd);
+    close_v4l2();
 
 }
 
-int CameraManager2::init_videoIn(struct vdIn *vd, char *device, int width, int height, int format, int grabmethod)
+int CameraManager2::init_videoIn(char *device, int width, int height, int format, int grabmethod)
 {
     
     if (vd == NULL || device == NULL)
@@ -97,7 +85,7 @@ int CameraManager2::init_videoIn(struct vdIn *vd, char *device, int width, int h
     vd->formatIn = format;
     vd->grabmethod = grabmethod;
     vd->isstreaming = 0;
-    if (init_v4l2 (vd) < 0) {
+    if (init_v4l2 () < 0) {
         fprintf (stderr, " Init v4L2 failed !! exit fatal \n");
         goto error;;
     }
@@ -121,7 +109,7 @@ error:
     return -1;
 }
 
-int CameraManager2::init_v4l2 (struct vdIn *vd)
+int CameraManager2::init_v4l2()
 {
     int i;
     int ret = 0;
@@ -230,7 +218,7 @@ fatal:
     return -1;
 }
 
-int CameraManager2::video_enable(struct vdIn *vd) {
+int CameraManager2::video_enable() {
     int type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
     int ret;
     std::cout << "Hej5" << std::endl;
@@ -246,7 +234,7 @@ int CameraManager2::video_enable(struct vdIn *vd) {
     return 0;
 }
 
-int CameraManager2::video_disable(struct vdIn *vd) {
+int CameraManager2::video_disable() {
     int type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
     int ret;
     
@@ -260,7 +248,7 @@ int CameraManager2::video_disable(struct vdIn *vd) {
 
 }
 
-int CameraManager2::uvcGrab(struct vdIn *vd) {
+int CameraManager2::uvcGrab() {
     int ret;
     
     std::cout << vd->isstreaming << std::endl;
@@ -326,7 +314,7 @@ jpg_data CameraManager2::get_jpg_data() {
     return jpg_dat;
 }
 
-int CameraManager2::close_v4l2(struct vdIn *vd) {
+int CameraManager2::close_v4l2() {
     int i;
     
     if (vd->isstreaming)
