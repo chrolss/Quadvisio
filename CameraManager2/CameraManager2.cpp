@@ -45,7 +45,7 @@ void CameraManager2::start_grabbing() {
     
     char outputfile[40];
 
-    for (int i = 0; i<6; i++) {
+    for (int i = 0; i<11; i++) {
         sprintf(outputfile, "snap%i.jpg", i);
         std::cout << i << std::endl;
         if (uvcGrab() < 0) {
@@ -221,15 +221,13 @@ fatal:
 int CameraManager2::video_enable() {
     int type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
     int ret;
-    std::cout << "Hej5" << std::endl;
 
     ret = ioctl (vd->fd, VIDIOC_STREAMON, &type);
     if (ret < 0) {
         fprintf (stderr, "Unable to %s capture: %d.\n", "start", errno);
         return ret;
     }
-    std::cout << "Hej6" << std::endl;
-
+    
     vd->isstreaming = 1;
     return 0;
 }
