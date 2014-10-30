@@ -8,7 +8,25 @@
 
 #include "CameraManager2.h"
 
+static int s_interrupted = 0;
+static void s_signal_handler (int signal_value)
+{
+    s_interrupted = 1;
+}
+
+static void s_catch_signals (void)
+{
+    struct sigaction action;
+    action.sa_handler = s_signal_handler;
+    action.sa_flags = 0;
+    sigemptyset (&action.sa_mask);
+    sigaction (SIGINT, &action, NULL);
+    sigaction (SIGTERM, &action, NULL);
+}
+
 CameraManager2::CameraManager2() {
+    
+    s_catch_signals ();
     
     struct vdIn *videoIn = new vdIn;
     this->saving_buffer = false;
@@ -26,6 +44,11 @@ CameraManager2::CameraManager2() {
 void CameraManager2::start_grabbing(struct vdIn *vd) {
     /*
     while (this->grabbing) {
+        if (s_interrupted) {
+            fprintf(stderr, "\nInterrupt received - aborting capture\n");
+            return;
+        }
+     
         if (uvcGrab(vd) < 0) {
             fprintf (stderr, "Error grabbing\n");
         }

@@ -17,6 +17,7 @@
 #include <sys/mman.h>
 #include <sys/ioctl.h>
 #include <thread>
+#include <signal.h>
 
 #define CLEAR(x) memset(&(x), 0, sizeof(x))
 
