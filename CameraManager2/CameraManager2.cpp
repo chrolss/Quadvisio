@@ -12,24 +12,26 @@ CameraManager2::CameraManager2() {
     
     struct vdIn *videoIn = new vdIn;
     char outputfile[40];
-    int img_num = 0;
     
     init_videoIn(videoIn, "/dev/video0", 640, 480, V4L2_PIX_FMT_MJPEG, 1);
     
     std::cout << videoIn->isstreaming << std::endl;
     
     for (int i = 0; i<6; i++) {
-        sprintf(outputfile, "snap%i.jpg", img_num);
+        sprintf(outputfile, "snap%i.jpg", i);
         if (uvcGrab(videoIn) < 0) {
             fprintf (stderr, "Error grabbing\n");
-            
         }
+        else {
+            FILE *file = fopen(outputfile, "wb");
+            fwrite(videoIn->tmpbuffer, videoIn->buf.bytesused + DHT_SIZE, 1, file);
+        }
+        
     }
     
     close_v4l2(videoIn);
     
-    FILE *file = fopen(outputfile, "wb");
-    fwrite (videoIn->tmpbuffer, videoIn->buf.bytesused + DHT_SIZE, 1, file);
+    
 }
 
 int CameraManager2::init_videoIn(struct vdIn *vd, char *device, int width, int height, int format, int grabmethod)
@@ -228,6 +230,7 @@ int CameraManager2::uvcGrab(struct vdIn *vd) {
         if (video_enable (vd))
             goto err;
     
+    std::cout << vd->isstreaming << std::endl;
     std::cout << "Hej7" << std::endl;
 
     memset (&vd->buf, 0, sizeof (struct v4l2_buffer));
