@@ -22,9 +22,11 @@ CameraManager2::CameraManager2() {
         sprintf(outputfile, "snap%i.jpg", img_num);
         if (uvcGrab(videoIn) < 0) {
             fprintf (stderr, "Error grabbing\n");
-            close_v4l2(videoIn);
+            
         }
     }
+    
+    close_v4l2(videoIn);
     
     FILE *file = fopen(outputfile, "wb");
     fwrite (videoIn->tmpbuffer, videoIn->buf.bytesused + DHT_SIZE, 1, file);
