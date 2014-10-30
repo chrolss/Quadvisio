@@ -315,7 +315,7 @@ err:
 
 }
 
-void CameraManager2::get_jpg_data() {
+jpg_data CameraManager2::get_jpg_data() {
     jpg_data jpg_dat;
     while (this->saving_buffer==true) {
         printf(".");
