@@ -318,7 +318,7 @@ int CameraManager2::close_v4l2() {
     int i;
     
     if (vd->isstreaming)
-        video_disable (vd);
+        video_disable();
     
     /* If the memory maps are not released the device will remain opened even
      after a call to close(); */
