@@ -65,7 +65,7 @@ BMP085::reading BMP085::getBoth () {
         
         ssize_t ret = write(fd, buf, 2);
         printf("Write %zi", ret);
-        if ( ret != 0) {
+        if ( ret < 0) {
 			throw BMP085::smbusIOException (
 				"getBoth() write to control register",
 				errno
@@ -149,7 +149,7 @@ long BMP085::getB5Value () {
     buf[0] = CONTROL_REG;
     buf[1] = TEMP_COMMAND;
     
-    if (write(fd, buf, 2) != 0) {
+    if (write(fd, buf, 2) < 0) {
 		throw BMP085::smbusIOException (
 			"getB5Value() write to control register",
 			errno
