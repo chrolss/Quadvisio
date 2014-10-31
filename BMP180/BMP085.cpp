@@ -124,10 +124,10 @@ BMP085::reading BMP085::getBoth () {
 	return data;
 }
 
-int BMP085::getRelativeAltitude (float pressure) {
+float BMP085::getRelativeAltitude (float pressure) {
 // This formula is from sec. 3.6 of the data sheet.
 	double x = pow(((double)pressure / 101.325), ALT_EXP);
-	return (int)(44330.0 * (1.0 - x));
+	return (float)(44330.0 * (1.0 - x));
 }
 
 void BMP085::millisleep (unsigned int thousandths) {

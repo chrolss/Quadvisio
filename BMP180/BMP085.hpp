@@ -67,7 +67,7 @@ class BMP085 {
 	// Given a pressure in kPa, such as returned from getBoth(),
 	// getRelativeAltitude() returns an altitude based on a mean
 	// sea level pressure of 101.325 kPa.
-		static int getRelativeAltitude (float kPa);
+		static float getRelativeAltitude (float kPa);
 	// The arg to millisleep() is a number of milliseconds.
 		static void millisleep (unsigned int);
 	// These are thrown if an i2c_smbus read or write call fails.
