@@ -42,29 +42,16 @@ CameraManager2::CameraManager2(int width, int height) {
     }
 
 void CameraManager2::start_grabbing() {
-    /*
-    char outputfile[40];
-
-    for (int i = 0; i<11; i++) {
-        sprintf(outputfile, "snap%i.jpg", i);
-        std::cout << i << std::endl;
-        if (uvcGrab() < 0) {
-            fprintf (stderr, "Error grabbing\n");
-        }
-        
-        else {
-            FILE *file = fopen(outputfile, "wb");
-            fwrite(vd->tmpbuffer, vd->buf.bytesused + DHT_SIZE, 1, file);
-        }
-    }
-    */
+    std::cout << "starting to grab frames" << std::endl;
+    int frame_count = 0;
     while (true) {
         if (uvcGrab() < 0) {
             fprintf (stderr, "Error grabbing\n");
         }
+        printf("Captured frame %i\n", frame_count);
+        frame_count++;
     }
     close_v4l2();
-
 }
 
 int CameraManager2::init_videoIn(char *device, int width, int height, int format, int grabmethod)
@@ -261,7 +248,7 @@ int CameraManager2::uvcGrab() {
         }
     }
     
-    this->saving_buffer = true;
+    saving_buffer = true;
 
     memset (&vd->buf, 0, sizeof (struct v4l2_buffer));
     vd->buf.type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
@@ -284,13 +271,15 @@ int CameraManager2::uvcGrab() {
     this->jpg_buffer = vd->tmpbuffer;
     this->jpg_buffer_size = vd->buf.bytesused + DHT_SIZE;
     
+    saving_buffer = false;
+    
     ret = ioctl (vd->fd, VIDIOC_QBUF, &vd->buf);
     if (ret < 0) {
         fprintf (stderr, "Unable to requeue buffer (%d).\n", errno);
         goto err;
     }
     
-    this->saving_buffer = false;
+    
     
     return 0;
 err:
@@ -301,7 +290,7 @@ err:
 
 jpg_data CameraManager2::get_jpg_data() {
     jpg_data jpg_dat;
-    while (this->saving_buffer==true) {
+    while (saving_buffer==true) {
         printf(".");
     }
     
