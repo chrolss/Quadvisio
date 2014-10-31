@@ -61,7 +61,7 @@ int main (int argc, const char* argv[]) {
     
     BMP085::reading data = bcm->getBoth();
     float start_altitude = 0.0;
-    for (int i = 0; i<11; i++) {
+    for (int i = 0; i<10; i++) {
         start_altitude += BMP085::getRelativeAltitude(data.kPa);
         usleep(100000);
     }
