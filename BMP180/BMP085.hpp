@@ -7,6 +7,13 @@
 #include <string>
 #include <exception>
 #include <inttypes.h>
+#include <linux/i2c-dev.h>
+#include <sys/ioctl.h>
+#include <fcntl.h>
+#include <cstring>
+#include <cstdio>
+#include <cerrno>
+#include <cmath>
 
 class BMP085 {
 	public:

@@ -1,11 +1,8 @@
+
+
+
 #include "BMP085.hpp"
-#include <linux/i2c-dev.h>
-#include <sys/ioctl.h>
-#include <fcntl.h>
-#include <cstring>
-#include <cstdio>
-#include <cerrno>
-#include <cmath>
+
 
 using namespace std;
 
@@ -42,7 +39,9 @@ BMP085::BMP085 (BMP085::OversamplingSetting o, string dev, int addr) :
 	md = readWord(0xbe);
 }
 
-BMP085::~BMP085 () { close(fd); }
+BMP085::~BMP085 () {
+    close(fd);
+}
 
 /* API */
 
