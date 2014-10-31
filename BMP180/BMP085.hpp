@@ -14,6 +14,12 @@
 #include <cstdio>
 #include <cerrno>
 #include <cmath>
+#include <iostream>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <unistd.h>
+#include <sys/ioctl.h>
 
 class BMP085 {
 	public:
