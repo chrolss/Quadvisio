@@ -70,10 +70,10 @@ int main (int argc, const char* argv[]) {
 // Take reading, report, and repeat ad infititum.
 	try {
 		while (1) {
+            data = bcm->getBoth();
             //cout << "Relative altitude at " << data.kPa << " kPa: "
             cout << (BMP085::getRelativeAltitude(data.kPa) - start_altitude) << "m.\n";
 			//cout << "\rTemperature: " << data.celcius << " °C\n";
-			data = bcm->getBoth();
 			usleep(100);
 		}
 	} catch (BMP085::smbusIOException &ex) {
