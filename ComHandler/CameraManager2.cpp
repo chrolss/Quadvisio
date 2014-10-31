@@ -24,7 +24,7 @@ static void s_catch_signals (void)
     sigaction (SIGTERM, &action, NULL);
 }
 
-CameraManager2::CameraManager2() {
+CameraManager2::CameraManager2(int width, int height) {
     
     s_catch_signals ();
     
@@ -32,17 +32,17 @@ CameraManager2::CameraManager2() {
     this->saving_buffer = false;
     this->grabbing = false;
     
-    init_videoIn("/dev/video0", 640, 480, V4L2_PIX_FMT_MJPEG, 1);
+    init_videoIn("/dev/video0", width, height, V4L2_PIX_FMT_MJPEG, 1);
     
     std::cout << vd->isstreaming << std::endl;
     
     std::thread t1(&CameraManager2::start_grabbing, this);
-    t1.join();
+    t1.detach();
     
     }
 
 void CameraManager2::start_grabbing() {
-    
+    /*
     char outputfile[40];
 
     for (int i = 0; i<11; i++) {
@@ -55,6 +55,12 @@ void CameraManager2::start_grabbing() {
         else {
             FILE *file = fopen(outputfile, "wb");
             fwrite(vd->tmpbuffer, vd->buf.bytesused + DHT_SIZE, 1, file);
+        }
+    }
+    */
+    while (true) {
+        if (uvcGrab() < 0) {
+            fprintf (stderr, "Error grabbing\n");
         }
     }
     close_v4l2();

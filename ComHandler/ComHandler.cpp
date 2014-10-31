@@ -94,13 +94,10 @@ ComHandler::ComHandler(bool enableCamera) {
     }
     
     if(enableCamera==true) {
-        camManager = new CameraManager;
-        
-        camManager->initializeCamera(320, 240);
-        camManager->start_grabing();
+        camManager = new CameraManager2(640,480);
     }
     
-    usleep(100000);
+    sleep(1);
     
 }
 
@@ -251,6 +248,7 @@ void ComHandler::sendQvisProMsg() {
     
     if (vidResNew != vidRes) {
         printf("New res: %i, old res: %i\n", this->vidResNew, this->vidRes);
+        /*
         switch (vidResNew) {
             case 0:
                 camManager->change_res(320, 240);
@@ -271,6 +269,7 @@ void ComHandler::sendQvisProMsg() {
             default:
                 break;
         }
+        */
         printf("New resolution was set\n");
         vidRes = vidResNew;
     }

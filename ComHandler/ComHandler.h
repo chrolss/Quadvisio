@@ -25,7 +25,7 @@
 #include <math.h>
 #include <time.h>
 
-#include "CameraManager.h"
+#include "CameraManager2.h"
 
 #define PORT "3490"  // the port users will be connecting to
 #define radToDeg 57.296
@@ -93,7 +93,7 @@ private:
     
     
     // Video
-    CameraManager *camManager;
+    CameraManager2 *camManager;
     int vidRes;
     int vidResNew;
     struct jpg_data jpg_dat;

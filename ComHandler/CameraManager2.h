@@ -110,7 +110,7 @@ struct jpg_data {
 class CameraManager2{
     
 public:
-    CameraManager2();
+    CameraManager2(int width, int height);
     jpg_data get_jpg_data();
     
     bool grabbing;

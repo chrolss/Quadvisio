@@ -2,4 +2,4 @@
 
 echo "Building ComHandler test software…"
 
-g++ -O2 -W -I /root/code/Quadvisio/ main.cpp ComHandler.cpp CameraManager.cpp -o ComTest -pthread -std=c++11
+g++ -O2 -W -I /root/code/Quadvisio/ main.cpp ComHandler.cpp CameraManager2.cpp -o ComTest -pthread -std=c++11
