@@ -75,6 +75,7 @@ BMP085::reading BMP085::getBoth () {
 		unsigned int duration = oss * 5 + 5;
 		if (oss == 3) duration += 5;
 		millisleep(duration);
+        
         memset(&buf,0,sizeof(buf));
         
         read(fd, buf, 3);
