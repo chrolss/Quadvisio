@@ -60,12 +60,11 @@ int main (int argc, const char* argv[]) {
 
 // Take reading, report, and repeat ad infititum.
 	try {
-		BMP085::reading data = bcm->getBoth();
-		cout << "Relative altitude at " << data.kPa << " kPa: "
-			<< BMP085::getRelativeAltitude(data.kPa) << "m.\n";
+        BMP085::reading data = bcm->getBoth();
 		while (1) {
-			cout << "\rTemperature: " << data.celcius << " °C    "
-				<< "Pressure: " << data.kPa << " kPa         " << flush;
+            cout << "Relative altitude at " << data.kPa << " kPa: "
+            << BMP085::getRelativeAltitude(data.kPa) << "m.\n";
+			cout << "\rTemperature: " << data.celcius << " °C\n";
 			data = bcm->getBoth();
 			sleep(2);
 		}
