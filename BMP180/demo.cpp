@@ -61,11 +61,11 @@ int main (int argc, const char* argv[]) {
     
     BMP085::reading data = bcm->getBoth();
     float start_altitude = 0.0;
-    for (int i = 0; i<10; i++) {
+    for (int i = 0; i<20; i++) {
         start_altitude += BMP085::getRelativeAltitude(data.kPa);
-        usleep(100000);
+        usleep(200000);
     }
-    start_altitude = (float) start_altitude/10.0;
+    start_altitude = (float) start_altitude/20.0;
 
 // Take reading, report, and repeat ad infititum.
 	try {
@@ -74,7 +74,7 @@ int main (int argc, const char* argv[]) {
             << (BMP085::getRelativeAltitude(data.kPa) - start_altitude) << "m.\n";
 			cout << "\rTemperature: " << data.celcius << " °C\n";
 			data = bcm->getBoth();
-			usleep(500000);
+			usleep(200000);
 		}
 	} catch (BMP085::smbusIOException &ex) {
 		cerr << "SMBus I/O Error:\n" << ex.what();
