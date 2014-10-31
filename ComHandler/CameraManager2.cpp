@@ -26,7 +26,7 @@ static void s_catch_signals (void)
 
 CameraManager2::CameraManager2(int width, int height) {
     
-    s_catch_signals ();
+    s_catch_signals();
     
     vd = new vdIn;
     this->saving_buffer = false;
@@ -38,7 +38,7 @@ CameraManager2::CameraManager2(int width, int height) {
 }
 
 void CameraManager2::start_grabbing() {
-    std::thread t1(&CameraManager2::start_grabbing, this);
+    std::thread t1(&CameraManager2::grabbing_loop, this);
     t1.detach();
 }
 
