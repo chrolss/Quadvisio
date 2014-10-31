@@ -58,13 +58,20 @@ int main (int argc, const char* argv[]) {
 		return 1;
 	}
 	bcm->hiRes = hires;
+    
+    BMP085::reading data = bcm->getBoth();
+    float start_altitude = 0.0;
+    for (int i = 0; i<11; i++) {
+        start_altitude += BMP085::getRelativeAltitude(data.kPa);
+        usleep(100000);
+    }
+    start_altitude = (float) start_altitude/10.0;
 
 // Take reading, report, and repeat ad infititum.
 	try {
-        BMP085::reading data = bcm->getBoth();
 		while (1) {
             cout << "Relative altitude at " << data.kPa << " kPa: "
-            << BMP085::getRelativeAltitude(data.kPa) << "m.\n";
+            << (BMP085::getRelativeAltitude(data.kPa) - start_altitude) << "m.\n";
 			cout << "\rTemperature: " << data.celcius << " °C\n";
 			data = bcm->getBoth();
 			usleep(500000);
