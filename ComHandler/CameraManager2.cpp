@@ -49,7 +49,7 @@ void CameraManager2::grabbing_loop() {
         if (uvcGrab() < 0) {
             fprintf (stderr, "Error grabbing\n");
         }
-        printf("Captured frame %i\n", frame_count);
+        //printf("Captured frame %i\n", frame_count);
         frame_count++;
     }
     close_v4l2();
@@ -274,7 +274,6 @@ int CameraManager2::uvcGrab() {
     this->jpg_buffer_size = vd->buf.bytesused + DHT_SIZE;
     
     this->saving_buffer = false;
-    std::cout << saving_buffer << std::endl;
 
     ret = ioctl (vd->fd, VIDIOC_QBUF, &vd->buf);
     if (ret < 0) {
