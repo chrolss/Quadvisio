@@ -272,7 +272,8 @@ int CameraManager2::uvcGrab() {
     this->jpg_buffer_size = vd->buf.bytesused + DHT_SIZE;
     
     this->saving_buffer = false;
-    
+    std::cout << saving_buffer << std::endl;
+
     ret = ioctl (vd->fd, VIDIOC_QBUF, &vd->buf);
     if (ret < 0) {
         fprintf (stderr, "Unable to requeue buffer (%d).\n", errno);
@@ -293,8 +294,8 @@ jpg_data CameraManager2::get_jpg_data() {
     jpg_data jpg_dat;
     
     while (this->saving_buffer) {
-        std::cout << saving_buffer << std::endl;
-        printf(".");
+        //std::cout << saving_buffer << std::endl;
+        //printf(".");
     }
     
     jpg_dat.buffer = jpg_buffer;
