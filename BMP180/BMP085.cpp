@@ -64,7 +64,6 @@ BMP085::reading BMP085::getBoth () {
         buf[1] = (oss << 6) + 0x34;
         
         ssize_t ret = write(fd, buf, 2);
-        printf("Write %zi", ret);
         if ( ret < 0) {
 			throw BMP085::smbusIOException (
 				"getBoth() write to control register",

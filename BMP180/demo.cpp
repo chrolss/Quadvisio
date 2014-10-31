@@ -72,7 +72,7 @@ int main (int argc, const char* argv[]) {
 		while (1) {
             data = bcm->getBoth();
             //cout << "Relative altitude at " << data.kPa << " kPa: "
-            cout << (BMP085::getRelativeAltitude(data.kPa) - start_altitude) << "m.\n";
+            cout << "Absolut altitude: " << (BMP085::getRelativeAltitude(data.kPa) - start_altitude) << "m.\n";
 			//cout << "\rTemperature: " << data.celcius << " °C\n";
 			usleep(100);
 		}
