@@ -95,6 +95,7 @@ ComHandler::ComHandler(bool enableCamera) {
     
     if(enableCamera==true) {
         camManager = new CameraManager2(640,480);
+        camManager->start_grabbing();
     }
     
     sleep(1);

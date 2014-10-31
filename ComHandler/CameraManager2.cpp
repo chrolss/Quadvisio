@@ -35,13 +35,14 @@ CameraManager2::CameraManager2(int width, int height) {
     init_videoIn("/dev/video0", width, height, V4L2_PIX_FMT_MJPEG, 1);
     
     std::cout << vd->isstreaming << std::endl;
-    
-    std::thread t1(&CameraManager2::start_grabbing, this);
-    t1.detach();
-    
-    }
+}
 
 void CameraManager2::start_grabbing() {
+    std::thread t1(&CameraManager2::start_grabbing, this);
+    t1.detach();
+}
+
+void CameraManager2::grabbing_loop() {
     std::cout << "starting to grab frames" << std::endl;
     int frame_count = 0;
     while (true) {
@@ -52,6 +53,7 @@ void CameraManager2::start_grabbing() {
         frame_count++;
     }
     close_v4l2();
+
 }
 
 int CameraManager2::init_videoIn(char *device, int width, int height, int format, int grabmethod)
@@ -293,7 +295,7 @@ jpg_data CameraManager2::get_jpg_data() {
     
     jpg_data jpg_dat;
     
-    while (this->saving_buffer) {
+    while(this->saving_buffer) {
         //std::cout << saving_buffer << std::endl;
         //printf(".");
     }

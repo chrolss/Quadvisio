@@ -111,6 +111,7 @@ class CameraManager2{
     
 public:
     CameraManager2(int width, int height);
+    void start_grabbing();
     jpg_data get_jpg_data();
     
     bool grabbing;
@@ -122,7 +123,7 @@ private:
     int video_disable();
     int uvcGrab();
     int close_v4l2();
-    void start_grabbing();
+    void grabbing_loop();
     
     void *jpg_buffer;
     int jpg_buffer_size;
