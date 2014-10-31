@@ -112,7 +112,6 @@ void Controller::calcPWM(double *input, double *output, double *ref) {
 	//printf("D: %f, ea0: %f, ea1: %f, eD: %f\n", innerParameters[2]*(ea[0]-ea[1])/dt,ea[0],ea[1],(ea[0]-ea[1]));
 	this->ea[1] = ea[0];		// set old error
 
-	//printf("P: %f, I: %f, D: %f, e0: %f, e2: %f\n",innerParameters[0]*ea[0], innerParameters[1]*(ea[2]), innerParameters[2]*(ea[0]-ea[1])/dt,ea[0],ea[2]);
 	//betadelen - pitch
 	eb[0] = ref[1] - input[4] + innerParameters[14];  	// set new error
 	this->eb[2] += eb[0]*dt;
@@ -122,8 +121,6 @@ void Controller::calcPWM(double *input, double *output, double *ref) {
 	MbT = innerParameters[3]*eb[0] + innerParameters[4]*(eb[2]) + innerParameters[5]*(eb[0]-eb[1])/dt;
 	this->eb[1] = eb[0];		// set old error
 
-	//printf("P: %f, I: %f, D: %f, e: %f\n",innerParameters[3]*eb[0], innerParameters[4]*(eb[2]), innerParameters[5]*(eb[0]-eb[1])/dt,eb[0]);
-	//printf("rollfel: %f, pitchfel: %f\n",ea[2],eb[2]);
 
 	//gammadelen
 	eg[0] = ref[2] - input[5] + joyCom[2];  	// set new error
@@ -170,10 +167,6 @@ void Controller::calcPWM(double *input, double *output, double *ref) {
         output[3] = F*CONST4 + MaT*CONST5 + Mb*CONST6 - Mg*CONST7;
     }
 
-
-    //printf("Before saturation \n");
-    //printf("LF = %f, RF = %f, RR = %f, RL = %f \n", output[0], output[1],output[2], output[3]);
-
     // Make sure output is between 0-max percentage
     for (int i=0; i<4; i++) {
         if (output[i]<0) {
@@ -185,8 +178,6 @@ void Controller::calcPWM(double *input, double *output, double *ref) {
             output[i]=MAX_PERCENTAGE;
         }
     }
-    //printf("LF = %f, RF = %f, RR = %f, LR = %f \n", output[0], output[1],output[2], output[3]);
-
 }
 
 
