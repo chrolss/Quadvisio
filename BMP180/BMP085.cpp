@@ -77,6 +77,9 @@ BMP085::reading BMP085::getBoth () {
 		millisleep(duration);
         
         memset(&buf,0,sizeof(buf));
+        buf[0] = 0xF6;
+        write(fd, buf, 1);
+        memset(&buf,0,sizeof(buf));
         
         read(fd, buf, 3);
         
