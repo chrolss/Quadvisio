@@ -26,7 +26,7 @@ static void s_catch_signals (void)
 
 CameraManager2::CameraManager2(int width, int height) {
     
-    s_catch_signals();
+    //s_catch_signals();
     
     vd = new vdIn;
     this->saving_buffer = false;
@@ -294,11 +294,12 @@ err:
 jpg_data CameraManager2::get_jpg_data() {
     
     jpg_data jpg_dat;
-    
+    /*
     while(this->saving_buffer) {
         //std::cout << saving_buffer << std::endl;
         //printf(".");
     }
+    */
     
     jpg_dat.buffer = jpg_buffer;
     jpg_dat.size = jpg_buffer_size;
