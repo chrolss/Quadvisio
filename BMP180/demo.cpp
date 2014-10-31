@@ -63,18 +63,18 @@ int main (int argc, const char* argv[]) {
     float start_altitude = 0.0;
     for (int i = 0; i<20; i++) {
         start_altitude += BMP085::getRelativeAltitude(data.kPa);
-        usleep(200000);
+        usleep(500000);
     }
     start_altitude = (float) start_altitude/20.0;
 
 // Take reading, report, and repeat ad infititum.
 	try {
 		while (1) {
-            cout << "Relative altitude at " << data.kPa << " kPa: "
-            << (BMP085::getRelativeAltitude(data.kPa) - start_altitude) << "m.\n";
-			cout << "\rTemperature: " << data.celcius << " °C\n";
+            //cout << "Relative altitude at " << data.kPa << " kPa: "
+            cout << (BMP085::getRelativeAltitude(data.kPa) - start_altitude) << "m.\n";
+			//cout << "\rTemperature: " << data.celcius << " °C\n";
 			data = bcm->getBoth();
-			usleep(200000);
+			usleep(1000);
 		}
 	} catch (BMP085::smbusIOException &ex) {
 		cerr << "SMBus I/O Error:\n" << ex.what();
