@@ -1,5 +1,7 @@
 
 #include "BMP085.hpp"
+#include <linux/i2c-dev.h>
+#include <linux/i2c.h>
 
 using namespace std;
 
