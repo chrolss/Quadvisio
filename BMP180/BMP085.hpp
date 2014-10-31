@@ -101,6 +101,9 @@ class BMP085 {
 		float getCelcius (long);
 		long getB5Value ();
 		int16_t readWord (int addr);
+    
+        char buf[3];
+
 	// Used in testing, see pg. 13 of the datasheet.
 		void useReferenceValues ();
 	private:

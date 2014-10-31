@@ -58,18 +58,30 @@ BMP085::reading BMP085::getBoth () {
 	int ucPress;
 	if (testRef) ucPress = 23843;
 	else {
-		if (i2c_smbus_write_byte_data(fd, CONTROL_REG, (oss << 6) + 0x34) != 0)
+        
+        buf[0] = CONTROL_REG;
+        buf[1] = (oss << 6) + 0x34;
+        
+        if (write(fd, buf, 2) != 0) {
 			throw BMP085::smbusIOException (
 				"getBoth() write to control register",
 				errno
 			);
+        }
+        
 		unsigned int duration = oss * 5 + 5;
 		if (oss == 3) duration += 5;
 		millisleep(duration);
-		int msb = i2c_smbus_read_byte_data(fd, DATA_REG);
-		int lsb = i2c_smbus_read_byte_data(fd, DATA_REG + 1);
+        memset(&buf,0,sizeof(buf));
+        
+        read(fd, buf, 3);
+        
+        int msb = buf[0];
+		int lsb = buf[1];
 		int xlsb = 0;
-		if (hiRes) xlsb = i2c_smbus_read_byte_data(fd, DATA_REG + 2);
+        if (hiRes) {
+            xlsb = buf[2];
+        }
 		if (msb == -1 || lsb == -1 || xlsb == -1) throw BMP085::smbusIOException (
 			"getBoth() read data register",
 			errno
@@ -128,7 +140,13 @@ float BMP085::getCelcius (long b5) {
 
 long BMP085::getB5Value () {
 	if (testRef) return 2399;
-	if (i2c_smbus_write_byte_data(fd, CONTROL_REG, TEMP_COMMAND) != 0)
+    
+    memset(&buf,0,sizeof(buf));
+    
+    buf[0] = CONTROL_REG;
+    buf[1] = TEMP_COMMAND;
+    
+	if (write(fd, buf, 2) != 0)
 		throw BMP085::smbusIOException (
 			"getB5Value() write to control register",
 			errno
@@ -140,6 +158,9 @@ long BMP085::getB5Value () {
 }
 
 int16_t BMP085::readWord (int addr) {
+    
+    read(fd, <#void *#>, <#size_t#>)
+    
 	int word = i2c_smbus_read_word_data(fd, addr);
 	if (word == -1) {
 		char str[32];
