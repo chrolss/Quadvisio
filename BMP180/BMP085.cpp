@@ -59,6 +59,7 @@ BMP085::reading BMP085::getBoth () {
 	if (testRef) ucPress = 23843;
 	else {
         
+        memset(&buf,0,sizeof(buf));
         buf[0] = CONTROL_REG;
         buf[1] = (oss << 6) + 0x34;
         
