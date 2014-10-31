@@ -146,11 +146,12 @@ long BMP085::getB5Value () {
     buf[0] = CONTROL_REG;
     buf[1] = TEMP_COMMAND;
     
-	if (write(fd, buf, 2) != 0)
+    if (write(fd, buf, 2) != 0) {
 		throw BMP085::smbusIOException (
 			"getB5Value() write to control register",
 			errno
 		);
+    }
 	millisleep(5);
 	long x1 = (readWord(DATA_REG) - ac6) * ac5 >> 15;
 	long x2 = (mc << 11) / (x1 + md);
@@ -158,10 +159,16 @@ long BMP085::getB5Value () {
 }
 
 int16_t BMP085::readWord (int addr) {
+    memset(&buf,0,sizeof(buf));
     
-    read(fd, <#void *#>, <#size_t#>)
+    buf[0] = addr;
+    write(fd, buf, 1);
     
-	int word = i2c_smbus_read_word_data(fd, addr);
+    memset(&buf,0,sizeof(buf));
+    
+    read(fd, buf, 1);
+    
+	int word = buf[0];
 	if (word == -1) {
 		char str[32];
 		sprintf(str, "readWord() 0x%x", addr);
