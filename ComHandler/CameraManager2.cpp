@@ -248,7 +248,7 @@ int CameraManager2::uvcGrab() {
         }
     }
     
-    saving_buffer = true;
+    this->saving_buffer = true;
 
     memset (&vd->buf, 0, sizeof (struct v4l2_buffer));
     vd->buf.type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
@@ -271,7 +271,7 @@ int CameraManager2::uvcGrab() {
     this->jpg_buffer = vd->tmpbuffer;
     this->jpg_buffer_size = vd->buf.bytesused + DHT_SIZE;
     
-    saving_buffer = false;
+    this->saving_buffer = false;
     
     ret = ioctl (vd->fd, VIDIOC_QBUF, &vd->buf);
     if (ret < 0) {
@@ -289,8 +289,11 @@ err:
 }
 
 jpg_data CameraManager2::get_jpg_data() {
+    
     jpg_data jpg_dat;
-    while (saving_buffer==true) {
+    
+    while (this->saving_buffer) {
+        std::cout << saving_buffer << std::endl;
         printf(".");
     }
     
