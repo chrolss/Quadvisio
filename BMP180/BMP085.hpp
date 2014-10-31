@@ -8,6 +8,7 @@
 #include <exception>
 #include <inttypes.h>
 #include <linux/i2c-dev.h>
+#include <smbus.h> 
 #include <sys/ioctl.h>
 #include <fcntl.h>
 #include <cstring>

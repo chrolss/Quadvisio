@@ -1,8 +1,5 @@
 
-
-
 #include "BMP085.hpp"
-
 
 using namespace std;
 
@@ -13,19 +10,23 @@ BMP085::BMP085 (BMP085::OversamplingSetting o, string dev, int addr) :
 	hiRes(true),
 	testRef(false)
 {
+    
 	fd = open(dev.c_str(), O_RDWR);
+    
 	if (fd < 0) {
 		ok = false;
 		err = "open() fail: ";
 		err += strerror(errno);
 		return;
 	}
+    
 	if (ioctl(fd, I2C_SLAVE, addr) < 0) {
 		ok = false;
 		err = "ioctl() fail: ";
 		err += strerror(errno);
 		return;
 	}
+    
 	ac1 = readWord(0xaa);
 	ac2 = readWord(0xac);
 	ac3 = readWord(0xae);
