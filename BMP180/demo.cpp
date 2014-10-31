@@ -74,7 +74,7 @@ int main (int argc, const char* argv[]) {
             cout << (BMP085::getRelativeAltitude(data.kPa) - start_altitude) << "m.\n";
 			//cout << "\rTemperature: " << data.celcius << " °C\n";
 			data = bcm->getBoth();
-			usleep(1000);
+			usleep(100);
 		}
 	} catch (BMP085::smbusIOException &ex) {
 		cerr << "SMBus I/O Error:\n" << ex.what();
