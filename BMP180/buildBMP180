@@ -1,5 +1,5 @@
 #!/bin/bash
 
-echo "Building BMP180 Test Program”
+echo "Building BMP180 Test Program"
 
 g++ -Wall -O2 BMP_180.cpp main.cpp -o bmp180Test

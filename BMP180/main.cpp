@@ -26,7 +26,7 @@ int main(int arc, const char *argv[]) {
     }
     
     BMP180 bmp;
-    bmp.initialize(BMP180::OSS_LOW);
+    bmp.initialize(oss);
     
     struct bmp180_data *bmp_data;
     bmp_data = new bmp180_data;

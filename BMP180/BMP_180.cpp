@@ -92,9 +92,9 @@ void BMP180::get_sensor_data(struct bmp180_data *data) {
     x1 >>= 16;
     x2 = (-7357 * p) >> 16;
     p += (x1 + x2 + 3791) >> 4;
-    
-    data->temperature = t;
-    data->pressure = p;
+
+    data->temperature = (double) t/10.0;
+    data->pressure = (double) p/1000.0;
     data->altitude = get_altitude();
 }
 
@@ -129,7 +129,7 @@ long BMP180::read_uncom_press() {
 }
 
 float BMP180::get_altitude() {
-    double x = pow(((double)p / 101.325), ALT_EXP);
+    double x = pow(((double)p / 101325.0), ALT_EXP);
     return (float)(44330.0 * (1.0 - x));
 }
 
@@ -144,5 +144,6 @@ int16_t BMP180::read_adress(int addr) {
     
     int16_t ac1_le = (buf[0] << 8 ) | (buf[1] & 0xff);
     
-    return (ac1_le >> 8) | (ac1_le << 8);
+    //return (ac1_le >> 8) | (ac1_le << 8);
+    return ac1_le;
 }
