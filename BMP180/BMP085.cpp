@@ -73,6 +73,8 @@ BMP085::reading BMP085::getBoth () {
         
 		unsigned int duration = oss * 5 + 5;
 		if (oss == 3) duration += 5;
+        
+        
 		millisleep(duration);
         
         memset(&buf,0,sizeof(buf));
@@ -94,6 +96,7 @@ BMP085::reading BMP085::getBoth () {
 		);
 		ucPress = ((msb << 16) + (lsb << 8) + xlsb) >> (8 - oss);
 	}
+    
 // Calculate true pressure.
 	long b5 = getB5Value();
 	long b6 = b5 - 4000;
