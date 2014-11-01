@@ -1,0 +1,5 @@
+#!/bin/bash
+
+echo "Building BMP180 Test Program”
+
+g++ -Wall -O2 BMP085.cpp demo.cpp kalman.cpp -o bmpTest
