@@ -34,8 +34,18 @@ void print_sensor_data() {
 
 int main(int argc, const char * argv[])
 {
+    BMP180::OversamplingSetting oss;
+    if (atoi(argv[1])==0) {oss = BMP180::OSS_LOW;}
+    else if (atoi(argv[1])==1) {oss = BMP180::OSS_STANDARD;}
+    else if (atoi(argv[1])==2) {oss = BMP180::OSS_HIGH;}
+    else if (atoi(argv[1])==3) {oss = BMP180::OSS_ULTRAHIGH;}
+    else {
+        cout << "Wrong argument" << endl;
+        return 0;
+    }
+
     
-    SensorManager sm;
+    SensorManager sm(oss);
     printf("Testing device connections...\n");
     printf(sm.testMPU() ? "MPU6050 connection successful\n" : "MPU6050 connection failed\n");
     

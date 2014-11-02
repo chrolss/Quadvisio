@@ -21,12 +21,12 @@ VectorInt16 aaReal;     // [x, y, z]            gravity-free accel sensor measur
 VectorInt16 aaWorld;    // [x, y, z]            world-frame accel sensor measurements
 VectorFloat gravity;    // [x, y, z]            gravity vector
 
-SensorManager::SensorManager(){
+SensorManager::SensorManager(BMP180::OversamplingSetting oss){
 	aFilter = new kalman(0.1,0.1,10,10);
 	bFilter = new kalman(0.1,0.1,10,10);
 	//checkForSensors();
 	initializeMPU();
-    initializeBMP(BMP180::OSS_ULTRAHIGH);
+    initializeBMP(oss);
 }
 
 void SensorManager::initializeMPU() {

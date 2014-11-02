@@ -34,7 +34,7 @@
 class SensorManager {
     
 public:
-    SensorManager();
+    SensorManager(BMP180::OversamplingSetting oss);
     void initializeMPU();
     void initializeBMP(BMP180::OversamplingSetting oss);
     bool initializeMPUdmp();
