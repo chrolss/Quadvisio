@@ -127,7 +127,7 @@ void SensorManager::readBMP(double *input) {
     double c1 = -sin(input[4])*double(input[0]/4096.0);
     double c2 = sin(input[3])*cos(input[4])*double(input[1]/4096.0);
     double c3 = cos(input[3])*cos(input[4])*double(input[2]/4096.0);
-    double az = 1.0 - (c1 + c2 + c3);
+    double az = 9.82*(1.0 - (c1 + c2 + c3));
     
     vz_est = vz_est + az*DT;
     hz_est = hz_est + vz_est*DT;
@@ -151,7 +151,7 @@ void SensorManager::get_bmp_offset() {
         bmp->get_sensor_data(bmpData);
         h_offset += bmpData->altitude;
     }
-    
+    printf("Altitude offset: %f\n", h_offset);
     h_offset = double(h_offset/50.0);
 }
 
