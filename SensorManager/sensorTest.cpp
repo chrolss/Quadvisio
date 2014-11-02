@@ -5,6 +5,7 @@
 #include <stdint.h>
 #include <string.h>
 #include <chrono>
+#include <math.h>
 
 #include "SensorManager.h"
 
@@ -30,6 +31,12 @@ void print_sensor_data() {
     cout << "Alt: " << input[6] << endl;
     cout << "Press: " << input[7] << endl;
     cout << "Temp: " << input[8] << endl;
+    
+    double z = -sin(input[4])*double(input[0]/4096.0);
+    z += sin(input[3])*cos(input[4])*double(input[1]/4096.0);
+    z += cos(input[3])*cos(input[4])*double(input[2]/4096.0);
+    
+    cout << "Gravity component: " << z << endl;
 }
 
 int main(int argc, const char * argv[])
