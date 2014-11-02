@@ -130,6 +130,8 @@ void SensorManager::readBMP(double *input) {
     double c3 = cos(input[3])*cos(input[4])*double(input[2]/4096.0);
     double az = 9.82*(1.0 - (c1 + c2 + c3));
     
+    std::cout << "Acc: " << az << std::endl;
+    
     vz_est = vz_est + az*DT;
     hz_est = hz_est + vz_est*DT;
     
