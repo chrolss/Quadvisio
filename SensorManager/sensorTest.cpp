@@ -32,9 +32,9 @@ void print_sensor_data() {
     cout << "Press: " << input[7] << endl;
     cout << "Temp: " << input[8] << endl;
     
-    double c1 = -sin(input[4])*double(input[0]/4096.0)
-    double c2 = sin(input[3])*cos(input[4])*double(input[1]/4096.0)
-    double c3 = cos(input[3])*cos(input[4])*double(input[2]/4096.0)
+    double c1 = -sin(input[4])*double(input[0]/4096.0);
+    double c2 = sin(input[3])*cos(input[4])*double(input[1]/4096.0);
+    double c3 = cos(input[3])*cos(input[4])*double(input[2]/4096.0);
     double z = c1 + c2 + c3;
     
     cout << c1 << " " << c2 << " " << c3 << endl;
