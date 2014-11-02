@@ -25,19 +25,21 @@
 
 //#include "mpu6050.h"
 #include "I2Cdev.h"
+#include "BMP_180.h"
 
-#define offsetRoll -0.072605
-#define offsetPitch 0.001396
+#define offsetRoll 0.0 //-0.072605
+#define offsetPitch 0.0 //0.001396
 
 class SensorManager {
     
 public:
     SensorManager();
-    void initializeSensor();
+    void initializeMPU();
+    void initializeBMP(BMP180::OversamplingSetting oss);
     bool initializeMPUdmp();
     bool testMPU();
-    void readMPU(double *input);
     void readDMP(double *input);
+    void readBMP(double *input);
     void checkForSensors();
     bool getMode(){return mpuMode;}
     
@@ -55,6 +57,7 @@ private:
     bool dmpReady = false;
     bool mpuMode = true;
     double alpha, beta;
+    struct bmp180_data *bmpData;
 };
 
 #endif /* defined(__Atlas__SensorManager__) */

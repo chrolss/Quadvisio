@@ -8,43 +8,53 @@
 
 #include "SensorManager.h"
 
-double input[6];
+using namespace std;
+
+double input[9];
 uint8_t devStatus;
 bool runDMP=false;
 
 double runTime;
-int Hz = 60;
+int Hz = 80;
 int loopSleep;
 
 std::chrono::time_point<std::chrono::high_resolution_clock> start;
 
+void print_sensor_data() {
+    cout << "Acc x: " << input[0] << endl;
+    cout << "Acc y: " << input[1] << endl;
+    cout << "Acc z: " << input[2] << endl;
+    cout << "Gyr roll: " << input[3] << endl;
+    cout << "Gyr pitch: " << input[4] << endl;
+    cout << "Gyr yaw: " << input[5] << endl;
+    cout << "Alt: " << input[6] << endl;
+    cout << "Press: " << input[7] << endl;
+    cout << "Temp: " << input[8] << endl;
+}
+
 int main(int argc, const char * argv[])
 {
-    int i;
-    std::cout << "Do you want use raw data ot DMP data? (1 or 2)" << std::endl;
-    std::cin >> i;
     
     SensorManager sm;
-    printf("Initializing MPU...\n");
-    //sm.initializeMPU();
-    
     printf("Testing device connections...\n");
     printf(sm.testMPU() ? "MPU6050 connection successful\n" : "MPU6050 connection failed\n");
     
-    usleep(100000);
+    usleep(1000000);
     
-    if (i ==2){
-        printf("Initializing DMP...");
-        if (sm.initializeMPUdmp()) {
-            printf("DMP ready!\n");
-            runDMP = true;
-        }
-        usleep(100000);
+
+    printf("Initializing DMP...");
+    if (sm.initializeMPUdmp()) {
+        printf("DMP ready!\n");
+        runDMP = true;
     }
+    usleep(1000000);
     
     while (runDMP) {
         auto start = std::chrono::high_resolution_clock::now();
         sm.readDMP(input);
+        sm.readBMP(input);
+        print_sensor_data();
+        
         auto duration = std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::high_resolution_clock::now() - start).count();
         
         loopSleep = 1000000/Hz - (int)duration;
@@ -53,6 +63,6 @@ int main(int argc, const char * argv[])
         }
         auto duration2 = std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::high_resolution_clock::now() - start).count();
         runTime = double(1000000)/(duration2);
-        std::cout << "Running at: " << runTime << "Hz" << std::endl;
+        cout << "Running at: " << runTime << "Hz" << endl;
     }
 }

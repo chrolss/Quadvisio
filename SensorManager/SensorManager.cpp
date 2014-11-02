@@ -9,12 +9,13 @@
 #include "SensorManager.h"
 #include "MPU6050_6AXIS_MOTIONAPPS20.h"
 #include <Sensors/adxl345.h>
-#include <Kalman/kalman.h>
+#include <kalman.h>
 
 MPU6050 *mpu;
-adxl345 *adxl;
+BMP180 *bmp;
 kalman *aFilter;
 kalman *bFilter;
+
 
 Quaternion q;           // [w, x, y, z]         quaternion container
 VectorInt16 aa;         // [x, y, z]            accel sensor measurements
@@ -25,20 +26,16 @@ VectorFloat gravity;    // [x, y, z]            gravity vector
 SensorManager::SensorManager(){
 	aFilter = new kalman(0.1,0.1,10,10);
 	bFilter = new kalman(0.1,0.1,10,10);
-	checkForSensors();
-	initializeSensor();
+	//checkForSensors();
+	initializeMPU();
+    initializeBMP(BMP180::OSS_ULTRAHIGH);
 }
 
-void SensorManager::initializeSensor() {
-	if (mpuMode){
-		mpu = new MPU6050(0x68);
-		mpu->initialize();
-		printf("Mpu initialized\n");
-	}
-	else{
-		adxl = new adxl345();
-		printf("adxl345 initialized\n");
-	}
+void SensorManager::initializeMPU() {
+
+    mpu = new MPU6050(0x68);
+    mpu->initialize();
+    printf("Mpu initialized\n");
 }
 
 bool SensorManager::initializeMPUdmp() {
@@ -57,6 +54,14 @@ bool SensorManager::initializeMPUdmp() {
     return false;
 }
 
+void SensorManager::initializeBMP(BMP180::OversamplingSetting oss) {
+    printf("Initializing BMP180\n");
+    bmp = new BMP180();
+    bmpData = new bmp180_data;
+    bmp->initialize(oss);
+    printf("BMP180 initialized\n");
+}
+
 bool SensorManager::testMPU() {
     if (mpu->testConnection()) {
         return true;
@@ -68,7 +73,7 @@ bool SensorManager::testMPU() {
 }
 
 void SensorManager::readDMP(double *input) {
-    if(mpuMode){
+
     	if (!dmpReady) {
     		return;
     	}
@@ -111,25 +116,21 @@ void SensorManager::readDMP(double *input) {
     		//input[3] = aFilter->estimate(ypr[2]+offsetRoll);
     		//input[4] = bFilter->estimate(ypr[1]+offsetPitch);
     		input[5] = ypr[0];
-
-    	}
+        }
     	else {
     		printf("not reading");
     	}
-    }
-    else{
-    	adxl->readSensorData();
-    	input[0] = adxl->getAccX();
-    	input[1] = adxl->getAccY();
-    	input[2] = adxl->getAccZ();
-    	input[3] = adxl->getRoll();
-    	input[4] = adxl->getPitch();
-        input[5] = 0.0;			// return value from hmc5883l later
-        //printf("Pitch: %f, Roll: %f\n", input[4],input[3]);
-    }
+}
+
+void SensorManager::readBMP(double *input) {
+    bmp->get_sensor_data(bmpData);
+    input[6] = bmpData->altitude;
+    input[7] = bmpData->pressure;
+    input[8] = bmpData->temperature;
 }
 
 void SensorManager::checkForSensors(){
+    /*
 	char *fileName = "/dev/i2c-1";
 	int adxlAddress = 0x53;
 	int mpuAddress = 0x68;
@@ -159,6 +160,6 @@ void SensorManager::checkForSensors(){
 		printf("Going into gy-80 mode\n");
 		this->mpuMode = false;
 	}
-
+     */
 }
 
