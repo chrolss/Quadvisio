@@ -140,6 +140,7 @@ void SensorManager::readBMP(double *input) {
     hz_est = hz_filter->estimate(hz_est);
     
     std::cout << "Estimated altitude: " << hz_est << std::endl;
+    std::cout << "Estimated vertical speed: " << vz_est << std::endl;
     
     input[6] = bmpData->altitude - h_offset;
     input[7] = bmpData->pressure;
@@ -153,7 +154,7 @@ void SensorManager::get_bmp_offset() {
         h_offset += bmpData->altitude;
         printf("Alt: %f", h_offset);
     }
-    printf("Altitude offset: %f\n", h_offset);
     h_offset = double(h_offset/50.0);
+    printf("Altitude offset: %f\n", h_offset);
 }
 
