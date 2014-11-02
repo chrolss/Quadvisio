@@ -8,7 +8,6 @@
 
 #include "SensorManager.h"
 #include "MPU6050_6AXIS_MOTIONAPPS20.h"
-#include <Sensors/adxl345.h>
 #include <kalman.h>
 
 MPU6050 *mpu;
