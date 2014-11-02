@@ -60,6 +60,7 @@ void SensorManager::initializeBMP(BMP180::OversamplingSetting oss) {
     bmpData = new bmp180_data;
     bmp->initialize(oss);
     printf("BMP180 initialized\n");
+    get_bmp_offset();
     
 }
 
