@@ -129,7 +129,7 @@ long BMP180::read_uncom_press() {
 }
 
 float BMP180::get_altitude() {
-    double x = pow(((double)p / 101325.0), (double)ALT_EXP);
+    double x = pow(((double)p / 101325.0), ALT_EXP);
     return (float)(44330.0 * (1.0 - x));
 }
 
