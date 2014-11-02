@@ -12,6 +12,8 @@
 #include <iostream>
 #include <math.h>
 
+#define DT 0.02
+
 class kalman
 {
 public:

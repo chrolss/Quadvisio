@@ -11,8 +11,8 @@
 
 MPU6050 *mpu;
 BMP180 *bmp;
-kalman *aFilter;
-kalman *bFilter;
+kalman *vz_filter;
+kalman *hz_filter;
 
 
 Quaternion q;           // [w, x, y, z]         quaternion container
@@ -22,8 +22,10 @@ VectorInt16 aaWorld;    // [x, y, z]            world-frame accel sensor measure
 VectorFloat gravity;    // [x, y, z]            gravity vector
 
 SensorManager::SensorManager(BMP180::OversamplingSetting oss){
-	aFilter = new kalman(0.1,0.1,10,10);
-	bFilter = new kalman(0.1,0.1,10,10);
+    vz_est = 0.0;
+    hz_est = 0.0;
+	vz_filter = new kalman(0.1,0.1,0.0,10);
+	hz_filter = new kalman(0.1,0.1,0.0,10);
 	//checkForSensors();
 	initializeMPU();
     initializeBMP(oss);
@@ -58,6 +60,7 @@ void SensorManager::initializeBMP(BMP180::OversamplingSetting oss) {
     bmpData = new bmp180_data;
     bmp->initialize(oss);
     printf("BMP180 initialized\n");
+    
 }
 
 bool SensorManager::testMPU() {
@@ -111,8 +114,6 @@ void SensorManager::readDMP(double *input) {
     		input[2] = aaReal.z;
     		input[3] = (ypr[2]+offsetRoll);
     		input[4] = (ypr[1]+offsetPitch);
-    		//input[3] = aFilter->estimate(ypr[2]+offsetRoll);
-    		//input[4] = bFilter->estimate(ypr[1]+offsetPitch);
     		input[5] = ypr[0];
         }
     	else {
@@ -122,42 +123,35 @@ void SensorManager::readDMP(double *input) {
 
 void SensorManager::readBMP(double *input) {
     bmp->get_sensor_data(bmpData);
-    input[6] = bmpData->altitude;
+    
+    double c1 = -sin(input[4])*double(input[0]/4096.0);
+    double c2 = sin(input[3])*cos(input[4])*double(input[1]/4096.0);
+    double c3 = cos(input[3])*cos(input[4])*double(input[2]/4096.0);
+    double az = 1.0 - (c1 + c2 + c3);
+    
+    vz_est = vz_est + az*DT;
+    hz_est = hz_est + vz_est*DT;
+    
+    vz_est =  vz_est + 0.0001*(bmpData->altitude - h_offset - vz_est);
+    hz_est =  hz_est + 0.0008*(bmpData->altitude - h_offset - hz_est);
+    
+    vz_est = vz_filter->estimate(vz_est);
+    hz_est = hz_filter->estimate(hz_est);
+    
+    std::cout << "Estimated altitude: " << hz_est << std::endl;
+    
+    input[6] = bmpData->altitude - h_offset;
     input[7] = bmpData->pressure;
     input[8] = bmpData->temperature;
 }
 
-void SensorManager::checkForSensors(){
-    /*
-	char *fileName = "/dev/i2c-1";
-	int adxlAddress = 0x53;
-	int mpuAddress = 0x68;
-	int fd = open(fileName, O_RDWR);
-
-	if (fd < 0) {
-	     printf("Failed to open i2c port\n");
-	     exit(1);
-	}
-
-	if (ioctl(fd, I2C_SLAVE, adxlAddress) > -1) {
-		char buf[6];
-		buf[0] = 0x2d;
-		buf[1] = 0x18;
-
-		if ((write(fd, buf, 2)) != 2) {
-		    printf("Gy-80 not found, going into MPU mode\n");
-		    this->mpuMode = true;
-		}
-		else{
-			printf("Going into gy-80 mode\n");
-			this->mpuMode = false;
-		}
-
-	}
-	else{
-		printf("Going into gy-80 mode\n");
-		this->mpuMode = false;
-	}
-     */
+void SensorManager::get_bmp_offset() {
+    h_offset = 0.0;
+    for (int i = 0 ; i<50; i++) {
+        bmp->get_sensor_data(bmpData);
+        h_offset += bmpData->altitude;
+    }
+    
+    h_offset = double(h_offset/50.0);
 }
 

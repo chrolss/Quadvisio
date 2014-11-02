@@ -41,10 +41,11 @@ public:
     bool testMPU();
     void readDMP(double *input);
     void readBMP(double *input);
-    void checkForSensors();
     bool getMode(){return mpuMode;}
     
 private:
+    
+    void get_bmp_offset();
     
     uint8_t mpuIntStatus;   // holds actual interrupt status byte from MPU
     uint8_t devStatus;
@@ -59,6 +60,8 @@ private:
     bool mpuMode = true;
     double alpha, beta;
     struct bmp180_data *bmpData;
+    
+    double vz_est, hz_est, h_offset;
 };
 
 #endif /* defined(__Atlas__SensorManager__) */
