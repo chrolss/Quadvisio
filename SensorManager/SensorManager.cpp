@@ -128,7 +128,7 @@ void SensorManager::readBMP(double *input) {
     double c1 = -sin(input[4])*double(input[0]/4096.0);
     double c2 = sin(input[3])*cos(input[4])*double(input[1]/4096.0);
     double c3 = cos(input[3])*cos(input[4])*double(input[2]/4096.0);
-    double az = 9.82*(1.0 - (c1 + c2 + c3));
+    double az = 9.82*((c1 + c2 + c3) - 1.0);
     
     std::cout << "Acc: " << az << std::endl;
     
