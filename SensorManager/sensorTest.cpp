@@ -21,12 +21,12 @@ int loopSleep;
 std::chrono::time_point<std::chrono::high_resolution_clock> start;
 
 void print_sensor_data() {
-    cout << "Acc x: " << input[0] << endl;
-    cout << "Acc y: " << input[1] << endl;
-    cout << "Acc z: " << input[2] << endl;
-    cout << "Gyr roll: " << input[3] << endl;
-    cout << "Gyr pitch: " << input[4] << endl;
-    cout << "Gyr yaw: " << input[5] << endl;
+    cout << "Acc x: " << input[0]*9.82/4096 << endl;
+    cout << "Acc y: " << input[1]*9.82/4096 << endl;
+    cout << "Acc z: " << input[2]*9.82/4096 << endl;
+    cout << "Gyr roll: " << input[3]*180/M_PI << endl;
+    cout << "Gyr pitch: " << input[4]*180/M_PI << endl;
+    cout << "Gyr yaw: " << input[5]*180/M_PI << endl;
     cout << "Alt: " << input[6] << endl;
     cout << "Press: " << input[7] << endl;
     cout << "Temp: " << input[8] << endl;

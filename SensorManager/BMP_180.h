@@ -25,8 +25,6 @@
 #include <linux/i2c-dev.h>
 #include <linux/i2c.h>
 
-#define ALT_EXP 0.190294957
-
 struct bmp180_data {
     double altitude;
     double pressure;
@@ -75,6 +73,8 @@ private:
     
     long ut, up, x1, x2, x3, b3, b5, b6, t, p;
     unsigned long b4, b7;
+    
+    static const double ALT_EXP = 1.0 / 5.255;
 };
 
 #endif /* defined(__BMP_180__BMP_180__) */
