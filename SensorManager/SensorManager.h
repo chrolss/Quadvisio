@@ -26,6 +26,7 @@
 //#include "mpu6050.h"
 #include "I2Cdev.h"
 #include "BMP_180.h"
+#include <kalman.h>
 
 #define offsetRoll 0.0 //-0.072605
 #define offsetPitch 0.0 //0.001396
