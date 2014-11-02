@@ -72,7 +72,7 @@ int main(int argc, const char * argv[])
         auto start = std::chrono::high_resolution_clock::now();
         sm.readDMP(input);
         sm.readBMP(input);
-        print_sensor_data();
+        //print_sensor_data();
         
         auto duration = std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::high_resolution_clock::now() - start).count();
         

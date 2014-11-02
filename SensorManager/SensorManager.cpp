@@ -135,14 +135,20 @@ void SensorManager::readBMP(double *input) {
     vz_est = vz_est + az*DT;
     hz_est = hz_est + vz_est*DT;
     
+    std::cout << "Acc velocity: " << vz_est << std::endl;
+    std::cout << "Acc altitude: " << hz_est << std::endl;
+    
     vz_est =  vz_est + 0.0001*(bmpData->altitude - h_offset - hz_est);
     hz_est =  hz_est + 0.0008*(bmpData->altitude - h_offset - hz_est);
     
+    std::cout << "Combo velocity: " << vz_est << std::endl;
+    std::cout << "Combo altitude: " << hz_est << std::endl;
+    
     vz_est = vz_filter->estimate(vz_est);
     hz_est = hz_filter->estimate(hz_est);
-    
-    std::cout << "Estimated altitude: " << hz_est << std::endl;
-    std::cout << "Estimated vertical speed: " << vz_est << std::endl;
+
+    std::cout << "Final velocity: " << vz_est << std::endl;
+    std::cout << "Final altitude: " << hz_est << std::endl;
     
     input[6] = bmpData->altitude - h_offset;
     input[7] = bmpData->pressure;
