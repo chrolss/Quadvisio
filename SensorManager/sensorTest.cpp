@@ -69,14 +69,14 @@ int main(int argc, const char * argv[])
     while (runDMP) {
         auto start = std::chrono::high_resolution_clock::now();
         sm.readDMP(input);
-        sm.readBMP(input);
+        //sm.readBMP(input);
         print_sensor_data();
         
         auto duration = std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::high_resolution_clock::now() - start).count();
         
         loopSleep = 1000000/Hz - (int)duration;
         if (loopSleep>0) {
-            usleep(loopSleep);
+            //usleep(loopSleep);
         }
         auto duration2 = std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::high_resolution_clock::now() - start).count();
         runTime = double(1000000)/(duration2);

@@ -2,4 +2,4 @@
 
 echo "Building Manager test program"
 
-g++ -W main.cpp SensorManager.cpp adxl345.cpp -std=c++11 -o testManager
+g++ -W -O2  sensorTest.cpp SensorManager.cpp MPU6050.cpp BMP_180.cpp kalman.cpp I2Cdev.cpp -std=c++11 -o test
