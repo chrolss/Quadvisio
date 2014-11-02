@@ -133,7 +133,7 @@ void SensorManager::readBMP(double *input) {
     vz_est = vz_est + az*DT;
     hz_est = hz_est + vz_est*DT;
     
-    vz_est =  vz_est + 0.0001*(bmpData->altitude - h_offset - vz_est);
+    vz_est =  vz_est + 0.0001*(bmpData->altitude - h_offset - hz_est);
     hz_est =  hz_est + 0.0008*(bmpData->altitude - h_offset - hz_est);
     
     vz_est = vz_filter->estimate(vz_est);
