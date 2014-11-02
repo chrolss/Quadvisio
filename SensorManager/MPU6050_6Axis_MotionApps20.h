@@ -241,7 +241,7 @@ const prog_uchar dmpMemory[MPU6050_DMP_CODE_SIZE] PROGMEM = {
 // together!
 
 #ifndef DMP_FIFO_RATE
-#define DMP_FIFO_RATE	1
+#define DMP_FIFO_RATE	0x03
 #endif
 
 const prog_uchar dmpConfig[MPU6050_DMP_CONFIG_SIZE] PROGMEM = {
@@ -334,6 +334,7 @@ uint8_t MPU6050::dmpInitialize() {
     DEBUG_PRINTLN(ygOffset);
     DEBUG_PRINT(F("Z gyro offset = "));
     DEBUG_PRINTLN(zgOffset);
+    
 
     // setup weird slave stuff (?)
     DEBUG_PRINTLN(F("Setting slave 0 address to 0x7F..."));
@@ -366,7 +367,7 @@ uint8_t MPU6050::dmpInitialize() {
             DEBUG_PRINTLN(F("Setting DMP and FIFO_OFLOW interrupts enabled..."));
             setIntEnabled(0x12);
 
-            DEBUG_PRINTLN(F("Setting sample rate to 200Hz..."));
+            DEBUG_PRINTLN(F("Setting sample rate to 100Hz..."));
             setRate(4); // 1khz / (1 + 4) = 200 Hz
 
             DEBUG_PRINTLN(F("Setting external frame sync to TEMP_OUT_L[0]..."));
