@@ -241,7 +241,7 @@ const prog_uchar dmpMemory[MPU6050_DMP_CODE_SIZE] PROGMEM = {
 // together!
 
 #ifndef DMP_FIFO_RATE
-#define DMP_FIFO_RATE	0x03
+#define DMP_FIFO_RATE	0x07
 #endif
 
 const prog_uchar dmpConfig[MPU6050_DMP_CONFIG_SIZE] PROGMEM = {

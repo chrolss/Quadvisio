@@ -1,0 +1,5 @@
+#!/bin/bash
+
+echo "Building Manager test program"
+
+g++ -W -O2  sensorTest.cpp SensorManager.cpp MPU6050.cpp BMP_180.cpp kalman.cpp I2Cdev.cpp -std=c++11 -o test
