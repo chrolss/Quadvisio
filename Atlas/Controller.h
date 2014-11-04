@@ -69,13 +69,14 @@ private:
     double innerParameters[15];
     double outerParameters[9];
     double refs[7];             //roll, pitch, yaw, ax, ay, az, altitude
-    double err_roll[3], err_pitch[3], err_yaw[3];	//angle errors
+    double err_roll[3], err_pitch[3], err_yaw[3], err_alt[3];	//angle errors
     double joyCom[3];
     double trim[2];             //trim for roll and pitch
     double ex[3], ey[3];        //acceleration errors
     double F, Ma, Mb, Mg;
     double dA, dB;              //Desired changes in angles
     double MomRollTemp, MomPitchTemp, MomYawTemp;
+    double vertThrust;
     double k1, k2, k3, k4, thrust_const;
     double sens;                //joystick sensitivity, range 0.25 - 0.4
     

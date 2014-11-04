@@ -16,6 +16,9 @@ Controller::Controller(bool bird){
     this->err_roll[2] = 0.0;
     this->err_pitch[2] = 0.0;
     this->err_yaw[2] = 0.0;
+    this->err_alt[0] = 0.0;
+    this->err_alt[1] = 0.0;
+    this->err_alt[2] = 0.0;
     this->ex[1] = 0.0;
     this->ey[1] = 0.0;
     this->ex[2] = 0.0;
@@ -144,7 +147,9 @@ void Controller::calcPWM(double *input, double *output, double *ref) {
 	this->err_yaw[1] = err_yaw[0];		// set old error
 
 	//printf("P: %f, I: %f, D: %f, e: %f\n",innerParameters[6]*eg[0], innerParameters[7]*(eg[2]), innerParameters[8]*(eg[0]-eg[1])/dt,eg[0]);
-
+    
+    vertThrust = innerParameters[6]*err_alt[0] + innerParameters[7]*(err_alt[2]) + innerParameters[8]*(err_alt[0]-err_alt[1])/dt;
+    this->err_alt[1] = err_alt[0];
     
     if (pigeon) {
         //printf("MaT: %f, MbT: %f\n", MaT, MbT);
@@ -152,6 +157,9 @@ void Controller::calcPWM(double *input, double *output, double *ref) {
         Mb = (MomRollTemp*COS45 + MomPitchTemp*COS45);
         Mg = -MomYawTemp;		//change stuff
         
+        if (alt_hold) {
+            F = vertThrust;
+        }
         
         //printf("Ma = %f, Mb = %f, Mg = %f, F = %f \n", Ma, Mb, Mg, F);
         output[0] = 0.25*(F*CONST1 + Mb*CONST2 + Mg*CONST3);
