@@ -144,22 +144,29 @@ void Controller::calcPWM(double *input, double *output, double *ref) {
 		this->err_yaw[2] = windUp(err_yaw);
 	}
 	MomYawTemp = innerParameters[6]*err_yaw[0] + innerParameters[7]*(err_yaw[2]) + innerParameters[8]*(err_yaw[0]-err_yaw[1])/dt;
-	this->err_yaw[1] = err_yaw[0];		// set old error
+	err_yaw[1] = err_yaw[0];		// set old error
 
 	//printf("P: %f, I: %f, D: %f, e: %f\n",innerParameters[6]*eg[0], innerParameters[7]*(eg[2]), innerParameters[8]*(eg[0]-eg[1])/dt,eg[0]);
     
-    vertThrust = innerParameters[6]*err_alt[0] + innerParameters[7]*(err_alt[2]) + innerParameters[8]*(err_alt[0]-err_alt[1])/dt;
-    this->err_alt[1] = err_alt[0];
+    // Altitude PID
+    if (alt_hold) {
+
+        err_alt[0] = ref[3] - input[6] + innerParameters[14];  	// set new error
+        err_alt[2] += err_alt[0]*dt;
+        
+        if (fabs(err_alt[2])>WINDUP_LIMIT_UP){err_alt[2] = windUp(err_alt);}
+        
+        vertThrust = innerParameters[6]*err_alt[0] + innerParameters[7]*(err_alt[2]) + innerParameters[8]*(err_alt[0]-err_alt[1])/dt;
+        err_alt[1] = err_alt[0];
+    
+        F = vertThrust;
+    }
     
     if (pigeon) {
         //printf("MaT: %f, MbT: %f\n", MaT, MbT);
         Ma = (MomRollTemp*COS45 - MomPitchTemp*SIN45);
         Mb = (MomRollTemp*COS45 + MomPitchTemp*COS45);
         Mg = -MomYawTemp;		//change stuff
-        
-        if (alt_hold) {
-            F = vertThrust;
-        }
         
         //printf("Ma = %f, Mb = %f, Mg = %f, F = %f \n", Ma, Mb, Mg, F);
         output[0] = 0.25*(F*CONST1 + Mb*CONST2 + Mg*CONST3);

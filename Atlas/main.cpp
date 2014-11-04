@@ -21,7 +21,7 @@ Motor *motor;
 
 bool pigeon;
 bool video = false;
-double sInput[6];
+double sInput[7];
 double sOutput[4];
 double idleMotorValues[] = {0.0, 0.0, 0.0, 0.0};
 bool runAtlas=false;
