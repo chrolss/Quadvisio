@@ -10,12 +10,12 @@
 
 
 Controller::Controller(bool bird){
-    this->ea[1] = 0.0;
-    this->eb[1] = 0.0;
-    this->eg[1]	= 0.0;
-    this->ea[2] = 0.0;
-    this->eb[2] = 0.0;
-    this->eg[2] = 0.0;
+    this->err_roll[1] = 0.0;
+    this->err_pitch[1] = 0.0;
+    this->err_yaw[1]	= 0.0;
+    this->err_roll[2] = 0.0;
+    this->err_pitch[2] = 0.0;
+    this->err_yaw[2] = 0.0;
     this->ex[1] = 0.0;
     this->ey[1] = 0.0;
     this->ex[2] = 0.0;
@@ -27,26 +27,26 @@ Controller::Controller(bool bird){
     this->dA = 0.0;
 
     birdSetup(bird);
-    get_Parameters(birdParams);
+    read_parameters(bird_params_file);
 }
 
 void Controller::birdSetup(bool _bird){
 	if (_bird){
         this->thrust_const = THRUST_CONSTANT_PIGEON;
 		this->pigeon = true;
-		this->birdParams = "innerParameters_pigeon.txt";
+		this->bird_params_file = "innerParameters_pigeon.txt";
 		printf("Pigeon selected, initilizing system\n");
 	}
 	else{
         this->thrust_const = THRUST_CONSTANT_PHOENIX;
 		this->pigeon = false;
-		this->birdParams = "innerParameters_phoenix.txt";
+		this->bird_params_file = "innerParameters_phoenix.txt";
 		printf("Phoenix selected, initilizing system\n");
 	}
 }
 
 //reads PID parameters from two txt-files and sets them
-void Controller::get_Parameters(std::string _birdParams){
+void Controller::read_parameters(std::string _birdParams){
 	std::fstream params1(_birdParams);
 
 	params1 >> this->innerParameters[0] >>  this->innerParameters[1] >>  this->innerParameters[2]
@@ -66,7 +66,7 @@ void Controller::get_Parameters(std::string _birdParams){
 //writes PID parameters back to txt-files
 void Controller::write_Parameters(double *inner, double *outer){
 	std::ofstream params3;	//for output
-	params3.open(birdParams);
+	params3.open(bird_params_file);
 
 	params3 << inner[0] << "\t" << inner[1] << "\t" << inner[2] << "\t"
 	 << inner[3] << "\t" << inner[4] << "\t" << inner[5] << "\t"
@@ -82,73 +82,73 @@ void Controller::write_Parameters(double *inner, double *outer){
 
 }
 
-void Controller::send_Parameters(double *params){
+void Controller::get_parameters(double *params){
 	for (int i = 0; i < 15; i++){
 		params[i] = innerParameters[i];
 	}
 }
 
 void Controller::reset_I(){
-	this->ea[2] = 0.0;
-	this->eb[2] = 0.0;
-	this->eg[2] = 0.0;
+	this->err_roll[2] = 0.0;
+	this->err_pitch[2] = 0.0;
+	this->err_yaw[2] = 0.0;
 }
 
 void Controller::get_Errors(double *_err){
-	_err[0] = ea[2]/WINDUP_LIMIT_UP*100.0;
-	_err[1] = eb[2]/WINDUP_LIMIT_UP*100.0;
-	_err[2] = eg[2]/WINDUP_LIMIT_UP*100.0;
+	_err[0] = err_roll[2]/WINDUP_LIMIT_UP*100.0;
+	_err[1] = err_pitch[2]/WINDUP_LIMIT_UP*100.0;
+	_err[2] = err_yaw[2]/WINDUP_LIMIT_UP*100.0;
 }
 
 void Controller::calcPWM(double *input, double *output, double *ref) {
 
-	//alphadelen - roll
-	ea[0] = ref[0] - input[3] + innerParameters[13];  	// set new error
-	this->ea[2] += (ea[0])*dt;
-	if (fabs(ea[2])>WINDUP_LIMIT_UP){
-		this->ea[2] = windUp(ea);
+	// Roll
+	err_roll[0] = ref[0] - input[3] + innerParameters[13];  	// set new error
+	this->err_roll[2] += (err_roll[0])*dt;
+	if (fabs(err_roll[2])>WINDUP_LIMIT_UP){
+		this->err_roll[2] = windUp(err_roll);
 	}
-	MaT = innerParameters[0]*ea[0] + innerParameters[1]*(ea[2]) + innerParameters[2]*(ea[0]-ea[1])/dt;
+	MomRollTemp = innerParameters[0]*err_roll[0] + innerParameters[1]*(err_roll[2]) + innerParameters[2]*(err_roll[0]-err_roll[1])/dt;
 	//printf("D: %f, ea0: %f, ea1: %f, eD: %f\n", innerParameters[2]*(ea[0]-ea[1])/dt,ea[0],ea[1],(ea[0]-ea[1]));
-	this->ea[1] = ea[0];		// set old error
+	this->err_roll[1] = err_roll[0];		// set old error
 
-	//betadelen - pitch
-	eb[0] = ref[1] - input[4] + innerParameters[14];  	// set new error
-	this->eb[2] += eb[0]*dt;
-	if (fabs(eb[2])>WINDUP_LIMIT_UP){
-		this->eb[2] = windUp(eb);
+	// Pitch
+	err_pitch[0] = ref[1] - input[4] + innerParameters[14];  	// set new error
+	this->err_pitch[2] += err_pitch[0]*dt;
+	if (fabs(err_pitch[2])>WINDUP_LIMIT_UP){
+		this->err_pitch[2] = windUp(err_pitch);
 	}
-	MbT = innerParameters[3]*eb[0] + innerParameters[4]*(eb[2]) + innerParameters[5]*(eb[0]-eb[1])/dt;
-	this->eb[1] = eb[0];		// set old error
+	MomPitchTemp = innerParameters[3]*err_pitch[0] + innerParameters[4]*(err_pitch[2]) + innerParameters[5]*(err_pitch[0]-err_pitch[1])/dt;
+	this->err_pitch[1] = err_pitch[0];		// set old error
 
 
-	//gammadelen
-	eg[0] = ref[2] - input[5] + joyCom[2];  	// set new error
+	// Yaw
+	err_yaw[0] = err_yaw[2] - input[5] + joyCom[2];  	// set new error
 
-	if (fabs(eg[0])>3.84){						//220 degrees
-		if (eg[0]>0){
-			eg[0] = eg[0] - 2*M_PI;
+	if (fabs(err_yaw[0])>3.84){						//220 degrees
+		if (err_yaw[0]>0){
+			err_yaw[0] = err_yaw[0] - 2*M_PI;
 		}
 		else{
-			eg[0] = eg[0] + 2*M_PI;
+			err_yaw[0] = err_yaw[0] + 2*M_PI;
 		}
 	}
 
-	this->eg[2] += eg[0]*dt;
-	if (fabs(eg[2])>WINDUP_LIMIT_UP){
-		this->eg[2] = windUp(eg);
+	this->err_yaw[2] += err_yaw[0]*dt;
+	if (fabs(err_yaw[2])>WINDUP_LIMIT_UP){
+		this->err_yaw[2] = windUp(err_yaw);
 	}
-	MgT = innerParameters[6]*eg[0] + innerParameters[7]*(eg[2]) + innerParameters[8]*(eg[0]-eg[1])/dt;
-	this->eg[1] = eg[0];		// set old error
+	MomYawTemp = innerParameters[6]*err_yaw[0] + innerParameters[7]*(err_yaw[2]) + innerParameters[8]*(err_yaw[0]-err_yaw[1])/dt;
+	this->err_yaw[1] = err_yaw[0];		// set old error
 
 	//printf("P: %f, I: %f, D: %f, e: %f\n",innerParameters[6]*eg[0], innerParameters[7]*(eg[2]), innerParameters[8]*(eg[0]-eg[1])/dt,eg[0]);
 
     
     if (pigeon) {
         //printf("MaT: %f, MbT: %f\n", MaT, MbT);
-        Ma = (MaT*COS45 - MbT*SIN45);
-        Mb = (MaT*COS45 + MbT*COS45);
-        Mg = -MgT;		//change stuff
+        Ma = (MomRollTemp*COS45 - MomPitchTemp*SIN45);
+        Mb = (MomRollTemp*COS45 + MomPitchTemp*COS45);
+        Mg = -MomYawTemp;		//change stuff
         
         
         //printf("Ma = %f, Mb = %f, Mg = %f, F = %f \n", Ma, Mb, Mg, F);
@@ -159,12 +159,13 @@ void Controller::calcPWM(double *input, double *output, double *ref) {
     }
     
     else {
-    	Mg = -MgT;
-    	Mb = -MbT;
-        output[0] = F*CONST4 + MaT*CONST5 - Mb*CONST6 + Mg*CONST7;
-        output[1] = F*CONST4 - MaT*CONST5 - Mb*CONST6 - Mg*CONST7;
-        output[2] = F*CONST4 - MaT*CONST5 + Mb*CONST6 + Mg*CONST7;
-        output[3] = F*CONST4 + MaT*CONST5 + Mb*CONST6 - Mg*CONST7;
+        Mb = -MomPitchTemp;
+    	Mg = -MomYawTemp;
+    	
+        output[0] = F*CONST4 + MomRollTemp*CONST5 - Mb*CONST6 + Mg*CONST7;
+        output[1] = F*CONST4 - MomRollTemp*CONST5 - Mb*CONST6 - Mg*CONST7;
+        output[2] = F*CONST4 - MomRollTemp*CONST5 + Mb*CONST6 + Mg*CONST7;
+        output[3] = F*CONST4 + MomRollTemp*CONST5 + Mb*CONST6 - Mg*CONST7;
     }
 
     // Make sure output is between 0-max percentage
@@ -229,13 +230,8 @@ void Controller::setYawRef(double *ref, double _yaw){
 }
 
 double Controller::windUp(double *err){
-		if (err[2]>0){
-			return WINDUP_LIMIT_UP;
-		}
-		else{
-			return WINDUP_LIMIT_DOWN;
-
-			}
+		if (err[2]>0){return WINDUP_LIMIT_UP;}
+		else{return WINDUP_LIMIT_DOWN;}
 }
 
 

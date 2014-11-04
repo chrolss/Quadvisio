@@ -18,6 +18,7 @@ SensorManager *sensorManager;
 Controller *controller;
 ComHandler *comHandler;
 Motor *motor;
+
 bool pigeon;
 bool video = false;
 double sInput[6];
@@ -72,8 +73,8 @@ void initailize(){
     sOutput[2] = 0.0;
     sOutput[3] = 0.0;
 
-    controller->send_Parameters(inParams);	//lägger parametrarna i inParams
-    comHandler->setSettingsData(inParams);				//tonis funktion som skickar till Com
+    controller->get_parameters(inParams);	//lägger parametrarna i inParams
+    comHandler->setSettingsData(inParams);	//tonis funktion som skickar till Com
     controller->setSensitivity(0.6);		//sätt sens, 0.25 - 0.4
     
     runAtlas = true;
@@ -87,17 +88,12 @@ void loop(){
         
         // Start clock
         auto start = std::chrono::high_resolution_clock::now();
-        
-        if (comHandler->saveSettings == true){
-        	comHandler->getSettingsData(inParams);
-        	controller->setInnerParameters(inParams);
-        	controller->write_Parameters(inParams, outParams);
-        	comHandler->saveSettings = false;
-        }
 
         // Read sensor data
         sensorManager->readDMP(sInput);
 
+        
+        // Commincation with Qvis
         if (comHandler->connected) {
              if (!comHandler->reciveMsg && !comHandler->sendMsg) {
                  //printf("Setting output and send to true\n");
@@ -109,12 +105,21 @@ void loop(){
                  comHandler->sendMsg=true;
              }
          }
+        
+        if (comHandler->saveSettings == true){
+            comHandler->getSettingsData(inParams);
+            controller->setInnerParameters(inParams);
+            controller->write_Parameters(inParams, outParams);
+            comHandler->saveSettings = false;
+        }
 
-         if (!comHandler->connected && !comHandler->listening) {
-             comHandler->startListenThread();
-         }
-         comHandler->vidCount++;
+        if (!comHandler->connected && !comHandler->listening) {
+            comHandler->startListenThread();
+        }
+        comHandler->vidCount++;
 
+        
+        // Controller
         controller->setJoyCom(comHandler->controllerInputData, sInput, ref);
         if (comHandler->resetIntegral){
         	controller->reset_I();
@@ -123,6 +128,7 @@ void loop(){
 
         controller->calcPWM(sInput, sOutput, ref);
 
+        // Set PWM values
         if (comHandler->motorOn==true && comHandler->connected){
             motor->setPWM(sOutput);
         }
@@ -134,7 +140,6 @@ void loop(){
         auto duration = std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::high_resolution_clock::now() - start).count();
         
         loopSleep = 1000000/Hz - (int)duration;
-        
         
         // Sleep
         if (loopSleep>0) {

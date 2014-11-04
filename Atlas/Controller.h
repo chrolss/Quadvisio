@@ -52,26 +52,29 @@ public:
     void setJoyCom(double *joy, double *sensorInput, double *ref);
     double windUp(double *err);
     void write_Parameters(double *inner, double *outer);
-    void send_Parameters(double *params);
+    void get_parameters(double *params);
     void setSensitivity(double _sens);
     void reset_I();
     void get_Errors(double *_err);
     
 private:
     void birdSetup(bool _bird);
-    void get_Parameters(std::string _birdParams);
+    void read_parameters(std::string _birdParams);
+    
     bool pigeon;
-    std::string birdParams;
+    
+    std::string bird_params_file;
+    
     double innerParameters[15];
     double outerParameters[9];
     double refs[7];             //roll, pitch, yaw, ax, ay, az, altitude
-    double ea[3], eb[3], eg[3];	//angle errors
+    double err_roll[3], err_pitch[3], err_yaw[3];	//angle errors
     double joyCom[3];
     double trim[2];             //trim for roll and pitch
     double ex[3], ey[3];        //acceleration errors
     double F, Ma, Mb, Mg;
     double dA, dB;              //Desired changes in angles
-    double MaT, MbT, MgT;
+    double MomRollTemp, MomPitchTemp, MomYawTemp;
     double k1, k2, k3, k4, thrust_const;
     double sens;                //joystick sensitivity, range 0.25 - 0.4
     
