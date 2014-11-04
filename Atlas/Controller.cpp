@@ -25,6 +25,8 @@ Controller::Controller(bool bird){
     this->joyCom[2] = 0.0;
     this->dB = 0.0;
     this->dA = 0.0;
+    
+    alt_hold = false;
 
     birdSetup(bird);
     read_parameters(bird_params_file);
@@ -104,22 +106,22 @@ void Controller::calcPWM(double *input, double *output, double *ref) {
 
 	// Roll
 	err_roll[0] = ref[0] - input[3] + innerParameters[13];  	// set new error
-	this->err_roll[2] += (err_roll[0])*dt;
+	err_roll[2] += (err_roll[0])*dt;
 	if (fabs(err_roll[2])>WINDUP_LIMIT_UP){
-		this->err_roll[2] = windUp(err_roll);
+		err_roll[2] = windUp(err_roll);
 	}
 	MomRollTemp = innerParameters[0]*err_roll[0] + innerParameters[1]*(err_roll[2]) + innerParameters[2]*(err_roll[0]-err_roll[1])/dt;
 	//printf("D: %f, ea0: %f, ea1: %f, eD: %f\n", innerParameters[2]*(ea[0]-ea[1])/dt,ea[0],ea[1],(ea[0]-ea[1]));
-	this->err_roll[1] = err_roll[0];		// set old error
+	err_roll[1] = err_roll[0];		// set old error
 
 	// Pitch
 	err_pitch[0] = ref[1] - input[4] + innerParameters[14];  	// set new error
-	this->err_pitch[2] += err_pitch[0]*dt;
+	err_pitch[2] += err_pitch[0]*dt;
 	if (fabs(err_pitch[2])>WINDUP_LIMIT_UP){
-		this->err_pitch[2] = windUp(err_pitch);
+		err_pitch[2] = windUp(err_pitch);
 	}
 	MomPitchTemp = innerParameters[3]*err_pitch[0] + innerParameters[4]*(err_pitch[2]) + innerParameters[5]*(err_pitch[0]-err_pitch[1])/dt;
-	this->err_pitch[1] = err_pitch[0];		// set old error
+	err_pitch[1] = err_pitch[0];		// set old error
 
 
 	// Yaw
@@ -208,8 +210,12 @@ void Controller::setJoyCom(double *joy, double *sensorInput, double *ref){
 		//reset_PID();			//if the throttle is lower than 0.1 the I parameters in the
 	}							//PID will be set to zero
 	*/
-	this->F = 4*thrust_const*joy[3]*joy[3]*10000.0;
-	if (joy[4]>-900){
+    
+    if (!alt_hold) {
+        this->F = 4*thrust_const*joy[3]*joy[3]*10000.0;
+    }
+	
+    if (joy[4]>-900){
 		setSensitivity(joy[6]);
 		this->innerParameters[13] = joy[4];	//add from *joy
 		this->innerParameters[14] = -joy[5];	//add from *joy

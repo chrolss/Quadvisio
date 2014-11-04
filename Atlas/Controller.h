@@ -62,6 +62,7 @@ private:
     void read_parameters(std::string _birdParams);
     
     bool pigeon;
+    bool alt_hold;
     
     std::string bird_params_file;
     
