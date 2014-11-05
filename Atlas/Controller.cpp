@@ -217,13 +217,15 @@ void Controller::calcRef(double *sensorInput, double *ref){
 }
 
 void Controller::setJoyCom(double *joy, double *sensorInput, double *ref){
+    
 	if (fabs(joy[2])>0){					//this will hopefully reset the yaw reference
-		setYawRef(ref, sensorInput[5]);	//to the current yaw input from the sensor
-	}									//so the reference won't interfere with the controller
+		setYawRef(ref, sensorInput[5]);     //to the current yaw input from the sensor
+	}                                       //so the reference won't interfere with the controller
+    
 	/*
 	if (fabs(joy[3])<0.1){
-		//reset_PID();			//if the throttle is lower than 0.1 the I parameters in the
-	}							//PID will be set to zero
+		//reset_PID();                      //if the throttle is lower than 0.1 the I parameters in the
+	}                                       //PID will be set to zero
 	*/
     
     if (!alt_hold) {
@@ -235,6 +237,7 @@ void Controller::setJoyCom(double *joy, double *sensorInput, double *ref){
 		this->innerParameters[13] = joy[4];	//add from *joy
 		this->innerParameters[14] = -joy[5];	//add from *joy
 	}
+    
 	ref[0] = innerParameters[12]*joy[0];
 	ref[1] = -innerParameters[12]*joy[1];
 	this->joyCom[2] = 2.0*innerParameters[12]*joy[2];
@@ -272,6 +275,7 @@ void Controller::setInnerParameters(double *inParams){
 	this->innerParameters[12] = inParams[12];
 	this->innerParameters[13] = inParams[13];
 	this->innerParameters[14] = inParams[14];
+    this->innerParameters[15] = inParams[15];
 
 }
 

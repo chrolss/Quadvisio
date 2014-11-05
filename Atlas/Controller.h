@@ -27,15 +27,16 @@
 #define dt 0.017	//påhittad
 #define WINDUP_LIMIT_UP 0.028
 #define WINDUP_LIMIT_DOWN -0.028
-#define MAX_PERCENTAGE 80
+#define MAX_PERCENTAGE 90
 
 #define CONST1 3333.33	//pigeon
 #define CONST2 37878.7	//pigeon
 #define CONST3 1e7		//pigeon
+
 #define CONST4 280		//Phoenix
 #define CONST5 1680		//Phoenix
 #define CONST6 1500		//Phoenix
-#define CONST7 830000		//Phoenix
+#define CONST7 830000	//Phoenix
 
 #define COS45 0.7071067812
 #define SIN45 0.7071067812
@@ -66,7 +67,7 @@ private:
     
     std::string bird_params_file;
     
-    double innerParameters[15];
+    double innerParameters[16];
     double outerParameters[9];
     double refs[7];             //roll, pitch, yaw, ax, ay, az, altitude
     double err_roll[3], err_pitch[3], err_yaw[3], err_alt[3];	//angle errors

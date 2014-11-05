@@ -26,7 +26,7 @@
 // Hz : bitrate : dbm : errorMessage : imgSize - Image
 //
 //
-// SettingsData[] = [pids | trimRoll | trimPitch | JoySen | YawSen]
+// SettingsData[] = [ pids | trimRoll | trimPitch | JoySen | YawSen ]
 //
 //
 //
@@ -37,11 +37,11 @@
 //
 // Incoming Message Structure /////////////
 //
-// Yaw : Throttle : Roll : Pitch
+// Yaw : Throttle : Roll : Pitch : settings ind
 //
 // Outgoing Message Structure ///////////
 //
-// roll : pitch : yaw : refangels : pwm : wifi : data ind
+// roll : pitch : yaw : refangels : pwm : wifi : image Ind
 
 
 /////////////// COMMUNICATION PROTOCOL ///////////////////////////
@@ -664,10 +664,10 @@ void ComHandler::sendIdentity() {
 void ComHandler::sendSettingsData() {
     ostr.str("");
     
-    for (int i=0; i<14; i++) {
+    for (int i=0; i<15; i++) {
         ostr << settingsData[i] << ":";
     }
-    ostr << settingsData[14];
+    ostr << settingsData[15];
     
     
     std::string s;
@@ -820,6 +820,7 @@ void ComHandler::setSettingsData(double *params) {
     settingsData[12] = params[12];
     settingsData[13] = params[13];
     settingsData[14] = params[14];
+    settingsData[15] = params[15];
 }
 
 void ComHandler::getSettingsData(double *params){
@@ -838,4 +839,5 @@ void ComHandler::getSettingsData(double *params){
     params[12] = settingsData[12];
     params[13] = settingsData[13];
     params[14] = settingsData[14];
+    params[15] = settingsData[15];
 }

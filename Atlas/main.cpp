@@ -35,7 +35,7 @@ double loopTime = 0.0;
 int Hz = 100;
 int loopSleep=0;
 double ref[7];
-double inParams[15];
+double inParams[16];
 double outParams[6];
 double iErrors[3];
 
