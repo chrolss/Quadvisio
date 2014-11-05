@@ -26,7 +26,7 @@
 // Hz : bitrate : dbm : errorMessage : imgSize - Image
 //
 //
-// SettingsData[] = [pids | trimRoll | trimPitch | JoySen]
+// SettingsData[] = [pids | trimRoll | trimPitch | JoySen | YawSen]
 //
 //
 //
@@ -65,8 +65,10 @@ ComHandler::ComHandler(bool enableCamera) {
     sendImage=false;
     motorOn=false;
     colorVideo=true;
-    saveSettings = false;
+    savePidTrim = false;
     resetIntegral = false;
+    newSettings = false;
+    saveJoySens = false;
     
     
     vidCount = 0;
@@ -444,16 +446,33 @@ void ComHandler::readQvisProMsg() {
         motorOn = false;
     }
     
-    if (atoi(numberInStrings[6].c_str())==0) {
-        return;
-    }
+    // Read possible settingsdata
+    int settingsIndex = atoi(numberInStrings[6].c_str());
     
-    else if(atoi(numberInStrings[6].c_str())==3){
-        printf("Applying camara settings\n");
-        if(atoi(numberInStrings[7].c_str())==1) {videoStream = true;}
-        else {videoStream = false;}
-        vidResNew = atoi(numberInStrings[8].c_str());
+    if (settingsIndex > 0) {
+        newSettings = true;
+        if (settingsIndex == 1) {
+            for (int i = 0 ; i<14; i++) {
+                settingsData[i] = atof(numberInStrings[7+i].c_str());
+            }
+            savePidTrim = true;
+        }
+        
+        else if (settingsIndex == 2) {
+            settingsData[14] = atof(numberInStrings[7].c_str());
+            settingsData[15] = atof(numberInStrings[8].c_str());
+            saveJoySens = true;
+        }
+        
+        else if(settingsIndex == 3){
+            printf("Applying camara settings\n");
+            if(atoi(numberInStrings[7].c_str())==1) {videoStream = true;}
+            else {videoStream = false;}
+            vidResNew = atoi(numberInStrings[8].c_str());
+        }
     }
+    else {return;}
+    
 }
 
 void ComHandler::readQvisDevMsg() {
@@ -523,7 +542,7 @@ void ComHandler::readQvisDevMsg() {
         
         controllerInputData[6] = atof(numberInStrings[25].c_str());
         
-        saveSettings = true;
+        savePidTrim = true;
         
         printf("Joy sen: %f\n", controllerInputData[6]);
         printf("PID parameters and joystick sensetivity read and saved\n");
@@ -614,7 +633,7 @@ void ComHandler::sendIdentity() {
     std::ostringstream ostr;
     ostr.str("");
     
-    int sig = this->getSigStrength();
+    int sig = this->getSignalInfo();
     
     ostr << "1:" << sig;
     
@@ -651,7 +670,6 @@ void ComHandler::sendSettingsData() {
     ostr << settingsData[14];
     
     
-    
     std::string s;
     s = ostr.str();
     ostr.str("");
@@ -676,11 +694,6 @@ void ComHandler::sendSettingsData() {
     }
     reciveMsg = true;
     sendMsg = false;
-}
-
-
-int ComHandler::getSigStrength() {
-    return 60;
 }
 
 int ComHandler::getSignalInfo() {

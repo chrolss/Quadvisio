@@ -106,11 +106,22 @@ void loop(){
              }
          }
         
-        if (comHandler->saveSettings == true){
-            comHandler->getSettingsData(inParams);
-            controller->setInnerParameters(inParams);
-            controller->write_Parameters(inParams, outParams);
-            comHandler->saveSettings = false;
+        // Apply and store possible new settings
+        if (comHandler->newSettings == true){
+            
+            if (comHandler->savePidTrim) {
+                comHandler->getSettingsData(inParams);
+                controller->setInnerParameters(inParams);
+                controller->write_Parameters(inParams, outParams);
+                comHandler->savePidTrim = false;
+            }
+            
+            else if(comHandler->saveJoySens) {
+                
+                comHandler->saveJoySens = false;
+            }
+            
+            comHandler->newSettings = false;
         }
 
         if (!comHandler->connected && !comHandler->listening) {
@@ -159,7 +170,7 @@ void loop(){
 
 int main(int argc, const char* argv[])
 {
-    int bird = atoi(argv[1]);
+    long int bird = atoi(argv[1]);
     if (bird == 1){
     	pigeon = true;
     }

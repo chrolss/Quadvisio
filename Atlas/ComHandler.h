@@ -55,8 +55,9 @@ public:
     void getSettingsData(double *params);
     void sendSettingsData();
     
+    bool newSettings;
     bool connected, reciveMsg, sendMsg, listening, sendImage;
-    bool resetIntegral, videoStream, colorVideo, saveSettings, motorOn;
+    bool resetIntegral, videoStream, colorVideo, savePidTrim, saveJoySens, motorOn;
     
     double controllerInputData[9];  // Roll:Pitch:Yaw:Throttle:rollOffset:pitchOffset:JoySen
     
@@ -88,7 +89,6 @@ private:
     void sendQvisDevMsg();
     void sendQvisLightMsg();
     
-    int getSigStrength();
     int getSignalInfo();
     
     
@@ -99,7 +99,7 @@ private:
     struct jpg_data jpg_dat;
     
     // PID Params : Joy Sen : RollTrim : PitchTrim
-    double settingsData[15];
+    double settingsData[16];
     
     double output[19];
     int sizeOfOutput;
