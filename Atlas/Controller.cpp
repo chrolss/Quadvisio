@@ -112,7 +112,7 @@ void Controller::write_Parameters(double *inner, double *outer){
 }
 
 void Controller::get_parameters(double *params){
-	for (int i = 0; i < 15; i++){
+	for (int i = 0; i < 16; i++){
 		params[i] = innerParameters[i];
 	}
 }
