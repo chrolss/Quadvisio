@@ -187,6 +187,8 @@ void ComHandler::Listen()
 
 void ComHandler::qvisProLoop() {
     std::cout << "In Pro Loop" << std::endl;
+    sendSettingsData();
+
     while (connected) {
         if (reciveMsg) {
             readQvisProMsg();
