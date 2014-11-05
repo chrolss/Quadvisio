@@ -52,39 +52,63 @@ void Controller::birdSetup(bool _bird){
 
 //reads PID parameters from two txt-files and sets them
 void Controller::read_parameters(std::string _birdParams){
-	std::fstream params1(_birdParams);
-
-	params1 >> this->innerParameters[0] >>  this->innerParameters[1] >>  this->innerParameters[2]
+	std::fstream paramsFile(_birdParams);
+    std::string line;
+    int i = 0;
+    if (paramsFile.is_open()) {
+        while (getline(paramsFile, line)) {
+            innerParameters[i] = atof(line.c_str());
+            i++;
+        }
+    }
+    else {
+        printf("Error reading innerParameters.txt");
+    }
+    /*
+	paramsFile >> this->innerParameters[0] >>  this->innerParameters[1] >>  this->innerParameters[2]
 	>>  this->innerParameters[3] >>  this->innerParameters[4] >>  this->innerParameters[5]
 	>> this->innerParameters[6] >> this->innerParameters[7] >> this->innerParameters[8]
 	>> this->innerParameters[9] >> this->innerParameters[10] >> this->innerParameters[11]
 	>> this->innerParameters[12] >> this->innerParameters[13] >> this->innerParameters[14];
-	params1.close();
+    */
+	paramsFile.close();
 	printf("Got Parameters\n");
+    
+    /*
 	std::fstream params2("outerParameters.txt");
 	params2 >> 	this->outerParameters[0] >> this->outerParameters[1]
 	>> this->outerParameters[2] >> this->outerParameters[3]
 	>> this->outerParameters[4] >> this->outerParameters[5];
 	params2.close();
+     */
 }
 
 //writes PID parameters back to txt-files
 void Controller::write_Parameters(double *inner, double *outer){
-	std::ofstream params3;	//for output
-	params3.open(bird_params_file);
+	std::ofstream paramsFile;	//for output
+	paramsFile.open(bird_params_file);
 
-	params3 << inner[0] << "\t" << inner[1] << "\t" << inner[2] << "\t"
-	 << inner[3] << "\t" << inner[4] << "\t" << inner[5] << "\t"
-	 << inner[6] << "\t" << inner[7] << "\t" << inner[8] << "\t"
-	 << inner[9] << "\t" << inner[10] << "\t" << inner[11] << "\t"
-	 << inner[12] << "\t" << inner[13] << "\t" << inner[14];
-	params3.close();
-	printf("Parameters Written\n");
+    if (paramsFile.is_open()) {
+        paramsFile << inner[0] << "\n" << inner[1] << "\n" << inner[2] << "\n"
+        << inner[3] << "\n" << inner[4] << "\n" << inner[5] << "\n"
+        << inner[6] << "\n" << inner[7] << "\n" << inner[8] << "\n"
+        << inner[9] << "\n" << inner[10] << "\n" << inner[11] << "\n"
+        << inner[12] << "\n" << inner[13] << "\n" << inner[14] << "\n" << inner[15];
+        paramsFile.close();
+        
+        printf("Parameters Written\n");
+    }
+	
+    else {
+        printf("Error writing to innerParameters.txt");
+    }
+    
+    /*
 	std::ofstream params4;	//for output
-	params4 << outer[0] << "\t"  << outer[1] << "\t" << outer[2] << "\t"
-	 << outer[3] << "\t" << outer[4] << "\t" << outer[5] << "\t";
+	params4 << outer[0] << "\n"  << outer[1] << "\n" << outer[2] << "\n"
+	 << outer[3] << "\n" << outer[4] << "\n" << outer[5] << "\n";
 	params4.close();
-
+    */
 }
 
 void Controller::get_parameters(double *params){

@@ -109,15 +109,11 @@ void loop(){
         // Apply and store possible new settings
         if (comHandler->newSettings == true){
             
-            if (comHandler->savePidTrim) {
+            if (comHandler->savePidTrim || comHandler->saveJoySens) {
                 comHandler->getSettingsData(inParams);
                 controller->setInnerParameters(inParams);
                 controller->write_Parameters(inParams, outParams);
                 comHandler->savePidTrim = false;
-            }
-            
-            else if(comHandler->saveJoySens) {
-                
                 comHandler->saveJoySens = false;
             }
             
