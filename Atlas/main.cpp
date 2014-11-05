@@ -49,16 +49,16 @@ void initailize(){
     for (int i =0 ; i<6; i++) {
             outParams[i] = 0.0;
         }
-    sensorManager = new SensorManager;
+    //sensorManager = new SensorManager;
     controller = new Controller(pigeon);
     comHandler = new ComHandler(video);
-    motor = new Motor;
+    //motor = new Motor;
     
-    if(sensorManager->getMode()){
-    	if(sensorManager->initializeMPUdmp()) {
-    		runAtlas = true;
-    	}
-    }
+    //if(sensorManager->getMode()){
+    	//if(sensorManager->initializeMPUdmp()) {
+    		//runAtlas = true;
+    	//}
+    //}
     
     ref[0] = 0.0;	//roll
     ref[1] = 0.0;	//pitch
@@ -90,7 +90,7 @@ void loop(){
         auto start = std::chrono::high_resolution_clock::now();
 
         // Read sensor data
-        sensorManager->readDMP(sInput);
+        //sensorManager->readDMP(sInput);
 
         
         // Commincation with Qvis
@@ -137,10 +137,10 @@ void loop(){
 
         // Set PWM values
         if (comHandler->motorOn==true && comHandler->connected){
-            motor->setPWM(sOutput);
+            //motor->setPWM(sOutput);
         }
         else {
-            motor->setPWM(idleMotorValues);
+            //motor->setPWM(idleMotorValues);
         }
         
         // Measure duration
@@ -160,7 +160,7 @@ void loop(){
         //std::cout << "Running at: " << loopTime << "Hz" << std::endl;
     }
     
-    motor->closePWM();
+    //motor->closePWM();
     std::cout << "Test klart" << std::endl;
 }
 
