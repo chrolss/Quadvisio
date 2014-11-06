@@ -69,7 +69,9 @@ ComHandler::ComHandler(bool enableCamera) {
     resetIntegral = false;
     newSettings = false;
     saveJoySens = false;
+    altHold = false;
     
+    alt = 0.0;
     
     vidCount = 0;
     vidLimit = 0;
@@ -471,6 +473,14 @@ void ComHandler::readQvisProMsg() {
             if(atoi(numberInStrings[7].c_str())==1) {videoStream = true;}
             else {videoStream = false;}
             vidResNew = atoi(numberInStrings[8].c_str());
+        }
+        else if (settingsIndex == 4) {
+            if (atoi(numberInStrings[7].c_str())==1) {
+                altHold = true;
+                alt = atof(numberInStrings[8].c_str());
+            }
+            else {altHold = false;}
+            
         }
     }
     else {return;}

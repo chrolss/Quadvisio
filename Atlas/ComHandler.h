@@ -58,6 +58,8 @@ public:
     bool newSettings;
     bool connected, reciveMsg, sendMsg, listening, sendImage;
     bool resetIntegral, videoStream, colorVideo, savePidTrim, saveJoySens, motorOn;
+    bool altHold;
+    double alt;
     
     double controllerInputData[9];  // Roll:Pitch:Yaw:Throttle:rollOffset:pitchOffset:JoySen
     
