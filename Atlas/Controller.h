@@ -24,7 +24,7 @@
 #define ARM_RADIUS 0.176
 #define DRAG_CONSTANT_PIGEON 9.9768e-8
 
-#define dt 0.017	//påhittad
+#define dt 0.025	// 40Hz
 #define WINDUP_LIMIT_UP 0.028
 #define WINDUP_LIMIT_DOWN -0.028
 #define MAX_PERCENTAGE 90
@@ -58,12 +58,13 @@ public:
     void reset_I();
     void get_Errors(double *_err);
     
+    bool alt_hold;
+    
 private:
     void birdSetup(bool _bird);
     void read_parameters(std::string _birdParams);
     
     bool pigeon;
-    bool alt_hold;
     
     std::string bird_params_file;
     

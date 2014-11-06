@@ -113,6 +113,12 @@ void loop(){
                 comHandler->savePidTrim = false;
                 comHandler->saveJoySens = false;
             }
+            else if(comHandler->setAltHold) {
+                controller->alt_hold = comHandler->altHold;
+                ref[6] = comHandler->alt;
+                printf("Altitude hold on");
+                comHandler->setAltHold = false;
+            }
             
             comHandler->newSettings = false;
         }

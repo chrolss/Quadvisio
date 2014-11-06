@@ -173,14 +173,14 @@ void Controller::calcPWM(double *input, double *output, double *ref) {
 	//printf("P: %f, I: %f, D: %f, e: %f\n",innerParameters[6]*eg[0], innerParameters[7]*(eg[2]), innerParameters[8]*(eg[0]-eg[1])/dt,eg[0]);
     
     // Altitude PID
-    if (alt_hold) {
+    if (this->alt_hold) {
 
-        err_alt[0] = ref[3] - input[6] + innerParameters[14];  	// set new error
+        err_alt[0] = ref[6] - input[6];  	// set new error
         err_alt[2] += err_alt[0]*dt;
         
         if (fabs(err_alt[2])>WINDUP_LIMIT_UP){err_alt[2] = windUp(err_alt);}
         
-        vertThrust = innerParameters[6]*err_alt[0] + innerParameters[7]*(err_alt[2]) + innerParameters[8]*(err_alt[0]-err_alt[1])/dt;
+        vertThrust = innerParameters[10]*err_alt[0] + innerParameters[11]*(err_alt[2]) + innerParameters[12]*(err_alt[0]-err_alt[1])/dt;
         err_alt[1] = err_alt[0];
     
         F = vertThrust;

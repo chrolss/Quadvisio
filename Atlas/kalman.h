@@ -12,7 +12,7 @@
 #include <iostream>
 #include <math.h>
 
-#define DT 0.02 // 50Hz
+#define DT 0.025 // 40Hz
 
 class kalman
 {

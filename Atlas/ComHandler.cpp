@@ -70,6 +70,7 @@ ComHandler::ComHandler(bool enableCamera) {
     newSettings = false;
     saveJoySens = false;
     altHold = false;
+    setAltHold = false;
     
     alt = 0.0;
     
@@ -475,6 +476,7 @@ void ComHandler::readQvisProMsg() {
             vidResNew = atoi(numberInStrings[8].c_str());
         }
         else if (settingsIndex == 4) {
+            setAltHold = true;
             if (atoi(numberInStrings[7].c_str())==1) {
                 altHold = true;
                 alt = atof(numberInStrings[8].c_str());
