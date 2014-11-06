@@ -22,6 +22,7 @@
 #include <sys/ioctl.h>
 #include <sys/types.h>
 #include <sys/stat.h>
+#include <fstream>
 
 //#include "mpu6050.h"
 #include "I2Cdev.h"
@@ -46,6 +47,12 @@ public:
 private:
     
     void get_bmp_offset();
+    
+    void getKalmanParamsAlt();
+    void getKalmanParamsVel();
+    
+    float kalmanParamsAlt[5];
+    float kalmanParamsVel[5];
     
     uint8_t mpuIntStatus;   // holds actual interrupt status byte from MPU
     uint8_t devStatus;

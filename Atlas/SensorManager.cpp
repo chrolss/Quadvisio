@@ -24,8 +24,8 @@ VectorFloat gravity;    // [x, y, z]            gravity vector
 SensorManager::SensorManager(BMP180::OversamplingSetting oss){
     vz_est = 0.0;
     hz_est = 0.0;
-	vz_filter = new kalman(0.001,4.0,0.0,10);
-	hz_filter = new kalman(0.001,4.0,0.0,10);
+	vz_filter = new kalman(kalmanParamsVel[0],kalmanParamsVel[1],kalmanParamsVel[2],kalmanParamsVel[3]);
+	hz_filter = new kalman(kalmanParamsAlt[0],kalmanParamsAlt[1],kalmanParamsAlt[2],kalmanParamsAlt[3]);
 	//checkForSensors();
 	initializeMPU();
     initializeBMP(oss);
@@ -139,8 +139,8 @@ void SensorManager::readBMP(double *input) {
     std::cout << "Acc velocity: " << vz_est << std::endl;
     std::cout << "Acc altitude: " << hz_est << std::endl;
     
-    vz_est =  vz_est + 0.3*(bmpData->altitude - h_offset - hz_est);
-    hz_est =  hz_est + 0.8*(bmpData->altitude - h_offset - hz_est);
+    vz_est =  vz_est + kalmanParamsVel[4]*(bmpData->altitude - h_offset - hz_est);
+    hz_est =  hz_est + kalmanParamsAlt[4]*(bmpData->altitude - h_offset - hz_est);
     
     std::cout << "Combo velocity: " << vz_est << std::endl;
     std::cout << "Combo altitude: " << hz_est << std::endl;
@@ -165,5 +165,35 @@ void SensorManager::get_bmp_offset() {
     }
     h_offset = double(h_offset/50.0);
     printf("Altitude offset: %f\n", h_offset);
+}
+
+void SensorManager::getKalmanParamsAlt() {
+    std::fstream paramsFile("kalmanParamsAlt.txt");
+    std::string line;
+    int i = 0;
+    if (paramsFile.is_open()) {
+        while (getline(paramsFile, line)) {
+            kalmanParamsAlt[i] = atof(line.c_str());
+            i++;
+        }
+    }
+    else {
+        printf("Error reading innerParameters.txt");
+    }
+}
+
+void SensorManager::getKalmanParamsVel() {
+    std::fstream paramsFile("kalmanParamsVel.txt");
+    std::string line;
+    int i = 0;
+    if (paramsFile.is_open()) {
+        while (getline(paramsFile, line)) {
+            kalmanParamsVel[i] = atof(line.c_str());
+            i++;
+        }
+    }
+    else {
+        printf("Error reading innerParameters.txt");
+    }
 }
 
