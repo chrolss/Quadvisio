@@ -24,6 +24,10 @@ VectorFloat gravity;    // [x, y, z]            gravity vector
 SensorManager::SensorManager(BMP180::OversamplingSetting oss){
     vz_est = 0.0;
     hz_est = 0.0;
+    
+    getKalmanParamsAlt();
+    getKalmanParamsVel();
+    
 	vz_filter = new kalman(kalmanParamsVel[0],kalmanParamsVel[1],kalmanParamsVel[2],kalmanParamsVel[3]);
 	hz_filter = new kalman(kalmanParamsAlt[0],kalmanParamsAlt[1],kalmanParamsAlt[2],kalmanParamsAlt[3]);
 	//checkForSensors();
