@@ -102,13 +102,6 @@ void Controller::write_Parameters(double *inner, double *outer){
     else {
         printf("Error writing to innerParameters.txt");
     }
-    
-    /*
-	std::ofstream params4;	//for output
-	params4 << outer[0] << "\n"  << outer[1] << "\n" << outer[2] << "\n"
-	 << outer[3] << "\n" << outer[4] << "\n" << outer[5] << "\n";
-	params4.close();
-    */
 }
 
 void Controller::get_parameters(double *params){
@@ -132,7 +125,7 @@ void Controller::get_Errors(double *_err){
 void Controller::calcPWM(double *input, double *output, double *ref) {
 
 	// Roll
-	err_roll[0] = ref[0] - input[3] + innerParameters[13];  	// set new error
+	err_roll[0] = ref[0] - input[3] + innerParameters[12];  	// set new error
 	err_roll[2] += (err_roll[0])*dt;
 	if (fabs(err_roll[2])>WINDUP_LIMIT_UP){
 		err_roll[2] = windUp(err_roll);
@@ -142,7 +135,7 @@ void Controller::calcPWM(double *input, double *output, double *ref) {
 	err_roll[1] = err_roll[0];		// set old error
 
 	// Pitch
-	err_pitch[0] = ref[1] - input[4] + innerParameters[14];  	// set new error
+	err_pitch[0] = ref[1] - input[4] + innerParameters[13];  	// set new error
 	err_pitch[2] += err_pitch[0]*dt;
 	if (fabs(err_pitch[2])>WINDUP_LIMIT_UP){
 		err_pitch[2] = windUp(err_pitch);
@@ -174,13 +167,14 @@ void Controller::calcPWM(double *input, double *output, double *ref) {
     
     // Altitude PID
     if (this->alt_hold) {
-
         err_alt[0] = ref[6] - input[6];  	// set new error
         err_alt[2] += err_alt[0]*dt;
         
+        printf("alt err: %f\n", err_alt[0]);
+        
         if (fabs(err_alt[2])>WINDUP_LIMIT_UP){err_alt[2] = windUp(err_alt);}
         
-        vertThrust = innerParameters[10]*err_alt[0] + innerParameters[11]*(err_alt[2]) + innerParameters[12]*(err_alt[0]-err_alt[1])/dt;
+        vertThrust = innerParameters[9]*err_alt[0] + innerParameters[10]*(err_alt[2]) + innerParameters[11]*(err_alt[0]-err_alt[1])/dt;
         err_alt[1] = err_alt[0];
     
         F = vertThrust + 4*thrust_const*0.5*10000.0;
@@ -252,17 +246,17 @@ void Controller::setJoyCom(double *joy, double *sensorInput, double *ref){
 	
     if (joy[4]>-900){
 		setSensitivity(joy[6]);
-		this->innerParameters[13] = joy[4];	//add from *joy
-		this->innerParameters[14] = -joy[5];	//add from *joy
+		this->innerParameters[12] = joy[4];	//add from *joy
+		this->innerParameters[13] = -joy[5];	//add from *joy
 	}
     
-	ref[0] = innerParameters[12]*joy[0];
-	ref[1] = -innerParameters[12]*joy[1];
-	this->joyCom[2] = 2.0*innerParameters[12]*joy[2];
+	ref[0] = innerParameters[14]*joy[0];
+	ref[1] = -innerParameters[14]*joy[1];
+	this->joyCom[2] = 2.0*innerParameters[15]*joy[2];
 }
 
 void Controller::setSensitivity(double _sens){
-	this->innerParameters[12] = _sens;
+	this->innerParameters[14] = _sens;
 }
 
 void Controller::setYawRef(double *ref, double _yaw){
