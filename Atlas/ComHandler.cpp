@@ -464,6 +464,7 @@ void ComHandler::readQvisProMsg() {
         }
         
         else if (settingsIndex == 2) {
+            printf("Applying Joystick settings\n");
             settingsData[14] = atof(numberInStrings[7].c_str());
             settingsData[15] = atof(numberInStrings[8].c_str());
             saveJoySens = true;
@@ -476,6 +477,7 @@ void ComHandler::readQvisProMsg() {
             vidResNew = atoi(numberInStrings[8].c_str());
         }
         else if (settingsIndex == 4) {
+            printf("Applying Altitude settings\n");
             setAltHold = true;
             if (atoi(numberInStrings[7].c_str())==1) {
                 altHold = true;
