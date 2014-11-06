@@ -177,7 +177,7 @@ void Controller::calcPWM(double *input, double *output, double *ref) {
         vertThrust = innerParameters[9]*err_alt[0] + innerParameters[10]*(err_alt[2]) + innerParameters[11]*(err_alt[0]-err_alt[1])/dt;
         err_alt[1] = err_alt[0];
     
-        F = vertThrust + 4*thrust_const*0.2*10000.0;
+        F = vertThrust + 4*thrust_const*0.4*0.4*10000.0;
     }
     
     if (pigeon) {
