@@ -27,6 +27,7 @@ double kalman::estimate(double val){
 	x = x0;
 	p = p0 + q;
 	k = p / (p + r);
+    std::cout << p << std::endl;
 	this->x0 = x + k*(val - x);
 	this->p0 = (1 - k)*p;
 	return x0;

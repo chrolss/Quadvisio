@@ -152,8 +152,8 @@ int CameraManager2::init_v4l2()
         fprintf (stderr, "Unable to set format: %d.\n", errno);
         goto fatal;
     }
-    if ((vd->fmt.fmt.pix.width != vd->width) ||
-        (vd->fmt.fmt.pix.height != vd->height)) {
+    if ((vd->fmt.fmt.pix.width != (unsigned int)vd->width) ||
+        (vd->fmt.fmt.pix.height != (unsigned int)vd->height)) {
         fprintf (stderr, " format asked unavailable get width %d height %d \n",
                  vd->fmt.fmt.pix.width, vd->fmt.fmt.pix.height);
         vd->width = vd->fmt.fmt.pix.width;
