@@ -95,9 +95,11 @@ void SensorManager::readDMP(double *input) {
     }
 
     while (fifoCount<42) {
+        std::cout << "waiting" << std::endl;
         fifoCount = mpu->getFIFOCount();
     }
     if (fifoCount>=42) {
+        std::cout << "Hej" << std::endl;
         mpu->getFIFOBytes(fifoBuffer, packetSize);
     
         // display Euler angles in degrees
