@@ -480,6 +480,7 @@ void ComHandler::readQvisProMsg() {
             printf("Applying Altitude settings\n");
             setAltHold = true;
             if (atoi(numberInStrings[7].c_str())==1) {
+                std::cout << "Altitude on" << std::endl;
                 altHold = true;
                 alt = atof(numberInStrings[8].c_str());
             }

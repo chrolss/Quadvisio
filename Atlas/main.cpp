@@ -116,7 +116,7 @@ void loop(){
             else if(comHandler->setAltHold) {
                 controller->alt_hold = comHandler->altHold;
                 ref[6] = comHandler->alt;
-                printf("Altitude hold on");
+                printf("Altitude hold on\n");
                 comHandler->setAltHold = false;
             }
             
