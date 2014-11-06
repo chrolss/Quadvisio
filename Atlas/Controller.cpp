@@ -183,7 +183,7 @@ void Controller::calcPWM(double *input, double *output, double *ref) {
         vertThrust = innerParameters[10]*err_alt[0] + innerParameters[11]*(err_alt[2]) + innerParameters[12]*(err_alt[0]-err_alt[1])/dt;
         err_alt[1] = err_alt[0];
     
-        F = vertThrust;
+        F = vertThrust + 4*thrust_const*0.5*10000.0;
     }
     
     if (pigeon) {
@@ -246,12 +246,6 @@ void Controller::setJoyCom(double *joy, double *sensorInput, double *ref){
 		setYawRef(ref, sensorInput[5]);     //to the current yaw input from the sensor
 	}                                       //so the reference won't interfere with the controller
     
-	/*
-	if (fabs(joy[3])<0.1){
-		//reset_PID();                      //if the throttle is lower than 0.1 the I parameters in the
-	}                                       //PID will be set to zero
-	*/
-    
     if (!alt_hold) {
         this->F = 4*thrust_const*joy[3]*joy[3]*10000.0;
     }
@@ -265,8 +259,6 @@ void Controller::setJoyCom(double *joy, double *sensorInput, double *ref){
 	ref[0] = innerParameters[12]*joy[0];
 	ref[1] = -innerParameters[12]*joy[1];
 	this->joyCom[2] = 2.0*innerParameters[12]*joy[2];
-
-
 }
 
 void Controller::setSensitivity(double _sens){
