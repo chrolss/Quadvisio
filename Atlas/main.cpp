@@ -43,13 +43,13 @@ double iErrors[3];
 
 void initailize(){
     
-    for (int i =0 ; i<(sizeof(sInput)/sizeof(*sInput)); i++) {
+    for (unsigned int i =0 ; i<(sizeof(sInput)/sizeof(*sInput)); i++) {
         sInput[i] = 0.0;
     }
-    for (int i =0 ; i<(sizeof(sOutput)/sizeof(*sOutput)); i++) {
+    for (unsigned i =0 ; i<(sizeof(sOutput)/sizeof(*sOutput)); i++) {
         sOutput[i] = 0.0;
     }
-    for (int i =0 ; i<(sizeof(outParams)/sizeof(*outParams)); i++) {
+    for (unsigned i =0 ; i<(sizeof(outParams)/sizeof(*outParams)); i++) {
         outParams[i] = 0.0;
     }
     
