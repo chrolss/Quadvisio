@@ -157,13 +157,13 @@ void SensorManager::readBMP(double *input) {
     std::cout << "Kalman P for Vel" << std::endl;
     vz_est = vz_filter->estimate(vz_est);
     std::cout << "Kalman P for Alt" << std::endl;
-    hz_est = hz_filter->estimate(bmpData->altitude);
+    hz_est = hz_filter->estimate(bmpData->altitude - h_offset);
 
     //std::cout << "Final velocity: " << vz_est << std::endl;
     //std::cout << "Final altitude: " << hz_est << std::endl;
     
     input[6] = hz_est;
-    input[7] = bmpData->altitude;
+    input[7] = bmpData->altitude - h_offset;
     input[8] = bmpData->temperature;
 }
 
