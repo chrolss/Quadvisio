@@ -53,14 +53,15 @@ void initailize(){
         outParams[i] = 0.0;
     }
     
-    //sensorManager = new SensorManager(oss);
+    sensorManager = new SensorManager(oss);
     controller = new Controller(pigeon);
     comHandler = new ComHandler(video);
     //motor = new Motor;
     
-    //if(sensorManager->initializeMPUdmp()) {
-        //runAtlas = true;
-    //}
+    if(sensorManager->initializeMPUdmp()) {
+        runAtlas = true;
+    }
+    else {return;}
     
     ref[0] = 0.0;	//roll
     ref[1] = 0.0;	//pitch
@@ -87,8 +88,8 @@ void loop(){
         auto start = std::chrono::high_resolution_clock::now();
 
         // Read sensor data
-        //sensorManager->readDMP(sInput);
-        //sensorManager->readBMP(sInput);
+        sensorManager->readDMP(sInput);
+        sensorManager->readBMP(sInput);
         
         // Commincation with Qvis
         if (comHandler->connected) {
