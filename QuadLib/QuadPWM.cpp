@@ -92,7 +92,7 @@ void QuadPWM::cleanUp() {
 }
 
 void QuadPWM::setPolarity(std::string pwmName, int polarity) {
-    for (int pwm = 0; pwm<pwmDatas.size(); pwm++) {
+    for (unsigned int pwm = 0; pwm<pwmDatas.size(); pwm++) {
         if (pwmName.compare(pwmDatas.at(pwm).name)==0) {
             int fd;
             int len;
@@ -106,7 +106,7 @@ void QuadPWM::setPolarity(std::string pwmName, int polarity) {
 }
 
 void QuadPWM::setPeriod(std::string pwmName, int period) {
-    for (int pwm = 0; pwm<pwmDatas.size(); pwm++) {
+    for (unsigned int pwm = 0; pwm<pwmDatas.size(); pwm++) {
         if (pwmName.compare(pwmDatas.at(pwm).name)==0) {
             int fd;
             int len;
@@ -120,7 +120,7 @@ void QuadPWM::setPeriod(std::string pwmName, int period) {
 }
 
 void QuadPWM::setDuty(std::string pwmName, int duty) {
-    for (int pwm = 0; pwm<pwmDatas.size(); pwm++) {
+    for (unsigned int pwm = 0; pwm<pwmDatas.size(); pwm++) {
         if (pwmName.compare(pwmDatas.at(pwm).name)==0) {
             int fd;
             int len;
