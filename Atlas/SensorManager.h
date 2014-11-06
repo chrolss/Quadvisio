@@ -31,8 +31,6 @@
 #define offsetRoll 0.0 //-0.072605
 #define offsetPitch 0.0 //0.001396
 
-#define DT 0.02 // 50Hz
-
 class SensorManager {
     
 public:
