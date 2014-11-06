@@ -163,7 +163,7 @@ void SensorManager::readBMP(double *input) {
     //std::cout << "Final altitude: " << hz_est << std::endl;
     
     input[6] = hz_est;
-    input[7] = vz_est;
+    input[7] = bmpData->altitude;
     input[8] = bmpData->temperature;
 }
 
