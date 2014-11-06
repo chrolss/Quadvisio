@@ -622,7 +622,7 @@ std::string ComHandler::reciveMessage() {
             msgSize = atoi(msgBuffer.substr(0,3).c_str());
         }
         
-        if (msgSize>0 && msgBuffer.size() == (msgSize+3)) {
+        if (msgSize>0 && msgBuffer.size() == (unsigned int)(msgSize+3)) {
             msg = msgBuffer;
             return msg;
         }
