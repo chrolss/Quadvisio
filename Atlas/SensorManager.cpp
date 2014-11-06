@@ -24,8 +24,8 @@ VectorFloat gravity;    // [x, y, z]            gravity vector
 SensorManager::SensorManager(BMP180::OversamplingSetting oss){
     vz_est = 0.0;
     hz_est = 0.0;
-	vz_filter = new kalman(0.1,4.0,0.0,10);
-	hz_filter = new kalman(0.1,4.0,0.0,10);
+	vz_filter = new kalman(0.001,4.0,0.0,10);
+	hz_filter = new kalman(0.001,4.0,0.0,10);
 	//checkForSensors();
 	initializeMPU();
     initializeBMP(oss);
@@ -139,7 +139,7 @@ void SensorManager::readBMP(double *input) {
     std::cout << "Acc velocity: " << vz_est << std::endl;
     std::cout << "Acc altitude: " << hz_est << std::endl;
     
-    vz_est =  vz_est + 0.1*(bmpData->altitude - h_offset - hz_est);
+    vz_est =  vz_est + 0.3*(bmpData->altitude - h_offset - hz_est);
     hz_est =  hz_est + 0.8*(bmpData->altitude - h_offset - hz_est);
     
     std::cout << "Combo velocity: " << vz_est << std::endl;
