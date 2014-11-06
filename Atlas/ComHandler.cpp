@@ -800,9 +800,9 @@ void ComHandler::setOutputData(double *sInput, double *pwm, double *ref, double 
     output[10] = sInput[0];
     output[11] = sInput[1];
     output[12] = sInput[2];
-    output[13] = sInput[3];
-    output[14] = sInput[4];
-    output[15] = sInput[5];
+    output[13] = sInput[6];
+    output[14] = sInput[7];
+    output[15] = sInput[8];
     output[16] = err[0];
     output[17] = err[1];
     output[18] = err[2];
