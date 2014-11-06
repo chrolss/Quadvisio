@@ -25,23 +25,29 @@
 
 //#include "mpu6050.h"
 #include "I2Cdev.h"
+#include "BMP_180.h"
+#include "kalman.h"
 
-#define offsetRoll 0.01693
-#define offsetPitch -0.01508
+#define offsetRoll 0.0 //-0.072605
+#define offsetPitch 0.0 //0.001396
+
+#define DT 0.02 // 50Hz
 
 class SensorManager {
     
 public:
-    SensorManager();
-    void initializeSensor();
+    SensorManager(BMP180::OversamplingSetting oss);
+    void initializeMPU();
+    void initializeBMP(BMP180::OversamplingSetting oss);
     bool initializeMPUdmp();
     bool testMPU();
-    void readMPU(double *input);
     void readDMP(double *input);
-    void checkForSensors();
+    void readBMP(double *input);
     bool getMode(){return mpuMode;}
     
 private:
+    
+    void get_bmp_offset();
     
     uint8_t mpuIntStatus;   // holds actual interrupt status byte from MPU
     uint8_t devStatus;
@@ -55,6 +61,9 @@ private:
     bool dmpReady = false;
     bool mpuMode = true;
     double alpha, beta;
+    struct bmp180_data *bmpData;
+    
+    double vz_est, hz_est, h_offset;
 };
 
 #endif /* defined(__Atlas__SensorManager__) */

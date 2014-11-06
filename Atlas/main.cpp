@@ -19,9 +19,11 @@ Controller *controller;
 ComHandler *comHandler;
 Motor *motor;
 
+BMP180::OversamplingSetting oss;
+
 bool pigeon;
 bool video = false;
-double sInput[7];
+double sInput[9];
 double sOutput[4];
 double idleMotorValues[] = {0.0, 0.0, 0.0, 0.0};
 bool runAtlas=false;
@@ -40,24 +42,24 @@ double outParams[6];
 double iErrors[3];
 
 void initailize(){
-    for (int i =0 ; i<6; i++) {
+    
+    for (int i =0 ; i<(sizeof(sInput)/sizeof(*sInput)); i++) {
         sInput[i] = 0.0;
     }
-    for (int i =0 ; i<4; i++) {
+    for (int i =0 ; i<(sizeof(sOutput)/sizeof(*sOutput)); i++) {
         sOutput[i] = 0.0;
     }
-    for (int i =0 ; i<6; i++) {
-            outParams[i] = 0.0;
-        }
-    //sensorManager = new SensorManager;
+    for (int i =0 ; i<(sizeof(outParams)/sizeof(*outParams)); i++) {
+        outParams[i] = 0.0;
+    }
+    
+    //sensorManager = new SensorManager(oss);
     controller = new Controller(pigeon);
     comHandler = new ComHandler(video);
     //motor = new Motor;
     
-    //if(sensorManager->getMode()){
-    	//if(sensorManager->initializeMPUdmp()) {
-    		//runAtlas = true;
-    	//}
+    //if(sensorManager->initializeMPUdmp()) {
+        //runAtlas = true;
     //}
     
     ref[0] = 0.0;	//roll
@@ -67,11 +69,6 @@ void initailize(){
     ref[4] = 0.0;	//y-acceleration
     ref[5] = 0.0;	//z-accerleration
     ref[6] = 0.0;	//altitude
-
-    sOutput[0] = 0.0;
-    sOutput[1] = 0.0;
-    sOutput[2] = 0.0;
-    sOutput[3] = 0.0;
 
     controller->get_parameters(inParams);	//lägger parametrarna i inParams
     comHandler->setSettingsData(inParams);	//tonis funktion som skickar till Com
@@ -91,12 +88,11 @@ void loop(){
 
         // Read sensor data
         //sensorManager->readDMP(sInput);
-
+        //sensorManager->readBMP(sInput);
         
         // Commincation with Qvis
         if (comHandler->connected) {
              if (!comHandler->reciveMsg && !comHandler->sendMsg) {
-                 //printf("Setting output and send to true\n");
             	 controller->get_Errors(iErrors);
                  comHandler->setOutputData(sInput, sOutput, ref, loopTime, iErrors);
                  if (comHandler->vidCount>=2) {
@@ -189,6 +185,15 @@ int main(int argc, const char* argv[])
     else {
         printf("Incorrect input argument for camera, 1 = Camera On, 0 = Camera Off\n");
         exit(1);
+    }
+    
+    if (atoi(argv[3])==0) {oss = BMP180::OSS_LOW;}
+    else if (atoi(argv[1])==1) {oss = BMP180::OSS_STANDARD;}
+    else if (atoi(argv[1])==2) {oss = BMP180::OSS_HIGH;}
+    else if (atoi(argv[1])==3) {oss = BMP180::OSS_ULTRAHIGH;}
+    else {
+        std::cout << "Wrong argument" << std::endl;
+        return 0;
     }
     
 	initailize();

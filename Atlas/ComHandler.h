@@ -50,7 +50,7 @@ public:
     void startListenThread();
     void closeClient();
     
-    void setOutputData(double *out, double *pwm, double *ref, double &freq, double *err);
+    void setOutputData(double *sInput, double *pwm, double *ref, double &freq, double *err);
     void setSettingsData(double *params);
     void getSettingsData(double *params);
     void sendSettingsData();
@@ -101,7 +101,7 @@ private:
     // PID Params : Joy Sen : RollTrim : PitchTrim
     double settingsData[16];
     
-    double output[19];
+    double output[22];
     int sizeOfOutput;
 
     int sockfd, newsockfd, portno, n;

@@ -18,7 +18,7 @@
 //
 // "controllerInputData" structure: [ Roll | Pitch | Yaw | Throttle | RollOffset | PitchOffset]
 //
-// "outputData" structure: [angles | refangles | pwms | speed | sidespeed | altitude | integral roll | integral pitch | integral yaw | Hz | bitrate | dbm]
+// "outputData" structure: [angles | refangles | pwms | accx | accy | accy | alt | vert. speed | temp | integral roll | integral pitch | integral yaw | Hz | bitrate | dbm]
 //
 // Outgoing Message Structure ///////////
 //
@@ -244,7 +244,7 @@ void ComHandler::sendQvisProMsg() {
     
     ostr.str("");
     
-    for (int i=0; i<10; i++) {
+    for (int i=0; i<16; i++) {
         ostr << output[i] << ":";
     }
     
@@ -770,8 +770,8 @@ int ComHandler::getSignalInfo() {
     }
     close(sockfd);
     
-    this->output[17] = sigInfo->bitrate;
-    this->output[18] = (double)sigInfo->level;
+    this->output[20] = sigInfo->bitrate;
+    this->output[21] = (double)sigInfo->level;
     
     */
     return 0;
@@ -786,10 +786,10 @@ void ComHandler::closeClient() {
     connected = false;
 }
 
-void ComHandler::setOutputData(double *out, double *pwm, double *ref, double &freq, double *err) {
-    output[0] = out[3]*radToDeg;
-    output[1] = out[4]*radToDeg;
-    output[2] = out[5]*radToDeg;
+void ComHandler::setOutputData(double *sInput, double *pwm, double *ref, double &freq, double *err) {
+    output[0] = sInput[3]*radToDeg;
+    output[1] = sInput[4]*radToDeg;
+    output[2] = sInput[5]*radToDeg;
     output[3] = ref[0]*radToDeg;
     output[4] = ref[1]*radToDeg;
     output[5] = ref[2]*radToDeg;
@@ -797,13 +797,16 @@ void ComHandler::setOutputData(double *out, double *pwm, double *ref, double &fr
     output[7] = pwm[1];
     output[8] = pwm[2];
     output[9] = pwm[3];
-    output[10] = cos(out[4])*out[0]-sin(out[4]);
-    output[11] = cos(out[3])*out[1]-sin(out[3]);
-    output[12] = out[2];
-    output[13] = err[0];
-    output[14] = err[1];
-    output[15] = err[2];
-    output[16] = freq;
+    output[10] = sInput[0];
+    output[11] = sInput[1];
+    output[12] = sInput[2];
+    output[13] = sInput[3];
+    output[14] = sInput[4];
+    output[15] = sInput[5];
+    output[16] = err[0];
+    output[17] = err[1];
+    output[18] = err[2];
+    output[19] = freq;
 }
 
 void ComHandler::setSettingsData(double *params) {
