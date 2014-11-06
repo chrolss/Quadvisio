@@ -160,7 +160,7 @@ void loop(){
         auto duration2 = std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::high_resolution_clock::now() - start).count();
          
         loopTime = double(1000000)/(duration2);
-        std::cout << "Running at: " << loopTime << "Hz" << std::endl;
+        //std::cout << "Running at: " << loopTime << "Hz" << std::endl;
     }
     
     //motor->closePWM();

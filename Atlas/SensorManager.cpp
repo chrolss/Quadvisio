@@ -86,7 +86,7 @@ void SensorManager::readDMP(double *input) {
     
     fifoCount = mpu->getFIFOCount();
     
-    std::cout << "FIFO count: " << fifoCount << std::endl;
+    //std::cout << "FIFO count: " << fifoCount << std::endl;
     
     if (fifoCount >1000) {
         mpu->resetFIFO();
@@ -96,11 +96,11 @@ void SensorManager::readDMP(double *input) {
     }
 
     while (fifoCount<42) {
-        std::cout << "waiting" << std::endl;
+        //std::cout << "waiting" << std::endl;
         fifoCount = mpu->getFIFOCount();
     }
     if (fifoCount>=42) {
-        std::cout << "Hej" << std::endl;
+        //std::cout << "Hej" << std::endl;
         mpu->getFIFOBytes(fifoBuffer, packetSize);
     
         // display Euler angles in degrees
@@ -139,28 +139,28 @@ void SensorManager::readBMP(double *input) {
     double c3 = cos(input[3])*cos(input[4])*double(input[2]/4096.0);
     double az = 9.82*((c1 + c2 + c3) - 1.0);
     
-    std::cout << "Acc: " << az << std::endl;
+    //std::cout << "Acc: " << az << std::endl;
     input[2] = az;
     
     vz_est = vz_est + az*DT;
     hz_est = hz_est + vz_est*DT;
     
-    std::cout << "Acc velocity: " << vz_est << std::endl;
-    std::cout << "Acc altitude: " << hz_est << std::endl;
+    //std::cout << "Acc velocity: " << vz_est << std::endl;
+    //std::cout << "Acc altitude: " << hz_est << std::endl;
     
     vz_est =  vz_est + kalmanParamsVel[4]*(bmpData->altitude - h_offset - hz_est);
     hz_est =  hz_est + kalmanParamsAlt[4]*(bmpData->altitude - h_offset - hz_est);
     
-    std::cout << "Combo velocity: " << vz_est << std::endl;
-    std::cout << "Combo altitude: " << hz_est << std::endl;
+    //std::cout << "Combo velocity: " << vz_est << std::endl;
+    //std::cout << "Combo altitude: " << hz_est << std::endl;
     
-    std::cout << "Kalman P for Vel" << std::endl;
+    //std::cout << "Kalman P for Vel" << std::endl;
     vz_est = vz_filter->estimate(vz_est);
-    std::cout << "Kalman P for Alt" << std::endl;
+    //std::cout << "Kalman P for Alt" << std::endl;
     hz_est = hz_filter->estimate(hz_est);
 
-    std::cout << "Final velocity: " << vz_est << std::endl;
-    std::cout << "Final altitude: " << hz_est << std::endl;
+    //std::cout << "Final velocity: " << vz_est << std::endl;
+    //std::cout << "Final altitude: " << hz_est << std::endl;
     
     input[6] = hz_est;
     input[7] = vz_est;
