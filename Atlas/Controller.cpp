@@ -173,7 +173,7 @@ void Controller::calcPWM(double *input, double *output, double *ref) {
         
         printf("alt err: %f\n", err_alt[0]);
         
-        if (fabs(err_alt[2])>WINDUP_LIMIT_UP){err_alt[2] = windUp(err_alt);}
+        //if (fabs(err_alt[2])>WINDUP_LIMIT_UP){err_alt[2] = windUp(err_alt);}
         
         vertThrust = innerParameters[9]*err_alt[0] + innerParameters[10]*(err_alt[2]) + innerParameters[11]*(err_alt[0]-err_alt[1])/dt;
         err_alt[1] = err_alt[0];
