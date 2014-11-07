@@ -47,7 +47,7 @@ double iErrors[3];
 
 void my_handler(int s){
     printf("Caught signal %d\n",s);
-    //motor->setPWM(idleMotorValues);
+    motor->setPWM(idleMotorValues);
     exit(1);
     
 }
@@ -67,7 +67,7 @@ void initailize(){
     sensorManager = new SensorManager(oss);
     controller = new Controller(pigeon);
     comHandler = new ComHandler(video);
-    //motor = new Motor;
+    motor = new Motor;
     
     if(sensorManager->initializeMPUdmp()) {
         runAtlas = true;
@@ -152,10 +152,10 @@ void loop(){
 
         // Set PWM values
         if (comHandler->motorOn==true && comHandler->connected){
-            //motor->setPWM(sOutput);
+            motor->setPWM(sOutput);
         }
         else {
-            //motor->setPWM(idleMotorValues);
+            motor->setPWM(idleMotorValues);
         }
         
         // Measure duration
@@ -175,7 +175,7 @@ void loop(){
         //std::cout << "Running at: " << loopTime << "Hz" << std::endl;
     }
     
-    //motor->closePWM();
+    motor->closePWM();
     std::cout << "Test klart" << std::endl;
 }
 
