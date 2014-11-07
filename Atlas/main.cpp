@@ -73,7 +73,7 @@ void initailize(){
 
     controller->get_parameters(inParams);	//lägger parametrarna i inParams
     comHandler->setSettingsData(inParams);	//tonis funktion som skickar till Com
-    controller->setSensitivity(0.6);		//sätt sens, 0.25 - 0.4
+    //controller->setSensitivity(0.6);		//sätt sens, 0.25 - 0.4
     
     runAtlas = true;
 }
@@ -117,6 +117,7 @@ void loop(){
                 controller->alt_hold = comHandler->altHold;
                 ref[6] = comHandler->alt;
                 printf("Altitude hold on\n");
+                controller->reset_I();
                 comHandler->setAltHold = false;
             }
             

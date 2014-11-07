@@ -114,6 +114,7 @@ void Controller::reset_I(){
 	this->err_roll[2] = 0.0;
 	this->err_pitch[2] = 0.0;
 	this->err_yaw[2] = 0.0;
+    this->err_alt[2] = 0.0;
 }
 
 void Controller::get_Errors(double *_err){
