@@ -9,6 +9,10 @@
 #include <iostream>
 #include <string>
 #include <chrono>
+#include <signal.h>
+#include <stdlib.h>
+#include <stdio.h>
+#include <unistd.h>
 #include "SensorManager.h"
 #include "Controller.h"
 #include "ComHandler.h"
@@ -40,6 +44,13 @@ double ref[7];
 double inParams[16];
 double outParams[6];
 double iErrors[3];
+
+void my_handler(int s){
+    printf("Caught signal %d\n",s);
+    //motor->setPWM(idleMotorValues);
+    exit(1);
+    
+}
 
 void initailize(){
     
@@ -203,6 +214,13 @@ int main(int argc, const char* argv[])
         std::cout << "Wrong argument" << std::endl;
         return 0;
     }
+    
+    struct sigaction sigIntHandler;
+    sigIntHandler.sa_handler = my_handler;
+    sigemptyset(&sigIntHandler.sa_mask);
+    sigIntHandler.sa_flags = 0;
+    
+    sigaction(SIGINT, &sigIntHandler, NULL);
     
 	initailize();
     loop();
