@@ -287,7 +287,7 @@ void Controller::setOuterParameters(double *outParams){
 
 double Controller::getCurrentThrust() {
     
-    double thrust = sqrt((F - vertThrust)/(thrust_const*40000.0));
+    double thrust = sqrt((F)/(thrust_const*40000.0));
     std::cout << thrust << std::endl;
     return thrust;
 }
