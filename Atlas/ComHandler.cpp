@@ -451,7 +451,7 @@ void ComHandler::readQvisProMsg() {
                 alt = atof(numberInStrings[8].c_str());
             }
             else {
-                printf("Altitude hold off sending thrust");
+                printf("Altitude hold off sending thrust\n");
                 altHold = false;
                 sendThrust = true;
             }
