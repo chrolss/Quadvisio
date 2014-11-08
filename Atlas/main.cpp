@@ -46,8 +46,8 @@ double outParams[6];
 double iErrors[3];
 
 void my_handler(int s){
-    printf("Caught signal %d\n",s);
-    //motor->setPWM(idleMotorValues);
+    printf("\nSetting motor to idle");
+    motor->setPWM(idleMotorValues);
     exit(1);
     
 }
@@ -67,7 +67,7 @@ void initailize(){
     sensorManager = new SensorManager(oss);
     controller = new Controller(pigeon);
     comHandler = new ComHandler(video);
-    //motor = new Motor;
+    motor = new Motor;
     
     if(sensorManager->initializeMPUdmp()) {
         runAtlas = true;
@@ -155,10 +155,10 @@ void loop(){
 
         // Set PWM values
         if (comHandler->motorOn==true && comHandler->connected){
-            //motor->setPWM(sOutput);
+            motor->setPWM(sOutput);
         }
         else {
-            //motor->setPWM(idleMotorValues);
+            motor->setPWM(idleMotorValues);
         }
         
         // Measure duration
