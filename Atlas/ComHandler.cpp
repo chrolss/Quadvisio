@@ -257,7 +257,7 @@ void ComHandler::sendQvisProMsg() {
     
     if (sendThrust) {
         ostr << thrust << ":";
-        printf("Sending trust: %f", thrust);
+        std::cout << "Sending trust: " <<  thrust << std::endl;
         sendThrust = false;
     }
     else {
