@@ -155,6 +155,15 @@ void Controller::calcPWM(double *input, double *output, double *ref) {
     // Altitude PID
     if (this->alt_hold) {
         err_alt[0] = ref[6] - input[6];  	// set new error
+        
+        // Limit the error to avoid nervous behavior
+        if (err_alt[0] > 2.0) {
+            err_alt[0] = 2.0;
+        }
+        else if(err_alt[0] < -2.0) {
+            err_alt[0] = -2.0;
+        }
+        
         err_alt[2] += err_alt[0]*dt;
         
         printf("alt err: %f\n", err_alt[0]);
