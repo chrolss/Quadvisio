@@ -256,7 +256,7 @@ void ComHandler::sendQvisProMsg() {
     // Wifi signal
     
     if (sendThrust) {
-        ostr << thrust << ":";
+        ostr << (thrust + 1000) << ":";
         std::cout << "Sending trust: " <<  thrust << std::endl;
         sendThrust = false;
     }
