@@ -71,8 +71,10 @@ ComHandler::ComHandler(bool enableCamera) {
     saveJoySens = false;
     altHold = false;
     setAltHold = false;
+    sendThrust = false;
     
     alt = 0.0;
+    thrust = 0.0;
     
     vidCount = 0;
     vidLimit = 0;
@@ -252,32 +254,18 @@ void ComHandler::sendQvisProMsg() {
     }
     
     // Wifi signal
-    ostr << "0:";
+    
+    if (sendThrust) {
+        ostr << thrust << ":";
+        printf("Sending trust: %f", thrust);
+        sendThrust = false;
+    }
+    else {
+        ostr << "0:";
+    }
     
     if (vidResNew != vidRes) {
         printf("New res: %i, old res: %i\n", this->vidResNew, this->vidRes);
-        /*
-        switch (vidResNew) {
-            case 0:
-                camManager->change_res(320, 240);
-                break;
-                
-            case 1:
-                camManager->change_res(640, 480);
-                break;
-                
-            case 2:
-                camManager->change_res(1280, 720);
-                break;
-                
-            case 3:
-                camManager->change_res(1920, 1080);
-                break;
-                
-            default:
-                break;
-        }
-        */
         printf("New resolution was set\n");
         vidRes = vidResNew;
     }
@@ -336,28 +324,6 @@ void ComHandler::sendQvisDevMsg() {
     
     if (vidResNew != vidRes) {
         printf("New res: %i, old res: %i\n", this->vidResNew, this->vidRes);
-        /*
-        switch (vidResNew) {
-            case 0:
-                camManager->change_res(320, 240);
-                break;
-                
-            case 1:
-                camManager->change_res(640, 480);
-                break;
-                
-            case 2:
-                camManager->change_res(1280, 720);
-                break;
-                
-            case 3:
-                camManager->change_res(1920, 1080);
-                break;
-                
-            default:
-                break;
-        }
-        */
         printf("New resolution was set\n");
         vidRes = vidResNew;
     }
@@ -484,7 +450,11 @@ void ComHandler::readQvisProMsg() {
                 altHold = true;
                 alt = atof(numberInStrings[8].c_str());
             }
-            else {altHold = false;}
+            else {
+                printf("Altitude hold off sending thrust");
+                altHold = false;
+                sendThrust = true;
+            }
             
         }
     }
@@ -799,6 +769,10 @@ void ComHandler::closeClient() {
     std::cout << "Connection closed." << std::endl;
     sleep(2);
     connected = false;
+}
+
+void ComHandler::setThrust(double thrust) {
+    this->thrust = thrust;
 }
 
 void ComHandler::setOutputData(double *sInput, double *pwm, double *ref, double &freq, double *err) {

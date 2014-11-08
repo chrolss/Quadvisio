@@ -64,23 +64,9 @@ void Controller::read_parameters(std::string _birdParams){
     else {
         printf("Error reading innerParameters.txt");
     }
-    /*
-	paramsFile >> this->innerParameters[0] >>  this->innerParameters[1] >>  this->innerParameters[2]
-	>>  this->innerParameters[3] >>  this->innerParameters[4] >>  this->innerParameters[5]
-	>> this->innerParameters[6] >> this->innerParameters[7] >> this->innerParameters[8]
-	>> this->innerParameters[9] >> this->innerParameters[10] >> this->innerParameters[11]
-	>> this->innerParameters[12] >> this->innerParameters[13] >> this->innerParameters[14];
-    */
+
 	paramsFile.close();
 	printf("Got Parameters\n");
-    
-    /*
-	std::fstream params2("outerParameters.txt");
-	params2 >> 	this->outerParameters[0] >> this->outerParameters[1]
-	>> this->outerParameters[2] >> this->outerParameters[3]
-	>> this->outerParameters[4] >> this->outerParameters[5];
-	params2.close();
-     */
 }
 
 //writes PID parameters back to txt-files
@@ -146,7 +132,7 @@ void Controller::calcPWM(double *input, double *output, double *ref) {
 
 
 	// Yaw
-	err_yaw[0] = err_yaw[2] - input[5] + joyCom[2];  	// set new error
+	err_yaw[0] = ref[2] - input[5] + joyCom[2];  	// set new error
 
 	if (fabs(err_yaw[0])>3.84){						//220 degrees
 		if (err_yaw[0]>0){
@@ -297,5 +283,9 @@ void Controller::setOuterParameters(double *outParams){
 	this->outerParameters[3] = outParams[3];
 	this->outerParameters[4] = outParams[4];
 	this->outerParameters[5] = outParams[5];
+}
+
+double Controller::getCurrentThrust() {
+    return sqrt((F - vertThrust)/(thrust_const*40000.0));
 }
 

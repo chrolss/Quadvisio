@@ -54,11 +54,12 @@ public:
     void setSettingsData(double *params);
     void getSettingsData(double *params);
     void sendSettingsData();
+    void setThrust(double thrust);
     
     bool newSettings;
     bool connected, reciveMsg, sendMsg, listening, sendImage;
     bool resetIntegral, videoStream, colorVideo, savePidTrim, saveJoySens, motorOn;
-    bool altHold, setAltHold;
+    bool altHold, setAltHold, sendThrust;
     double alt;
     
     double controllerInputData[9];  // Roll:Pitch:Yaw:Throttle:rollOffset:pitchOffset:JoySen
@@ -93,6 +94,7 @@ private:
     
     int getSignalInfo();
     
+    double thrust; // Thrust value to send back to Qvis when the altitude hold is turned off (between 0-1)
     
     // Video
     CameraManager2 *camManager;

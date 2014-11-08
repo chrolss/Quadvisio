@@ -58,6 +58,8 @@ public:
     void reset_I();
     void get_Errors(double *_err);
     
+    double getCurrentThrust();
+    
     bool alt_hold;
     
 private:

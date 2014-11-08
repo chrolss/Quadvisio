@@ -47,7 +47,7 @@ double iErrors[3];
 
 void my_handler(int s){
     printf("Caught signal %d\n",s);
-    motor->setPWM(idleMotorValues);
+    //motor->setPWM(idleMotorValues);
     exit(1);
     
 }
@@ -67,7 +67,7 @@ void initailize(){
     sensorManager = new SensorManager(oss);
     controller = new Controller(pigeon);
     comHandler = new ComHandler(video);
-    motor = new Motor;
+    //motor = new Motor;
     
     if(sensorManager->initializeMPUdmp()) {
         runAtlas = true;
@@ -115,6 +115,7 @@ void loop(){
          }
         
         // Apply and store possible new settings
+        
         if (comHandler->newSettings == true){
             
             if (comHandler->savePidTrim || comHandler->saveJoySens) {
@@ -127,11 +128,10 @@ void loop(){
             else if(comHandler->setAltHold) {
                 controller->alt_hold = comHandler->altHold;
                 ref[6] = comHandler->alt;
-                printf("Altitude hold on\n");
+                printf("Altitude hold changed\n");
                 controller->reset_I();
                 comHandler->setAltHold = false;
             }
-            
             comHandler->newSettings = false;
         }
 
@@ -147,15 +147,18 @@ void loop(){
         	controller->reset_I();
         	comHandler->resetIntegral = false;
         }
+        
+        // If altitude hold, notify comHandler about current trust
+        if (controller->alt_hold) {comHandler->setThrust(controller->getCurrentThrust());}
 
         controller->calcPWM(sInput, sOutput, ref);
 
         // Set PWM values
         if (comHandler->motorOn==true && comHandler->connected){
-            motor->setPWM(sOutput);
+            //motor->setPWM(sOutput);
         }
         else {
-            motor->setPWM(idleMotorValues);
+            //motor->setPWM(idleMotorValues);
         }
         
         // Measure duration
