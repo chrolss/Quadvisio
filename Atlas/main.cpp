@@ -46,7 +46,7 @@ double outParams[6];
 double iErrors[3];
 
 void my_handler(int s){
-    printf("\nSetting motor to idle");
+    printf("\nSetting motor to idle\n");
     motor->setPWM(idleMotorValues);
     exit(1);
     

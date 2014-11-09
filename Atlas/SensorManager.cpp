@@ -172,7 +172,7 @@ void SensorManager::get_bmp_offset() {
     for (int i = 0 ; i<50; i++) {
         bmp->get_sensor_data(bmpData);
         h_offset += bmpData->altitude;
-        printf("Alt: %f", h_offset);
+        //printf("Alt: %f", h_offset);
     }
     h_offset = double(h_offset/50.0);
     printf("Altitude offset: %f\n", h_offset);
