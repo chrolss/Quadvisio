@@ -299,7 +299,7 @@ double Controller::getCurrentThrust() {
     double thrust = sqrt((F)/(thrust_const*40000.0));
     std::cout << thrust << std::endl;
     if (thrust>1.0) {
-        thrust = 1.0
+        thrust = 1.0;
     }
     return thrust;
 }
