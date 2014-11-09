@@ -71,7 +71,6 @@ ComHandler::ComHandler(bool enableCamera) {
     saveJoySens = false;
     altHold = false;
     setAltHold = false;
-    sendThrust = false;
     
     alt = 0.0;
     thrust = 0.0;
@@ -255,13 +254,11 @@ void ComHandler::sendQvisProMsg() {
     
     // Wifi signal
     
-    if (sendThrust) {
-        ostr << (thrust + 1000) << ":";
+    ostr << "0:";
+    
+    if (altHold) {
+        ostr << (thrust) << ":";
         std::cout << "Sending trust: " <<  thrust << std::endl;
-        sendThrust = false;
-    }
-    else {
-        ostr << "0:";
     }
     
     if (vidResNew != vidRes) {
@@ -453,7 +450,6 @@ void ComHandler::readQvisProMsg() {
             else {
                 printf("Altitude hold off sending thrust\n");
                 altHold = false;
-                sendThrust = true;
             }
             
         }
