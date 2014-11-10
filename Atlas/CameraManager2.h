@@ -115,6 +115,7 @@ public:
     jpg_data get_jpg_data();
     
     bool grabbing;
+    bool new_image;
     
 private:
     int init_videoIn(char *device, int width, int height, int format, int grabmethod);
@@ -124,6 +125,7 @@ private:
     int uvcGrab();
     int close_v4l2();
     void grabbing_loop();
+    
     
     void *jpg_buffer;
     int jpg_buffer_size;

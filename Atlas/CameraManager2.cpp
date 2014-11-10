@@ -31,6 +31,7 @@ CameraManager2::CameraManager2(int width, int height) {
     vd = new vdIn;
     this->saving_buffer = false;
     this->grabbing = false;
+    this->new_image = false;
     
     init_videoIn("/dev/video0", width, height, V4L2_PIX_FMT_MJPEG, 1);
     
@@ -238,7 +239,6 @@ int CameraManager2::video_disable() {
     }
     vd->isstreaming = 0;
     return 0;
-
 }
 
 int CameraManager2::uvcGrab() {
@@ -250,8 +250,6 @@ int CameraManager2::uvcGrab() {
         }
     }
     
-    this->saving_buffer = true;
-
     memset (&vd->buf, 0, sizeof (struct v4l2_buffer));
     vd->buf.type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
     vd->buf.memory = V4L2_MEMORY_MMAP;
@@ -267,21 +265,20 @@ int CameraManager2::uvcGrab() {
     memcpy (vd->tmpbuffer + HEADERFRAME1 + DHT_SIZE, vd->mem[vd->buf.index] + HEADERFRAME1, (vd->buf.bytesused - HEADERFRAME1));
     
     if (debug) {
-        fprintf (stderr, "bytes in used %d \n", vd->buf.bytesused);
+        fprintf (stderr, "Bytes in used %d \n", vd->buf.bytesused);
     }
     
-    this->jpg_buffer = vd->tmpbuffer;
-    this->jpg_buffer_size = vd->buf.bytesused + DHT_SIZE;
+    if (!this->new_image) {
+        this->jpg_buffer = vd->tmpbuffer;
+        this->jpg_buffer_size = vd->buf.bytesused + DHT_SIZE;
+        this->new_image = true;
+    }
     
-    this->saving_buffer = false;
-
     ret = ioctl (vd->fd, VIDIOC_QBUF, &vd->buf);
     if (ret < 0) {
         fprintf (stderr, "Unable to requeue buffer (%d).\n", errno);
         goto err;
     }
-    
-    
     
     return 0;
 err:
@@ -293,15 +290,10 @@ err:
 jpg_data CameraManager2::get_jpg_data() {
     
     jpg_data jpg_dat;
-    /*
-    while(this->saving_buffer) {
-        //std::cout << saving_buffer << std::endl;
-        //printf(".");
-    }
-    */
     
-    jpg_dat.buffer = jpg_buffer;
-    jpg_dat.size = jpg_buffer_size;
+    jpg_dat.buffer = this->jpg_buffer;
+    jpg_dat.size = this->jpg_buffer_size;
+    
     return jpg_dat;
 }
 

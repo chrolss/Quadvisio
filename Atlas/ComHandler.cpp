@@ -267,8 +267,9 @@ void ComHandler::sendQvisProMsg() {
         vidRes = vidResNew;
     }
 
-    if (sendImage && videoStream) {
+    if (sendImage && videoStream && camManager->new_image) {
         jpg_dat = camManager->get_jpg_data();
+        camManager->new_image = false;
         ostr << jpg_dat.size;
         std::cout << "JPG size" << jpg_dat.size << std::endl;
     }

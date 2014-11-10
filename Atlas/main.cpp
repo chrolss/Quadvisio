@@ -47,7 +47,7 @@ double iErrors[3];
 
 void my_handler(int s){
     printf("\nSetting motor to idle\n");
-    motor->setPWM(idleMotorValues);
+    //motor->setPWM(idleMotorValues);
     exit(1);
     
 }
@@ -64,10 +64,10 @@ void initailize(){
         outParams[i] = 0.0;
     }
     
+    //motor = new Motor;
     sensorManager = new SensorManager(oss);
     controller = new Controller(pigeon);
     comHandler = new ComHandler(video);
-    motor = new Motor;
     
     if(sensorManager->initializeMPUdmp()) {
         runAtlas = true;
@@ -154,13 +154,14 @@ void loop(){
         controller->calcPWM(sInput, sOutput, ref);
 
         // Set PWM values
+        /*
         if (comHandler->motorOn==true && comHandler->connected){
             motor->setPWM(sOutput);
         }
         else {
             motor->setPWM(idleMotorValues);
         }
-        
+        */
         // Measure duration
         auto duration = std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::high_resolution_clock::now() - start).count();
         
