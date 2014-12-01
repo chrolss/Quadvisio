@@ -1,5 +1,7 @@
 /* GPS Reading C++ Program
  * Created for testing out Linux Serial API Termios
+ *
+ * Crashes terminal - need to first tcgetattr and save the settings, then reapply when exiting
  */
 
 #include <stdlib.h>
@@ -30,9 +32,6 @@ int main(int argc,char** argv)
         tcsetattr(STDOUT_FILENO,TCSAFLUSH,&stdio);
         fcntl(STDIN_FILENO, F_SETFL, O_NONBLOCK);       // make the reads non-blocking
 
-
-
-
         memset(&tio,0,sizeof(tio));
         tio.c_iflag=0;
         tio.c_oflag=0;
@@ -42,15 +41,20 @@ int main(int argc,char** argv)
         tio.c_cc[VTIME]=5;
 
         tty_fd=open(argv[1], O_RDWR | O_NONBLOCK);
-        cfsetospeed(&tio,B115200);            // 115200 baud
-        cfsetispeed(&tio,B115200);            // 115200 baud
-
+        cfsetospeed(&tio,B9600);            // 9600 baud
+        cfsetispeed(&tio,B9600);            // 9600 baud
+        printf("Waiting for message\n");
         tcsetattr(tty_fd,TCSANOW,&tio);
+        unsigned char msg[256];
+        int i = 0;
         while (c!='q')
         {
-                if (read(tty_fd,&c,1)>0)        write(STDOUT_FILENO,&c,1);              // if new data is available on the serial port, print it out
+                if (read(tty_fd,&c,1)>0){
+                	write(STDOUT_FILENO,&c,1);              // if new data is available on the serial port, print it out
+
+                }
                 if (read(STDIN_FILENO,&c,1)>0)  write(tty_fd,&c,1);                     // if new data is available on the console, send it to the serial port
         }
-
+        tcsetattr(STDOUT_FILENO,TCSANOW,&stdio);
         close(tty_fd);
 }
