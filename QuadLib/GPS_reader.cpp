@@ -9,17 +9,36 @@
 #include <unistd.h>
 #include <fcntl.h>
 #include <termios.h>
+#include <iostream>
 #include <string.h> // needed for memset
+
+std::string extractor(std::string stringy){
+	std::string str = "GPGSA";
+	std::string str2 = "Here is GPGSA";
+	std::size_t found = stringy.find(str);	// look for keyword in string
+	std::size_t found2 = str2.find(str);
+	if (found2!=std::string::npos)
+		printf("det gick\n");
+	if (found!=std::string::npos){
+		printf("Hej \n");
+		return "";
+	}
+	else{
+		printf("not found\n");
+		return "";
+	}
+}
 
 int main(int argc,char** argv)
 {
         struct termios tio;
         struct termios stdio;
+        struct termios old_stdio;
         int tty_fd;
         fd_set rdset;
 
         unsigned char c='D';
-
+        tcgetattr(STDOUT_FILENO,&old_stdio);
         printf("Please start with %s /dev/ttyS1 (for example)\n",argv[0]);
         memset(&stdio,0,sizeof(stdio));
         stdio.c_iflag=0;
@@ -47,14 +66,38 @@ int main(int argc,char** argv)
         tcsetattr(tty_fd,TCSANOW,&tio);
         unsigned char msg[256];
         int i = 0;
+        std::string letter;
+        std::string message;
+        std::string test;
         while (c!='q')
         {
                 if (read(tty_fd,&c,1)>0){
-                	write(STDOUT_FILENO,&c,1);              // if new data is available on the serial port, print it out
+                	//write(STDOUT_FILENO,&c,1);              // if new data is available on the serial port, print it out
+                	letter.append(reinterpret_cast<const char*>(&c));
+                }
+                if (read(STDIN_FILENO,&c,1)>0)  write(tty_fd,&c,1);
+                else{
+                	message.append(letter);
+                	letter = "";
+                	if (message.length() > 100){
+                		printf("%s", message.c_str());
+                		//std::string test = extractor(message);
+                		//printf("%s", test.c_str());
+                		test = "";
+                		message = "";
+                	}
+                	//printf("%s", letter.c_str());
+                	/*
+                	std::string peppu = extractor(message.c_str());
+                	printf("%s", peppu.c_str());
+                	*/
 
                 }
-                if (read(STDIN_FILENO,&c,1)>0)  write(tty_fd,&c,1);                     // if new data is available on the console, send it to the serial port
-        }
-        tcsetattr(STDOUT_FILENO,TCSANOW,&stdio);
+       }
         close(tty_fd);
+        tcsetattr(STDOUT_FILENO,TCSANOW,&old_stdio);
+        return EXIT_SUCCESS;
+
 }
+
+
