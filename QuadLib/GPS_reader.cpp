@@ -16,17 +16,10 @@ std::string extractor(std::string stringy){
 	std::string str = "GPGSA";
 	std::string str2 = "Here is GPGSA";
 	std::size_t found = stringy.find(str);	// look for keyword in string
-	std::size_t found2 = str2.find(str);
-	if (found2!=std::string::npos)
-		printf("det gick\n");
-	if (found!=std::string::npos){
-		printf("Hej \n");
-		return "";
-	}
-	else{
-		printf("not found\n");
-		return "";
-	}
+	//std::size_t found2 = str2.find(str);
+	std::cout << found << std::endl;
+	//std::cout << found2 << std::endl;
+	return "\n";
 }
 
 int main(int argc,char** argv)
@@ -79,9 +72,10 @@ int main(int argc,char** argv)
                 else{
                 	message.append(letter);
                 	letter = "";
-                	if (message.length() > 100){
-                		printf("%s", message.c_str());
-                		//std::string test = extractor(message);
+                	if (message.length() > 200){
+                		//printf("%s", message.c_str());
+                		//std::cout << message << std::endl;
+                		std::string test = extractor(message);
                 		//printf("%s", test.c_str());
                 		test = "";
                 		message = "";
